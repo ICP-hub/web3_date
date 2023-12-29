@@ -5,9 +5,8 @@ const sequelize = new Sequelize({
   host: 'localhost',
   port: '5432',
   username: 'postgres',
-  password: "rooot",
-  database: 'postgres',
-  logging: false, // Set to true to log queries
+  password: "DDate",
+  database: 'postgres'
 });
 
 module.exports = sequelize;
