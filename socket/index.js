@@ -19,7 +19,7 @@ principalSocketMap = {};
 
 const io = socketIO(server, {
   cors: {
-    origin: ["http://127.0.0.1:8080", "http://localhost:3001"], // Replace with the URL of your frontend app
+    origin: "*",  //["http://127.0.0.1:8080", "http://localhost:3001"], // Replace with the URL of your frontend app
     methods: ["GET", "POST"]
   }
 });
