@@ -258,15 +258,15 @@ const ChattingSinglePage = () => {
 
 
             <div
-                class="flex flex-row items-center h-16 rounded-xl bg-white w-full px-4"
+                className="flex flex-row items-center h-16 rounded-xl bg-white w-full px-4"
             >
 
                 <div>
                     <button
-                        class="flex items-center justify-center text-gray-400 hover:text-gray-600"
+                        className="flex items-center justify-center text-gray-400 hover:text-gray-600"
                     >
                         <svg
-                            class="w-5 h-5"
+                            className="w-5 h-5"
                             fill="none"
                             stroke="currentColor"
                             viewBox="0 0 24 24"
@@ -283,20 +283,20 @@ const ChattingSinglePage = () => {
                 </div>
 
                 {/* message will be sent */}
-                <div class="flex-grow ml-4">
-                    <div class="relative w-full">
+                <div className="flex-grow ml-4">
+                    <div className="relative w-full">
                         <input
                             type="text"
                             value={message}
                             onChange={(e) => setMessage(e.target.value)}
                             placeholder="write your message!"
-                            class="flex w-full border rounded-xl focus:outline-none focus:border-indigo-300 pl-4 h-10"
+                            className="flex w-full border rounded-xl focus:outline-none focus:border-indigo-300 pl-4 h-10"
                         />
                         <button
-                            class="absolute flex items-center justify-center h-full w-12 right-0 top-0 text-gray-400 hover:text-gray-600"
+                            className="absolute flex items-center justify-center h-full w-12 right-0 top-0 text-gray-400 hover:text-gray-600"
                         >
                             <svg
-                                class="w-6 h-6"
+                                className="w-6 h-6"
                                 fill="none"
                                 stroke="currentColor"
                                 viewBox="0 0 24 24"
@@ -315,15 +315,15 @@ const ChattingSinglePage = () => {
 
 
                 {/* send button */}
-                <div class="ml-4">
+                <div className="ml-4">
                     <button
-                        class="flex items-center justify-center bg-gradient-to-b from-[#DB7D11] to-[#6B3018]  dark:hover:bg-yellow-500 rounded-xl text-white px-4 py-1 flex-shrink-0"
+                        className="flex items-center justify-center bg-gradient-to-b from-[#DB7D11] to-[#6B3018]  dark:hover:bg-yellow-500 rounded-xl text-white px-4 py-1 flex-shrink-0"
                         onClick={sendMessage}
                     >
                         <span>Send</span>
-                        <span class="ml-2">
+                        <span className="ml-2">
                             <svg
-                                class="w-4 h-4 transform rotate-45 -mt-px"
+                                className="w-4 h-4 transform rotate-45 -mt-px"
                                 fill="none"
                                 stroke="currentColor"
                                 viewBox="0 0 24 24"

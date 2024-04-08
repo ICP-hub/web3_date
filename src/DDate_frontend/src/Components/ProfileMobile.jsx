@@ -34,47 +34,47 @@ const ProfileMobile = () => {
         </div>
       </div>
       {/* responsive form */}
-      {/* <div class="p-4 max-w-lg mx-auto bg-white rounded-xl shadow-md">
+      {/* <div className="p-4 max-w-lg mx-auto bg-white rounded-xl shadow-md">
                 <form>
-                    <div class="mb-4">
-                        <label for="gender" class="block text-sm font-medium text-gray-700">Gender</label>
-                        <input type="text" id="gender" name="gender" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring focus:border-blue-300" placeholder="Man" />
+                    <div className="mb-4">
+                        <label for="gender" className="block text-sm font-medium text-gray-700">Gender</label>
+                        <input type="text" id="gender" name="gender" className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring focus:border-blue-300" placeholder="Man" />
                     </div>
-                    <div class="mb-4">
-                        <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
-                        <input type="email" id="email" name="email" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring focus:border-blue-300" placeholder="xyzabc123@gmail.com" />
+                    <div className="mb-4">
+                        <label for="email" className="block text-sm font-medium text-gray-700">Email</label>
+                        <input type="email" id="email" name="email" className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring focus:border-blue-300" placeholder="xyzabc123@gmail.com" />
                     </div>
-                    <div class="mb-4">
-                        <label for="username" class="block text-sm font-medium text-gray-700">Username</label>
-                        <input type="text" id="username" name="username" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring focus:border-blue-300" placeholder="XYZ11" />
+                    <div className="mb-4">
+                        <label for="username" className="block text-sm font-medium text-gray-700">Username</label>
+                        <input type="text" id="username" name="username" className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring focus:border-blue-300" placeholder="XYZ11" />
                     </div>
-                    <div class="mb-4">
-                        <label for="mobile" class="block text-sm font-medium text-gray-700">Mobile No.</label>
-                        <input type="tel" id="mobile" name="mobile" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring focus:border-blue-300" placeholder="1234567890" />
+                    <div className="mb-4">
+                        <label for="mobile" className="block text-sm font-medium text-gray-700">Mobile No.</label>
+                        <input type="tel" id="mobile" name="mobile" className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring focus:border-blue-300" placeholder="1234567890" />
                     </div>
-                    <div class="mb-4">
-                        <label for="dob" class="block text-sm font-medium text-gray-700">DOB</label>
-                        <input type="date" id="dob" name="dob" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring focus:border-blue-300" />
+                    <div className="mb-4">
+                        <label for="dob" className="block text-sm font-medium text-gray-700">DOB</label>
+                        <input type="date" id="dob" name="dob" className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring focus:border-blue-300" />
                     </div>
-                    <div class="mb-4">
-                        <label for="introduction" class="block text-sm font-medium text-gray-700">My Introduction</label>
-                        <textarea id="introduction" name="introduction" rows="4" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring focus:border-blue-300" placeholder="Tell us about yourself..."></textarea>
+                    <div className="mb-4">
+                        <label for="introduction" className="block text-sm font-medium text-gray-700">My Introduction</label>
+                        <textarea id="introduction" name="introduction" rows="4" className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring focus:border-blue-300" placeholder="Tell us about yourself..."></textarea>
                     </div>
-                    <div class="flex justify-end">
-                        <button type="submit" class="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-700">Submit</button>
+                    <div className="flex justify-end">
+                        <button type="submit" className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-700">Submit</button>
                     </div>
                 </form>
             </div> */}
 
       {/* one part ends */}
 
-      <div class="p-4 max-w-lg mx-auto bg-white rounded-xl shadow-md">
+      <div className="p-4 max-w-lg mx-auto bg-white rounded-xl shadow-md">
         <form>
           {/* <!-- Gender Field --> */}
-          <div class="flex items-center mb-4">
+          <div className="flex items-center mb-4">
             <label
               for="gender"
-              class="block text-sm font-medium text-gray-700 w-1/3"
+              className="block text-sm font-medium text-gray-700 w-1/3"
             >
               Gender
             </label>
@@ -82,16 +82,16 @@ const ProfileMobile = () => {
               type="text"
               id="gender"
               name="gender"
-              class="mt-1 block w-2/3 rounded-md border-gray-300 shadow-sm focus:ring focus:border-blue-300"
+              className="mt-1 block w-2/3 rounded-md border-gray-300 shadow-sm focus:ring focus:border-blue-300"
               placeholder="Man"
             />
           </div>
 
           {/* <!-- Email Field --> */}
-          <div class="flex items-center mb-4">
+          <div className="flex items-center mb-4">
             <label
               for="email"
-              class="block text-sm font-medium text-gray-700 w-1/3"
+              className="block text-sm font-medium text-gray-700 w-1/3"
             >
               Email
             </label>
@@ -99,16 +99,16 @@ const ProfileMobile = () => {
               type="email"
               id="email"
               name="email"
-              class="mt-1 block w-2/3 rounded-md border-gray-300 shadow-sm focus:ring focus:border-blue-300"
+              className="mt-1 block w-2/3 rounded-md border-gray-300 shadow-sm focus:ring focus:border-blue-300"
               placeholder="xyzabc123@gmail.com"
             />
           </div>
 
           {/* <!-- Username Field --> */}
-          <div class="flex items-center mb-4">
+          <div className="flex items-center mb-4">
             <label
               for="username"
-              class="block text-sm font-medium text-gray-700 w-1/3"
+              className="block text-sm font-medium text-gray-700 w-1/3"
             >
               Username
             </label>
@@ -116,16 +116,16 @@ const ProfileMobile = () => {
               type="text"
               id="username"
               name="username"
-              class="mt-1 block w-2/3 rounded-md border-gray-300 shadow-sm focus:ring focus:border-blue-300"
+              className="mt-1 block w-2/3 rounded-md border-gray-300 shadow-sm focus:ring focus:border-blue-300"
               placeholder="XYZ11"
             />
           </div>
 
           {/* <!-- Mobile Number Field --> */}
-          <div class="flex items-center mb-4">
+          <div className="flex items-center mb-4">
             <label
               for="mobile"
-              class="block text-sm font-medium text-gray-700 w-1/3"
+              className="block text-sm font-medium text-gray-700 w-1/3"
             >
               Mobile No.
             </label>
@@ -133,16 +133,16 @@ const ProfileMobile = () => {
               type="tel"
               id="mobile"
               name="mobile"
-              class="mt-1 block w-2/3 rounded-md border-gray-300 shadow-sm focus:ring focus:border-blue-300"
+              className="mt-1 block w-2/3 rounded-md border-gray-300 shadow-sm focus:ring focus:border-blue-300"
               placeholder="1234567890"
             />
           </div>
 
           {/* <!-- DOB Field --> */}
-          <div class="flex items-center mb-4">
+          <div className="flex items-center mb-4">
             <label
               for="dob"
-              class="block text-sm font-medium text-gray-700 w-1/3"
+              className="block text-sm font-medium text-gray-700 w-1/3"
             >
               DOB
             </label>
@@ -150,15 +150,15 @@ const ProfileMobile = () => {
               type="date"
               id="dob"
               name="dob"
-              class="mt-1 block w-2/3 rounded-md border-gray-300 shadow-sm focus:ring focus:border-blue-300"
+              className="mt-1 block w-2/3 rounded-md border-gray-300 shadow-sm focus:ring focus:border-blue-300"
             />
           </div>
 
           {/* <!-- Introduction Field --> */}
-          <div class="mb-4">
+          <div className="mb-4">
             <label
               for="introduction"
-              class="block text-sm font-medium text-gray-700"
+              className="block text-sm font-medium text-gray-700"
             >
               My Introduction
             </label>
@@ -166,15 +166,15 @@ const ProfileMobile = () => {
               id="introduction"
               name="introduction"
               rows="4"
-              class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring focus:border-blue-300"
+              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring focus:border-blue-300"
               placeholder="Tell us about yourself..."
             ></textarea>
           </div>
 
-          <div class="flex justify-end">
+          <div className="flex justify-end">
             <button
               type="submit"
-              class="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-700"
+              className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-700"
             >
               Submit
             </button>

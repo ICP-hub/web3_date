@@ -1,16 +1,24 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import createAccountImage from "../../../assets/Images/CreateAccount/createAccountImage.png";
+import { SlArrowUp,SlArrowDown } from "react-icons/sl";
 
 const CreateAccount4 = () => {
   const navigate = useNavigate();
+  const [showArt, setShowArt] = useState(false); 
+  const [showActivities, setshowActivities] = useState(false);
+  const [showTravel, setshowTravel] = useState(false);
+  const [showBussiness, setShowBussiness] = useState(false); 
+
 
   const [formData, setFormData] = useState({
     selectedArt: "",
     selectedPets: "",
-    selectedHabbits: "",
+    selectedHabbits: [],
     selectedActivities: "",
     selectedMovies: "",
+    selectedsports: "",
+    selectedBussiness: "",
     selectedTravel: "",
   });
 
@@ -21,7 +29,9 @@ const CreateAccount4 = () => {
   useEffect(() => {
     const savedData = localStorage.getItem("form4");
     if (savedData) {
-      setFormData(JSON.parse(savedData));
+      let data = JSON.parse(savedData);
+      data.selectedBussiness = [];
+      setFormData(data);
     }
   }, []);
 
@@ -40,6 +50,7 @@ const CreateAccount4 = () => {
       name === "selectedMovies" ||
       name === "selectedTravel" ||
       name === "selectedActivities" ||
+      name === "selectedsports" ||
       name === "selectedHabbits"
     ) {
       setFormData((prevData) => {
@@ -121,18 +132,27 @@ const CreateAccount4 = () => {
             {/* art Selection */}
             <fieldset className="mb-2">
               <legend className="block text-lg font-semibold mb-1 text-white md:text-black">
-                Art and Culture
+                Art and Culture <span className="text-gray-400 text-sm">(select any 2)</span>
               </legend>
 
               <div className="flex flex-wrap gap-2 md:gap-2 mb-4 py-2  rounded-3xl">
                 {[
-                  "Drawing",
                   "Museum",
-                  "Art Galleries",
+                  "Drawing",
+                  "Theaters",
                   "Craft",
+                  "Art Galleries ",
+                  "Live music",
                   "Night Life",
+                  "Cosplay",
                   "Exhibitions",
-                ].map((art) => (
+                  "Folk music",
+                  "Playwriting",
+                  "Hip-hop music",
+                  "Cultural festivals",
+                  "Others"
+                ].slice(0, showArt ? undefined : 9)
+                .map((art) => (
                   <label
                     key={art}
                     className={`inline-block px-3 py-2 rounded-full text-sm focus:outline-none transition duration-300 ${
@@ -153,6 +173,22 @@ const CreateAccount4 = () => {
                     {art}
                   </label>
                 ))}
+                {showArt && ( // Render the "See Less" button if showAllSports is true
+                <button
+                  onClick={() => setShowArt(false)}
+                  className="text-[#4D73F9] items-center flex text-md font-semibold "
+                  type="button"
+                >
+                  see less <SlArrowUp className="bold-icon ml-[10px] "  />
+                </button>
+              )}
+              <button
+                onClick={() => setShowArt(!showArt)}
+                className="text-[#4D73F9] text-md flex items-center font-semibold"
+                type="button"
+              >
+                {showArt ? "" : <p className="flex items-center">see more <SlArrowDown className="ml-[10px] font-bold"  /></p>} 
+              </button>
               </div>
             </fieldset>
 
@@ -216,7 +252,7 @@ const CreateAccount4 = () => {
 
             <fieldset className="mb-2">
               <legend className="block text-lg font-semibold mb-1 text-white md:text-black">
-                Outdoor Activities
+                Outdoor Activities  <span className="text-gray-400 text-sm">(select any 2)</span>
               </legend>
               <div className="flex flex-wrap gap-2 md:gap-2 mb-2 py-2  rounded-3xl">
                 {[
@@ -224,11 +260,18 @@ const CreateAccount4 = () => {
                   "Trekking",
                   "Fishing",
                   "Skiing",
-                  "Rafting",
-                  "Biking",
-                  "Camping",
-                  "Hunting",
-                ].map((activities) => (
+                  "Motor Sports",
+                  "Diving",
+                  "Surfing",
+                  "Sailing",
+                  "Paddle Boarding",
+                  "Kayaking",
+                  "Trail running",
+                  "cycling",
+                  "Tennis",
+                  "Others"
+                ].slice(0, showActivities ? undefined : 10)
+                .map((activities) => (
                   <label
                     key={activities}
                     className={`inline-block px-3 py-2 rounded-full text-sm focus:outline-none transition duration-300 ${
@@ -249,12 +292,28 @@ const CreateAccount4 = () => {
                     {activities}
                   </label>
                 ))}
+                {showActivities && ( // Render the "See Less" button if showAllSports is true
+                <button
+                  onClick={() => setshowActivities(false)}
+                  className="text-[#4D73F9] items-center flex text-md font-semibold"
+                  type="button"
+                >
+                  see less  <SlArrowUp className="bold-icon ml-[10px] "  />
+                </button>
+              )}
+              <button
+                onClick={() => setshowActivities(!showActivities)}
+                className="text-[#4D73F9] text-md font-semibold"
+                type="button"
+              >
+                {showActivities ? "" :<p className="flex items-center">see more <SlArrowDown className="ml-[10px] font-bold "/></p>}
+              </button>
               </div>
             </fieldset>
 
             <fieldset className="mb-2">
               <legend className="block text-lg font-semibold mb-1 text-white md:text-black">
-                Movies
+                Movies  <span className="text-gray-400 text-sm">(select any 2)</span>
               </legend>
               <div className="flex flex-wrap gap-2 md:gap-2 mb-2 py-2 rounded-3xl">
                 {[
@@ -263,20 +322,21 @@ const CreateAccount4 = () => {
                   "Comedy",
                   "Crime",
                   "Romantic",
-                  "Horror",
+                  "Rom-com",
+                  "Sci-fi",
                   "Thriller",
-                  "Documentary",
-                  "War",
-                  "Film noir",
-                  "Fantasy",
-                  "Bollywood",
-                  "K-drama",
-                  "Sports",
-                  "Historical",
-                  "Superhero",
-                  "Biography",
-                  "Adventure",
-                  "Mystery",
+                  // "Documentary",
+                  // "War",
+                  // "Film noir",
+                  // "Fantasy",
+                  // "Bollywood",
+                  // "K-drama",
+                  // "Sports",
+                  // "Historical",
+                  // "Superhero",
+                  // "Biography",
+                  // "Adventure",
+                  // "Mystery",
                 ].map((movies) => (
                   <label
                     key={movies}
@@ -303,7 +363,7 @@ const CreateAccount4 = () => {
 
             <fieldset className="mb-2">
               <legend className="block text-lg font-semibold mb-1 text-white md:text-black">
-                Travel
+                Travel  <span className="text-gray-400 text-sm">(select any 2)</span>
               </legend>
               <div className="flex flex-wrap gap-2 md:gap-2 mb-2 py-2  rounded-3xl">
                 {[
@@ -321,7 +381,9 @@ const CreateAccount4 = () => {
                   "staycations",
                   "Camping",
                   "Backpacking",
-                ].map((travel) => (
+                ]
+                .slice(0, showTravel ? undefined : 8)
+                .map((travel) => (
                   <label
                     key={travel}
                     className={`inline-block px-3 py-2 rounded-full text-sm focus:outline-none transition duration-300 ${
@@ -343,6 +405,67 @@ const CreateAccount4 = () => {
                   </label>
                 ))}
               </div>
+            </fieldset>
+            <fieldset className="mb-2">
+              <legend className="block text-lg font-semibold mb-1 text-white md:text-black">
+              Business And Growth  <span className="text-gray-400 text-sm">(select any 2)</span>
+              </legend>
+              <div className="flex flex-wrap gap-2 md:gap-2 mb-2 py-2 rounded-3xl">
+                {[
+                  "Investment",
+                  "Networking",
+                  "Self Development",
+                  "Environmentalism",
+                  "Metaverse",
+                  "Trading",
+                  "DAO’s",
+                  "NFT’s",
+                  "Crypto",
+                  "Service-based Business ",
+                  "Franchise ",
+                  " Freelancing",
+                  "IT Development",
+                  "Others",
+                ]
+                .slice(0, showBussiness ? undefined : 8)
+                .map((bussniss) => (
+                  <label
+                    key={bussniss}
+                    className={`inline-block px-3 py-2 rounded-full text-sm focus:outline-none transition duration-300 ${
+                      formData.  selectedBussiness.includes(bussniss)
+                        ? "bg-yellow-500 text-black"
+                        : "bg-transparent hover:bg-yellow-500 hover:text-black text-white md:text-black border border-white md:border-black"
+                    }`}
+                  >
+                    <input
+                      type="checkbox"
+                      name="selectedBussiness"
+                      value={bussniss}
+                      onChange={handleFormChange}
+                      checked={formData.selectedBussiness.includes(bussniss)}
+                      style={{ display: "none" }}
+                    />
+                    {bussniss}
+                  </label>
+                ))}
+                {showBussiness && ( // Render the "See Less" button if showAllSports is true
+                <button
+                  onClick={() => setShowBussiness(false)}
+                  className="text-[#4D73F9] items-center flex text-md font-semibold"
+                  type="button"
+                >
+                  see less <SlArrowUp className="bold-icon ml-[10px]"  />
+                </button>
+              )}
+              <button
+                onClick={() => setShowBussiness(!showBussiness)}
+                className="text-[#4D73F9] text-md font-samibold ml-[10px] font-semibold "
+                type="button"
+              >
+                {showBussiness ? "" : <p className="flex items-center">see more <SlArrowDown className="ml-[10px] font-bold"  /></p>}
+              </button>
+              </div>
+              
             </fieldset>
 
             {/* Form Buttons */}

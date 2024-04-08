@@ -11,7 +11,7 @@ const CreateAccount2 = () => {
     selectedFooding: "",
     selectedWhatYouDo: "",
     selectedlookingFor: "",
-    selectedHeight: 0,
+    selectedHeight: "Feet’inch’",
     selectedZodiac: "",
   });
 
@@ -91,8 +91,8 @@ const CreateAccount2 = () => {
                   <label
                     key={genPro}
                     className={`inline-block px-3 py-2 rounded-full text-sm focus:outline-none transition duration-300 ${formData.genderPronouns === genPro
-                        ? "bg-yellow-500 text-black"
-                        : "bg-transparent hover:bg-yellow-500 hover:text-black text-white md:text-black border border-white md:border-black"
+                      ? "bg-yellow-500 text-black"
+                      : "bg-transparent hover:bg-yellow-500 hover:text-black text-white md:text-black border border-white md:border-black"
                       }`}
                   >
                     <input
@@ -107,14 +107,54 @@ const CreateAccount2 = () => {
                 ))}
               </div>
             </fieldset>
+            <div className="flex flex-col md:flex-row md:space-x-4 mb-6">
+              {/* Height Input */}
+              <div className="flex-1 mb-4 md:mb-0">
+                <label
+                  htmlFor="selectedHeight"
+                  className=" block text-lg font-semibold  mb-2 text-white md:text-black"
+                >
+                  Height
+                </label>
+                <input
+                  type="number"
+                  id="selectedHeight"
+                  name="selectedHeight"
+                  placeholder="Feet’inch’’"
+                  value={formData.selectedHeight}
+                  onChange={handleFormChange}
+                  className="px-4 py-2 rounded-full border border-white md:border-black bg-transparent text-white md:text-black focus:ring-yellow-500 focus:border-yellow-500 text-center font-samibold w-48"
+                />
+
+              </div>
+
+              {/* Zodiac Sign Input */}
+              {/* <div className="flex-1">
+                <label
+                  htmlFor="selectedZodiac"
+                  className="block text-lg font-semibold  mb-2 text-white md:text-black"
+                >
+                  Zodiac Sign
+                </label>
+                <input
+                  type="text"
+                  id="selectedZodiac"
+                  name="selectedZodiac"
+                  placeholder="Your zodiac sign"
+                  value={formData.selectedZodiac}
+                  onChange={handleFormChange}
+                  className="w-full px-4 py-2 rounded-full border border-white md:border-black bg-transparent text-white md:text-black focus:ring-yellow-500 focus:border-yellow-500"
+                />
+              </div> */}
+            </div>
 
             <fieldset className="mb-2">
               <legend className="block text-lg font-semibold mb-1 text-white md:text-black">
                 Religion
               </legend>
-              <div className="flex flex-wrap gap-2 md:gap-2 mb-2 py-2 px-0 rounded-3xl">
-                {["Hindu", "Muslim", "Sikh", "Christian", "Jain", "Catholic", "Agnostic", "Jewish", "Atheist", "Buddhist", "Spiritual"].map(
-                  (religion) => (
+              <div>
+                <div className="flex flex-wrap gap-2 md:gap-2  px-0 rounded-3xl">
+                  {["Hindu", "Muslim", "Sikh", "Christian"].map((religion) => (
                     <label
                       key={religion}
                       className={`inline-block px-3 py-2 rounded-full text-sm focus:outline-none transition duration-300 ${formData.selectedReligion === religion
@@ -131,52 +171,63 @@ const CreateAccount2 = () => {
                       />
                       {religion}
                     </label>
+                  ))}
+                </div>
+                <div className="flex flex-wrap gap-2 md:gap-2 mb-2 py-2 px-0 rounded-3xl">
+                  {["Jain", "Catholic", "Agnostic", "Jewish", "Atheist", "Buddhist", "Spiritual"].map(
+                    (religion) => (
+                      <label
+                        key={religion}
+                        className={`inline-block px-3 py-2 rounded-full text-sm focus:outline-none transition duration-300 ${formData.selectedReligion === religion
+                            ? "bg-yellow-500 text-black"
+                            : "bg-transparent hover:bg-yellow-500 hover:text-black text-white md:text-black border border-white md:border-black"
+                          }`}
+                      >
+                        <input
+                          type="radio"
+                          name="selectedReligion"
+                          value={religion}
+                          onChange={handleFormChange}
+                          style={{ display: "none" }}
+                        />
+                        {religion}
+                      </label>
+                    )
+                  )}
+                </div>
+              </div>
+
+            </fieldset>
+
+            {/* Height and Zodiac Sign Selection */}
+           
+            <fieldset className="mb-2">
+              <legend className="block text-lg font-semibold  mb-2 text-white md:text-black">
+                Zodiac Sign
+              </legend>
+              <div className="flex flex-wrap gap-2 md:gap-2 mb-2 py-2  rounded-3xl">
+                {["Capricorn", "Aquarius", "Pisces", "Aries", "Taurus", "Gemini", "Cancer", "Leo", "Virgo", "Libra", "Scorpio", "Sagittarius"].map(
+                  (Zodiac) => (
+                    <label
+                      key={Zodiac}
+                      className={`inline-block px-3 py-2 rounded-full text-sm focus:outline-none transition duration-300 ${formData.selectedZodiac === Zodiac
+                        ? "bg-yellow-500 text-black"
+                        : "bg-transparent hover:bg-yellow-500 hover:text-black text-white md:text-black border border-white md:border-black"
+                        }`}
+                    >
+                      <input
+                        type="radio"
+                        name="selectedZodiac"
+                        value={Zodiac}
+                        onChange={handleFormChange}
+                        style={{ display: "none" }}
+                      />
+                      {Zodiac}
+                    </label>
                   )
                 )}
               </div>
             </fieldset>
-
-            {/* Height and Zodiac Sign Selection */}
-            <div className="flex flex-col md:flex-row md:space-x-4 mb-6">
-              {/* Height Input */}
-              <div className="flex-1 mb-4 md:mb-0">
-                <label
-                  htmlFor="selectedHeight"
-                  className=" block text-lg font-semibold  mb-2 text-white md:text-black"
-                >
-                  Height (Feet)
-                </label>
-                <input
-                  type="number"
-                  id="selectedHeight"
-                  name="selectedHeight"
-                  placeholder="Your height in feet"
-                  value={formData.selectedHeight}
-                  onChange={handleFormChange}
-                  className="w-full px-4 py-2 rounded-full border border-white md:border-black bg-transparent text-white md:text-black focus:ring-yellow-500 focus:border-yellow-500"
-                />
-              </div>
-
-              {/* Zodiac Sign Input */}
-              <div className="flex-1">
-                <label
-                  htmlFor="selectedZodiac"
-                  className="block text-lg font-semibold  mb-2 text-white md:text-black"
-                >
-                  Zodiac Sign
-                </label>
-                <input
-                  type="text"
-                  id="selectedZodiac"
-                  name="selectedZodiac"
-                  placeholder="Your zodiac sign"
-                  value={formData.selectedZodiac}
-                  onChange={handleFormChange}
-                  className="w-full px-4 py-2 rounded-full border border-white md:border-black bg-transparent text-white md:text-black focus:ring-yellow-500 focus:border-yellow-500"
-                />
-              </div>
-            </div>
-
             <fieldset className="mb-2">
               <legend className="block text-lg font-semibold  mb-2 text-white md:text-black">
                 Fooding
@@ -187,8 +238,8 @@ const CreateAccount2 = () => {
                     <label
                       key={Fooding}
                       className={`inline-block px-3 py-2 rounded-full text-sm focus:outline-none transition duration-300 ${formData.selectedFooding === Fooding
-                          ? "bg-yellow-500 text-black"
-                          : "bg-transparent hover:bg-yellow-500 hover:text-black text-white md:text-black border border-white md:border-black"
+                        ? "bg-yellow-500 text-black"
+                        : "bg-transparent hover:bg-yellow-500 hover:text-black text-white md:text-black border border-white md:border-black"
                         }`}
                     >
                       <input
@@ -205,6 +256,7 @@ const CreateAccount2 = () => {
               </div>
             </fieldset>
 
+
             <fieldset className="mb-2">
               <legend className="block text-lg font-semibold mb-1 text-white md:text-black ">
                 What You do
@@ -215,8 +267,8 @@ const CreateAccount2 = () => {
                     <label
                       key={WhatYouDo}
                       className={`inline-block px-3 py-2 rounded-full text-sm focus:outline-none transition duration-300 ${formData.selectedWhatYouDo === WhatYouDo
-                          ? "bg-yellow-500 text-black"
-                          : "bg-transparent hover:bg-yellow-500 hover:text-black text-white md:text-black border border-white md:border-black"
+                        ? "bg-yellow-500 text-black"
+                        : "bg-transparent hover:bg-yellow-500 hover:text-black text-white md:text-black border border-white md:border-black"
                         }`}
                     >
                       <input
@@ -248,8 +300,8 @@ const CreateAccount2 = () => {
                   <label
                     key={lookingFor}
                     className={`inline-block px-3 py-2 rounded-full text-sm focus:outline-none transition duration-300 ${formData.selectedlookingFor === lookingFor
-                        ? "bg-yellow-500 text-black"
-                        : "bg-transparent hover:bg-yellow-500 hover:text-black text-white md:text-black border border-white md:border-black"
+                      ? "bg-yellow-500 text-black"
+                      : "bg-transparent hover:bg-yellow-500 hover:text-black text-white md:text-black border border-white md:border-black"
                       }`}
                   >
                     <input

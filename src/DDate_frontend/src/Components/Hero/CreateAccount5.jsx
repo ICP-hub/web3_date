@@ -83,95 +83,95 @@ const CreateAccount5 = () => {
     }
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  // const handleSubmit = async (e) => {
+  //   e.preventDefault();
 
-    setIsButtonDisable(!isButtonDisable);
+  //   setIsButtonDisable(!isButtonDisable);
 
-    if (imageFiles.length === 0) {
-      setImageError(true);
-      return;
-    }
-    localStorage.setItem("form5", JSON.stringify(formData));
-    console.log(formData);
+  //   if (imageFiles.length === 0) {
+  //     setImageError(true);
+  //     return;
+  //   }
+  //   localStorage.setItem("form5", JSON.stringify(formData));
+  //   console.log(formData);
 
-    const formKeys = ["form1", "form2", "form3", "form4", "form5"];
-    const userData = {};
-    const principalString = localStorage.getItem("id");
-    console.log(principalString);
+  //   const formKeys = ["form1", "form2", "form3", "form4", "form5"];
+  //   const userData = {};
+  //   const principalString = localStorage.getItem("id");
+  //   console.log(principalString);
 
-    // Convert the principal string to a Principal object
-    const principal = convertStringToPrincipal(principalString);
+  //   // Convert the principal string to a Principal object
+  //   const principal = convertStringToPrincipal(principalString);
 
-    if (principal) {
-      formKeys.forEach((key) => {
-        userData[key] = localStorage.getItem(key);
-      });
+  //   if (principal) {
+  //     formKeys.forEach((key) => {
+  //       userData[key] = localStorage.getItem(key);
+  //     });
 
-      const result = {};
+  //     const result = {};
 
-      for (const key in userData) {
-        if (userData.hasOwnProperty(key)) {
-          const formData = JSON.parse(userData[key]);
-          Object.assign(result, formData);
-        }
-      }
+  //     for (const key in userData) {
+  //       if (userData.hasOwnProperty(key)) {
+  //         const formData = JSON.parse(userData[key]);
+  //         Object.assign(result, formData);
+  //       }
+  //     }
 
-      const objectSendToBackendFormat = {
-        id: principal,
-        gender: result.usergender,
-        email: result.email,
-        name: result.username,
-        mobile_number: result.mobile,
-        dob: result.dob,
-        gender_pronouns: result.genderPronouns,
-        religion: result.selectedReligion,
-        height: result.selectedHeight,
-        zodiac: result.selectedZodiac,
-        diet: result.selectedFooding,
-        occupation: result.selectedWhatYouDo,
-        looking_for: result.selectedlookingFor,
-        smoking: result.selectedsmoking,
-        drinking: result.selecteddrink,
-        hobbies: result.selectedhobbies,
-        sports: result.selectedsports,
-        art_and_culture: result.selectedArt,
-        pets: result.selectedPets,
-        general_habits: result.selectedHabbits,
-        outdoor_activities: result.selectedActivities,
-        travel: result.selectedTravel,
-        movies: result.selectedMovies,
-        interests_in: result.selectedintrests,
-        age: result.age,
-        location: result.selectedLocation,
-        min_preferred_age: result.min_age,
-        max_preferred_age: result.max_age,
-        preferred_gender: result.selectedintrests,
-        preferred_location: result.selectedPrefferedLocation,
-        introduction: result.selectedIntro,
-        images: imageFiles,
-      };
+  //     const objectSendToBackendFormat = {
+  //       id: principal,
+  //       gender: result.usergender,
+  //       email: result.email,
+  //       name: result.username,
+  //       mobile_number: result.mobile,
+  //       dob: result.dob,
+  //       gender_pronouns: result.genderPronouns,
+  //       religion: result.selectedReligion,
+  //       height: result.selectedHeight,
+  //       zodiac: result.selectedZodiac,
+  //       diet: result.selectedFooding,
+  //       occupation: result.selectedWhatYouDo,
+  //       looking_for: result.selectedlookingFor,
+  //       smoking: result.selectedsmoking,
+  //       drinking: result.selecteddrink,
+  //       hobbies: result.selectedhobbies,
+  //       sports: result.selectedsports,
+  //       art_and_culture: result.selectedArt,
+  //       pets: result.selectedPets,
+  //       general_habits: result.selectedHabbits,
+  //       outdoor_activities: result.selectedActivities,
+  //       travel: result.selectedTravel,
+  //       movies: result.selectedMovies,
+  //       interests_in: result.selectedintrests,
+  //       age: result.age,
+  //       location: result.selectedLocation,
+  //       min_preferred_age: result.min_age,
+  //       max_preferred_age: result.max_age,
+  //       preferred_gender: result.selectedintrests,
+  //       preferred_location: result.selectedPrefferedLocation,
+  //       introduction: result.selectedIntro,
+  //       images: imageFiles,
+  //     };
 
-      localStorage.setItem("myImage", objectSendToBackendFormat.images[0]);
+  //     localStorage.setItem("myImage", objectSendToBackendFormat.images[0]);
 
-      console.log(
-        "image in local storage",
-        objectSendToBackendFormat.images[0]
-      );
+  //     console.log(
+  //       "image in local storage",
+  //       objectSendToBackendFormat.images[0]
+  //     );
 
-      console.log("objectSendToBackendFormat", objectSendToBackendFormat);
+  //     console.log("objectSendToBackendFormat", objectSendToBackendFormat);
 
-      try {
-        await DDate_backend.add_user_profile(objectSendToBackendFormat);
-        console.log(imageFiles);
-        navigate("/Swipe");
-      } catch (error) {
-        console.error("Error sending data to the backend:", error);
-      }
-    } else {
-      console.error("Error converting principal string to Principal object.");
-    }
-  };
+  //     try {
+  //       await DDate_backend.add_user_profile(objectSendToBackendFormat);
+  //       console.log(imageFiles);
+  //       navigate("/Swipe");
+  //     } catch (error) {
+  //       console.error("Error sending data to the backend:", error);
+  //     }
+  //   } else {
+  //     console.error("Error converting principal string to Principal object.");
+  //   }
+  // };
 
   function convertStringToPrincipal(principalString) {
     try {
@@ -183,6 +183,13 @@ const CreateAccount5 = () => {
       return null;
     }
   }
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    localStorage.setItem("form5", JSON.stringify(formData));
+    console.log(formData);
+    navigate("/CreateAccount6");
+  };
 
   return (
     <div className="flex w-full h-screen md:flex-row font-num">
@@ -340,7 +347,7 @@ const CreateAccount5 = () => {
             </div>
 
             {/* Image Input */}
-            <div className="flex flex-row w-full">
+            {/* <div className="flex flex-row w-full">
               <fieldset className="mb-2 w-full">
                 <legend className="block text-lg font-semibold mb-2 text-white md:text-black">
                   Add Photos (Minimum 1)
@@ -385,7 +392,7 @@ const CreateAccount5 = () => {
                   </p>
                 )}
               </fieldset>
-            </div>
+            </div> */}
 
             {/* Form Buttons */}
             <div className="flex justify-between mt-6">
@@ -398,14 +405,9 @@ const CreateAccount5 = () => {
               </button>
               <button
                 type="submit"
-                disabled={isButtonDisable}
-                className={`font-semibold py-2 px-4 rounded ${
-                  isButtonDisable
-                    ? "bg-gray-400 text-gray-200 cursor-not-allowed"
-                    : "bg-yellow-500 hover:bg-yellow-600 text-white"
-                }`}
+                className="bg-yellow-500 text-white font-semibold py-2 px-4 rounded hover:bg-yellow-600"
               >
-                {isButtonDisable ? "loading..." : "Save and Start"}
+                Next
               </button>
             </div>
           </form>

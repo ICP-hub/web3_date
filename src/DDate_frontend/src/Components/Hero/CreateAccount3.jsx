@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import createAccountImage from "../../../assets/Images/CreateAccount/createAccountImage.png";
-
+import { SlArrowUp,SlArrowDown } from "react-icons/sl";
 const CreateAccount3 = () => {
   const navigate = useNavigate();
 
@@ -66,7 +66,8 @@ const CreateAccount3 = () => {
     console.log(formData);
     navigate("/CreateAccount4");
   };
-
+  const [showAllSports, setShowAllSports] = useState(false); 
+  const [showhobbies , setshowhobbies] = useState(false);
   return (
     <div className="flex w-full h-screen md:flex-row font-num">
       {/* Image container for larger screens */}
@@ -168,7 +169,7 @@ const CreateAccount3 = () => {
             {/* Hobbies (select any 2) */}
             <fieldset className="mb-2">
               <legend className="block text-lg font-semibold mb-2 text-white md:text-black">
-                Hobbies
+                Hobbies <span className="text-gray-400 text-sm">(select any 2)</span>
               </legend>
               <div className="flex flex-wrap gap-2 md:gap-2 mb-2 py-2  rounded-3xl">
                 {[
@@ -180,8 +181,14 @@ const CreateAccount3 = () => {
                   "Numerology",
                   "Amateur Cook",
                   "Formula One",
+                  "Painting",
+                  "Pottery",
+                  "Camping",
+                  "Singing",
+                  "Photography",
                   "Others"
-                ].map((hobbies) => (
+                ].slice(0, showhobbies ? undefined : 8)
+                .map((hobbies) => (
                   <label
                     key={hobbies}
                     className={`inline-block px-3 py-2 rounded-full text-sm focus:outline-none transition duration-300 ${
@@ -202,13 +209,31 @@ const CreateAccount3 = () => {
                     {hobbies}
                   </label>
                 ))}
+                {showhobbies && ( // Render the "See Less" button if showAllSports is true
+                <button
+
+                  onClick={() => setshowhobbies(false)}
+                  className="text-[#4D73F9] text-md font-semibold flex items-center"
+                  type="button"
+                >
+                  see less <SlArrowUp className="bold-icon ml-[10px]"  />
+                </button>
+              )}
+              <button
+                onClick={() => setshowhobbies(!showhobbies)}
+                className="text-[#4D73F9] text-md font-semibold"
+                type="button"
+              >
+                {showhobbies ? "" : <p className="flex items-center ">see more <SlArrowDown className="ml-[10px]" /></p>}
+              
+              </button>
               </div>
             </fieldset>
 
             {/* Sports (select any 2) */}
             <fieldset className="mb-2">
               <legend className="block text-lg font-semibold mb-1 text-white md:text-black">
-                Sports
+                Sports <span className="text-gray-400 text-sm">(select any 2)</span>
               </legend>
               <div className="flex flex-wrap gap-2 md:gap-2 mb-2 py-2 rounded-3xl">
                 {[
@@ -216,12 +241,12 @@ const CreateAccount3 = () => {
                   "Football",
                   "Basketball",
                   "Tennis",
-                  "Chess",
                   "Badminton",
                   "Boxing",
                   "Gym",
                   "Yoga",
                   "Volleyball",
+                  "Chess",
                   "Carrom",
                   "Golf",
                   "Table-Tennis",
@@ -237,8 +262,10 @@ const CreateAccount3 = () => {
                   "Skydiving",
                   "Karate",
                   "Judo",
-                  "Archery",
-                ].map((sports) => (
+                  "Others",
+                ]
+                .slice(0, showAllSports ? undefined : 10)
+                .map((sports) => (
                   <label
                     key={sports}
                     className={`inline-block px-3 py-2 rounded-full text-sm focus:outline-none transition duration-300 ${
@@ -258,7 +285,24 @@ const CreateAccount3 = () => {
                     {sports}
                   </label>
                 ))}
+                {showAllSports && ( // Render the "See Less" button if showAllSports is true
+                <button
+                  onClick={() => setShowAllSports(false)}
+                  className="text-[#4D73F9] text-lg font-semibold flex items-center"
+                  type="button" 
+                >
+                  see less  <SlArrowUp className="bold-icon ml-[10px]"  />
+                </button>
+              )}
+              <button
+                onClick={() => setShowAllSports(!showAllSports)}
+                className="text-[#4D73F9] text-md font-semibold "
+                type="button"
+              >
+                {showAllSports ? "" : <p className="flex items-center ml-[6px]">see more <SlArrowDown className="ml-[10px]" /></p>}
+              </button>
               </div>
+              
             </fieldset>
 
             {/* Form Buttons */}
