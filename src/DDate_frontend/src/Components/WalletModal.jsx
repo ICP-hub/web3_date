@@ -306,19 +306,19 @@ localStorage.setItem("id", principalText);
 
         <ul className="space-y-3">
           {/* AstroX ME */}
-          <li className="border border-gray-300 rounded-3xl flex items-center p-2 cursor-pointer transition-colors duration-300 ease-in-out  hover:bg-yellow-900 hover:border-yellow-500 active:bg-yellow-700 active:border-yellow-600">
+          <li className="border border-gray-300 rounded-3xl flex items-center p-2 cursor-pointer transition-colors duration-300 ease-in-out  hover:bg-yellow-900 hover:border-yellow-500 active:bg-yellow-700 active:border-yellow-600 opacity-50 pointer-events-none">
             <img src={AstroXME} alt="AstroXME" className="rounded-full h-8 w-8 flex items-center justify-center text-white mr-2" />
             <span className="text-center flex-grow" onClick={connectAstroXME}>AstroX ME</span>
           </li>
 
           {/* Infinity Wallet */}
-          <li className="border border-gray-300 rounded-3xl flex items-center p-2 cursor-pointer transition-colors duration-300 ease-in-out hover:bg-yellow-900 hover:border-yellow-500 active:bg-yellow-700 active:border-yellow-600">
+          <li className="border border-gray-300 rounded-3xl flex items-center p-2 cursor-pointer transition-colors duration-300 ease-in-out hover:bg-yellow-900 hover:border-yellow-500 active:bg-yellow-700 active:border-yellow-600 opacity-50 pointer-events-none">
             <img src={infinityWallet} alt="infinityWallet" className="rounded-full h-8 w-8 flex items-center justify-center text-white mr-2" />
             <span className="text-center flex-grow" onClick={connectInfinityWallet}>Infinity Wallet</span>
           </li>
 
           {/* NFID */}
-          <li className="border border-gray-300 rounded-3xl flex items-center p-2 cursor-pointer transition-colors duration-300 ease-in-out hover:bg-yellow-900 hover:border-yellow-500 active:bg-yellow-700 active:border-yellow-600">
+          <li className="border border-gray-300 rounded-3xl flex items-center p-2 cursor-pointer transition-colors duration-300 ease-in-out hover:bg-yellow-900 hover:border-yellow-500 active:bg-yellow-700 active:border-yellow-600 opacity-50 pointer-events-none">
             <img src={NFID} alt="NFID" className="rounded-full h-8 w-8 flex items-center justify-center text-white mr-2" />
             <span className="text-center flex-grow">NFID</span>
           </li>
@@ -337,7 +337,7 @@ localStorage.setItem("id", principalText);
           </li>
 
           {/* Stoic Wallet */}
-          <li className="border border-gray-300 rounded-3xl flex items-center p-2 cursor-pointer transition-colors duration-300 ease-in-out hover:bg-yellow-900 hover:border-yellow-500 active:bg-yellow-700 active:border-yellow-600">
+          <li className="border border-gray-300 rounded-3xl flex items-center p-2 cursor-pointer transition-colors duration-300 ease-in-out hover:bg-yellow-900 hover:border-yellow-500 active:bg-yellow-700 active:border-yellow-600 opacity-50 pointer-events-none">
             <img src={StoicWallet} alt="StoicWallet" className="rounded-full h-8 w-8 flex items-center justify-center text-white mr-2" />
             <span className="text-center flex-grow" onClick={connectStoicWallet}>Stoic Wallet</span>
           </li>
