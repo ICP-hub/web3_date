@@ -31,7 +31,7 @@ const LogoutModal = ({ isOpen, onClose }) => {
       >
         <h3 className="text-base font-base mb-2 text-center">Wallet Details</h3>
         <p className="border-t border-white w-3/4 mx-auto mb-4">
-          Principal :{principal.toText()}
+          Principal :{ principal && principal.toText()}
         </p>
 
         <div

@@ -31,7 +31,7 @@ const AllRoutes = () => {
 
   const userToken = localStorage.getItem('userToken');
 
-  console.log("getting it from local storage", userToken);
+  // console.log("getting it from local storage", userToken);
 
 
   // useEffect(()=>{
@@ -49,10 +49,10 @@ const AllRoutes = () => {
   const existingUserHandler = async () => {
     try {
       const principalString = localStorage.getItem("id");
-      console.log("Principal string from localStorage:", principalString);
+      // console.log("Principal string from localStorage:", principalString);
   
       if (principalString) {
-        const principal = convertStringToPrincipal(principalString);
+        const principal = Principal.fromText(principalString);
   
         if (principal) {
           const userExist = await DDate_backend.get_profile(principal);
@@ -78,16 +78,16 @@ const AllRoutes = () => {
     existingUserHandler();
   }, []);
 
-  function convertStringToPrincipal(principalString) {
-    try {
-      const principal = Principal.fromText(principalString);
-      console.log("Converted Principal: ", principal.toText());
-      return principal;
-    } catch (error) {
-      console.error("Error converting string to Principal: ", error);
-      return null;
-    }
-  }
+  // function convertStringToPrincipal(principalString) {
+  //   try {
+  //     const principal = Principal.fromText(principalString);
+  //     // console.log("Converted Principal: ", principal.toText());
+  //     return principal;
+  //   } catch (error) {
+  //     console.error("Error converting string to Principal: ", error);
+  //     return null;
+  //   }
+  // }
 
   //   async function getSignatureWithData(authClient){
   //     let principal = authClient.getIdentity().getPrincipal().toString();

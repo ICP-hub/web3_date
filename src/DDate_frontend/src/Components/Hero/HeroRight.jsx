@@ -16,10 +16,10 @@ const {principal} = useAuth()
 
 
   const id =localStorage.getItem('id')
-  console.log("id =?????", id) 
+  // console.log("id =?????", id) 
    const isUserLoggedIn = !!id
 
-  console.log("isUserLoggedIn =?????", isUserLoggedIn)
+  // console.log("isUserLoggedIn =?????", isUserLoggedIn)
 
   // const createAccountHandler = () => {
   //   navigate('/CreateAccount1');

@@ -8,7 +8,7 @@ import Footer from "../Components/Footer";
 
 const HomePage = () => {
   return (
-    <div className="container-fluid mx-auto sm:px-0 lg:px-0">
+    <div className="container mx-auto sm:px-0 lg:px-0">
       <Hero />
       <Info />
       <Explore />
