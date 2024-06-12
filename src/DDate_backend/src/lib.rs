@@ -2,7 +2,6 @@ mod profile_creation;
 mod notification;
 mod profile_matcher;
 mod right_and_left_swipe;
-mod socket_server;
 use crate::profile_creation::{UserProfileParams,UserProfileCreationInfo};
 use ic_cdk::{export_candid, query, update};
 pub use notification::*;
