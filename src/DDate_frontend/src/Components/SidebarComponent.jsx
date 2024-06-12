@@ -8,7 +8,7 @@ import { Principal } from "@dfinity/principal";
 import { IoLogOut } from "react-icons/io5";
 import Loader from "./Loader";
 
-const SidebarComponent = () => {
+const SidebarComponent = ({ userId }) => {
   const [formData, setFormData] = useState({
     preferred_location: "",
     interests_in: "",
@@ -117,7 +117,7 @@ const SidebarComponent = () => {
     } else {
       setIsInputFocused(false);
     }
-  
+
 
     if (name === "preferAge") {
       let minAge, maxAge;
@@ -258,9 +258,8 @@ const SidebarComponent = () => {
         </div>
       ) : (
         <aside
-          className={`fixed top-0 w-64 h-screen z-50 transition-transform ${
-            isSidebarOpen || !isMobileOrTablet ? "" : "-translate-x-full"
-          }`}
+          className={`fixed top-0 w-64 h-screen z-50 transition-transform ${isSidebarOpen || !isMobileOrTablet ? "" : "-translate-x-full"
+            }`}
           aria-label="Sidebar"
         >
           <div className="h-full px-3 py-4 overflow-y-auto bg-gradient-to-b from-[#DB7D11] to-[#6B3018]">
@@ -309,7 +308,7 @@ const SidebarComponent = () => {
                   ></svg>
                 )}
                 <button
-                  onClick={() => navigate("/Profile")}
+                  onClick={() => navigate("/Profile" ,{state:userId})}
                   className="block p-2 text-white text-sm rounded"
                 >
                   <span>My Profile</span>
@@ -365,7 +364,7 @@ const SidebarComponent = () => {
 
               <li
                 className=" mb-2 cursor-pointer flex flex-row items-center bg-yellow-600 py-1 rounded-full"
-                onClick={()=>{ setShowDropdown(!showDropDown)}}
+                onClick={() => { setShowDropdown(!showDropDown) }}
                 style={{
                   background:
                     "radial-gradient(68.18% 68.18% at 50% 50%, #FFC107 0%, #E28110 100%)",
@@ -410,125 +409,125 @@ const SidebarComponent = () => {
               </li>
             </ul>
             {showDropDown &&
-            <form className="transition-all duration-500 ease-in-out " onSubmit={handleSubmit}>
-              <div className="flex flex-col mb-2 ml-4 text-white">
-                <fieldset className="mb-1">
-                  <legend className="font-bold p-2 text-base rounded">
-                    Your interests in
-                  </legend>
-                  <div className="flex flex-wrap gap-2 md:gap-2 mb-1 py-2 px-2 rounded-3xl font-light text-sm">
-                    {["Male", "Female", "All"].map((interest) => (
-                      <label key={interest} className="flex items-center">
-                        <input
-                          type="radio"
-                          name="interests_in"
-                          value={interest}
-                          checked={formData.interests_in === interest}
-                          onChange={handleFormChange}
-                          style={{ marginRight: "0.5rem" }}
-                        />
-                        {interest}
-                      </label>
-                    ))}
-                  </div>
-                </fieldset>
-
-                <fieldset className="mb-1">
-                  <legend className="font-bold p-2 text-base rounded">
-                    Preferred age
-                  </legend>
-                  <div className="flex flex-wrap gap-2 md:gap-2 mb-1 py-2 px-2 rounded-3xl font-light	text-sm">
-                    {["18-20", "20-25", "25-30", "above 30"].map(
-                      (preferAge) => (
-                        <label key={preferAge} className="flex items-center">
+              <form className="transition-all duration-500 ease-in-out " onSubmit={handleSubmit}>
+                <div className="flex flex-col mb-2 ml-4 text-white">
+                  <fieldset className="mb-1">
+                    <legend className="font-bold p-2 text-base rounded">
+                      Your interests in
+                    </legend>
+                    <div className="flex flex-wrap gap-2 md:gap-2 mb-1 py-2 px-2 rounded-3xl font-light text-sm">
+                      {["Male", "Female", "All"].map((interest) => (
+                        <label key={interest} className="flex items-center">
                           <input
                             type="radio"
-                            name="preferAge"
-                            value={preferAge}
+                            name="interests_in"
+                            value={interest}
+                            checked={formData.interests_in === interest}
                             onChange={handleFormChange}
-                            checked={formData.combinedAge === preferAge}
                             style={{ marginRight: "0.5rem" }}
                           />
-                          {preferAge}
+                          {interest}
                         </label>
-                      )
-                    )}
-                  </div>
-                </fieldset>
-              </div>
+                      ))}
+                    </div>
+                  </fieldset>
 
-              <div className="mb-3 ml-4">
-                <label
-                  htmlFor="location"
-                  className="block text-base  font-bold mb-1 ml-1 text-white"
-                >
-                  Location
-                </label>
-                <input
-                  type="text"
-                  id="location"
-                  name="location"
-                  placeholder="Your Location"
-                  value={formData.location}
-                  onChange={handleFormChange}
-                  onFocus={() => setIsInputFocused(true)}
-                  onBlur={() => setIsInputFocused(false)}
-                  className="w-11/12 px-2 py-2 rounded-full text-sm border border-white bg-transparent text-white focus:ring-yellow-500 focus:border-yellow-500"
-                />
-              </div>
+                  <fieldset className="mb-1">
+                    <legend className="font-bold p-2 text-base rounded">
+                      Preferred age
+                    </legend>
+                    <div className="flex flex-wrap gap-2 md:gap-2 mb-1 py-2 px-2 rounded-3xl font-light	text-sm">
+                      {["18-20", "20-25", "25-30", "above 30"].map(
+                        (preferAge) => (
+                          <label key={preferAge} className="flex items-center">
+                            <input
+                              type="radio"
+                              name="preferAge"
+                              value={preferAge}
+                              onChange={handleFormChange}
+                              checked={formData.combinedAge === preferAge}
+                              style={{ marginRight: "0.5rem" }}
+                            />
+                            {preferAge}
+                          </label>
+                        )
+                      )}
+                    </div>
+                  </fieldset>
+                </div>
 
-              <div className="mb-6 ml-4">
-                <label
-                  htmlFor="preferred_location"
-                  className="block text-base  font-bold mb-1 ml-1 text-white"
-                >
-                  Preferred Location
-                </label>
-                <input
-                  type="text"
-                  id="preferred_location"
-                  name="preferred_location"
-                  placeholder="Your Preferred Location"
-                  value={formData.preferred_location}
-                  onChange={handleFormChange}
-                  onFocus={() => setIsInputFocused(true)}
-                  onBlur={() => setIsInputFocused(false)}
-                  className="w-11/12 px-2 py-2 rounded-full text-sm border border-white bg-transparent text-white font-num  focus:ring-yellow-500 focus:border-yellow-500"
-                />
-              </div>
+                <div className="mb-3 ml-4">
+                  <label
+                    htmlFor="location"
+                    className="block text-base  font-bold mb-1 ml-1 text-white"
+                  >
+                    Location
+                  </label>
+                  <input
+                    type="text"
+                    id="location"
+                    name="location"
+                    placeholder="Your Location"
+                    value={formData.location}
+                    onChange={handleFormChange}
+                    onFocus={() => setIsInputFocused(true)}
+                    onBlur={() => setIsInputFocused(false)}
+                    className="w-11/12 px-2 py-2 rounded-full text-sm border border-white bg-transparent text-white focus:ring-yellow-500 focus:border-yellow-500"
+                  />
+                </div>
 
-              <div className="flex flex-col items-center">
-                <button
-                  type="submit"
-                  className="text-black hover:text-white font-normal py-2 px-20 text-sm rounded-full mb-4"
-                  style={{
-                    background:
-                      "radial-gradient(68.18% 68.18% at 50% 50%, #FFC107 0%, #E28110 100%)",
-                  }}
-                  onClick={() =>{
-                    console.log("Form data by tushar jain"+formData.location);
-                    navigate("/Swipe", { state: { forceRerender: Date.now() } })
-                  }
-                  }
-                >
-                  Apply
-                </button>
-              </div>
-             
-            </form>
-}
-<div className="flex flex-col items-center">
-                <button
-                  onClick={logoutHandler}
-                  className="text-black hover:text-white text-left flex gap-3 px-6 font-normal py-2 w-full mt-2 text-sm rounded-full "
-                  style={{
-                    background:
-                      "radial-gradient(68.18% 68.18% at 50% 50%, #FFC107 0%, #E28110 100%)",
-                  }}
-                >
-                  <IoLogOut size={22} /> Logout
-                </button>
-              </div>
+                <div className="mb-6 ml-4">
+                  <label
+                    htmlFor="preferred_location"
+                    className="block text-base  font-bold mb-1 ml-1 text-white"
+                  >
+                    Preferred Location
+                  </label>
+                  <input
+                    type="text"
+                    id="preferred_location"
+                    name="preferred_location"
+                    placeholder="Your Preferred Location"
+                    value={formData.preferred_location}
+                    onChange={handleFormChange}
+                    onFocus={() => setIsInputFocused(true)}
+                    onBlur={() => setIsInputFocused(false)}
+                    className="w-11/12 px-2 py-2 rounded-full text-sm border border-white bg-transparent text-white font-num  focus:ring-yellow-500 focus:border-yellow-500"
+                  />
+                </div>
+
+                <div className="flex flex-col items-center">
+                  <button
+                    type="submit"
+                    className="text-black hover:text-white font-normal py-2 px-20 text-sm rounded-full mb-4"
+                    style={{
+                      background:
+                        "radial-gradient(68.18% 68.18% at 50% 50%, #FFC107 0%, #E28110 100%)",
+                    }}
+                    onClick={() => {
+                      console.log("Form data by tushar jain" + formData.location);
+                      navigate("/Swipe", { state: { forceRerender: Date.now() } })
+                    }
+                    }
+                  >
+                    Apply
+                  </button>
+                </div>
+
+              </form>
+            }
+            <div className="flex flex-col items-center">
+              <button
+                onClick={logoutHandler}
+                className="text-black hover:text-white text-left flex gap-3 px-6 font-normal py-2 w-full mt-2 text-sm rounded-full "
+                style={{
+                  background:
+                    "radial-gradient(68.18% 68.18% at 50% 50%, #FFC107 0%, #E28110 100%)",
+                }}
+              >
+                <IoLogOut size={22} /> Logout
+              </button>
+            </div>
           </div>
         </aside>
       )}

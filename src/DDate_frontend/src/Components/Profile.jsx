@@ -6,10 +6,13 @@ import Ellipse from "../../assets/Images/UserProfiles/Ellipse.svg";
 import { CiEdit } from "react-icons/ci";
 import { useNavigate } from "react-router-dom";
 import { DDate_backend } from "../../../declarations/DDate_backend/index";
+import { useAuth } from "../auth/useAuthClient";
 import Loader from "./Loader";
 import "./Swipe.css";
+import { useLocation } from 'react-router-dom';
 
 const Profile = () => {
+  const { backendActor } = useAuth();
   const [loader, setLoader] = useState(false);
   const [progress, setProgress] = useState(60);
   const [formData, setFormData] = useState({
@@ -27,71 +30,8 @@ const Profile = () => {
   const [userProfile, setUserProfile] = useState(null);
   const [tempProfileImage, setTempProfileImage] = useState("");
 
+
   const navigate = useNavigate();
-
-  useEffect(() => {
-    setLoader(true);
-
-    const principalString = localStorage.getItem("id");
-
-    // const principalString = "tc7cw-ilo2x-rwqep-gohde-puqog-soeyv-szxvv-ybcgw-lbrkl-sm7ab-wae";
-    console.log(principalString);
-
-    if (principalString) {
-      const newPrincipal = convertStringToPrincipal(principalString);
-      setPrincipal(newPrincipal);
-
-      const fetchUserProfile = async () => {
-        try {
-          const userProfileData = await DDate_backend.get_profile(newPrincipal);
-          console.log("userProfileData ==>>>> ", userProfileData);
-          setFormData({
-            gender: userProfileData.gender || "",
-            email: userProfileData.email || "",
-            name: userProfileData.name || "",
-            mobile_number: userProfileData.mobile_number || "",
-            introduction: userProfileData.introduction || "",
-            images: userProfileData.images || [],
-            gender_pronouns: userProfileData.gender_pronouns || "",
-            matches: userProfileData.matches || [],
-            location: userProfileData.location || "",
-            dob: userProfileData.dob || "",
-            hobbies: userProfileData.hobbies || [],
-            occupation: userProfileData.occupation || "",
-            smoking: userProfileData.smoking || "",
-            drinking: userProfileData.drinking || "",
-            religion: userProfileData.religion || "",
-            height: userProfileData.height || "",
-            diet: userProfileData.diet || "",
-            pets: userProfileData.pets || "",
-            zodiac: userProfileData.zodiac || "",
-            sports: userProfileData.sports || [],
-            interests_in: userProfileData.interests_in || "",
-            movies: userProfileData.movies || [],
-            outdoor_activities: userProfileData.outdoor_activities || [],
-            travel: userProfileData.travel || [],
-            general_habits: userProfileData.general_habits || [],
-            art_and_culture: userProfileData.art_and_culture || [],
-            looking_for: userProfileData.looking_for || "",
-            min_preferred_age: userProfileData.min_preferred_age || null,
-            max_preferred_age: userProfileData.max_preferred_age || null,
-            preferred_gender: userProfileData.preferred_gender || "",
-            preferred_location: userProfileData.preferred_location || "",
-          });
-
-          setLoader(false);
-        } catch (error) {
-          console.error("Error fetching user profile: ", error);
-          setLoader(false);
-        }
-      };
-
-      fetchUserProfile();
-      setLoader(false);
-    } else {
-      console.warn("Principal string is null or empty.");
-    }
-  }, []);
 
   function convertStringToPrincipal(principalString) {
     try {
@@ -118,9 +58,60 @@ const Profile = () => {
     return circumference - (progress / 100) * circumference;
   };
 
+  const location = useLocation();
+  const id = location.state;
+  console.log("data in profiel ", id);
+
+  useEffect(() => {
+    const getData = async () => {
+      try {
+        await backendActor.get_an_account(id).then((userProfileData) => {
+          console.log("data of profile ", userProfileData);
+          // setFormData({
+          //   gender: userProfileData.gender || "",
+          //   email: userProfileData.email || "",
+          //   name: userProfileData.name || "",
+          //   mobile_number: userProfileData.mobile_number || "",
+          //   introduction: userProfileData.introduction || "",
+          //   images: userProfileData.images || [],
+          //   gender_pronouns: userProfileData.gender_pronouns || "",
+          //   matches: userProfileData.matches || [],
+          //   location: userProfileData.location || "",
+          //   dob: userProfileData.dob || "",
+          //   hobbies: userProfileData.hobbies || [],
+          //   occupation: userProfileData.occupation || "",
+          //   smoking: userProfileData.smoking || "",
+          //   drinking: userProfileData.drinking || "",
+          //   religion: userProfileData.religion || "",
+          //   height: userProfileData.height || "",
+          //   diet: userProfileData.diet || "",
+          //   pets: userProfileData.pets || "",
+          //   zodiac: userProfileData.zodiac || "",
+          //   sports: userProfileData.sports || [],
+          //   interests_in: userProfileData.interests_in || "",
+          //   movies: userProfileData.movies || [],
+          //   outdoor_activities: userProfileData.outdoor_activities || [],
+          //   travel: userProfileData.travel || [],
+          //   general_habits: userProfileData.general_habits || [],
+          //   art_and_culture: userProfileData.art_and_culture || [],
+          //   looking_for: userProfileData.looking_for || "",
+          //   min_preferred_age: userProfileData.min_preferred_age || null,
+          //   max_preferred_age: userProfileData.max_preferred_age || null,
+          //   preferred_gender: userProfileData.preferred_gender || "",
+          //   preferred_location: userProfileData.preferred_location || ""
+          // })
+        });
+
+      } catch (error) {
+        console.error("Error getting data to the backend:", error);
+      }
+    }
+    getData();
+  }, [])
+
   return (
     <div className="md:grid grid-cols-6">
-      {principal && <SidebarComponent />}
+      <SidebarComponent />
       {loader ? (
         <div className="sm:ml-64">
           <div className="container flex justify-center">
@@ -242,7 +233,7 @@ const Profile = () => {
                   </label>
                 </div>
                 <div className="flex justify-center mb-[32px] items-center">
-                  <p className="text-[20px] font-viga mr-[10px] text-center font-[600]">{formData.name} {formData.gender_pronouns}</p><Link to="/editProfile"><CiEdit className="text-cursor" size={22} /></Link>
+                  <p className="text-[20px] font-viga mr-[10px] text-center font-[600]">{formData.name} {formData.gender_pronouns}</p><div onClick={() => navigate("/editProfile", { state: id })} div><CiEdit className="text-cursor" size={22} /></div>
                 </div>
                 <div className="w-full font-viga p-4">
                   <div className="grid grid-cols-3 gap-2">
@@ -260,7 +251,7 @@ const Profile = () => {
                         id="gender"
                         type="text"
                         name="gender"
-                        value={formData.gender}
+                        value="male"
                         className=" font-[600] w-full px-2 py-1.5 rounded-3xl"
                       />
                     </div>
@@ -279,11 +270,11 @@ const Profile = () => {
                         id="email"
                         type="email"
                         name="email"
-                        value={formData.email}
+                        value="kumarabhishek07565@gmail.com"
                         className=" font-[600] w-full px-2 py-1.5 rounded-3xl"
                       />
                     </div>
-                    
+
                     <div className="flex items-center">
                       <label
                         htmlFor="mobile_number"
@@ -298,7 +289,7 @@ const Profile = () => {
                         id="mobile_number"
                         type="tel"
                         name="mobile_number"
-                        value={formData.mobile_number.toString()}
+                        value="6203554162"
                         className="font-[600] w-full px-2 py-1.5 rounded-3xl"
                       />
                     </div>
@@ -322,7 +313,7 @@ const Profile = () => {
                         id="introduction"
                         name="introduction"
                         disabled
-                        value={formData.introduction}
+                        value="I am Abhishek Kumar"
                         rows="4"
                         className="bg-[#F0F0F0] font-[600] rounded-xl px-2 py-1.5 w-full "
                       ></textarea>
@@ -335,131 +326,139 @@ const Profile = () => {
                         Religion
                       </div>
                       <p className="col-span-2 w-full px-2 py-1.5">
-                        {formData.religion}
+                        {/* {formData.religion} */}
+                        "Hindu"
                       </p>
                       <div className="flex items-center">
                         Height
                       </div>
                       <p className="col-span-2 w-full px-2 py-1.5">
-                        {formData.height}
+                        {/* {formData.height} */}
+                        5.7inches
                       </p>
                       <div className="flex items-center">
                         Location
                       </div>
                       <p className="col-span-2 w-full px-2 py-1.5">
-                        {formData.location}
+                        {/* {formData.location} */}
+                        Ludhiana
                       </p>
                       <div className="flex items-center">
                         Smoking
                       </div>
                       <p className="col-span-2 w-full px-2 py-1.5">
-                        {formData.smoking}
+                        {/* {formData.smoking} */}
+                        Regular
                       </p>
                       <div className="flex items-center">
                         Alcohol/Drink
                       </div>
                       <p className="col-span-2 w-full px-2 py-1.5">
-                        {formData.drinking}
+                        {/* {formData.drinking} */}
+                        Regular
                       </p>
                       <div className="flex items-center">
                         Occupation
                       </div>
                       <p className="col-span-2 w-full px-2 py-1.5">
-                        {formData.occupation}
+                        Businessman
                       </p>
                       <div className="flex items-center">
                         Hobbies
                       </div>
                       <p className="col-span-2 w-full px-2 flex flex-wrap gap-6 py-1.5">
-                        {formData?.hobbies?.map((hobby)=>(
-                        <div className="">
-                          <p className="rounded-lg px-2 py-1.5 bg-[#F0F0F0] ">{hobby}</p>
-                        </div>))}
+                        {formData?.hobbies?.map((hobby) => (
+                          <div className="">
+                            <p className="rounded-lg px-2 py-1.5 bg-[#F0F0F0] ">{hobby}</p>
+                          </div>))}
                       </p>
                       <div className="flex items-center">
                         Sports
                       </div>
                       <p className="col-span-2 w-full px-2 flex flex-wrap gap-6 py-1.5">
-                        {formData?.sports?.map((hobby)=>(
-                        <div className="">
-                          <p className="rounded-lg px-2 py-1.5 bg-[#F0F0F0] ">{hobby}</p>
-                        </div>))}
+                        {formData?.sports?.map((hobby) => (
+                          <div className="">
+                            <p className="rounded-lg px-2 py-1.5 bg-[#F0F0F0] ">{hobby}</p>
+                          </div>))}
                       </p>
                       <div className="flex items-center">
                         Outdoor Activities
                       </div>
                       <p className="col-span-2 w-full px-2 flex flex-wrap gap-6 py-1.5">
-                        {formData?.outdoor_activities?.map((hobby)=>(
-                        <div className="">
-                          <p className="rounded-lg px-2 py-1.5 bg-[#F0F0F0] ">{hobby}</p>
-                        </div>))}
+                        {formData?.outdoor_activities?.map((hobby) => (
+                          <div className="">
+                            <p className="rounded-lg px-2 py-1.5 bg-[#F0F0F0] ">{hobby}</p>
+                          </div>))}
                       </p>
                       <div className="flex items-center">
                         Travel
                       </div>
                       <p className="col-span-2 w-full px-2 flex flex-wrap gap-6 py-1.5">
-                        {formData?.travel?.map((hobby)=>(
-                        <div className="">
-                          <p className="rounded-lg px-2 py-1.5 bg-[#F0F0F0] ">{hobby}</p>
-                        </div>))}
+                        {formData?.travel?.map((hobby) => (
+                          <div className="">
+                            <p className="rounded-lg px-2 py-1.5 bg-[#F0F0F0] ">{hobby}</p>
+                          </div>))}
                       </p>
                       <div className="flex items-center">
                         Movies
                       </div>
                       <p className="col-span-2 w-full px-2 flex flex-wrap gap-6 py-1.5">
-                        {formData?.movies?.map((hobby)=>(
-                        <div className="">
-                          <p className="rounded-lg px-2 py-1.5 bg-[#F0F0F0] ">{hobby}</p>
-                        </div>))}
+                        {formData?.movies?.map((hobby) => (
+                          <div className="">
+                            <p className="rounded-lg px-2 py-1.5 bg-[#F0F0F0] ">{hobby}</p>
+                          </div>))}
                       </p>
                       <div className="flex items-center">
                         Zodiac Sign
                       </div>
                       <p className="col-span-2 w-full px-2 py-1.5">
-                        {formData.zodiac}
+                        ox
                       </p><div className="flex items-center">
                         Diet
                       </div>
                       <p className="col-span-2 w-full px-2 py-1.5">
-                        {formData.diet}
+                        {/* {formData.diet} */}
+                        Vegeterian
                       </p>
                       <div className="flex items-center">
                         General Habits
                       </div>
                       <p className="col-span-2 w-full px-2 flex flex-wrap gap-6 py-1.5">
-                        {formData?.general_habits?.map((hobby)=>(
-                        <div className="">
-                          <p className="rounded-lg px-2 py-1.5 bg-[#F0F0F0] ">{hobby}</p>
-                        </div>))}
+                        {formData?.general_habits?.map((hobby) => (
+                          <div className="">
+                            <p className="rounded-lg px-2 py-1.5 bg-[#F0F0F0] ">{hobby}</p>
+                          </div>))}
                       </p>
                       <div className="flex items-center">
                         Art & Culture
                       </div>
                       <p className="col-span-2 w-full px-2 flex flex-wrap gap-6 py-1.5">
-                        {formData?.art_and_culture?.map((hobby)=>(
-                        <div className="">
-                          <p className="rounded-lg px-2 py-1.5 bg-[#F0F0F0] ">{hobby}</p>
-                        </div>))}
+                        {formData?.art_and_culture?.map((hobby) => (
+                          <div className="">
+                            <p className="rounded-lg px-2 py-1.5 bg-[#F0F0F0] ">{hobby}</p>
+                          </div>))}
                       </p>
                       <div className="flex items-center">
                         Pets
                       </div>
                       <p className="col-span-2 w-full px-2 py-1.5">
-                        {formData.pets}
+                        {/* {formData.pets} */}
+                        Dog
                       </p>
                       <div className="flex items-center">
                         What are you looking for
                       </div>
                       <p className="col-span-2 w-full px-2 py-1.5">
-                        {formData.looking_for}
+                        {/* {formData.looking_for} */}
+                        Men
                       </p>
                       <div className="flex items-center">
                         Your interests in
                       </div>
                       <p className="col-span-2 w-full px-2 py-1.5">
-                        {formData.interests_in}
+                        Women
                       </p>
-                      
+
                     </div>
                   </div>
                 </div>
