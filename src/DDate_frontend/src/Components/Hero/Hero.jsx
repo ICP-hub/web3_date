@@ -4,8 +4,8 @@ import HeroRight from './HeroRight';
 import Swipe from "../Chatting/ChattingSinglePage";
 const Hero = () => {
   return (
-    <div >
-      <nav className='h-10 bg-transparent w-full relative '></nav>
+    <div className='container mx-auto'>
+      {/* <nav className='h-10 bg-transparent w-full relative '></nav> */}
     <div className="flex flex-col lg:flex-row w-full h-auto ">
       <HeroLeft />
       <HeroRight />

@@ -64,13 +64,13 @@ export const useAuthClient = (options = defaultOptions) => {
           });
         }, []);
       
-      console.log('authClient',authClient)
+      // console.log('authClient',authClient)
         const login = async (val) => {
-          console.log('val',val)
+          // console.log('val',val)
             return new Promise(async (resolve, reject) => {
                 try {
 
-                  console.log("authClient.getIdentity().getPrincipal().isAnonymous() =>>>>>>>>>>",authClient.getIdentity().getPrincipal().isAnonymous());
+                  // console.log("authClient.getIdentity().getPrincipal().isAnonymous() =>>>>>>>>>>",authClient.getIdentity().getPrincipal().isAnonymous());
                   if (
                     authClient.isAuthenticated() &&
                     (await authClient.getIdentity().getPrincipal().isAnonymous()) ===
@@ -81,7 +81,7 @@ export const useAuthClient = (options = defaultOptions) => {
                     resolve(AuthClient);
                   } else {
 
-                console.log("val=>>>.", val);
+                // console.log("val=>>>.", val);
                     let opt = val === "ii" ? "loginOptionsii" : "loginOptionsnfid"
           authClient.login({
             ...options[opt],
@@ -125,20 +125,20 @@ export const useAuthClient = (options = defaultOptions) => {
       const principal = identity.getPrincipal();
 
 
-      console.log("isAuthenticated",isAuthenticated,"principal",principal, "identity",identity );
+      // console.log("isAuthenticated",isAuthenticated,"principal",principal, "identity",identity );
       setAuthClient(client);
       setIsAuthenticated(isAuthenticated);
       setIdentity(identity);
       setPrincipal(principal);
         let principalText = principal.toText();
 
-        console.log("principalText???? ",principalText);
+        // console.log("principalText???? ",principalText);
         localStorage.setItem("id",JSON.stringify(principalText))
 
       if (isAuthenticated && identity && principal && principal.isAnonymous() === false) {
-          let backendActor = createActor(backendCanisterId, { agentOptions: { identity: identity } });
+          let backendActor = createActor(backendCanisterId, { agentOptions: { identity: identity, verifyQuerySignatures: false } });
           
-          console.log("backendActor",backendActor);
+          // console.log("backendActor",backendActor);
           setBackendActor(backendActor);
       }
 

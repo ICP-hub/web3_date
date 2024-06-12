@@ -1,7 +1,7 @@
 {
   "canisters": {
     "DDate_backend": {
-      "candid": "src/DDate_backend/DDate.did",
+      "candid": "src/DDate_backend/DDate_backend.did",
       "package": "DDate_backend",
       "type": "rust"
     },
