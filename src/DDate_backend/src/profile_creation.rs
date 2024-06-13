@@ -77,6 +77,12 @@ pub struct UserProfileParams {
     pub matched_profiles: Option<Vec<String>>, // Make this optional
 }
 
+#[derive(Clone, Deserialize, CandidType, Debug, Serialize)]
+pub struct Pagination {
+    pub page: usize,
+    pub size: usize,
+}
+
 #[derive(Debug, Serialize, Clone, Deserialize, CandidType)]
 pub struct Message {
     pub id: String,
@@ -425,3 +431,4 @@ pub fn get_an_account(user_id: String) -> Result<UserProfileCreationInfo, String
     ic_cdk::println!("Retrieving account with user_id: {}", user_id);
     PROFILES.with(|profiles| profiles.borrow().get_account(&user_id))
 }
+

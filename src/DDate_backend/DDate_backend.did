@@ -1,3 +1,9 @@
+type MatchResult = record {
+  total_matches : nat64;
+  error_message : opt text;
+  paginated_profiles : vec UserProfileCreationInfo;
+};
+
 type Message = record {
   id : text;
   receiver_id : text;
@@ -12,9 +18,10 @@ type Notification = record {
 };
 type NotificationType = variant { Like };
 type Result = variant { Ok : text; Err : text };
-type Result_1 = variant { Ok : UserProfileCreationInfo; Err : text };
-type Result_2 = variant { Ok : vec Message; Err : text };
-type Result_3 = variant { Ok; Err : text };
+type Result_1 = variant { Ok : MatchResult; Err : text };
+type Result_2 = variant { Ok : UserProfileCreationInfo; Err : text };
+type Result_3 = variant { Ok : vec Message; Err : text };
+type Result_4 = variant { Ok; Err : text };
 
 type UserProfileCreationInfo = record {
   notifications : vec Notification;
@@ -63,11 +70,11 @@ service : {
   create_message : (text, text, text) -> (Result);
   delete_an_account : (text) -> (Result);
   delete_message : (text) -> (Result);
-  find_matches_for_me : (text) -> (vec text);
-  get_an_account : (text) -> (Result_1) query;
-  read_messages : (text, text) -> (Result_2) query;
+  find_matches_for_me : (text, nat64, nat64) -> (Result_1);
+  get_an_account : (text) -> (Result_2) query;
+  read_messages : (text, text) -> (Result_3) query;
   retrieve_notifications_for_user : (text) -> (vec Notification);
-  send_like_notification_candid : (text, text) -> (Result_3);
+  send_like_notification_candid : (text, text) -> (Result_4);
   update_an_account : (text, UserProfileParams) -> (Result);
   update_message : (text, text) -> (Result);
    
