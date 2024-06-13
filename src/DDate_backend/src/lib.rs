@@ -2,11 +2,10 @@ mod profile_creation;
 mod notification;
 mod profile_matcher;
 mod right_and_left_swipe;
-mod socket_server;
 use crate::profile_creation::{UserProfileParams,UserProfileCreationInfo};
 use ic_cdk::{export_candid, query, update};
 pub use notification::*;
-use profile_creation::{Notification, PROFILES};
+use profile_creation::{Notification, Pagination, PROFILES};
 pub use profile_matcher::*;
 pub use right_and_left_swipe::*;
 use crate::profile_creation::Message;
@@ -38,32 +37,48 @@ pub fn send_like_notification_candid(sender_id: String, receiver_id: String) -> 
     })
 }
 
-
 #[update]
-pub fn find_matches_for_me(user_id: String) -> Vec<String> {
+pub fn find_matches_for_me(user_id: String, page: usize, size: usize) -> Result<MatchResult, String> {
     ic_cdk::println!("Finding matches for user: {}", user_id);
 
-    let matched_user_ids: Vec<String> = PROFILES.with(|profiles| {
-        let profiles_borrowed = profiles.borrow();
-        match profiles_borrowed.profiles.get(&user_id) {
-            Some(user_profile) => {
-                ic_cdk::println!("User profile found: {:?}", user_profile);
-                find_matches(&profiles_borrowed, &user_id)
-            },
-            None => {
-                ic_cdk::println!("User profile not found for user_id: {}", user_id);
-                Vec::new()
+    // Check if page number is 0, and return an error immediately
+    if page == 0 {
+        return Err("Page number must be greater than 0".to_string());
+    } else {
+        // Adjust pagination to start at index 1 if page is less than 1
+        let pagination = Pagination {
+            page,
+            size,
+        };
+
+        // Borrow profiles to find matches
+        let match_result = PROFILES.with(|profiles| {
+            let profiles_borrowed = profiles.borrow();
+            match profiles_borrowed.profiles.get(&user_id) {
+                Some(_) => {
+                    // Call find_matches with borrowed profiles, user_id, and pagination
+                    find_matches(&profiles_borrowed, &user_id, pagination)
+                },
+                None => {
+                    // Return error if user profile is not found
+                    Err("User profile not found".to_string())
+                }
             }
-        }
-    });
+        });
 
-    PROFILES.with(|profiles| {
-        if let Some(user_profile) = profiles.borrow_mut().profiles.get_mut(&user_id) {
-            user_profile.matched_profiles = matched_user_ids.clone();
+        // Update matched_profiles in the user's profile (assuming profiles are mutable)
+        if let Ok(match_result) = &match_result {
+            PROFILES.with(|profiles| {
+                if let Some(user_profile) = profiles.borrow_mut().profiles.get_mut(&user_id) {
+                    user_profile.matched_profiles = match_result.paginated_profiles.iter()
+                        .map(|profile| profile.user_id.clone())
+                        .collect();
+                }
+            });
         }
-    });
 
-    matched_user_ids
+        match_result
+    }
 }
 
 
