@@ -10,6 +10,8 @@ import { useAuth } from "../auth/useAuthClient";
 import Loader from "./Loader";
 import "./Swipe.css";
 import { useLocation } from 'react-router-dom';
+import { useForm } from "react-hook-form";
+
 
 const Profile = () => {
   const { backendActor } = useAuth();
@@ -23,7 +25,29 @@ const Profile = () => {
     introduction: "",
     images: [],
     gender_pronouns: "",
-    matches: []
+    matches: [],
+    age: "",
+    art_and_culture: [],
+    diet: "",
+    dob: "",
+    drinking: "",
+    general_habbits: "",
+    height: "",
+    hobbies: [],
+    interests_in: "",
+    location: "",
+    looking_for: "",
+    max_preferred_age: "",
+    min_preferred_age: "",
+    movies: "",
+    occupation: "",
+    outdoor_activities: [],
+    pets: "",
+    preferred_gender: "",
+    preferred_location: "",
+    religion: "",
+    travel: "",
+    zodiac: "",
   });
 
   const [principal, setPrincipal] = useState(null);
@@ -64,50 +88,63 @@ const Profile = () => {
 
   useEffect(() => {
     const getData = async () => {
+      console.log("Generated Id", id);
       try {
         await backendActor.get_an_account(id).then((userProfileData) => {
-          console.log("data of profile ", userProfileData);
-          // setFormData({
-          //   gender: userProfileData.gender || "",
-          //   email: userProfileData.email || "",
-          //   name: userProfileData.name || "",
-          //   mobile_number: userProfileData.mobile_number || "",
-          //   introduction: userProfileData.introduction || "",
-          //   images: userProfileData.images || [],
-          //   gender_pronouns: userProfileData.gender_pronouns || "",
-          //   matches: userProfileData.matches || [],
-          //   location: userProfileData.location || "",
-          //   dob: userProfileData.dob || "",
-          //   hobbies: userProfileData.hobbies || [],
-          //   occupation: userProfileData.occupation || "",
-          //   smoking: userProfileData.smoking || "",
-          //   drinking: userProfileData.drinking || "",
-          //   religion: userProfileData.religion || "",
-          //   height: userProfileData.height || "",
-          //   diet: userProfileData.diet || "",
-          //   pets: userProfileData.pets || "",
-          //   zodiac: userProfileData.zodiac || "",
-          //   sports: userProfileData.sports || [],
-          //   interests_in: userProfileData.interests_in || "",
-          //   movies: userProfileData.movies || [],
-          //   outdoor_activities: userProfileData.outdoor_activities || [],
-          //   travel: userProfileData.travel || [],
-          //   general_habits: userProfileData.general_habits || [],
-          //   art_and_culture: userProfileData.art_and_culture || [],
-          //   looking_for: userProfileData.looking_for || "",
-          //   min_preferred_age: userProfileData.min_preferred_age || null,
-          //   max_preferred_age: userProfileData.max_preferred_age || null,
-          //   preferred_gender: userProfileData.preferred_gender || "",
-          //   preferred_location: userProfileData.preferred_location || ""
-          // })
-        });
+          if (userProfileData) {
+            const myData = userProfileData?.Ok?.params;
+            console.log("My Data Abhishek ka hai ", myData);
+            if (myData) {
+              setFormData({
+                name: myData?.name[0],
+                email: myData?.email[0],
+                age: myData?.age[0],
+                art_and_culture: myData?.art_and_culture,
+                diet: myData?.diet[0],
+                dob: myData?.dob,
+                drinking: myData?.drinking[0],
+                smoking: myData?.smoking[0],
+                gender: myData?.gender[0],
+                gender_pronouns: myData?.gender[0],
+                general_habbits: myData?.general_habbits,
+                height: myData?.height[0],
+                hobbies: myData?.hobbies,
+                images: myData?.images,
+                interests_in: myData?.interests_in[0],
+                introduction: myData?.introduction[0],
+                location: myData?.location[0],
+                looking_for: myData?.looking_for[0],
+                max_preferred_age: myData?.max_preferred_age[0],
+                min_preferred_age: myData?.min_preferred_age[0],
+                movies: myData?.movies,
+                occupation: myData?.occupation[0],
+                outdoor_activities: myData?.outdoor_activities,
+                pets: myData.pets[0],
+                preferred_gender: myData?.preferred_gender[0],
+                preferred_location: myData?.preferred_location[0],
+                religion: myData?.religion[0],
+                travel: myData?.travel,
+                zodiac: myData.zodiac[0],
+                mobile_number: myData.mobile_number[0]
+              })
+            }
+            else {
+
+            }
+
+
+          }
+        })
 
       } catch (error) {
         console.error("Error getting data to the backend:", error);
       }
     }
     getData();
-  }, [])
+  }, [id, backendActor])
+
+  console.log('user data', formData)
+
 
   return (
     <div className="md:grid grid-cols-6">
@@ -233,7 +270,7 @@ const Profile = () => {
                   </label>
                 </div>
                 <div className="flex justify-center mb-[32px] items-center">
-                  <p className="text-[20px] font-viga mr-[10px] text-center font-[600]">{formData.name} {formData.gender_pronouns}</p><div onClick={() => navigate("/editProfile", { state: id })} div><CiEdit className="text-cursor" size={22} /></div>
+                  <p className="text-[20px] font-viga mr-[10px] text-center font-[600]">{formData.name}</p><div onClick={() => navigate("/editProfile", { state: formData })} div><CiEdit className="text-cursor" size={22} /></div>
                 </div>
                 <div className="w-full font-viga p-4">
                   <div className="grid grid-cols-3 gap-2">
@@ -251,7 +288,7 @@ const Profile = () => {
                         id="gender"
                         type="text"
                         name="gender"
-                        value="male"
+                        value={formData?.gender ?? ""}
                         className=" font-[600] w-full px-2 py-1.5 rounded-3xl"
                       />
                     </div>
@@ -270,7 +307,7 @@ const Profile = () => {
                         id="email"
                         type="email"
                         name="email"
-                        value="kumarabhishek07565@gmail.com"
+                        value={formData?.email ?? ""}
                         className=" font-[600] w-full px-2 py-1.5 rounded-3xl"
                       />
                     </div>
@@ -289,7 +326,7 @@ const Profile = () => {
                         id="mobile_number"
                         type="tel"
                         name="mobile_number"
-                        value="6203554162"
+                        value={formData?.mobile_number ?? ""}
                         className="font-[600] w-full px-2 py-1.5 rounded-3xl"
                       />
                     </div>
@@ -298,7 +335,7 @@ const Profile = () => {
                       DOB
                     </div>
                     <p className="font-[600] col-span-2 w-full px-2 py-1.5">
-                      {formData.dob}
+                      {formData?.dob ?? ""}
                     </p>
                     <div className="">
                       <label
@@ -313,8 +350,8 @@ const Profile = () => {
                         id="introduction"
                         name="introduction"
                         disabled
-                        value="I am Abhishek Kumar"
                         rows="4"
+                        value={formData?.introduction ?? ""}
                         className="bg-[#F0F0F0] font-[600] rounded-xl px-2 py-1.5 w-full "
                       ></textarea>
                     </div>
@@ -326,49 +363,44 @@ const Profile = () => {
                         Religion
                       </div>
                       <p className="col-span-2 w-full px-2 py-1.5">
-                        {/* {formData.religion} */}
-                        "Hindu"
+                        {formData?.religion ?? ""}
                       </p>
                       <div className="flex items-center">
                         Height
                       </div>
                       <p className="col-span-2 w-full px-2 py-1.5">
-                        {/* {formData.height} */}
-                        5.7inches
+                        {formData?.height ?? ""}
                       </p>
                       <div className="flex items-center">
                         Location
                       </div>
                       <p className="col-span-2 w-full px-2 py-1.5">
-                        {/* {formData.location} */}
-                        Ludhiana
+                        {formData?.location ?? ""}
                       </p>
                       <div className="flex items-center">
                         Smoking
                       </div>
                       <p className="col-span-2 w-full px-2 py-1.5">
-                        {/* {formData.smoking} */}
-                        Regular
+                        {formData?.smoking ?? ""}
                       </p>
                       <div className="flex items-center">
                         Alcohol/Drink
                       </div>
                       <p className="col-span-2 w-full px-2 py-1.5">
-                        {/* {formData.drinking} */}
-                        Regular
+                        {formData?.drinking ?? ""}
                       </p>
                       <div className="flex items-center">
                         Occupation
                       </div>
                       <p className="col-span-2 w-full px-2 py-1.5">
-                        Businessman
+                        {formData?.occupation ?? ""}
                       </p>
                       <div className="flex items-center">
                         Hobbies
                       </div>
                       <p className="col-span-2 w-full px-2 flex flex-wrap gap-6 py-1.5">
-                        {formData?.hobbies?.map((hobby) => (
-                          <div className="">
+                        {formData?.hobbies?.map((hobby, index) => (
+                          <div className="" key={index}>
                             <p className="rounded-lg px-2 py-1.5 bg-[#F0F0F0] ">{hobby}</p>
                           </div>))}
                       </p>
@@ -376,87 +408,84 @@ const Profile = () => {
                         Sports
                       </div>
                       <p className="col-span-2 w-full px-2 flex flex-wrap gap-6 py-1.5">
-                        {formData?.sports?.map((hobby) => (
+                        {/* {formData?.sports?.map((sport) => (
                           <div className="">
-                            <p className="rounded-lg px-2 py-1.5 bg-[#F0F0F0] ">{hobby}</p>
-                          </div>))}
+                            <p className="rounded-lg px-2 py-1.5 bg-[#F0F0F0] ">{sport}</p>
+                          </div>))} */}
                       </p>
                       <div className="flex items-center">
                         Outdoor Activities
                       </div>
                       <p className="col-span-2 w-full px-2 flex flex-wrap gap-6 py-1.5">
-                        {formData?.outdoor_activities?.map((hobby) => (
+                        {/* {formData?.outdoor_activities?.map((activities) => (
                           <div className="">
-                            <p className="rounded-lg px-2 py-1.5 bg-[#F0F0F0] ">{hobby}</p>
-                          </div>))}
+                            <p className="rounded-lg px-2 py-1.5 bg-[#F0F0F0] ">{activities}</p>
+                          </div>))} */}
                       </p>
                       <div className="flex items-center">
                         Travel
                       </div>
                       <p className="col-span-2 w-full px-2 flex flex-wrap gap-6 py-1.5">
-                        {formData?.travel?.map((hobby) => (
+                        {/* {formData?.travel?.map((travel) => (
                           <div className="">
-                            <p className="rounded-lg px-2 py-1.5 bg-[#F0F0F0] ">{hobby}</p>
-                          </div>))}
+                            <p className="rounded-lg px-2 py-1.5 bg-[#F0F0F0] ">{travel}</p>
+                          </div>))} */}
                       </p>
                       <div className="flex items-center">
                         Movies
                       </div>
                       <p className="col-span-2 w-full px-2 flex flex-wrap gap-6 py-1.5">
-                        {formData?.movies?.map((hobby) => (
-                          <div className="">
-                            <p className="rounded-lg px-2 py-1.5 bg-[#F0F0F0] ">{hobby}</p>
-                          </div>))}
+                        {/* {formData?.movies?.map((movie, index) => (
+                          <div className="" key={index}>
+                            <p className="rounded-lg px-2 py-1.5 bg-[#F0F0F0] ">{movie}</p>
+                          </div>))} */}
                       </p>
                       <div className="flex items-center">
                         Zodiac Sign
                       </div>
                       <p className="col-span-2 w-full px-2 py-1.5">
-                        ox
+                        {formData?.zodiac ?? ""}
                       </p><div className="flex items-center">
                         Diet
                       </div>
                       <p className="col-span-2 w-full px-2 py-1.5">
-                        {/* {formData.diet} */}
-                        Vegeterian
+                        {formData?.diet ?? ""}
                       </p>
                       <div className="flex items-center">
                         General Habits
                       </div>
                       <p className="col-span-2 w-full px-2 flex flex-wrap gap-6 py-1.5">
-                        {formData?.general_habits?.map((hobby) => (
+                        {/* {formData?.general_habbits?.map((generalHabbit) => (
                           <div className="">
-                            <p className="rounded-lg px-2 py-1.5 bg-[#F0F0F0] ">{hobby}</p>
-                          </div>))}
+                            <p className="rounded-lg px-2 py-1.5 bg-[#F0F0F0] ">{generalHabbit}</p>
+                          </div>))} */}
                       </p>
                       <div className="flex items-center">
                         Art & Culture
                       </div>
                       <p className="col-span-2 w-full px-2 flex flex-wrap gap-6 py-1.5">
-                        {formData?.art_and_culture?.map((hobby) => (
-                          <div className="">
-                            <p className="rounded-lg px-2 py-1.5 bg-[#F0F0F0] ">{hobby}</p>
-                          </div>))}
+                        {/* {formData?.art_and_culture?.map((artAndCul, index) => (
+                          <div className="" key={index}>
+                            <p className="rounded-lg px-2 py-1.5 bg-[#F0F0F0] ">{artAndCul}</p>
+                          </div>))} */}
                       </p>
                       <div className="flex items-center">
                         Pets
                       </div>
                       <p className="col-span-2 w-full px-2 py-1.5">
-                        {/* {formData.pets} */}
-                        Dog
+                        {formData?.pets ?? ""}
                       </p>
                       <div className="flex items-center">
                         What are you looking for
                       </div>
                       <p className="col-span-2 w-full px-2 py-1.5">
-                        {/* {formData.looking_for} */}
-                        Men
+                        {formData?.looking_for ?? ""}
                       </p>
                       <div className="flex items-center">
                         Your interests in
                       </div>
                       <p className="col-span-2 w-full px-2 py-1.5">
-                        Women
+                        {formData?.interests_in ?? ""}
                       </p>
 
                     </div>
@@ -540,8 +569,8 @@ const Profile = () => {
                     </label>
                   </div>
 
-                  {Object.entries(isLoading).map(([key, value]) =>
-                    console.log(value)
+                  {Object.entries(isLoading).map(([key, //value]) =>
+                    console.log(//value)
                   )}
                   
                   <div className="w-40 h-[180px] md:w-36 md:h-[196px] rounded-[15px] bg-zinc-200  flex justify-center items-center">

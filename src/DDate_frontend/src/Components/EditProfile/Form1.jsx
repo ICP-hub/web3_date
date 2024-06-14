@@ -117,6 +117,7 @@ const Form1 = ({ index, setIndex, updateFormData, AllformData }) => {
                     {...register('username')}
                     className="form-input bg-transparent w-full border-2 px-2 border-gray-300 py-1.5 rounded-3xl text-white md:text-black text-sm"
                 />
+                {errors.username && <p className="text-red-500">{errors.username.message}</p>}
 
                 <label className="block text-lg font-semibold mb-1 text-white md:text-black">
                     Gender
@@ -181,7 +182,7 @@ const Form1 = ({ index, setIndex, updateFormData, AllformData }) => {
                 />
                 {errors.dob && <p className="text-red-500">{errors.dob.message}</p>}
 
-                <div className="flex flex-col md:flex-row md:space-x-4 mb-6 mt-[12px]">
+                <div className="flex flex-col mb-6 mt-[12px]">
                     <label htmlFor="selectedIntro" className="block text-lg font-semibold mb-1 text-white md:text-black">
                         My Introduction
                     </label>

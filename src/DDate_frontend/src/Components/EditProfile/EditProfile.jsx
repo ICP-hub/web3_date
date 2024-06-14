@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useForm, FormProvider } from 'react-hook-form';
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import Form1 from "./Form1";
@@ -53,14 +53,17 @@ const EditProfile = () => {
     4: ['selectedInterests', 'selectedPreferAge', 'selectedLocation', 'selectedPreferLocation',],
     5: ['firstImage0', 'firstImage1', 'firstImage2', 'firstImage3', 'firstImage4']
   };
-
+  const location = useLocation();
+  const userdata = location.state.formData
+  console.log("userdata", userdata)
   const methods = useForm({
     resolver: yupResolver(schema),
     mode: 'all'
+
   });
   const { handleSubmit, trigger } = methods;
   const [index, setIndex] = React.useState(0);
-  const [id, setId] = useState('');
+  // const [id, setId] = useState('');
   const [data, setData] = useState('');
 
   const { backendActor } = useAuth();
@@ -136,22 +139,22 @@ const EditProfile = () => {
     }
   };
 
-  useEffect(() => {
-    const getData = async () => {
-      try {
-        await backendActor.get_an_account(id).then((result) => {
-          console.log(result)
-          if (result) {
-            setData(result)
-          }
-        });
+  // useEffect(() => {
+  //   const getData = async () => {
+  //     try {
+  //       await backendActor.get_an_account(id).then((result) => {
+  //         console.log(result)
+  //         if (result) {
+  //           setData(result)
+  //         }
+  //       });
 
-      } catch (error) {
-        console.error("Error getting data to the backend:", error);
-      }
-    }
-    getData();
-  })
+  //     } catch (error) {
+  //       console.error("Error getting data to the backend:", error);
+  //     }
+  //   }
+  //   getData();
+  // }, [id, backendActor])
 
 
   const handleNext = async () => {
@@ -172,7 +175,7 @@ const EditProfile = () => {
 
   // const [index, setIndex] = useState(0);
   const [formData, setFormData] = useState({});
-  
+
   const updateFormData = (newData) => {
     setFormData(prev => ({ ...prev, ...newData }));
   };
