@@ -222,12 +222,34 @@ pub fn update_account(&mut self, user_id: &String, new_params: UserProfileParams
             None => Err("Profile not found".to_string()),
         }
     }
-
-
-
     pub fn create_message(&mut self, sender_id: String, receiver_id: String, content: String) -> Result<String, String> {
+        // Validate input
+        if sender_id.trim().is_empty() {
+            return Err("Sender ID is required".to_string());
+        }
+        if receiver_id.trim().is_empty() {
+            return Err("Receiver ID is required".to_string());
+        }
+        if sender_id == receiver_id {
+            return Err("Sender and receiver IDs must be different".to_string());
+        }
+        if content.trim().is_empty() {
+            return Err("Message content is required".to_string());
+        }
+    
+        // Check if sender exists
+        if !self.profiles.contains_key(&sender_id) {
+            return Err(format!("Sender ID '{}' does not exist", sender_id));
+        }
+    
+        // Check if receiver exists
+        if !self.profiles.contains_key(&receiver_id) {
+            return Err(format!("Receiver ID '{}' does not exist", receiver_id));
+        }
+    
+        // Create the message
         let timestamp = ic_cdk::api::time();
-        let message_id = format!("{:x}", Sha256::digest(&format!("{}{}{}", sender_id, receiver_id, timestamp)));
+        let message_id = format!("{:x}", Sha256::digest(format!("{}{}{}", sender_id, receiver_id, timestamp).as_bytes()));
         let message = Message {
             id: message_id.clone(),
             sender_id: sender_id.clone(),
@@ -235,34 +257,82 @@ pub fn update_account(&mut self, user_id: &String, new_params: UserProfileParams
             content,
             timestamp,
         };
-
+    
         let chat_id = Self::get_chat_id(&sender_id, &receiver_id);
         self.messages.entry(chat_id).or_insert_with(VecDeque::new).push_back(message);
-
+    
         Ok("Message sent successfully".to_string())
     }
-
+    
     pub fn read_messages(&self, user_id: &String, other_user_id: &String) -> Result<Vec<Message>, String> {
+        // Validate input
+        if user_id.trim().is_empty() {
+            return Err("User ID is required".to_string());
+        }
+        if other_user_id.trim().is_empty() {
+            return Err("Other user ID is required".to_string());
+        }
+    
+        // Check if user exists
+        if !self.profiles.contains_key(user_id) {
+            return Err(format!("User ID '{}' does not exist", user_id));
+        }
+    
+        // Check if other user exists
+        if !self.profiles.contains_key(other_user_id) {
+            return Err(format!("Other user ID '{}' does not exist", other_user_id));
+        }
+    
+        // Retrieve messages
         let chat_id = Self::get_chat_id(user_id, other_user_id);
         match self.messages.get(&chat_id) {
             Some(messages) => Ok(messages.clone().into_iter().collect()),
             None => Err("No messages found".to_string()),
         }
-    }
 
+    }
+    
     pub fn update_message(&mut self, message_id: String, new_content: String) -> Result<String, String> {
+        // Validate input
+        if message_id.trim().is_empty() {
+            return Err("Message ID is required".to_string());
+        }
+        if new_content.trim().is_empty() {
+            return Err("New content is required".to_string());
+        }
+    
+        // Check if the message ID exists
+        let mut message_found = false;
         for messages in self.messages.values_mut() {
             for message in messages.iter_mut() {
                 if message.id == message_id {
-                    message.content = new_content;
-                    return Ok("Message updated successfully".to_string());
+                    message.content = new_content.clone(); // Clone new_content
+                    message_found = true;
+                    break;
                 }
             }
+            if message_found {
+                break;
+            }
         }
-        Err("Message not found".to_string())
+    
+        // Return result based on whether the message was found or not
+        if message_found {
+            Ok("Message updated successfully".to_string())
+        } else {
+            Err("Message not found".to_string())
+        }
     }
-
+    
+    
+    
     pub fn delete_message(&mut self, message_id: String) -> Result<String, String> {
+        // Validate input
+        if message_id.trim().is_empty() {
+            return Err("Message ID is required".to_string());
+        }
+    
+        // Delete message
         for messages in self.messages.values_mut() {
             if let Some(pos) = messages.iter().position(|m| m.id == message_id) {
                 messages.remove(pos);
@@ -271,9 +341,10 @@ pub fn update_account(&mut self, user_id: &String, new_params: UserProfileParams
         }
         Err("Message not found".to_string())
     }
-
+    
+    // Utility function to generate a chat ID
     fn get_chat_id(user1: &String, user2: &String) -> String {
-        let mut ids = vec![user1, user2];
+        let mut ids = vec![user1.clone(), user2.clone()];
         ids.sort();
         format!("{}_{}", ids[0], ids[1])
     }

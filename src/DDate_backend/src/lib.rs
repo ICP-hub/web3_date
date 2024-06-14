@@ -36,54 +36,64 @@ pub fn send_like_notification_candid(sender_id: String, receiver_id: String) -> 
         profiles_borrowed.send_like_notification(sender_id, receiver_id)
     })
 }
-
 #[update]
 pub fn find_matches_for_me(user_id: String, page: usize, size: usize) -> Result<MatchResult, String> {
     ic_cdk::println!("Finding matches for user: {}", user_id);
 
+    // Check if the user ID is valid
+    let user_exists = PROFILES.with(|profiles| {
+        profiles.borrow().profiles.contains_key(&user_id)
+    });
+
+    if !user_exists {
+        return Err(format!("User ID '{}' does not exist", user_id));
+    }
+
     // Check if page number is 0, and return an error immediately
     if page == 0 {
         return Err("Page number must be greater than 0".to_string());
-    } else {
-        // Adjust pagination to start at index 1 if page is less than 1
-        let pagination = Pagination {
-            page,
-            size,
-        };
+    }
 
-        // Borrow profiles to find matches
-        let match_result = PROFILES.with(|profiles| {
-            let profiles_borrowed = profiles.borrow();
-            match profiles_borrowed.profiles.get(&user_id) {
-                Some(_) => {
-                    // Call find_matches with borrowed profiles, user_id, and pagination
-                    find_matches(&profiles_borrowed, &user_id, pagination)
-                },
-                None => {
-                    // Return error if user profile is not found
-                    Err("User profile not found".to_string())
-                }
+    let pagination = Pagination { page, size };
+
+    // Borrow profiles to find matches
+    let match_result = PROFILES.with(|profiles| {
+        let profiles_borrowed = profiles.borrow();
+        match profiles_borrowed.profiles.get(&user_id) {
+            Some(_) => {
+                // Call find_matches with borrowed profiles, user_id, and pagination
+                find_matches(&profiles_borrowed, &user_id, pagination)
+            },
+            None => {
+                // This check is redundant as we already verified the user exists
+                Err("User profile not found".to_string())
+            }
+        }
+    });
+
+    // Update matched_profiles in the user's profile (assuming profiles are mutable)
+    if let Ok(match_result) = &match_result {
+        PROFILES.with(|profiles| {
+            if let Some(user_profile) = profiles.borrow_mut().profiles.get_mut(&user_id) {
+                user_profile.matched_profiles = match_result.paginated_profiles.iter()
+                    .map(|profile| profile.user_id.clone())
+                    .collect();
             }
         });
-
-        // Update matched_profiles in the user's profile (assuming profiles are mutable)
-        if let Ok(match_result) = &match_result {
-            PROFILES.with(|profiles| {
-                if let Some(user_profile) = profiles.borrow_mut().profiles.get_mut(&user_id) {
-                    user_profile.matched_profiles = match_result.paginated_profiles.iter()
-                        .map(|profile| profile.user_id.clone())
-                        .collect();
-                }
-            });
-        }
-
-        match_result
     }
+
+    match_result
 }
 
 
 #[update]
 fn check_user_match(current_user_id: String, potential_match_id: String) -> bool {
+    // Check if current_user_id is the same as potential_match_id
+    if current_user_id == potential_match_id {
+        ic_cdk::println!("Error: Same profile ID entered in both fields.");
+        return false;  // Return early and do not proceed
+    }
+    
     PROFILES.with(|profiles| {
         let profiles_borrowed = profiles.borrow();
         ic_cdk::println!("Checking match between {} and {}", current_user_id, potential_match_id);
@@ -114,20 +124,29 @@ fn check_user_match(current_user_id: String, potential_match_id: String) -> bool
     })
 }
 
-
-
 #[update]
-pub fn retrieve_notifications_for_user(user_id: String) -> Vec<Notification> {
-    // Call the get_notifications function and convert VecDeque to Vec
+pub fn retrieve_notifications_for_user(user_id: String) -> Result<Vec<Notification>, String> {
+    // Access the PROFILES storage to retrieve notifications
     PROFILES.with(|profiles| {
-        profiles
-            .borrow()
-            .profiles
-            .get(&user_id)
-            .map(|profile| profile.notifications.iter().cloned().collect())
-            .unwrap_or_else(Vec::new)
+        let profiles = profiles.borrow();
+
+        // Check if the user ID exists
+        if profiles.profiles.contains_key(&user_id) {
+            // Retrieve notifications if user exists
+            let notifications = profiles
+                .profiles
+                .get(&user_id)
+                .map(|profile| profile.notifications.iter().cloned().collect())
+                .unwrap_or_else(Vec::new);
+            Ok(notifications)
+        } else {
+            // Return an error if user does not exist
+            Err(format!("User ID '{}' does not exist", user_id))
+        }
     })
 }
+
+
 #[update]
 pub fn create_message(sender_id: String, receiver_id: String, content: String) -> Result<String, String> {
     PROFILES.with(|profiles| profiles.borrow_mut().create_message(sender_id, receiver_id, content))
