@@ -36,14 +36,22 @@ impl Profile {
 
 // Merging new parameters into existing ones
 
-pub fn get_notifications(user_id: &str) -> Vec<Notification> {
+
+pub fn get_notifications(user_id: String) -> Result<Vec<Notification>, String> {
+    // Access the PROFILES storage to retrieve notifications
     PROFILES.with(|profiles| {
-        profiles
-            .borrow()
-            .profiles
-            .get(user_id)
-            .map(|profile| profile.notifications.iter().cloned().collect())
-            .unwrap_or_else(Vec::new)
+        let profiles = profiles.borrow();
+
+        // Check if the user ID exists
+        if let Some(profile) = profiles.profiles.get(&user_id) {
+            // Retrieve notifications if user exists
+            let notifications = profile.notifications.iter().cloned().collect();
+            Ok(notifications)
+        } else {
+            // Return an error if user does not exist
+            Err(format!("User ID '{}' does not exist", user_id))
+        }
     })
 }
+
 
