@@ -15,6 +15,7 @@ import SwipeBottomBar from "./SwipeBottomBar";
 import Loader from "./Loader";
 // import logo from "../../assets/Images/SwapImage/swapLogo.svg";
 import logo from "../../assets/Images/SwapImage/slideLogo1.svg";
+import { useLocation } from 'react-router-dom';
 import {
   faClose,
   faHeart,
@@ -24,6 +25,24 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 function Swipe() {
   // const principalString =
   //   "lqfrt-gz5bh-7z76h-3hb7a-jh2hq-be7jp-equjq-b7wrw-u2xub-tnk3x-qqe";
+
+  const location = useLocation();
+  const userId = location.state
+  console.log('location', location.state)
+
+  useEffect(() => {
+    const getData = async () => {
+      try {
+        await backendActor.get_an_account(userId).then((result) => {
+          console.log('get_an_account', result)
+        });
+
+      } catch (error) {
+        console.error("Error getting data to the backend:", error);
+      }
+    }
+    getData();
+  }, [])
 
   const principalString = localStorage.getItem("id");
 
@@ -395,10 +414,14 @@ function Swipe() {
     setSwipeProfiles(sampleProfiles)
   }, []);
 
+  console.log(location.state)
+
 
   return (
+
     <div className="md:grid grid-cols-9">
-      <SidebarComponent />
+      <SidebarComponent userId={userId} />
+      <h1>{location.state}</h1>
       {startLoader ? (
         <div className="sm:ml-64">
           <div className="container flex justify-center">

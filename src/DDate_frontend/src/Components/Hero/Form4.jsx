@@ -399,6 +399,7 @@ const Form4 = () => {
     formState: { errors },
     watch,
     setValue,
+    trigger,
   } = useFormContext();
 
   const [showArt, setShowArt] = useState(false);
@@ -411,7 +412,7 @@ const Form4 = () => {
   const selectedActivities = watch("selectedActivities", []);
   const selectedMovies = watch("selectedMovies", []);
   const selectedTravel = watch("selectedTravel", []);
-
+  
   // Optionally set default values on mount using setValue
   useEffect(() => {
     setValue("selectedArt", []);
@@ -432,7 +433,11 @@ const Form4 = () => {
     if (updatedValues.length <= 2) {
       setValue(name, updatedValues);
     }
+    
+    // Manually trigger validation
+    trigger(name);
   };
+
   return (
     <div className="w-full max-w-lg rounded-lg p-6 shadow-md md:bg-transparent md:shadow-none">
       {/* Art Selection */}
@@ -462,18 +467,17 @@ const Form4 = () => {
             .map((art) => (
               <label
                 key={art}
-                className={`inline-block px-3 py-2 rounded-full text-sm focus:outline-none transition duration-300 ${
-                  selectedArt?.includes(art)
-                    ? "bg-yellow-500 text-black"
-                    : "bg-transparent hover:bg-yellow-500 hover:text-black text-white md:text-black border border-white md:border-black"
-                }`}
+                className={`inline-block px-3 py-2 rounded-full text-sm focus:outline-none transition duration-300 ${selectedArt?.includes(art)
+                  ? "bg-yellow-500 text-black"
+                  : "bg-transparent hover:bg-yellow-500 hover:text-black text-white md:text-black border border-white md:border-black"
+                  }`}
               >
                 <input
                   type="checkbox"
                   value={art}
                   {...register("selectedArt", {
                     validate: (value) =>
-                      value.length <= 2 || "Select up to 2 arts only",
+                      value.length === 0 || value.length === 2 || "Select either 0 or 2 arts",
                   })}
                   checked={selectedArt?.includes(art)}
                   onChange={() => handleCheckboxChange("selectedArt", art)}
@@ -510,11 +514,10 @@ const Form4 = () => {
             <label
               key={pet}
               className={`inline-block px-3 py-2 rounded-full text-sm focus:outline-none transition duration-300
-                        ${
-                          pet === selectedPets
-                            ? "bg-yellow-500 text-black"
-                            : "bg-transparent hover:bg-yellow-500 hover:text-black text-white md:text-black border border-white md:border-black"
-                        }`}
+                        ${pet === selectedPets
+                  ? "bg-yellow-500 text-black"
+                  : "bg-transparent hover:bg-yellow-500 hover:text-black text-white md:text-black border border-white md:border-black"
+                }`}
             >
               <input
                 type="radio"
@@ -535,23 +538,23 @@ const Form4 = () => {
       <fieldset className="mb-4">
         <legend className="block text-lg font-semibold mb-2 text-white md:text-black">
           General Habits
+          <span className="text-gray-400 text-sm">(select up to 2)</span>
         </legend>
         <div className="flex flex-wrap gap-2 md:gap-2 py-2 rounded-3xl">
           {["Early rise", "Night owl", "lazy", "Active"].map((habit) => (
             <label
               key={habit}
-              className={`inline-block px-3 py-2 rounded-full text-sm focus:outline-none transition duration-300 ${
-                selectedHabits?.includes(habit)
-                  ? "bg-yellow-500 text-black"
-                  : "bg-transparent hover:bg-yellow-500 hover:text-black text-white md:text-black border border-white md:border-black"
-              }`}
+              className={`inline-block px-3 py-2 rounded-full text-sm focus:outline-none transition duration-300 ${selectedHabits?.includes(habit)
+                ? "bg-yellow-500 text-black"
+                : "bg-transparent hover:bg-yellow-500 hover:text-black text-white md:text-black border border-white md:border-black"
+                }`}
             >
               <input
                 type="checkbox"
                 value={habit}
                 {...register("selectedHabits", {
                   validate: (value) =>
-                    value.length <= 2 || "Select up to 2 Habbits only",
+                    value.length === 0 || value.length === 2 || "Select either 0 or 2 habits",
                 })}
                 checked={selectedHabits?.includes(habit)}
                 onChange={() => handleCheckboxChange("selectedHabits", habit)}
@@ -561,7 +564,7 @@ const Form4 = () => {
             </label>
           ))}
         </div>
-      {errors?.selectedHabits && <p className="text-red-500">{errors?.selectedHabits?.message}</p>}
+        {errors.selectedHabits && <p className="text-red-500">{errors.selectedHabits.message}</p>}
       </fieldset>
       <fieldset className="mb-4">
         <legend className="block text-lg font-semibold mb-1 text-white md:text-black">
@@ -589,18 +592,17 @@ const Form4 = () => {
             .map((activity) => (
               <label
                 key={activity}
-                className={`inline-block px-3 py-2 rounded-full text-sm focus:outline-none transition duration-300 ${
-                  selectedActivities?.includes(activity)
-                    ? "bg-yellow-500 text-black"
-                    : "bg-transparent hover:bg-yellow-500 hover:text-black text-white md:text-black border border-white md:border-black"
-                }`}
+                className={`inline-block px-3 py-2 rounded-full text-sm focus:outline-none transition duration-300 ${selectedActivities?.includes(activity)
+                  ? "bg-yellow-500 text-black"
+                  : "bg-transparent hover:bg-yellow-500 hover:text-black text-white md:text-black border border-white md:border-black"
+                  }`}
               >
                 <input
                   type="checkbox"
                   value={activity}
                   {...register("selectedActivities", {
                     validate: (value) =>
-                      value.length <= 2 || "Select up to 2 Activities only",
+                      value.length === 0 || value.length === 2 || "Select either 0 or 2 activities",
                   })}
                   checked={selectedActivities?.includes(activity)}
                   onChange={() => handleCheckboxChange("selectedActivities", activity)}
@@ -626,7 +628,7 @@ const Form4 = () => {
             )}
           </button>
         </div>
-      {errors?.selectedActivities && <p className="text-red-500">{errors?.selectedActivities?.message}</p>}
+        {errors?.selectedActivities && <p className="text-red-500">{errors?.selectedActivities?.message}</p>}
       </fieldset>
       <fieldset className="mb-4">
         <legend className="block text-lg font-semibold mb-1 text-white md:text-black">
@@ -642,33 +644,20 @@ const Form4 = () => {
             "Rom-com",
             "Sci-fi",
             "Thriller",
-            // "Documentary",
-            // "War",
-            // "Film noir",
-            // "Fantasy",
-            // "Bollywood",
-            // "K-drama",
-            // "Sports",
-            // "Historical",
-            // "Superhero",
-            // "Biography",
-            // "Adventure",
-            // "Mystery",
           ].map((movie) => (
             <label
               key={movie}
-              className={`inline-block px-3 py-2 rounded-full text-sm focus:outline-none transition duration-300 ${
-                selectedMovies?.includes(movie)
-                  ? "bg-yellow-500 text-black"
-                  : "bg-transparent hover:bg-yellow-500 hover:text-black text-white md:text-black border border-white md:border-black"
-              }`}
+              className={`inline-block px-3 py-2 rounded-full text-sm focus:outline-none transition duration-300 ${selectedMovies?.includes(movie)
+                ? "bg-yellow-500 text-black"
+                : "bg-transparent hover:bg-yellow-500 hover:text-black text-white md:text-black border border-white md:border-black"
+                }`}
             >
               <input
                 type="checkbox"
                 value={movie}
                 {...register("selectedMovies", {
                   validate: (value) =>
-                    value.length <= 2 || "Select up to 2 Movies only",
+                    value.length === 0 || value.length === 2 || "Select either 0 or 2 movies",
                 })}
                 checked={selectedMovies?.includes(movie)}
                 onChange={() => handleCheckboxChange("selectedMovies", movie)}
@@ -678,7 +667,7 @@ const Form4 = () => {
             </label>
           ))}
         </div>
-      {errors?.selectedMovies && <p className="text-red-500">{errors?.selectedMovies?.message}</p>}
+        {errors?.selectedMovies && <p className="text-red-500">{errors?.selectedMovies?.message}</p>}
       </fieldset>
       <fieldset className="mb-2">
         <legend className="block text-lg font-semibold mb-1 text-white md:text-black">
@@ -705,18 +694,17 @@ const Form4 = () => {
             .map((travel) => (
               <label
                 key={travel}
-                className={`inline-block px-3 py-2 rounded-full text-sm focus:outline-none transition duration-300 ${
-                  selectedTravel?.includes(travel)
-                    ? "bg-yellow-500 text-black"
-                    : "bg-transparent hover:bg-yellow-500 hover:text-black text-white md:text-black border border-white md:border-black"
-                }`}
+                className={`inline-block px-3 py-2 rounded-full text-sm focus:outline-none transition duration-300 ${selectedTravel?.includes(travel)
+                  ? "bg-yellow-500 text-black"
+                  : "bg-transparent hover:bg-yellow-500 hover:text-black text-white md:text-black border border-white md:border-black"
+                  }`}
               >
                 <input
                   type="checkbox"
                   value={travel}
                   {...register("selectedTravel", {
                     validate: (value) =>
-                      value.length <= 2 || "Select up to 2 Travel only",
+                      value.length === 0 || value.length === 2 || "Select either 0 or 2 travel options",
                   })}
                   checked={selectedTravel?.includes(travel)}
                   onChange={() => handleCheckboxChange("selectedTravel", travel)}
@@ -742,7 +730,7 @@ const Form4 = () => {
             )}
           </button>
         </div>
-      {errors?.selectedTravel && <p className="text-red-500">{errors?.selectedTravel?.message}</p>}
+        {errors.selectedTravel && <p className="text-red-500">{errors.selectedTravel.message}</p>}
       </fieldset>
     </div>
   );
