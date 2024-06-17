@@ -3,7 +3,6 @@ type MatchResult = record {
   error_message : opt text;
   paginated_profiles : vec UserProfileCreationInfo;
 };
-
 type Message = record {
   id : text;
   receiver_id : text;
@@ -18,21 +17,13 @@ type Notification = record {
 };
 type NotificationType = variant { Like };
 type Result = variant { Ok : text; Err : text };
-type Result_1 = variant { Ok : MatchResult; Err : text };
-type Result_2 = variant { Ok : UserProfileCreationInfo; Err : text };
-type Result_3 = variant { Ok : vec Message; Err : text };
-type Result_4 = variant { Ok : vec Notification; Err : text };
-type Result_5 = variant { Ok; Err : text };
-
-type UserProfileCreationInfo = record {
-  notifications : vec Notification;
-  matched_profiles : vec text;
-  created_at : nat64;
-  user_id : text;
-  creator_principal : principal;
-  params : UserProfileParams;
-};
-type UserProfileParams = record {
+type Result_1 = variant { Ok : nat64; Err : text };
+type Result_2 = variant { Ok : MatchResult; Err : text };
+type Result_3 = variant { Ok : UserProfileCreationInfo; Err : text };
+type Result_4 = variant { Ok : vec Message; Err : text };
+type Result_5 = variant { Ok : vec Notification; Err : text };
+type Result_6 = variant { Ok; Err : text };
+type UserInputParams = record {
   age : opt nat64;
   dob : opt text;
   occupation : opt text;
@@ -65,18 +56,63 @@ type UserProfileParams = record {
   max_preferred_age : opt nat64;
   images : opt vec text;
 };
+type UserProfileCreationInfo = record {
+  notifications : vec Notification;
+  matched_profiles : vec text;
+  created_at : nat64;
+  user_id : text;
+  creator_principal : principal;
+  params : UserProfileParams;
+};
+type UserProfileParams = record {
+  age : opt nat64;
+  dob : opt text;
+  occupation : opt text;
+  height : opt text;
+  mobile_number : opt text;
+  notifications : opt vec Notification;
+  diet : opt text;
+  travel : opt vec text;
+  name : opt text;
+  pets : opt text;
+  matched_profiles : opt vec text;
+  outdoor_activities : opt vec text;
+  min_preferred_age : opt nat64;
+  user_id : opt text;
+  email : opt text;
+  smoking : opt text;
+  drinking : opt text;
+  likes : opt vec text;
+  introduction : opt text;
+  matches : opt vec text;
+  art_and_culture : opt vec text;
+  preferred_location : opt text;
+  gender : opt text;
+  interests_in : opt text;
+  preferred_gender : opt text;
+  gender_pronouns : opt text;
+  looking_for : opt text;
+  general_habits : opt vec text;
+  sports : opt vec text;
+  religion : opt text;
+  movies : opt vec text;
+  location : opt text;
+  zodiac : opt text;
+  hobbies : opt vec text;
+  max_preferred_age : opt nat64;
+  images : opt vec text;
+};
 service : {
   check_user_match : (text, text) -> (bool);
-  create_an_account : (UserProfileParams) -> (Result);
-  create_message : (text, text, text) -> (Result);
+  create_an_account : (UserInputParams) -> (Result);
+  create_message : (text, text, text) -> (Result_1);
   delete_an_account : (text) -> (Result);
-  delete_message : (text) -> (Result);
-  find_matches_for_me : (text, nat64, nat64) -> (Result_1);
-  get_an_account : (text) -> (Result_2) query;
-  read_messages : (text, text) -> (Result_3) query;
-  retrieve_notifications_for_user : (text) -> (Result_4);
-  send_like_notification_candid : (text, text) -> (Result_5);
-  update_an_account : (text, UserProfileParams) -> (Result);
-  update_message : (text, text) -> (Result);
-   
+  delete_message : (nat64) -> (Result);
+  find_matches_for_me : (text, nat64, nat64) -> (Result_2);
+  get_an_account : (text) -> (Result_3) query;
+  read_messages : (text, text) -> (Result_4) query;
+  retrieve_notifications_for_user : (text) -> (Result_5);
+  send_like_notification_candid : (text, text) -> (Result_6);
+  update_an_account : (text, UserInputParams) -> (Result);
+  update_message : (nat64, text) -> (Result);
 }

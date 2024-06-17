@@ -2,13 +2,14 @@ mod profile_creation;
 mod notification;
 mod profile_matcher;
 mod right_and_left_swipe;
-use crate::profile_creation::{UserProfileParams,UserProfileCreationInfo};
+use crate::profile_creation::UserProfileCreationInfo;
 use ic_cdk::{export_candid, query, update};
 pub use notification::*;
 use profile_creation::{Notification, Pagination, PROFILES};
 pub use profile_matcher::*;
 pub use right_and_left_swipe::*;
 use crate::profile_creation::Message;
+use crate::profile_creation::UserInputParams;
 
 
 
@@ -153,7 +154,7 @@ pub fn retrieve_notifications_for_user(user_id: String) -> Result<Vec<Notificati
 
 
 #[update]
-pub fn create_message(sender_id: String, receiver_id: String, content: String) -> Result<String, String> {
+pub fn create_message(sender_id: String, receiver_id: String, content: String) -> Result<u64, String> {
     PROFILES.with(|profiles| profiles.borrow_mut().create_message(sender_id, receiver_id, content))
 }
 
@@ -163,14 +164,15 @@ pub fn read_messages(user_id: String, other_user_id: String) -> Result<Vec<Messa
 }
 
 #[update]
-pub fn update_message(message_id: String, new_content: String) -> Result<String, String> {
-    PROFILES.with(|profiles| profiles.borrow_mut().update_message(message_id, new_content))
+pub fn update_message(timestamp: u64, new_content: String) -> Result<String, String> {
+    PROFILES.with(|profiles| profiles.borrow_mut().update_message(timestamp, new_content))
 }
 
 #[update]
-pub fn delete_message(message_id: String) -> Result<String, String> {
-    PROFILES.with(|profiles| profiles.borrow_mut().delete_message(message_id))
+pub fn delete_message(timestamp: u64) -> Result<String, String> {
+    PROFILES.with(|profiles| profiles.borrow_mut().delete_message(timestamp))
 }
+
 
 
 export_candid!{}
