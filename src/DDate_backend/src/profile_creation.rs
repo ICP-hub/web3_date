@@ -10,7 +10,6 @@ use ic_cdk::api::stable::{StableReader, StableWriter};
 use ic_cdk_macros::{post_upgrade, pre_upgrade};
 use std::io::Read;
 
-
 // Define the Notification struct
 #[derive(Debug, Serialize, Clone, Deserialize, CandidType)]
 pub struct Notification {
@@ -25,7 +24,40 @@ pub enum NotificationType {
     // Add other notification types as needed
 }
 
-
+#[derive(Default, Clone, Deserialize, CandidType, Debug, Serialize)]
+pub struct UserInputParams {
+    pub gender: Option<String>,
+    pub email: Option<String>,
+    pub name: Option<String>,
+    pub mobile_number: Option<String>,
+    pub dob: Option<String>,
+    pub gender_pronouns: Option<String>,
+    pub religion: Option<String>,
+    pub height: Option<String>,
+    pub zodiac: Option<String>,
+    pub diet: Option<String>,
+    pub occupation: Option<String>,
+    pub looking_for: Option<String>,
+    pub smoking: Option<String>,
+    pub drinking: Option<String>,
+    pub hobbies: Option<Vec<String>>,
+    pub sports: Option<Vec<String>>,
+    pub art_and_culture: Option<Vec<String>>,
+    pub pets: Option<String>,
+    pub general_habits: Option<Vec<String>>,
+    pub outdoor_activities: Option<Vec<String>>,
+    pub travel: Option<Vec<String>>,
+    pub movies: Option<Vec<String>>,
+    pub interests_in: Option<String>,
+    pub age: Option<u64>,
+    pub location: Option<String>,
+    pub min_preferred_age: Option<u64>,
+    pub max_preferred_age: Option<u64>,
+    pub preferred_gender: Option<String>,
+    pub preferred_location: Option<String>,
+    pub introduction: Option<String>,
+    pub images: Option<Vec<String>>,
+}
 
 #[derive(Clone, Deserialize, CandidType, Debug, Serialize)]
 pub struct UserProfileCreationInfo {
@@ -37,7 +69,7 @@ pub struct UserProfileCreationInfo {
     pub matched_profiles: Vec<String>,
 }
 
-#[derive(Default,Clone, Deserialize, CandidType, Debug, Serialize)]
+#[derive(Default, Clone, Deserialize, CandidType, Debug, Serialize)]
 pub struct UserProfileParams {
     pub user_id: Option<String>,
     pub gender: Option<String>,
@@ -71,10 +103,10 @@ pub struct UserProfileParams {
     pub preferred_location: Option<String>,
     pub introduction: Option<String>,
     pub images: Option<Vec<String>>,
-    pub likes: Option<HashSet<String>>, // Make this optional
-    pub matches: Option<Vec<String>>, // Make this optional
-    pub notifications: Option<VecDeque<Notification>>, // Make this optional
-    pub matched_profiles: Option<Vec<String>>, // Make this optional
+    pub likes: Option<HashSet<String>>,
+    pub matches: Option<Vec<String>>,
+    pub notifications: Option<VecDeque<Notification>>,
+    pub matched_profiles: Option<Vec<String>>,
 }
 
 #[derive(Clone, Deserialize, CandidType, Debug, Serialize)]
@@ -91,7 +123,6 @@ pub struct Message {
     pub content: String,
     pub timestamp: u64,
 }
-
 
 #[pre_upgrade]
 fn pre_upgrade() {
@@ -134,14 +165,11 @@ fn post_upgrade() {
 pub struct Profile {
     pub profiles: HashMap<String, UserProfileCreationInfo>,
     pub messages: HashMap<String, VecDeque<Message>>,
-    
-    
 }
 
 thread_local! {
     pub static PROFILES: RefCell<Profile> = RefCell::new(Profile::new())
 }
-
 
 impl Profile {
     // Initialize
@@ -190,17 +218,16 @@ impl Profile {
     }
 
     // Method to update an existing account
-pub fn update_account(&mut self, user_id: &String, new_params: UserProfileParams) -> Result<String, String> {
-    match self.profiles.get_mut(user_id) {
-        Some(profile) => {
-            profile.params.merge(new_params);
-            ic_cdk::println!("Updated profile with user_id: {}", user_id);
-            Ok(format!("User profile updated with id: {}", user_id))
-        },
-        None => Err("Profile not found".to_string()),
+    pub fn update_account(&mut self, user_id: &String, new_params: UserProfileParams) -> Result<String, String> {
+        match self.profiles.get_mut(user_id) {
+            Some(profile) => {
+                profile.params.merge(new_params);
+                ic_cdk::println!("Updated profile with user_id: {}", user_id);
+                Ok(format!("User profile updated with id: {}", user_id))
+            },
+            None => Err("Profile not found".to_string()),
+        }
     }
-}
-
 
     // Method to delete an existing account
     pub fn delete_account(&mut self, user_id: &String) -> Result<String, String> {
@@ -222,7 +249,7 @@ pub fn update_account(&mut self, user_id: &String, new_params: UserProfileParams
             None => Err("Profile not found".to_string()),
         }
     }
-    pub fn create_message(&mut self, sender_id: String, receiver_id: String, content: String) -> Result<String, String> {
+    pub fn create_message(&mut self, sender_id: String, receiver_id: String, content: String) -> Result<u64, String> {
         // Validate input
         if sender_id.trim().is_empty() {
             return Err("Sender ID is required".to_string());
@@ -249,9 +276,8 @@ pub fn update_account(&mut self, user_id: &String, new_params: UserProfileParams
     
         // Create the message
         let timestamp = ic_cdk::api::time();
-        let message_id = format!("{:x}", Sha256::digest(format!("{}{}{}", sender_id, receiver_id, timestamp).as_bytes()));
         let message = Message {
-            id: message_id.clone(),
+            id: timestamp.to_string(),
             sender_id: sender_id.clone(),
             receiver_id: receiver_id.clone(),
             content,
@@ -261,7 +287,7 @@ pub fn update_account(&mut self, user_id: &String, new_params: UserProfileParams
         let chat_id = Self::get_chat_id(&sender_id, &receiver_id);
         self.messages.entry(chat_id).or_insert_with(VecDeque::new).push_back(message);
     
-        Ok("Message sent successfully".to_string())
+        Ok(timestamp)
     }
     
     pub fn read_messages(&self, user_id: &String, other_user_id: &String) -> Result<Vec<Message>, String> {
@@ -289,24 +315,20 @@ pub fn update_account(&mut self, user_id: &String, new_params: UserProfileParams
             Some(messages) => Ok(messages.clone().into_iter().collect()),
             None => Err("No messages found".to_string()),
         }
-
     }
     
-    pub fn update_message(&mut self, message_id: String, new_content: String) -> Result<String, String> {
+    pub fn update_message(&mut self, timestamp: u64, new_content: String) -> Result<String, String> {
         // Validate input
-        if message_id.trim().is_empty() {
-            return Err("Message ID is required".to_string());
-        }
         if new_content.trim().is_empty() {
             return Err("New content is required".to_string());
         }
     
-        // Check if the message ID exists
+        // Check if the message timestamp exists
         let mut message_found = false;
         for messages in self.messages.values_mut() {
             for message in messages.iter_mut() {
-                if message.id == message_id {
-                    message.content = new_content.clone(); // Clone new_content
+                if message.timestamp == timestamp {
+                    message.content = new_content.clone();
                     message_found = true;
                     break;
                 }
@@ -325,22 +347,17 @@ pub fn update_account(&mut self, user_id: &String, new_params: UserProfileParams
     }
     
     
-    
-    pub fn delete_message(&mut self, message_id: String) -> Result<String, String> {
-        // Validate input
-        if message_id.trim().is_empty() {
-            return Err("Message ID is required".to_string());
-        }
-    
+    pub fn delete_message(&mut self, timestamp: u64) -> Result<String, String> {
         // Delete message
         for messages in self.messages.values_mut() {
-            if let Some(pos) = messages.iter().position(|m| m.id == message_id) {
+            if let Some(pos) = messages.iter().position(|m| m.timestamp == timestamp) {
                 messages.remove(pos);
                 return Ok("Message deleted successfully".to_string());
             }
         }
         Err("Message not found".to_string())
     }
+    
     
     // Utility function to generate a chat ID
     fn get_chat_id(user1: &String, user2: &String) -> String {
@@ -350,8 +367,48 @@ pub fn update_account(&mut self, user_id: &String, new_params: UserProfileParams
     }
 }
 
-
-
+impl From<UserInputParams> for UserProfileParams {
+    fn from(input: UserInputParams) -> Self {
+        UserProfileParams {
+            gender: input.gender,
+            email: input.email,
+            name: input.name,
+            mobile_number: input.mobile_number,
+            dob: input.dob,
+            gender_pronouns: input.gender_pronouns,
+            religion: input.religion,
+            height: input.height,
+            zodiac: input.zodiac,
+            diet: input.diet,
+            occupation: input.occupation,
+            looking_for: input.looking_for,
+            smoking: input.smoking,
+            drinking: input.drinking,
+            hobbies: input.hobbies,
+            sports: input.sports,
+            art_and_culture: input.art_and_culture,
+            pets: input.pets,
+            general_habits: input.general_habits,
+            outdoor_activities: input.outdoor_activities,
+            travel: input.travel,
+            movies: input.movies,
+            interests_in: input.interests_in,
+            age: input.age,
+            location: input.location,
+            min_preferred_age: input.min_preferred_age,
+            max_preferred_age: input.max_preferred_age,
+            preferred_gender: input.preferred_gender,
+            preferred_location: input.preferred_location,
+            introduction: input.introduction,
+            images: input.images,
+            likes: None,
+            matches: None,
+            notifications: None,
+            matched_profiles: None,
+            user_id: None,
+        }
+    }
+}
 
 impl UserProfileParams {
     pub fn merge(&mut self, other: UserProfileParams) {
@@ -463,9 +520,8 @@ impl UserProfileParams {
     }
 }
 
-
 #[update]
-pub async fn create_an_account(params: UserProfileParams) -> Result<String, String> {
+pub async fn create_an_account(params: UserInputParams) -> Result<String, String> {
     let caller = ic_cdk::api::caller();
 
     let u_ids = raw_rand().await.map_err(|e| format!("Failed to generate random user ID: {:?}", e))?.0;
@@ -475,7 +531,7 @@ pub async fn create_an_account(params: UserProfileParams) -> Result<String, Stri
         user_id: unique_user_id.clone(),
         created_at: ic_cdk::api::time(),
         creator_principal: caller,
-        params,
+        params: params.into(), // Convert UserInputParams to UserProfileParams
         notifications: VecDeque::new(),
         matched_profiles: Vec::new(),
     };
@@ -486,9 +542,10 @@ pub async fn create_an_account(params: UserProfileParams) -> Result<String, Stri
 }
 
 #[update]
-pub fn update_an_account(user_id: String, params: UserProfileParams) -> Result<String, String> {
+pub fn update_an_account(user_id: String, params: UserInputParams) -> Result<String, String> {
     ic_cdk::println!("Updating account with user_id: {}", user_id);
-    PROFILES.with(|profiles| profiles.borrow_mut().update_account(&user_id, params))
+    let user_profile_params: UserProfileParams = params.into(); // Convert UserInputParams to UserProfileParams
+    PROFILES.with(|profiles| profiles.borrow_mut().update_account(&user_id, user_profile_params))
 }
 
 #[update]
@@ -502,4 +559,3 @@ pub fn get_an_account(user_id: String) -> Result<UserProfileCreationInfo, String
     ic_cdk::println!("Retrieving account with user_id: {}", user_id);
     PROFILES.with(|profiles| profiles.borrow().get_account(&user_id))
 }
-
