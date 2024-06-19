@@ -31,7 +31,7 @@ const Explore = () => {
           </svg>
         </div>
 
-        <div className="flex flex-col items-center justify-center my-10">
+        <div className="flex flex-col items-center justify-between my-10 px-[6%] w-full">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-4 w-full px-6">
             {/* Friendships */}
             <div className="flex flex-col sm:flex-row items-center text-start mt-8 md:mb-16 mb-6 relative">
@@ -75,7 +75,7 @@ const Explore = () => {
             </div>
 
             {/* Marriage */}
-            <div className="flex flex-col sm:flex-row items-center text-start md:mb-16 mb-6">
+            <div className="flex flex-col sm:flex-row items-center text-start md:mb-16 mb-6 ">
               <div className="w-40 h-40 bg-custom-red rounded-full relative mb-6 sm:mb-0">
                 <img
                   className="absolute z-10 top-1/4 left-1/2 transform -translate-x-1/2 -translate-y-2/6 w-full h-full object-contain"

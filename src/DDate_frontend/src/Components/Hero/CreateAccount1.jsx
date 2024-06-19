@@ -209,7 +209,7 @@ const CreateAccount1 = () => {
     }
   };
 
-  
+
 
 
   const handleNext = async () => {
@@ -264,7 +264,7 @@ const CreateAccount1 = () => {
               {index === 5 && <Form6 />}
 
               <div className="flex justify-between">
-                {/* <button type="button" className="bg-yellow-500 font-semibold py-2 px-6 rounded-full hover:bg-yellow-600 text-white md:text-black md:hover:text-black" onClick={handleSwipe}>Swipe</button> */}
+                <button type="button" className="bg-yellow-500 font-semibold py-2 px-6 rounded-full hover:bg-yellow-600 text-white md:text-black md:hover:text-black" onClick={handleSwipe}>Swipe</button>
 
                 <button type="button" className="bg-yellow-500 font-semibold py-2 px-6 rounded-full hover:bg-yellow-600 text-white md:text-black md:hover:text-black" onClick={handleBack} disabled={index === 0}>Back</button>
                 {index === 5 ? (

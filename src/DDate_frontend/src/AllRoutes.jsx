@@ -18,7 +18,7 @@ import EditProfile from "./Components/EditProfile/EditProfile"
 
 const AllRoutes = () => {
 
-  
+
   const navigate = useNavigate();
   const [userCheckComplete, setUserCheckComplete] = useState(false);
   const [finalMatch, setFinalMatch] = useState([]);
@@ -50,15 +50,15 @@ const AllRoutes = () => {
     try {
       const principalString = localStorage.getItem("id");
       // console.log("Principal string from localStorage:", principalString);
-  
+
       if (principalString) {
         const principal = Principal.fromText(principalString);
-  
+
         if (principal) {
           const userExist = await DDate_backend.get_profile(principal);
           const userPrincipalInString = userExist.id.toText();
           const principalToString = principal.toText();
-  
+
           if (userPrincipalInString === principalToString) {
             navigate("/Swipe");
           }
@@ -70,7 +70,7 @@ const AllRoutes = () => {
       setUserCheckComplete(true);
     }
   };
-  
+
 
 
 
@@ -122,7 +122,7 @@ const AllRoutes = () => {
 
   return (
     <>
-       {userCheckComplete && (
+      {userCheckComplete && (
         <Routes>
           <Route path="/" element={<HomePage />} />
           {/* <Route path="/" element={<EditProfile />} /> */}
@@ -131,15 +131,15 @@ const AllRoutes = () => {
           <Route path="/Swipe" element={<Swipe />} />
           <Route path="/Profile" element={<Profile />} />
           <Route path="/Notification" element={<Notification />} />
-          <Route path="/ChattingPage" element={<ChattingPage finalMatch={finalMatch}/>} />
+          <Route path="/ChattingPage" element={<ChattingPage finalMatch={finalMatch} />} />
           <Route path="/ChattingSinglePage/:chatId" element={<ChattingSinglePage />} />
 
           <Route path="/profile/:senderId" element={<ProfileViewer finalMatch={finalMatch} setFinalMatch={setFinalMatch} />} />
-          
-        </Routes>
-      )} 
 
-      
+        </Routes>
+      )}
+
+
 
 
     </>

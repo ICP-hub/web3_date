@@ -4,7 +4,7 @@ const Info = () => {
   return (
     <div className="bg-white flex flex-col items-center w-full font-num">
       <div
-        className="w-full py-8 sm:py-10 md:py-12 lg:py-14 px-2"
+        className="w-full py-8 sm:py-10 md:py-12 lg:py-14 px-[6%]"
         style={{
           background:
             "radial-gradient(84.33% 84.32% at 51.71% 43.22%, #E28110 0%, #26011C 100%)",
@@ -35,7 +35,7 @@ const Info = () => {
           </svg>
         </div>
 
-        <div className="flex flex-col md:flex-row justify-center items-start pt-6 sm:pt-8 md:pt-10 lg:pt-12 font-num font-custom mb-12 md:mb-14 lg:mb-2">
+        <div className="flex flex-col md:flex-row justify-between items-start pt-6 sm:pt-8 md:pt-10 lg:pt-12 font-num font-custom mb-12 md:mb-14 lg:mb-2">
           <div className="flex items-center mb-2 md:mb-0">
             <div className="text-7xl text-white mr-4">1</div>
             <div>
