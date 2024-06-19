@@ -421,7 +421,6 @@ function Swipe() {
 
     <div className="md:grid grid-cols-9">
       <SidebarComponent userId={userId} />
-      <h1>{location.state}</h1>
       {startLoader ? (
         <div className="sm:ml-64">
           <div className="container flex justify-center">

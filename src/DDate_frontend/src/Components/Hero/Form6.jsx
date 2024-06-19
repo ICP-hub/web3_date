@@ -243,94 +243,94 @@ import React, { useState } from 'react';
 import { useFormContext } from 'react-hook-form';
 
 const Form6 = () => {
-  const { register, setValue, formState: { errors }, unregister } = useFormContext();
-  const [imageFields, setImageFields] = useState([{ id: Date.now(), file: null }]);
-  const [err, setErr] = useState(false);
+    const { register, setValue, formState: { errors }, unregister } = useFormContext();
+    const [imageFields, setImageFields] = useState([{ id: Date.now(), file: null }]);
+    const [err, setErr] = useState(false);
 
-  function handleError() {
-    setErr(true);
-  }
-
-  const handleImageUpload = (e, index) => {
-    const file = e.target.files[0];
-    if (file) {
-      const newImageFields = [...imageFields];
-      newImageFields[index].file = URL.createObjectURL(file);
-      setImageFields(newImageFields);
-      setValue(`firstImage${index}`, file);
+    function handleError() {
+        setErr(true);
     }
-  };
 
-  const handleAddField = () => {
-    if (imageFields.length < 5) {
-      setImageFields([...imageFields, { id: Date.now(), file: null }]);
-    }
-  };
+    const handleImageUpload = (e, index) => {
+        const file = e.target.files[0];
+        if (file) {
+            const newImageFields = [...imageFields];
+            newImageFields[index].file = URL.createObjectURL(file);
+            setImageFields(newImageFields);
+            setValue(`firstImage${index}`, file);
+        }
+    };
 
-  const handleRemoveField = (index) => {
-    const newImageFields = imageFields.filter((_, i) => i !== index);
-    setImageFields(newImageFields);
-    unregister(`firstImage${index}`);
-  };
+    const handleAddField = () => {
+        if (imageFields.length < 5) {
+            setImageFields([...imageFields, { id: Date.now(), file: null }]);
+        }
+    };
 
-  const renderImagePreviews = () => {
-    return imageFields.map((field, index) => (
-      <div key={field.id} className="relative group mb-4">
-        {field.file ? (
-          <div className="relative">
-            <img src={field.file} alt={`Preview ${index + 1}`} className="h-36 w-full object-fill rounded-2xl" />
-            <button
-              type="button"
-              onClick={() => handleRemoveField(index)}
-              className="absolute top-1 right-1 bg-red-900 text-white p-1 rounded-md opacity-75 group-hover:opacity-100 text-xs"
-            >
-              X
-            </button>
-          </div>
-        ) : (
-          <div
-            className="h-36 w-full flex justify-center items-center border border-gray-400 bg-gray-200 rounded-2xl cursor-pointer"
-            onClick={() => document.getElementById(`file-input-${index}`).click()}
-          >
-            <div className="flex items-center justify-center w-10 h-10 bg-white border-2 border-gray-600 rounded-full">
-              <span className="text-2xl text-gray-600">+</span>
+    const handleRemoveField = (index) => {
+        const newImageFields = imageFields.filter((_, i) => i !== index);
+        setImageFields(newImageFields);
+        unregister(`firstImage${index}`);
+    };
+
+    const renderImagePreviews = () => {
+        return imageFields.map((field, index) => (
+            <div key={field.id} className="relative group mb-4">
+                {field.file ? (
+                    <div className="relative">
+                        <img src={field.file} alt={`Preview ${index + 1}`} className="h-36 w-full object-fill rounded-2xl" />
+                        <button
+                            type="button"
+                            onClick={() => handleRemoveField(index)}
+                            className="absolute top-1 right-1 bg-red-900 text-white p-1 rounded-md opacity-75 group-hover:opacity-100 text-xs"
+                        >
+                            X
+                        </button>
+                    </div>
+                ) : (
+                    <div
+                        className="h-36 w-full flex justify-center items-center border border-gray-400 bg-gray-200 rounded-2xl cursor-pointer"
+                        onClick={() => document.getElementById(`file-input-${index}`).click()}
+                    >
+                        <div className="flex items-center justify-center w-10 h-10 bg-white border-2 border-gray-600 rounded-full">
+                            <span className="text-2xl text-gray-600">+</span>
+                        </div>
+                    </div>
+                )}
+                <input
+                    type="file"
+                    accept="image/*"
+                    {...register(`firstImage${index}`)}
+                    className="hidden"
+                    id={`file-input-${index}`}
+                    onChange={(e) => { handleImageUpload(e, index); handleError() }}
+                />
             </div>
-          </div>
-        )}
-        <input
-          type="file"
-          accept="image/*"
-          {...register(`firstImage${index}`)}
-          className="hidden"
-          id={`file-input-${index}`}
-          onChange={(e) => {handleImageUpload(e, index); handleError()}}
-        />
-      </div>
-    ));
-  };
+        ));
+    };
 
-  return (
-    <div className="p-4">
-      <h3 className="text-xl font-semibold mb-4">Upload Your Images</h3>
+    return (
+        <div className="p-4">
+            <h3 className="text-xl font-semibold mb-4">Upload Your Images</h3>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
-        {renderImagePreviews()}
-      </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
+                {renderImagePreviews()}
+            </div>
 
-      {imageFields.length < 5 && (
-        <button
-          type="button"
-          onClick={handleAddField}
-          className="px-4 py-2 bg-yellow-500 text-black rounded mb-4"
-        >
-          Add Image
-        </button>
-      )}
-      <div>
-      {!err && <p className="text-red-500 text-sm">At least one image is required</p>}
-      </div>
-    </div>
-  );
+            {imageFields.length < 5 && (
+                <button
+                    type="button"
+                    onClick={handleAddField}
+                    className="px-4 py-2 bg-yellow-500 text-black rounded mb-4"
+                >
+                    Add Image
+                </button>
+            )}
+            <div>
+                {!err && <p className="text-red-500 text-sm">At least one image is required</p>}
+            </div>
+        </div>
+    );
 };
 
 export default Form6;
