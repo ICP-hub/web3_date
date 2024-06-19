@@ -54,12 +54,64 @@ const EditProfile = () => {
     5: ['firstImage0', 'firstImage1', 'firstImage2', 'firstImage3', 'firstImage4']
   };
   const location = useLocation();
-  const userdata = location.state.formData
-  console.log("userdata", userdata)
+  const userdata = location.state
+  const [value, setValue] = useState(null);
+  useEffect(() => {
+    if (userdata && userdata.dob && Array.isArray(userdata.dob) && userdata.dob[0]) {
+      const dateString = String(userdata.dob[0]);
+      const dateObject = new Date(dateString);
+      if (!isNaN(dateObject.getTime())) {
+        const formattedDate = dateObject.toISOString().split('T')[0];
+        setValue(formattedDate);
+      } else {
+        console.error('Invalid date string:', dateString);
+      }
+    }
+  }, [userdata]);
+
+  const convertBigIntToString = (obj) => {
+    for (const key in obj) {
+      if (typeof obj[key] === 'bigint') {
+        obj[key] = obj[key].toString();
+      }
+    }
+  };
+
+  if (userdata) {
+    convertBigIntToString(userdata);
+  }
+  const PreValue = {
+    username: userdata?.name,
+    usergender: userdata?.gender,
+    email: userdata?.email,
+    mobile: userdata?.mobile_number,
+    dob: value,
+    selectedIntro: userdata?.introduction,
+    selectedsmoking: userdata?.smoking,
+    selecteddrink: userdata?.drinking,
+    selectedhobbies: userdata?.selected_hobbies,
+    selectedsports: userdata?.sports,
+    genderPronouns: userdata?.gender_pronouns,
+    selectedReligion: userdata?.religion,
+    selectedZodiac: userdata?.zodiac,
+    selectedFooding: userdata?.diet,
+    selectedWhatYouDo: userdata?.occupation,
+    selectedLookingFor: userdata?.looking_for,
+    selectedArt: userdata?.art_and_culture,
+    selectedPets: userdata?.pets,
+    selectedHabits: userdata?.habbits,
+    selectedActivities: userdata?.outdoor_activities,
+    selectedMovies: userdata?.selected_movies,
+    selectedTravel: userdata?.travels,
+    selectedInterests: userdata?.interests_in,
+    selectedPreferAge: userdata?.age,
+    selectedPreferLocation: userdata?.preferred_location,
+  }
+
   const methods = useForm({
     resolver: yupResolver(schema),
-    mode: 'all'
-
+    mode: 'all',
+    defaultValues: PreValue
   });
   const { handleSubmit, trigger } = methods;
   const [index, setIndex] = React.useState(0);
@@ -72,51 +124,44 @@ const EditProfile = () => {
     console.log('Final Form Data', data);
     if (backendActor) {
       const DdateData = {
-        userName: [data?.username],
         email: [data?.email],
         age: [Number((data?.selectedPreferAge).slice(0, 2)) + Math.floor(Math.random() * 10 + 1)],
         gender: [data?.usergender],
         dob: [String(data?.dob)],
-        mobile: [data?.mobile],
         gender_pronouns: [data?.genderPronouns],
         religion: [data?.selectedReligion],
-        selected_life_pathNumber: [data?.selectedLifePathNumber],
         zodiac: [data?.selectedZodiac],
-        selected_fooding: [data?.selectedFooding],
-        selected_what_do_you_do: [data?.selectedWhatYouDo],
-        selected_looking_for: [data?.selectedLookingFor],
+        looking_for: [data?.selectedLookingFor],
         smoking: [data?.selectedsmoking],
         drinking: [data?.selecteddrink],
         hobbies: [data?.selectedhobbies],
         sports: [data?.selectedsports],
         art_and_culture: [data?.selectedArt],
-        selected_pets: [data?.selectedPets],
         general_habits: [data?.selectedHabits],
-        selected_activities: [data?.selectedActivities],
         movies: [data?.selectedMovies],
-        selected_travel: [data?.selectedTravel],
-        interests_in: [],
+        interests_in: data?.selectedInterests,
         location: [data?.selectedLocation],
         preferred_location: [data?.selectedPreferLocation],
         introduction: [data?.selectedIntro],
-        selected_images: [{ first_image: [data?.firstImage0] },
-        { second_image: [data?.firstImage1] },
-        { third_image: [data?.firstImage2] },
-        { fourth_image: [data?.firstImage3] },
-        { fifth_image: [data?.firstImage4] }],
-        occupation: [],
+        occupation: [data?.selectedWhatYouDo],
         height: [],
-        mobile_number: [],
-        diet: [],
-        travel: [],
+        mobile_number: [data?.mobile],
+        diet: [data?.selectedFooding],
+        travel: [data?.selectedTravel],
         name: [data?.username],
-        pets: [],
-        outdoor_activities: [],
+        pets: [data?.selectedPets],
+        outdoor_activities: [data?.selectedActivities],
         min_preferred_age: [Number((data?.selectedPreferAge).slice(0, 2))],
         preferred_gender: [data?.usergender],
-        looking_for: ['both'],
         max_preferred_age: [Number((data?.selectedPreferAge).slice(3, 5))],
-        images: []
+        images:
+          [
+            // data?.firstImage0,
+            // data?.firstImage1,
+            // data?.firstImage2,
+            // data?.firstImage3,
+            // data?.firstImage4
+          ]
 
       }
       console.log('Ddatedata ', DdateData)
@@ -241,7 +286,7 @@ const EditProfile = () => {
               <button type="button" className="bg-yellow-500 font-semibold py-2 px-6 rounded-full hover:bg-yellow-600 text-white md:text-black md:hover:text-black" onClick={handleBack} disabled={index === 0}>Back</button>
               {index === 5 ? (
                 <>
-                  <button type="submit" className="bg-yellow-500 font-semibold py-2 px-6 rounded-full hover:bg-yellow-600 text-white md:text-black md:hover:text-black">Submit</button>
+                  <button type="submit" className="bg-yellow-500 font-semibold py-2 px-6 rounded-full hover:bg-yellow-600 text-white md:text-black md:hover:text-black">Save</button>
                 </>
               ) : (
                 <button type="button" className="bg-yellow-500 font-semibold py-2 px-6 rounded-full hover:bg-yellow-600 text-white md:text-black md:hover:text-black" onClick={handleNext}>Next</button>

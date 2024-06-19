@@ -141,63 +141,57 @@ const CreateAccount1 = () => {
     console.log('Final Form Data', data);
     if (backendActor) {
       const DdateData = {
-        userName: [data?.username],
         email: [data?.email],
         age: [Number((data?.selectedPreferAge).slice(0, 2)) + Math.floor(Math.random() * 10 + 1)],
         gender: [data?.usergender],
         dob: [String(data?.dob)],
-        mobile: [data?.mobile],
         gender_pronouns: [data?.genderPronouns],
         religion: [data?.selectedReligion],
-        selected_life_pathNumber: [data?.selectedLifePathNumber],
         zodiac: [data?.selectedZodiac],
-        selected_fooding: [data?.selectedFooding],
-        selected_what_do_you_do: [data?.selectedWhatYouDo],
-        selected_looking_for: [data?.selectedLookingFor],
+        looking_for: [data?.selectedLookingFor],
         smoking: [data?.selectedsmoking],
         drinking: [data?.selecteddrink],
         hobbies: [data?.selectedhobbies],
         sports: [data?.selectedsports],
         art_and_culture: [data?.selectedArt],
-        selected_pets: [data?.selectedPets],
         general_habits: [data?.selectedHabits],
-        selected_activities: [data?.selectedActivities],
         movies: [data?.selectedMovies],
-        selected_travel: [data?.selectedTravel],
-        interests_in: [],
+        interests_in: data?.selectedInterests,
         location: [data?.selectedLocation],
         preferred_location: [data?.selectedPreferLocation],
         introduction: [data?.selectedIntro],
-        selected_images: [{ first_image: [data?.firstImage0] },
-        { second_image: [data?.firstImage1] },
-        { third_image: [data?.firstImage2] },
-        { fourth_image: [data?.firstImage3] },
-        { fifth_image: [data?.firstImage4] }],
-        occupation: [],
+        occupation: [data?.selectedWhatYouDo],
         height: [],
-        mobile_number: [],
-        diet: [],
-        travel: [],
+        mobile_number: [data?.mobile],
+        diet: [data?.selectedFooding],
+        travel: [data?.selectedTravel],
         name: [data?.username],
-        pets: [],
-        outdoor_activities: [],
+        pets: [data?.selectedPets],
+        outdoor_activities: [data?.selectedActivities],
         min_preferred_age: [Number((data?.selectedPreferAge).slice(0, 2))],
         preferred_gender: [data?.usergender],
-        looking_for: ['both'],
         max_preferred_age: [Number((data?.selectedPreferAge).slice(3, 5))],
-        images: []
-
+        images:
+          [
+            // data?.firstImage0,
+            // data?.firstImage1,
+            // data?.firstImage2,
+            // data?.firstImage3,
+            // data?.firstImage4
+          ]
       }
       console.log('Ddatedata ', DdateData)
 
       try {
         await backendActor.create_an_account(DdateData).then((result) => {
+          console.log("result", result)
           if (result) {
-            const API = result.Ok;
-            console.log(API)
-            const trimedId = API.split(":")[1].trim();
-            setId(trimedId);
-            navigate("/Swipe", { state: trimedId });
+            const API = result?.Ok;
+            console.log("Final API", API)
+            // const trimedId = API?.split(":")[1]?.trim();
+            // console.log("TrimmedId", trimedId)  // Log trimmedId to check its value
+            setId(API);
+            navigate("/Swipe", { state: API });
           } else {
             setId('')
           }
@@ -209,7 +203,7 @@ const CreateAccount1 = () => {
     }
   };
 
-  
+
 
 
   const handleNext = async () => {
@@ -225,10 +219,10 @@ const CreateAccount1 = () => {
     }
   };
 
-  const handleSwipe = () => {
-    console.log("Navigating with ID:", id);
-    navigate("/Swipe");
-  };
+  // const handleSwipe = () => {
+  //   console.log("Navigating with ID:", id);
+  //   navigate("/Swipe");
+  // };
 
   const onErrorHandler = val => {
     console.log('error', val);
