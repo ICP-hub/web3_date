@@ -1,3 +1,4 @@
+
 import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -11,13 +12,13 @@ import {
 const Footer = () => {
   return (
     <footer
-      className="text-white py-8"
+      className="text-white py-8 px-[6%]"
       style={{
         background:
           "radial-gradient(84.33% 84.32% at 51.71% 43.22%, #E28110 0%, #26011C 100%)",
       }}
     >
-      <div className="container mx-auto px-4 lg:px-8">
+      <div className="container mx-auto ">
         <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-8">
           <div className="mb-4">
             <h4 className="text-lg font-bold mb-2">Legal</h4>
@@ -101,3 +102,4 @@ const Footer = () => {
 };
 
 export default Footer;
+

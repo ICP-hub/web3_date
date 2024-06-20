@@ -141,57 +141,63 @@ const CreateAccount1 = () => {
     console.log('Final Form Data', data);
     if (backendActor) {
       const DdateData = {
+        userName: [data?.username],
         email: [data?.email],
         age: [Number((data?.selectedPreferAge).slice(0, 2)) + Math.floor(Math.random() * 10 + 1)],
         gender: [data?.usergender],
         dob: [String(data?.dob)],
+        mobile: [data?.mobile],
         gender_pronouns: [data?.genderPronouns],
         religion: [data?.selectedReligion],
+        selected_life_pathNumber: [data?.selectedLifePathNumber],
         zodiac: [data?.selectedZodiac],
-        looking_for: [data?.selectedLookingFor],
+        selected_fooding: [data?.selectedFooding],
+        selected_what_do_you_do: [data?.selectedWhatYouDo],
+        selected_looking_for: [data?.selectedLookingFor],
         smoking: [data?.selectedsmoking],
         drinking: [data?.selecteddrink],
         hobbies: [data?.selectedhobbies],
         sports: [data?.selectedsports],
         art_and_culture: [data?.selectedArt],
+        selected_pets: [data?.selectedPets],
         general_habits: [data?.selectedHabits],
+        selected_activities: [data?.selectedActivities],
         movies: [data?.selectedMovies],
-        interests_in: data?.selectedInterests,
+        selected_travel: [data?.selectedTravel],
+        interests_in: [],
         location: [data?.selectedLocation],
         preferred_location: [data?.selectedPreferLocation],
         introduction: [data?.selectedIntro],
-        occupation: [data?.selectedWhatYouDo],
+        selected_images: [{ first_image: [data?.firstImage0] },
+        { second_image: [data?.firstImage1] },
+        { third_image: [data?.firstImage2] },
+        { fourth_image: [data?.firstImage3] },
+        { fifth_image: [data?.firstImage4] }],
+        occupation: [],
         height: [],
-        mobile_number: [data?.mobile],
-        diet: [data?.selectedFooding],
-        travel: [data?.selectedTravel],
+        mobile_number: [],
+        diet: [],
+        travel: [],
         name: [data?.username],
-        pets: [data?.selectedPets],
-        outdoor_activities: [data?.selectedActivities],
+        pets: [],
+        outdoor_activities: [],
         min_preferred_age: [Number((data?.selectedPreferAge).slice(0, 2))],
         preferred_gender: [data?.usergender],
+        looking_for: ['both'],
         max_preferred_age: [Number((data?.selectedPreferAge).slice(3, 5))],
-        images:
-          [
-            // data?.firstImage0,
-            // data?.firstImage1,
-            // data?.firstImage2,
-            // data?.firstImage3,
-            // data?.firstImage4
-          ]
+        images: []
+
       }
       console.log('Ddatedata ', DdateData)
 
       try {
         await backendActor.create_an_account(DdateData).then((result) => {
-          console.log("result", result)
           if (result) {
-            const API = result?.Ok;
-            console.log("Final API", API)
-            // const trimedId = API?.split(":")[1]?.trim();
-            // console.log("TrimmedId", trimedId)  // Log trimmedId to check its value
-            setId(API);
-            navigate("/Swipe", { state: API });
+            const API = result.Ok;
+            console.log(API)
+            const trimedId = API.split(":")[1].trim();
+            setId(trimedId);
+            navigate("/Swipe", { state: trimedId });
           } else {
             setId('')
           }
@@ -219,10 +225,10 @@ const CreateAccount1 = () => {
     }
   };
 
-  // const handleSwipe = () => {
-  //   console.log("Navigating with ID:", id);
-  //   navigate("/Swipe");
-  // };
+  const handleSwipe = () => {
+    console.log("Navigating with ID:", id);
+    navigate("/Swipe");
+  };
 
   const onErrorHandler = val => {
     console.log('error', val);
@@ -258,7 +264,7 @@ const CreateAccount1 = () => {
               {index === 5 && <Form6 />}
 
               <div className="flex justify-between">
-                {/* <button type="button" className="bg-yellow-500 font-semibold py-2 px-6 rounded-full hover:bg-yellow-600 text-white md:text-black md:hover:text-black" onClick={handleSwipe}>Swipe</button> */}
+                <button type="button" className="bg-yellow-500 font-semibold py-2 px-6 rounded-full hover:bg-yellow-600 text-white md:text-black md:hover:text-black" onClick={handleSwipe}>Swipe</button>
 
                 <button type="button" className="bg-yellow-500 font-semibold py-2 px-6 rounded-full hover:bg-yellow-600 text-white md:text-black md:hover:text-black" onClick={handleBack} disabled={index === 0}>Back</button>
                 {index === 5 ? (
@@ -278,3 +284,4 @@ const CreateAccount1 = () => {
 };
 
 export default CreateAccount1;
+

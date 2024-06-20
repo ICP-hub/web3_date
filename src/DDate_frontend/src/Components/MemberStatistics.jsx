@@ -1,9 +1,10 @@
+
 import React from "react";
 
 const MemberStatistics = () => {
   return (
     <div
-      className="font-num flex  flex-wrap w-full lg:px-36 md: items-center p-4 "
+      className="font-num flex  flex-wrap w-full  md: items-center  "
       style={{
         background:
           "radial-gradient(84.33% 84.32% at 51.71% 43.22%, #E28110 0%, #26011C 100%)",
@@ -115,3 +116,4 @@ const MemberStatistics = () => {
 };
 
 export default MemberStatistics;
+
