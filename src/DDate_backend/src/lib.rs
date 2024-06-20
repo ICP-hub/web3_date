@@ -2,17 +2,17 @@ mod profile_creation;
 mod notification;
 mod profile_matcher;
 mod right_and_left_swipe;
+
 use crate::profile_creation::UserProfileCreationInfo;
 use ic_cdk::{export_candid, query, update};
 pub use notification::*;
+use profile_creation::set_user_inactive;
 use profile_creation::{Notification, Pagination, PROFILES};
 pub use profile_matcher::*;
 pub use right_and_left_swipe::*;
 use crate::profile_creation::Message;
 use crate::profile_creation::UserInputParams;
-
-
-
+use crate::profile_creation::PaginatedProfiles;
 
 
 
@@ -42,8 +42,9 @@ pub fn send_like_notification_candid(sender_id: String, receiver_id: String) -> 
         profiles_borrowed.send_like_notification(sender_id, receiver_id)
     })
 }
+
 #[update]
-pub fn find_matches_for_me(user_id: String, page: usize, size: usize) -> Result<MatchResult, String> {
+pub fn get_rightswiped_matches(user_id: String, page: usize, size: usize) -> Result<MatchResult, String> {
     ic_cdk::println!("Finding matches for user: {}", user_id);
 
     // Check if the user ID is valid
@@ -93,6 +94,39 @@ pub fn find_matches_for_me(user_id: String, page: usize, size: usize) -> Result<
 
 
 #[update]
+fn leftswipe(input: SwipeInput) -> String {
+    PROFILES.with(|profiles| {
+        match leftswipe_profile(&mut profiles.borrow_mut(), input) {
+            Ok(message) => message,
+            Err(error) => error,
+        }
+    })
+}
+
+#[update]
+fn rightswipe(input: SwipeInput) -> String {
+    PROFILES.with(|profiles| {
+        match rightswipe_profile(&mut profiles.borrow_mut(), input) {
+            Ok(message) => message,
+            Err(error) => error,
+        }
+    })
+}
+
+#[query]
+fn get_leftswipes(user_id: String, pagination: Pagination) -> Result<MatchResult, String> {
+    PROFILES.with(|profiles| {
+        fetch_leftswipes(&profiles.borrow(), user_id, pagination)
+    })
+}
+
+#[query]
+fn get_rightswipes(user_id: String, pagination: Pagination) -> Result<MatchResult, String> {
+    PROFILES.with(|profiles| {
+        fetch_rightswipes(&profiles.borrow(), user_id, pagination)
+    })
+}
+#[update]
 fn check_user_match(current_user_id: String, potential_match_id: String) -> bool {
     // Check if current_user_id is the same as potential_match_id
     if current_user_id == potential_match_id {
@@ -119,7 +153,9 @@ fn check_user_match(current_user_id: String, potential_match_id: String) -> bool
                 && current_user.params.age.unwrap() >= potential_match.params.min_preferred_age.unwrap()
                 && current_user.params.age.unwrap() <= potential_match.params.max_preferred_age.unwrap()
                 && current_user.params.gender == potential_match.params.preferred_gender
-                && current_user.params.location == potential_match.params.preferred_location;
+                && current_user.params.location == potential_match.params.preferred_location
+                && current_user.params.rightswipes.as_ref().map_or(false, |rightswipes| rightswipes.contains(&potential_match_id))
+                && potential_match.params.rightswipes.as_ref().map_or(false, |rightswipes| rightswipes.contains(&current_user_id));
             
             ic_cdk::println!("Match result for {} and {}: {}", current_user_id, potential_match_id, match_found);
             match_found
@@ -129,6 +165,23 @@ fn check_user_match(current_user_id: String, potential_match_id: String) -> bool
         }
     })
 }
+
+#[update]
+fn remove_user_matches(user_id: String) -> Result<String, String> {
+    PROFILES.with(|profiles| {
+        remove_matches(&mut profiles.borrow_mut(), user_id)
+    })
+}
+
+#[update]
+fn make_user_inactive(user_id: String) -> Result<String, String> {
+    PROFILES.with(|profiles| {
+        set_user_inactive(&mut profiles.borrow_mut(), user_id)
+    })
+}
+
+
+
 
 #[update]
 pub fn retrieve_notifications_for_user(user_id: String) -> Result<Vec<Notification>, String> {
