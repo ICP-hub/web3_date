@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from "react";
 import HomePage from "./Pages/HomePage";
 import { Routes, Route } from "react-router-dom";
@@ -148,4 +149,3 @@ const AllRoutes = () => {
 
 export default AllRoutes;
 
-//lqfrt-gz5bh-7z76h-3hb7a-jh2hq-be7jp-equjq-b7wrw-u2xub-tnk3x-qqe

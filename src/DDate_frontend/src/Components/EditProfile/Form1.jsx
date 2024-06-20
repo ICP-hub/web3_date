@@ -5,13 +5,13 @@ import { useFormContext } from 'react-hook-form';
 const Form1 = ({ index, setIndex, updateFormData, AllformData }) => {
 
     const { register, formState: { errors }, setValue, getValues, watch, handleSubmit } = useFormContext();
-    
+
     const selectedGender = watch('usergender');
-    
+
     console.log("updataed data: ", updateFormData);
     // useEffect(() => {
     //     if (updateFormData) {
-            
+
     //     }
     // }, []);
 
@@ -113,7 +113,6 @@ const Form1 = ({ index, setIndex, updateFormData, AllformData }) => {
                 <input
                     id="username"
                     type="text"
-                    name="username"
                     {...register('username')}
                     className="form-input bg-transparent w-full border-2 px-2 border-gray-300 py-1.5 rounded-3xl text-white md:text-black text-sm"
                 />

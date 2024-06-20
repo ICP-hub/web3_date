@@ -1,3 +1,4 @@
+
 import React from 'react'
 import AllRoutes from './AllRoutes'
 
@@ -8,5 +9,6 @@ function App() {
     </div>
   )
 }
+
 
 export default App
