@@ -306,8 +306,8 @@ const Form3 = () => {
   const [showSports, setShowSports] = useState(false);
   const selectedsmoking = watch("selectedsmoking");
   const selecteddrink = watch("selecteddrink");
-  const selectedhobbies = watch("selectedhobbies",[]);
-  const selectedsports = watch("selectedsports",[]);
+  const selectedhobbies = watch("selectedhobbies", []);
+  const selectedsports = watch("selectedsports", []);
 
   console.log(errors);
   useEffect(() => {
@@ -327,11 +327,10 @@ const Form3 = () => {
             <label
               key={smoking}
               className={`inline-block px-3 py-2 rounded-full text-sm focus:outline-none transition duration-300
-                          ${
-                            selectedsmoking === smoking
-                              ? "bg-yellow-500 text-black"
-                              : "bg-transparent hover:bg-yellow-500 hover:text-black text-white md:text-black border border-white md:border-black"
-                          }`}
+                          ${selectedsmoking === smoking
+                  ? "bg-yellow-500 text-black"
+                  : "bg-transparent hover:bg-yellow-500 hover:text-black text-white md:text-black border border-white md:border-black"
+                }`}
             >
               <input
                 type="radio"
@@ -345,7 +344,7 @@ const Form3 = () => {
             </label>
           ))}
         </div>
-      {errors.selectedsmoking && <p className="text-red-500">{errors.selectedsmoking.message}</p>}
+        {errors.selectedsmoking && <p className="text-red-500">{errors.selectedsmoking.message}</p>}
 
       </fieldset>
 
@@ -361,11 +360,10 @@ const Form3 = () => {
                 key={drink}
                 className={`inline-block px-3 py-2 rounded-full text-sm focus:outline-none transition duration-300
                           ${errors.selecteddrink && "border-red-500"}
-                          ${
-                            selecteddrink === drink
-                              ? "bg-yellow-500 text-black"
-                              : "bg-transparent hover:bg-yellow-500 hover:text-black text-white md:text-black border border-white md:border-black"
-                          }`}
+                          ${selecteddrink === drink
+                    ? "bg-yellow-500 text-black"
+                    : "bg-transparent hover:bg-yellow-500 hover:text-black text-white md:text-black border border-white md:border-black"
+                  }`}
               >
                 <input
                   type="radio"
@@ -380,7 +378,7 @@ const Form3 = () => {
             )
           )}
         </div>
-      {errors.selecteddrink && <p className="text-red-500">{errors.selecteddrink.message}</p>}
+        {errors.selecteddrink && <p className="text-red-500">{errors.selecteddrink.message}</p>}
       </fieldset>
       <fieldset className="mb-4">
         <legend className="block text-lg font-semibold mb-2 text-white md:text-black">
@@ -408,11 +406,10 @@ const Form3 = () => {
               <label
                 key={hobby}
                 className={`inline-block px-3 py-2 rounded-full text-sm focus:outline-none transition duration-300
-                            ${
-                              selectedhobbies?.includes(hobby)
-                                ? "bg-yellow-500 text-black"
-                                : "bg-transparent hover:bg-yellow-500 hover:text-black text-white md:text-black border border-white md:border-black"
-                            }`}
+                            ${selectedhobbies?.includes(hobby)
+                    ? "bg-yellow-500 text-black"
+                    : "bg-transparent hover:bg-yellow-500 hover:text-black text-white md:text-black border border-white md:border-black"
+                  }`}
               >
                 <input
                   type="checkbox"
@@ -433,7 +430,7 @@ const Form3 = () => {
             type="button"
           >
             <span className="flex text-base text-nowrap items-center">
-                {showHobbies ? "see less" : "see more"}
+              {showHobbies ? "see less" : "see more"}
               <span>
                 {showHobbies ? (
                   <SlArrowUp size={12} className="font-extrabold ml-2" />
@@ -444,7 +441,7 @@ const Form3 = () => {
             </span>
           </button>
         </div>
-      {errors.selectedhobbies && <p className="text-red-500">{errors.selectedhobbies.message}</p>}
+        {errors.selectedhobbies && <p className="text-red-500">{errors.selectedhobbies.message}</p>}
       </fieldset>
       <fieldset className="mb-4">
         <legend className="block text-lg font-semibold mb-1 text-white md:text-black">
@@ -483,11 +480,10 @@ const Form3 = () => {
             .map((sport) => (
               <label
                 key={sport}
-                className={`inline-block px-3 py-2 rounded-full text-sm focus:outline-none transition duration-300 ${
-                  selectedsports?.includes(sport)
+                className={`inline-block px-3 py-2 rounded-full text-sm focus:outline-none transition duration-300 ${selectedsports?.includes(sport)
                     ? "bg-yellow-500 text-black"
                     : "bg-transparent hover:bg-yellow-500 hover:text-black text-white md:text-black border border-white md:border-black"
-                }`}
+                  }`}
               >
                 <input
                   type="checkbox"
@@ -517,7 +513,7 @@ const Form3 = () => {
             </span>
           </button>
         </div>
-      {errors.selectedsports && <p className="text-red-500">{errors.selectedsports.message}</p>}
+        {errors.selectedsports && <p className="text-red-500">{errors.selectedsports.message}</p>}
       </fieldset>
     </div>
   );

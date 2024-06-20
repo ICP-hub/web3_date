@@ -1,3 +1,4 @@
+
 use candid::{CandidType, Principal};
 use ic_cdk::api::management_canister::main::raw_rand;
 use ic_cdk::{query, update};
@@ -719,6 +720,4 @@ pub fn set_user_inactive(profiles: &mut Profile, user_id: String) -> Result<Stri
         Err(format!("User ID '{}' not found", user_id))
     }
 }
-
-
 

@@ -246,7 +246,6 @@ const Form5 = () => {
             >
               <input
                 type="checkbox"
-                value={interest}
                 {...register("selectedInterests")}
                 checked={selectedInterests?.includes(interest)}
                 className="hidden"
@@ -263,7 +262,7 @@ const Form5 = () => {
           Preferred Age
         </legend>
         <div className="flex flex-wrap gap-2 md:gap-2 mb-2 py-2 px-2 rounded-3xl">
-          {["18-20", "20-25", "25-30", "30 50"].map((preferAge) => (
+          {["18-20", "20-25", "25-30", "30-50"].map((preferAge) => (
             <label
               key={preferAge}
               className={`inline-block px-3 py-2 rounded-full text-sm focus:outline-none transition duration-300 ${selectedPreferAge === preferAge ? "bg-yellow-500 text-black" : "bg-transparent hover:bg-yellow-500 hover:text-black text-white md:text-black border border-white md:border-black"
@@ -271,8 +270,6 @@ const Form5 = () => {
             >
               <input
                 type="radio"
-                name="selectedPreferAge"
-                value={preferAge}
                 {...register("selectedPreferAge")}
                 checked={selectedPreferAge === preferAge}
                 className="hidden"
@@ -313,7 +310,6 @@ const Form5 = () => {
           <input
             type="text"
             id="selectedPreferLocation"
-            name="selectedPreferLocation"
             placeholder="Your Preferred Location"
             {...register("selectedPreferLocation")}
             className="w-full px-4 py-2 rounded-full border border-white md:border-black bg-transparent text-white md:text-black focus:ring-yellow-500 focus:border-yellow-500"
@@ -332,7 +328,6 @@ const Form5 = () => {
           </label>
           <textarea
             id="selectedIntro"
-            name="selectedIntro"
             placeholder="Let us know something about you"
             {...register("selectedIntro")}
             className="w-full px-4 py-2 rounded-lg border border-white md:border-black bg-transparent text-white md:text-black"

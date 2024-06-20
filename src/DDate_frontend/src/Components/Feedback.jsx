@@ -1,3 +1,4 @@
+
 import React from "react";
 
 import p1 from "../../assets/Images/FeedbackImages/p1.svg";
@@ -25,7 +26,7 @@ const Feedback = () => {
 
   return (
     <>
-      <div className="bg-white flex font-num flex-col items-center w-full mt-14 px-4 md:px-6 lg:px-8">
+      <div className="bg-white flex font-num flex-col items-center w-full mt-14  md:px-6 lg:px-[4%]">
         <h2 className="text-center text-black text-2xl md:text-3xl lg:text-4xl font-bold mb-2">
           Happy Customers
         </h2>
@@ -92,3 +93,5 @@ const Feedback = () => {
 };
 
 export default Feedback;
+
+

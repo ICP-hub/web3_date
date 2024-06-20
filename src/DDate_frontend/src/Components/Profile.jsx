@@ -5,7 +5,7 @@ import back from "../../assets/Images/CreateAccount/back.svg";
 import Ellipse from "../../assets/Images/UserProfiles/Ellipse.svg";
 import { CiEdit } from "react-icons/ci";
 import { useNavigate } from "react-router-dom";
-import { DDate_backend } from "../../../declarations/DDate_backend/index";
+// import { DDate_backend } from "../../../declarations/DDate_backend/index";
 import { useAuth } from "../auth/useAuthClient";
 import Loader from "./Loader";
 import "./Swipe.css";
@@ -13,10 +13,11 @@ import { useLocation } from 'react-router-dom';
 import { useForm } from "react-hook-form";
 
 
-const Profile = () => {
+const Profile = ({ userId }) => {
   const { backendActor } = useAuth();
   const [loader, setLoader] = useState(false);
   const [progress, setProgress] = useState(60);
+  const [result, SetResult] = useState('');
   const [formData, setFormData] = useState({
     gender: "",
     email: "",
@@ -93,22 +94,33 @@ const Profile = () => {
         await backendActor.get_an_account(id).then((userProfileData) => {
           if (userProfileData) {
             const myData = userProfileData?.Ok?.params;
-            console.log("My Data Abhishek ka hai ", myData);
+            console.log("My Data Abhishek ka hai ", myData?.dob);
+            const dateObj = new Date(myData?.dob);
+
+            const day = String(dateObj.getDate()).padStart(2, '0');
+            const month = String(dateObj.getMonth() + 1).padStart(2, '0');
+            const year = dateObj.getFullYear();
+
+            const formattedDateStr = `${day}-${month}-${year}`
+
+            console.log(formattedDateStr);
             if (myData) {
+              SetResult(myData);
               setFormData({
                 name: myData?.name[0],
                 email: myData?.email[0],
                 age: myData?.age[0],
                 art_and_culture: myData?.art_and_culture,
                 diet: myData?.diet[0],
-                dob: myData?.dob,
+                dob: formattedDateStr,
+                sports: myData?.sports,
                 drinking: myData?.drinking[0],
                 smoking: myData?.smoking[0],
                 gender: myData?.gender[0],
                 gender_pronouns: myData?.gender[0],
-                general_habbits: myData?.general_habbits,
+                habbits: myData?.general_habits,
                 height: myData?.height[0],
-                hobbies: myData?.hobbies,
+                selected_hobbies: myData?.hobbies,
                 images: myData?.images,
                 interests_in: myData?.interests_in[0],
                 introduction: myData?.introduction[0],
@@ -116,14 +128,14 @@ const Profile = () => {
                 looking_for: myData?.looking_for[0],
                 max_preferred_age: myData?.max_preferred_age[0],
                 min_preferred_age: myData?.min_preferred_age[0],
-                movies: myData?.movies,
+                selected_movies: myData?.movies,
                 occupation: myData?.occupation[0],
                 outdoor_activities: myData?.outdoor_activities,
                 pets: myData.pets[0],
                 preferred_gender: myData?.preferred_gender[0],
                 preferred_location: myData?.preferred_location[0],
                 religion: myData?.religion[0],
-                travel: myData?.travel,
+                travels: myData?.travel,
                 zodiac: myData.zodiac[0],
                 mobile_number: myData.mobile_number[0]
               })
@@ -270,7 +282,7 @@ const Profile = () => {
                   </label>
                 </div>
                 <div className="flex justify-center mb-[32px] items-center">
-                  <p className="text-[20px] font-viga mr-[10px] text-center font-[600]">{formData.name}</p><div onClick={() => navigate("/editProfile", { state: formData })} div><CiEdit className="text-cursor" size={22} /></div>
+                  <p className="text-[20px] font-viga mr-[10px] text-center font-[600]">{formData.name}</p><div onClick={() => navigate("/editProfile", { state: result })} div><CiEdit className="text-cursor" size={22} /></div>
                 </div>
                 <div className="w-full font-viga p-4">
                   <div className="grid grid-cols-3 gap-2">
@@ -369,7 +381,7 @@ const Profile = () => {
                         Height
                       </div>
                       <p className="col-span-2 w-full px-2 py-1.5">
-                        {formData?.height ?? ""}
+                        none
                       </p>
                       <div className="flex items-center">
                         Location
@@ -399,46 +411,46 @@ const Profile = () => {
                         Hobbies
                       </div>
                       <p className="col-span-2 w-full px-2 flex flex-wrap gap-6 py-1.5">
-                        {formData?.hobbies?.map((hobby, index) => (
+                        {formData?.selected_hobbies?.map((hobby, index) => (
                           <div className="" key={index}>
-                            <p className="rounded-lg px-2 py-1.5 bg-[#F0F0F0] ">{hobby}</p>
+                            <p className="rounded-lg py-1.5">{hobby.join(", ")}</p>
                           </div>))}
                       </p>
                       <div className="flex items-center">
                         Sports
                       </div>
                       <p className="col-span-2 w-full px-2 flex flex-wrap gap-6 py-1.5">
-                        {/* {formData?.sports?.map((sport) => (
+                        {formData?.sports?.map((sport) => (
                           <div className="">
-                            <p className="rounded-lg px-2 py-1.5 bg-[#F0F0F0] ">{sport}</p>
-                          </div>))} */}
+                            <p className="rounded-lg py-1.5">{sport.join(", ")}</p>
+                          </div>))}
                       </p>
                       <div className="flex items-center">
                         Outdoor Activities
                       </div>
                       <p className="col-span-2 w-full px-2 flex flex-wrap gap-6 py-1.5">
-                        {/* {formData?.outdoor_activities?.map((activities) => (
-                          <div className="">
-                            <p className="rounded-lg px-2 py-1.5 bg-[#F0F0F0] ">{activities}</p>
-                          </div>))} */}
+                        {formData?.outdoor_activities?.map((activities, index) => (
+                          <div className="" key={index}>
+                            <p className="rounded-lg py-1.5">{activities.join(", ")}</p>
+                          </div>))}
                       </p>
                       <div className="flex items-center">
                         Travel
                       </div>
                       <p className="col-span-2 w-full px-2 flex flex-wrap gap-6 py-1.5">
-                        {/* {formData?.travel?.map((travel) => (
-                          <div className="">
-                            <p className="rounded-lg px-2 py-1.5 bg-[#F0F0F0] ">{travel}</p>
-                          </div>))} */}
+                        {formData?.travels?.map((travel, index) => (
+                          <div className="" key={index}>
+                            <p className="rounded-lg py-1.5">{travel.join(", ")} </p>
+                          </div>))}
                       </p>
                       <div className="flex items-center">
                         Movies
                       </div>
                       <p className="col-span-2 w-full px-2 flex flex-wrap gap-6 py-1.5">
-                        {/* {formData?.movies?.map((movie, index) => (
+                        {formData?.selected_movies?.map((movie, index) => (
                           <div className="" key={index}>
-                            <p className="rounded-lg px-2 py-1.5 bg-[#F0F0F0] ">{movie}</p>
-                          </div>))} */}
+                            <p className="rounded-lg py-1.5">{movie.join(", ")} </p>
+                          </div>))}
                       </p>
                       <div className="flex items-center">
                         Zodiac Sign
@@ -455,19 +467,19 @@ const Profile = () => {
                         General Habits
                       </div>
                       <p className="col-span-2 w-full px-2 flex flex-wrap gap-6 py-1.5">
-                        {/* {formData?.general_habbits?.map((generalHabbit) => (
-                          <div className="">
-                            <p className="rounded-lg px-2 py-1.5 bg-[#F0F0F0] ">{generalHabbit}</p>
-                          </div>))} */}
+                        {formData?.habbits?.map((habbit, index) => (
+                          <div className="" key={index}>
+                            <p className="rounded-lg py-1.5">{habbit.join(", ")} </p>
+                          </div>))}
                       </p>
                       <div className="flex items-center">
                         Art & Culture
                       </div>
                       <p className="col-span-2 w-full px-2 flex flex-wrap gap-6 py-1.5">
-                        {/* {formData?.art_and_culture?.map((artAndCul, index) => (
+                        {formData?.art_and_culture?.map((artAndCul, index) => (
                           <div className="" key={index}>
-                            <p className="rounded-lg px-2 py-1.5 bg-[#F0F0F0] ">{artAndCul}</p>
-                          </div>))} */}
+                            <p className="rounded-lg py-1.5">{artAndCul.join(", ")} </p>
+                          </div>))}
                       </p>
                       <div className="flex items-center">
                         Pets

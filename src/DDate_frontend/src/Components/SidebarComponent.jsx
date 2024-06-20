@@ -1,3 +1,4 @@
+
 import React from "react";
 // import userpic from "../../assets/Images/UserProfiles/userpic.svg";
 import logo from "../../assets/Images/CreateAccount/logo.png";
@@ -223,7 +224,7 @@ const SidebarComponent = ({ userId }) => {
   };
 
   return (
-    <div>
+    <div className="z-1">
       <button
         aria-controls="sidebar-multi-level-sidebar"
         type="button"
@@ -308,7 +309,7 @@ const SidebarComponent = ({ userId }) => {
                   ></svg>
                 )}
                 <button
-                  onClick={() => navigate("/Profile" ,{state:userId})}
+                  onClick={() => navigate("/Profile", { state: userId })}
                   className="block p-2 text-white text-sm rounded"
                 >
                   <span>My Profile</span>
@@ -536,3 +537,4 @@ const SidebarComponent = ({ userId }) => {
 };
 
 export default SidebarComponent;
+

@@ -1,3 +1,4 @@
+
 import React, {
   useState,
   useMemo,
@@ -260,6 +261,7 @@ function Swipe() {
   };
 
   const swipe = async (dir) => {
+    // console.log(`to ${dir}`)
     if (canSwipe && currentIndex >= 0 && currentIndex < db.length) {
       const cardRef = childRefs[currentIndex];
       if (cardRef && cardRef.current) {
@@ -416,73 +418,64 @@ function Swipe() {
 
   console.log(location.state)
 
-
   return (
-
-    <div className="md:grid grid-cols-9">
-      <SidebarComponent userId={userId} />
+    <div className="flex flex-col grid-cols-9 h-screen z-10 ">
+      <SidebarComponent userId={userId} className="hidden md:block  " />
       <h1>{location.state}</h1>
       {startLoader ? (
-        <div className="sm:ml-64">
+        <div className="w-full flex justify-center items-center  ">
           <div className="container flex justify-center">
-            <div className="max-w-xs md:max-w-md lg:max-w-lg xl:max-w-xl bg-white  h-screen ">
-              <div className="h-screen">
-                <Loader />
-              </div>
+            <div className="max-w-xs md:max-w-md lg:max-w-lg xl:max-w-xl bg-white h-screen flex items-center justify-center relative ">
+              <Loader />
             </div>
           </div>
-        </div>
-      ) : (
-        <div className="mx-auto md:col-start-5 w-[220px] ">
-          {
-            false
-              // db.length === 0 
-              ? (
-                <div className="flex justify-center">
-                  <div className="max-w-xs md:max-w-md lg:max-w-lg xl:max-w-xl bg-white  h-screen ">
-                    <div className="h-screen">
-                      <Loader />
-                    </div>
-                  </div>
+          h1        </div>
+      ) : (<div className="mx-auto md:col-start-5 w-full h-screen flex flex-col items-center absolute  ">
+        {
+          false
+            // db.length === 0
+            ? (
+              <div className="flex justify-center">
+                <div className="max-w-xs md:max-w-md lg:max-w-lg xl:max-w-xl bg-white h-screen ">
+                  <Loader />
                 </div>
-              ) : (
-                <div>
-                  {db.map((character, index) => (
-                    <TinderCard
-                      ref={childRefs[index]}
-                      className="swipe"
-                      key={character.name}
-                      onSwipe={(dir) => swiped(dir, character.name, index)}
-                      onCardLeftScreen={() => outOfFrame(character.name, index)}
-                    >
-                      <div className="h-[90%] mt-[31px] object-fit top-20">
-                        <img
-                          alt="img"
-                          src={character.images[0]}
-                          className="h-full object-cover w-[256px] md:w-[291px] lg:w-[331px] rounded-xl -top-[5.5rem]"
-                          style={{ height: "83vh" }}
-                        />
-                      </div>
+              </div>
+            ) : (
+              <div className="w-full h-full flex flex-col items-center justify-center relative">
+                {db.map((character, index) => (
+                  <TinderCard
+                    ref={childRefs[index]}
+                    className="swipe w-full h-full flex justify-center items-center"
+                    key={character.name}
+                    onSwipe={(dir) => swiped(dir, character.name, index)}
+                    onCardLeftScreen={() => outOfFrame(character.name, index)}
+                  >
+                    <div className="h-full  w-full flex flex-col items-center justify-center relative">
+                      <img
+                        alt="img"
+                        src={character.images[0]}
+                        className="h-full w-full rounded-xl lg:max-w-[30%]  "
+                        style={{ height: "106vh" }}
+                      />
                       <div
-                        className="bg-black rounded-b-xl w-[256px] md:w-[291px] lg:w-[331px] md:h-[201px] h-[242px] sm:w-[236px] z-10 fixed -bottom-7"
+                        className="bg-black rounded-b-xl w-full  lg:max-w-[30%] h-[30%] absolute bottom-0"
                         style={{
                           background:
                             "linear-gradient(to top, rgb(0, 0, 0) 50%, rgba(255, 255, 255, 0) 100%)",
                         }}
                       >
                       </div>
-                      <div className="pl-4 md:bottom-16 bottom-[8rem] absolute z-21">
-                        <h2 className="text-4xl font-bold text-white z-30 mb-2 ">
+                      <div className="pl-4 md:bottom-16 bottom-[8rem] absolute z-20 justify-center">
+                        <h2 className="text-4xl font-bold text-white  mb-2 ">
                           {character.name}
                         </h2>
-                        <p className="text-lg text-gray-700 font-bold z-30">
+                        <p className="text-lg text-gray-700 font-bold ">
                           {character.location}
                         </p>
 
-                        <p className="mt-2 z-30 font-bold text-white mb-6">
+                        <p className="mt-2 font-bold text-white mb-6 ">
                           {character.introduction}
                         </p>
-
                         {match && (
                           <ProfileModal
                             profile={db[indexxx]}
@@ -490,39 +483,42 @@ function Swipe() {
                             onClose={handleCloseModal} />
                         )}
                       </div>
-
-                      {/* </div> */}
-                    </TinderCard>
-                  ))}
-                </div>
-              )}{" "}
-          <div className="px-0 flex absolute gap-4 pl-4 pt-2 py-6 m-0 z-40 bottom-[10%]">
-            <button
-              className="rounded-full  h-12 w-12 bg-transparent shadow-md text-3xl border border-pink-700 hover:bg-red-300 font-bold text-gray-800"
-              onClick={() => swipe("left")}
-              disabled={db.length === 0}
-            >
-              <FontAwesomeIcon
-                icon={faClose}
-                style={{ color: db.length === 0 ? "#b2b2b2" : "#fd5068" }}
-              />
-            </button>
-            <button
-              className="rounded-full  h-12 w-12 bg-transparent shadow-md text-3xl border border-green-700 hover:bg-green-700 font-bold text-gray-800"
-              onClick={() => swipe("right")}
-              disabled={db.length === 0}
-            >
-              <FontAwesomeIcon
-                icon={faHeart}
-                style={{ color: db.length === 0 ? "#b2b2b2" : "#1be4a1" }}
-              />
-            </button>
-          </div>
-
+                    </div>
+                  </TinderCard>
+                ))}
+              </div>
+            )}
+        <div className="flex gap-4  p-6 bottom-[10%] fixed bottom-4 w-full justify-center z-30 ">
+          <button
+            className="rounded-full  h-12 w-12 bg-transparent shadow-md text-3xl border border-pink-700 hover:bg-red-300 font-bold text-gray-800 "
+            onClick={() => swipe("left")}
+            disabled={db.length === 0}
+          >
+            <FontAwesomeIcon
+              icon={faClose}
+              style={{ color: db.length === 0 ? "#b2b2b2" : "#fd5068" }}
+            />
+          </button>
+          <button
+            className="rounded-full  h-12 w-12 bg-transparent shadow-md text-3xl border border-green-700 hover:bg-green-700 font-bold text-gray-800"
+            onClick={() => swipe("right")}
+            disabled={db.length === 0}
+          >
+            <FontAwesomeIcon
+              icon={faHeart}
+              style={{ color: db.length === 0 ? "#b2b2b2" : "#1be4a1" }}
+            />
+          </button>
         </div>
+
+      </div>
       )}
     </div>
   );
+
+
+
 }
 
 export default Swipe;
+

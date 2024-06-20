@@ -1,3 +1,4 @@
+
 use candid::CandidType;
 use serde::Deserialize;
 
@@ -146,8 +147,6 @@ pub fn remove_matches(profiles: &mut Profile, user_id: String) -> Result<String,
         Err(format!("User ID '{}' not found", user_id))
     }
 }
-
-
 
 
 

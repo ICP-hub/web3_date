@@ -1,4 +1,5 @@
 
+
 use crate::profile_creation::Notification;
 use crate::profile_creation::NotificationType;
 use crate::profile_creation::Profile;
@@ -60,6 +61,5 @@ pub fn get_notifications(user_id: String) -> Result<Vec<Notification>, String> {
         }
     })
 }
-
 
 

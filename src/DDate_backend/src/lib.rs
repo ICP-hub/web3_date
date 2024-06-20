@@ -1,3 +1,4 @@
+
 mod profile_creation;
 mod notification;
 mod profile_matcher;
@@ -302,6 +303,3 @@ pub fn delete_message(timestamp: u64) -> Result<String, String> {
 }
 
 
-
-
-export_candid!{}
