@@ -64,6 +64,7 @@ type UserInputParams = record {
   images : opt vec text;
 };
 type UserProfileCreationInfo = record {
+  status : bool;
   notifications : vec Notification;
   matched_profiles : vec text;
   created_at : nat64;
@@ -123,6 +124,7 @@ service : {
   get_rightswiped_matches : (text, nat64, nat64) -> (Result_4);
   get_rightswipes : (text, Pagination) -> (Result_4) query;
   leftswipe : (SwipeInput) -> (text);
+  make_user_inactive : (text) -> (Result);
   read_messages : (text, text) -> (Result_5) query;
   remove_user_matches : (text) -> (Result);
   retrieve_notifications_for_user : (text) -> (Result_6);

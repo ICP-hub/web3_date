@@ -652,25 +652,63 @@ pub async fn create_an_account(params: UserInputParams) -> Result<String, String
 pub fn update_an_account(user_id: String, params: UserInputParams) -> Result<String, String> {
     ic_cdk::println!("Updating account with user_id: {}", user_id);
     let user_profile_params: UserProfileParams = params.into(); // Convert UserInputParams to UserProfileParams
-    PROFILES.with(|profiles| profiles.borrow_mut().update_account(&user_id, user_profile_params))
+
+    PROFILES.with(|profiles| {
+        let profiles_borrowed = profiles.borrow();
+        match profiles_borrowed.profiles.get(&user_id) {
+            Some(profile) => {
+                if !profile.status {
+                    return Err("Account is inactive".to_string());
+                }
+            },
+            None => return Err("Profile not found".to_string()),
+        }
+        profiles.borrow_mut().update_account(&user_id, user_profile_params)
+    })
 }
+
 
 #[update]
 pub fn delete_an_account(user_id: String) -> Result<String, String> {
     ic_cdk::println!("Deleting account with user_id: {}", user_id);
-    PROFILES.with(|profiles| profiles.borrow_mut().delete_account(&user_id))
+    PROFILES.with(|profiles| {
+        let profiles_borrowed = profiles.borrow();
+        match profiles_borrowed.profiles.get(&user_id) {
+            Some(profile) => {
+                if !profile.status {
+                    return Err("Account is inactive".to_string());
+                }
+            },
+            None => return Err("Profile not found".to_string()),
+        }
+        profiles.borrow_mut().delete_account(&user_id)
+    })
 }
+
 
 #[query]
 pub fn get_an_account(user_id: String) -> Result<UserProfileCreationInfo, String> {
     ic_cdk::println!("Retrieving account with user_id: {}", user_id);
-    PROFILES.with(|profiles| profiles.borrow().get_account(&user_id))
+    PROFILES.with(|profiles| {
+        let profiles_borrowed = profiles.borrow();
+        match profiles_borrowed.profiles.get(&user_id) {
+            Some(profile) => {
+                if !profile.status {
+                    return Err("Account is inactive".to_string());
+                }
+                Ok(profile.clone())
+            },
+            None => Err("Profile not found".to_string()),
+        }
+    })
 }
+
 
 #[query]
 pub fn get_all_accounts(pagination: Pagination) -> Result<PaginatedProfiles, String> {
     PROFILES.with(|profiles| profiles.borrow().get_all(pagination))
 }
+
 
 pub fn set_user_inactive(profiles: &mut Profile, user_id: String) -> Result<String, String> {
     if let Some(user_profile) = profiles.profiles.get_mut(&user_id) {

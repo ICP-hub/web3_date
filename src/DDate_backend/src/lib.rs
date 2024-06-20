@@ -14,8 +14,6 @@ use crate::profile_creation::Message;
 use crate::profile_creation::UserInputParams;
 use crate::profile_creation::PaginatedProfiles;
 
-
-
 #[update]
 pub fn send_like_notification_candid(sender_id: String, receiver_id: String) -> Result<(), String> {
     ic_cdk::println!("Sender ID: {}", sender_id);
@@ -25,18 +23,15 @@ pub fn send_like_notification_candid(sender_id: String, receiver_id: String) -> 
         let mut profiles_borrowed = profiles.borrow_mut();
         ic_cdk::println!("Profiles available: {:?}", profiles_borrowed.profiles.keys());
 
-        if let Some(sender_profile) = profiles_borrowed.profiles.get(&sender_id) {
-            ic_cdk::println!("Found sender profile: {:?}", sender_profile);
-        } else {
-            ic_cdk::println!("Sender profile not found: {}", sender_id);
-            return Err(format!("Sender profile not found: {}", sender_id));
+        let sender_profile = profiles_borrowed.profiles.get(&sender_id).ok_or_else(|| format!("Sender profile not found: {}", sender_id))?;
+        let receiver_profile = profiles_borrowed.profiles.get(&receiver_id).ok_or_else(|| format!("Receiver profile not found: {}", receiver_id))?;
+
+        if !sender_profile.status {
+            return Err("Sender's account is inactive".to_string());
         }
 
-        if let Some(receiver_profile) = profiles_borrowed.profiles.get(&receiver_id) {
-            ic_cdk::println!("Found receiver profile: {:?}", receiver_profile);
-        } else {
-            ic_cdk::println!("Receiver profile not found: {}", receiver_id);
-            return Err(format!("Receiver profile not found: {}", receiver_id));
+        if !receiver_profile.status {
+            return Err("Receiver's account is inactive".to_string());
         }
 
         profiles_borrowed.send_like_notification(sender_id, receiver_id)
@@ -47,13 +42,13 @@ pub fn send_like_notification_candid(sender_id: String, receiver_id: String) -> 
 pub fn get_rightswiped_matches(user_id: String, page: usize, size: usize) -> Result<MatchResult, String> {
     ic_cdk::println!("Finding matches for user: {}", user_id);
 
-    // Check if the user ID is valid
+    // Check if the user ID is valid and active
     let user_exists = PROFILES.with(|profiles| {
-        profiles.borrow().profiles.contains_key(&user_id)
+        profiles.borrow().profiles.get(&user_id).map_or(false, |profile| profile.status)
     });
 
     if !user_exists {
-        return Err(format!("User ID '{}' does not exist", user_id));
+        return Err(format!("User ID '{}' does not exist or is inactive", user_id));
     }
 
     // Check if page number is 0, and return an error immediately
@@ -91,6 +86,7 @@ pub fn get_rightswiped_matches(user_id: String, page: usize, size: usize) -> Res
 
     match_result
 }
+
 
 
 #[update]
@@ -180,23 +176,19 @@ fn make_user_inactive(user_id: String) -> Result<String, String> {
     })
 }
 
-
-
-
 #[update]
 pub fn retrieve_notifications_for_user(user_id: String) -> Result<Vec<Notification>, String> {
     // Access the PROFILES storage to retrieve notifications
     PROFILES.with(|profiles| {
         let profiles = profiles.borrow();
 
-        // Check if the user ID exists
-        if profiles.profiles.contains_key(&user_id) {
+        // Check if the user ID exists and is active
+        if let Some(profile) = profiles.profiles.get(&user_id) {
+            if !profile.status {
+                return Err("User's account is inactive".to_string());
+            }
             // Retrieve notifications if user exists
-            let notifications = profiles
-                .profiles
-                .get(&user_id)
-                .map(|profile| profile.notifications.iter().cloned().collect())
-                .unwrap_or_else(Vec::new);
+            let notifications = profile.notifications.iter().cloned().collect();
             Ok(notifications)
         } else {
             // Return an error if user does not exist
@@ -205,26 +197,110 @@ pub fn retrieve_notifications_for_user(user_id: String) -> Result<Vec<Notificati
     })
 }
 
-
 #[update]
 pub fn create_message(sender_id: String, receiver_id: String, content: String) -> Result<u64, String> {
-    PROFILES.with(|profiles| profiles.borrow_mut().create_message(sender_id, receiver_id, content))
+    PROFILES.with(|profiles| {
+        let mut profiles_borrowed = profiles.borrow_mut();
+        
+        let sender_profile = profiles_borrowed.profiles.get(&sender_id).ok_or_else(|| format!("Sender ID {} does not exist.", sender_id))?;
+        let receiver_profile = profiles_borrowed.profiles.get(&receiver_id).ok_or_else(|| format!("Receiver ID {} does not exist.", receiver_id))?;
+
+        if !sender_profile.status {
+            return Err("Sender's account is inactive".to_string());
+        }
+
+        if !receiver_profile.status {
+            return Err("Receiver's account is inactive".to_string());
+        }
+
+        profiles_borrowed.create_message(sender_id, receiver_id, content)
+    })
 }
+
 
 #[query]
 pub fn read_messages(user_id: String, other_user_id: String) -> Result<Vec<Message>, String> {
-    PROFILES.with(|profiles| profiles.borrow().read_messages(&user_id, &other_user_id))
+    PROFILES.with(|profiles| {
+        let profiles_borrowed = profiles.borrow();
+
+        let user_profile = profiles_borrowed.profiles.get(&user_id).ok_or_else(|| format!("User ID {} does not exist.", user_id))?;
+        let other_user_profile = profiles_borrowed.profiles.get(&other_user_id).ok_or_else(|| format!("Other user ID {} does not exist.", other_user_id))?;
+
+        if !user_profile.status {
+            return Err("User's account is inactive".to_string());
+        }
+
+        if !other_user_profile.status {
+            return Err("Other user's account is inactive".to_string());
+        }
+
+        profiles_borrowed.read_messages(&user_id, &other_user_id)
+    })
 }
 
 #[update]
 pub fn update_message(timestamp: u64, new_content: String) -> Result<String, String> {
-    PROFILES.with(|profiles| profiles.borrow_mut().update_message(timestamp, new_content))
+    PROFILES.with(|profiles| {
+        let mut profiles_borrowed = profiles.borrow_mut();
+        
+        // Find the message and check if the sender is active
+        let mut sender_id = None;
+        for messages in profiles_borrowed.messages.values() {
+            for message in messages {
+                if message.timestamp == timestamp {
+                    sender_id = Some(message.sender_id.clone());
+                    break;
+                }
+            }
+            if sender_id.is_some() {
+                break;
+            }
+        }
+
+        if let Some(sender_id) = sender_id {
+            let sender_profile = profiles_borrowed.profiles.get(&sender_id).ok_or_else(|| format!("Sender ID {} does not exist.", sender_id))?;
+            if !sender_profile.status {
+                return Err("Sender's account is inactive".to_string());
+            }
+            profiles_borrowed.update_message(timestamp, new_content)
+        } else {
+            Err("Message not found".to_string())
+        }
+    })
 }
+
 
 #[update]
 pub fn delete_message(timestamp: u64) -> Result<String, String> {
-    PROFILES.with(|profiles| profiles.borrow_mut().delete_message(timestamp))
+    PROFILES.with(|profiles| {
+        let mut profiles_borrowed = profiles.borrow_mut();
+        
+        // Find the message and check if the sender is active
+        let mut sender_id = None;
+        for messages in profiles_borrowed.messages.values() {
+            for message in messages {
+                if message.timestamp == timestamp {
+                    sender_id = Some(message.sender_id.clone());
+                    break;
+                }
+            }
+            if sender_id.is_some() {
+                break;
+            }
+        }
+
+        if let Some(sender_id) = sender_id {
+            let sender_profile = profiles_borrowed.profiles.get(&sender_id).ok_or_else(|| format!("Sender ID {} does not exist.", sender_id))?;
+            if !sender_profile.status {
+                return Err("Sender's account is inactive".to_string());
+            }
+            profiles_borrowed.delete_message(timestamp)
+        } else {
+            Err("Message not found".to_string())
+        }
+    })
 }
+
 
 
 

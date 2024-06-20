@@ -9,8 +9,7 @@ pub struct MatchResult {
     pub paginated_profiles: Vec<UserProfileCreationInfo>,
     pub error_message: Option<String>,
 
-}
-pub fn find_matches(
+}pub fn find_matches(
     profiles: &Profile,
     profile_id: &String,
     pagination: Pagination,
@@ -19,6 +18,11 @@ pub fn find_matches(
 
     // Validate the profile ID
     let new_profile = profiles.profiles.get(profile_id).ok_or_else(|| format!("Profile ID '{}' not found", profile_id))?;
+
+    // Check if the profile is active
+    if !new_profile.status {
+        return Err("Account is inactive".to_string());
+    }
 
     // Validate pagination parameters
     if pagination.page == 0 {
@@ -34,6 +38,7 @@ pub fn find_matches(
         .iter()
         .filter_map(|(id, existing_profile)| {
             if id != profile_id &&
+                existing_profile.status &&
                 existing_profile.params.age.unwrap_or(0) >= new_profile.params.min_preferred_age.unwrap_or(0) &&
                 existing_profile.params.age.unwrap_or(0) <= new_profile.params.max_preferred_age.unwrap_or(0) &&
                 existing_profile.params.gender.as_ref() == new_profile.params.preferred_gender.as_ref() &&
@@ -73,6 +78,11 @@ pub fn find_matches(
 }
 pub fn remove_matches(profiles: &mut Profile, user_id: String) -> Result<String, String> {
     if let Some(user_profile) = profiles.profiles.get_mut(&user_id) {
+        // Check if the profile is active
+        if !user_profile.status {
+            return Err("Account is inactive".to_string());
+        }
+
         // Clear the matched profiles for the user
         user_profile.matched_profiles.clear();
 
@@ -136,6 +146,7 @@ pub fn remove_matches(profiles: &mut Profile, user_id: String) -> Result<String,
         Err(format!("User ID '{}' not found", user_id))
     }
 }
+
 
 
 
