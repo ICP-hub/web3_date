@@ -1,9 +1,9 @@
 
+
 use crate::profile_creation::Notification;
 use crate::profile_creation::NotificationType;
 use crate::profile_creation::Profile;
-use crate::PROFILES;
-
+use crate::profile_creation::PROFILES;
 impl Profile {
     pub fn send_like_notification(&mut self, sender_id: String, receiver_id: String) -> Result<(), String> {
         const MAX_NOTIFICATIONS: usize = 100;
@@ -15,6 +15,17 @@ impl Profile {
         };
 
         ic_cdk::println!("Profiles available before sending notification: {:?}", self.profiles.keys());
+
+        let sender_profile = self.profiles.get(&sender_id).ok_or_else(|| format!("Sender ID {} does not exist.", sender_id))?;
+        let receiver_profile = self.profiles.get(&receiver_id).ok_or_else(|| format!("Receiver ID {} does not exist.", receiver_id))?;
+
+        if !sender_profile.status {
+            return Err("Sender's account is inactive".to_string());
+        }
+
+        if !receiver_profile.status {
+            return Err("Receiver's account is inactive".to_string());
+        }
 
         if let Some(receiver_profile) = self.profiles.get_mut(&receiver_id) {
             ic_cdk::println!("Receiver profile found: {:?}", receiver_profile);
@@ -31,12 +42,6 @@ impl Profile {
     }
 }
 
-
-
-
-// Merging new parameters into existing ones
-
-
 pub fn get_notifications(user_id: String) -> Result<Vec<Notification>, String> {
     // Access the PROFILES storage to retrieve notifications
     PROFILES.with(|profiles| {
@@ -44,6 +49,9 @@ pub fn get_notifications(user_id: String) -> Result<Vec<Notification>, String> {
 
         // Check if the user ID exists
         if let Some(profile) = profiles.profiles.get(&user_id) {
+            if !profile.status {
+                return Err("User's account is inactive".to_string());
+            }
             // Retrieve notifications if user exists
             let notifications = profile.notifications.iter().cloned().collect();
             Ok(notifications)

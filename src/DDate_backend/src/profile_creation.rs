@@ -1,3 +1,4 @@
+
 use candid::{CandidType, Principal};
 use ic_cdk::api::management_canister::main::raw_rand;
 use ic_cdk::{query, update};
@@ -9,6 +10,12 @@ use bincode;
 use ic_cdk::api::stable::{StableReader, StableWriter};
 use ic_cdk_macros::{post_upgrade, pre_upgrade};
 use std::io::Read;
+
+#[derive(Debug, Serialize, Deserialize, CandidType)]
+pub struct PaginatedProfiles {
+    pub total_profiles: usize,
+    pub profiles: Vec<UserProfileCreationInfo>,
+}
 
 // Define the Notification struct
 #[derive(Debug, Serialize, Clone, Deserialize, CandidType)]
@@ -67,6 +74,7 @@ pub struct UserProfileCreationInfo {
     pub params: UserProfileParams,
     pub notifications: VecDeque<Notification>,
     pub matched_profiles: Vec<String>,
+    pub status: bool,
 }
 
 #[derive(Default, Clone, Deserialize, CandidType, Debug, Serialize)]
@@ -107,6 +115,8 @@ pub struct UserProfileParams {
     pub matches: Option<Vec<String>>,
     pub notifications: Option<VecDeque<Notification>>,
     pub matched_profiles: Option<Vec<String>>,
+    pub leftswipes: Option<HashSet<String>>,
+    pub rightswipes: Option<HashSet<String>>,
 }
 
 #[derive(Clone, Deserialize, CandidType, Debug, Serialize)]
@@ -161,7 +171,7 @@ fn post_upgrade() {
     }
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Serialize, Deserialize, CandidType)]
 pub struct Profile {
     pub profiles: HashMap<String, UserProfileCreationInfo>,
     pub messages: HashMap<String, VecDeque<Message>>,
@@ -221,6 +231,9 @@ impl Profile {
     pub fn update_account(&mut self, user_id: &String, new_params: UserProfileParams) -> Result<String, String> {
         match self.profiles.get_mut(user_id) {
             Some(profile) => {
+                if !profile.status {
+                    return Err("Account is inactive".to_string());
+                }
                 profile.params.merge(new_params);
                 ic_cdk::println!("Updated profile with user_id: {}", user_id);
                 Ok(format!("User profile updated with id: {}", user_id))
@@ -228,9 +241,19 @@ impl Profile {
             None => Err("Profile not found".to_string()),
         }
     }
+    
 
     // Method to delete an existing account
     pub fn delete_account(&mut self, user_id: &String) -> Result<String, String> {
+        match self.profiles.get(user_id) {
+            Some(profile) => {
+                if !profile.status {
+                    return Err("Account is inactive".to_string());
+                }
+            },
+            None => return Err("Profile not found".to_string()),
+        }
+    
         if self.profiles.remove(user_id).is_some() {
             ic_cdk::println!("Deleted profile with user_id: {}", user_id);
             Ok(format!("User profile deleted with id: {}", user_id))
@@ -238,17 +261,22 @@ impl Profile {
             Err("Profile not found".to_string())
         }
     }
+    
 
     // Method to retrieve an existing account
     pub fn get_account(&self, user_id: &String) -> Result<UserProfileCreationInfo, String> {
         match self.profiles.get(user_id) {
             Some(profile) => {
+                if !profile.status {
+                    return Err("Account is inactive".to_string());
+                }
                 ic_cdk::println!("Retrieved profile with user_id: {}", user_id);
                 Ok(profile.clone())
             },
             None => Err("Profile not found".to_string()),
         }
     }
+    
     pub fn create_message(&mut self, sender_id: String, receiver_id: String, content: String) -> Result<u64, String> {
         // Validate input
         if sender_id.trim().is_empty() {
@@ -264,13 +292,21 @@ impl Profile {
             return Err("Message content is required".to_string());
         }
     
-        // Check if sender exists
-        if !self.profiles.contains_key(&sender_id) {
+        // Check if sender exists and is active
+        if let Some(sender_profile) = self.profiles.get(&sender_id) {
+            if !sender_profile.status {
+                return Err(format!("Sender ID '{}' is inactive", sender_id));
+            }
+        } else {
             return Err(format!("Sender ID '{}' does not exist", sender_id));
         }
     
-        // Check if receiver exists
-        if !self.profiles.contains_key(&receiver_id) {
+        // Check if receiver exists and is active
+        if let Some(receiver_profile) = self.profiles.get(&receiver_id) {
+            if !receiver_profile.status {
+                return Err(format!("Receiver ID '{}' is inactive", receiver_id));
+            }
+        } else {
             return Err(format!("Receiver ID '{}' does not exist", receiver_id));
         }
     
@@ -299,13 +335,21 @@ impl Profile {
             return Err("Other user ID is required".to_string());
         }
     
-        // Check if user exists
-        if !self.profiles.contains_key(user_id) {
+        // Check if user exists and is active
+        if let Some(user_profile) = self.profiles.get(user_id) {
+            if !user_profile.status {
+                return Err(format!("User ID '{}' is inactive", user_id));
+            }
+        } else {
             return Err(format!("User ID '{}' does not exist", user_id));
         }
     
-        // Check if other user exists
-        if !self.profiles.contains_key(other_user_id) {
+        // Check if other user exists and is active
+        if let Some(other_user_profile) = self.profiles.get(other_user_id) {
+            if !other_user_profile.status {
+                return Err(format!("Other user ID '{}' is inactive", other_user_id));
+            }
+        } else {
             return Err(format!("Other user ID '{}' does not exist", other_user_id));
         }
     
@@ -323,11 +367,19 @@ impl Profile {
             return Err("New content is required".to_string());
         }
     
-        // Check if the message timestamp exists
+        // Check if the message timestamp exists and if sender is active
         let mut message_found = false;
         for messages in self.messages.values_mut() {
             for message in messages.iter_mut() {
                 if message.timestamp == timestamp {
+                    if let Some(sender_profile) = self.profiles.get(&message.sender_id) {
+                        if !sender_profile.status {
+                            return Err("Sender's account is inactive".to_string());
+                        }
+                    } else {
+                        return Err(format!("Sender ID '{}' does not exist", message.sender_id));
+                    }
+    
                     message.content = new_content.clone();
                     message_found = true;
                     break;
@@ -347,16 +399,33 @@ impl Profile {
     }
     
     
+    
     pub fn delete_message(&mut self, timestamp: u64) -> Result<String, String> {
-        // Delete message
+        // Delete message if sender is active
+        let mut message_found = false;
         for messages in self.messages.values_mut() {
             if let Some(pos) = messages.iter().position(|m| m.timestamp == timestamp) {
+                if let Some(sender_profile) = self.profiles.get(&messages[pos].sender_id) {
+                    if !sender_profile.status {
+                        return Err("Sender's account is inactive".to_string());
+                    }
+                } else {
+                    return Err(format!("Sender ID '{}' does not exist", messages[pos].sender_id));
+                }
+    
                 messages.remove(pos);
-                return Ok("Message deleted successfully".to_string());
+                message_found = true;
+                break;
             }
         }
-        Err("Message not found".to_string())
+    
+        if message_found {
+            Ok("Message deleted successfully".to_string())
+        } else {
+            Err("Message not found".to_string())
+        }
     }
+    
     
     
     // Utility function to generate a chat ID
@@ -365,6 +434,41 @@ impl Profile {
         ids.sort();
         format!("{}_{}", ids[0], ids[1])
     }
+
+    pub fn get_all(&self, pagination: Pagination) -> Result<PaginatedProfiles, String> {
+        // Validate pagination parameters
+        if pagination.page < 1 {
+            return Err("Page number must be greater than 0".to_string());
+        }
+        if pagination.size < 1 {
+            return Err("Page size must be greater than 0".to_string());
+        }
+    
+        // Collect all active profiles
+        let all_profiles: Vec<&UserProfileCreationInfo> = self
+            .profiles
+            .values()
+            .filter(|profile| profile.status) // Only include active profiles
+            .collect();
+        let total_profiles = all_profiles.len();
+    
+        // Calculate pagination indices
+        let start = (pagination.page - 1) * pagination.size;
+        if start >= total_profiles {
+            return Err("Page number out of range".to_string());
+        }
+        let end = std::cmp::min(start + pagination.size, total_profiles);
+    
+        // Slice profiles according to pagination
+        let paginated_profiles = all_profiles[start..end].to_vec();
+    
+        // Construct and return the paginated result
+        Ok(PaginatedProfiles {
+            total_profiles,
+            profiles: paginated_profiles.into_iter().cloned().collect(),
+        })
+    }
+    
 }
 
 impl From<UserInputParams> for UserProfileParams {
@@ -406,6 +510,8 @@ impl From<UserInputParams> for UserProfileParams {
             notifications: None,
             matched_profiles: None,
             user_id: None,
+            leftswipes:None,
+            rightswipes:None,
         }
     }
 }
@@ -534,6 +640,7 @@ pub async fn create_an_account(params: UserInputParams) -> Result<String, String
         params: params.into(), // Convert UserInputParams to UserProfileParams
         notifications: VecDeque::new(),
         matched_profiles: Vec::new(),
+        status:true,
     };
 
     ic_cdk::println!("Creating account with user_id: {}", unique_user_id);
@@ -541,21 +648,76 @@ pub async fn create_an_account(params: UserInputParams) -> Result<String, String
     Ok(unique_user_id)
 }
 
+
 #[update]
 pub fn update_an_account(user_id: String, params: UserInputParams) -> Result<String, String> {
     ic_cdk::println!("Updating account with user_id: {}", user_id);
     let user_profile_params: UserProfileParams = params.into(); // Convert UserInputParams to UserProfileParams
-    PROFILES.with(|profiles| profiles.borrow_mut().update_account(&user_id, user_profile_params))
+
+    PROFILES.with(|profiles| {
+        let profiles_borrowed = profiles.borrow();
+        match profiles_borrowed.profiles.get(&user_id) {
+            Some(profile) => {
+                if !profile.status {
+                    return Err("Account is inactive".to_string());
+                }
+            },
+            None => return Err("Profile not found".to_string()),
+        }
+        profiles.borrow_mut().update_account(&user_id, user_profile_params)
+    })
 }
+
 
 #[update]
 pub fn delete_an_account(user_id: String) -> Result<String, String> {
     ic_cdk::println!("Deleting account with user_id: {}", user_id);
-    PROFILES.with(|profiles| profiles.borrow_mut().delete_account(&user_id))
+    PROFILES.with(|profiles| {
+        let profiles_borrowed = profiles.borrow();
+        match profiles_borrowed.profiles.get(&user_id) {
+            Some(profile) => {
+                if !profile.status {
+                    return Err("Account is inactive".to_string());
+                }
+            },
+            None => return Err("Profile not found".to_string()),
+        }
+        profiles.borrow_mut().delete_account(&user_id)
+    })
 }
+
 
 #[query]
 pub fn get_an_account(user_id: String) -> Result<UserProfileCreationInfo, String> {
     ic_cdk::println!("Retrieving account with user_id: {}", user_id);
-    PROFILES.with(|profiles| profiles.borrow().get_account(&user_id))
+    PROFILES.with(|profiles| {
+        let profiles_borrowed = profiles.borrow();
+        match profiles_borrowed.profiles.get(&user_id) {
+            Some(profile) => {
+                if !profile.status {
+                    return Err("Account is inactive".to_string());
+                }
+                Ok(profile.clone())
+            },
+            None => Err("Profile not found".to_string()),
+        }
+    })
 }
+
+
+#[query]
+pub fn get_all_accounts(pagination: Pagination) -> Result<PaginatedProfiles, String> {
+    PROFILES.with(|profiles| profiles.borrow().get_all(pagination))
+}
+
+
+pub fn set_user_inactive(profiles: &mut Profile, user_id: String) -> Result<String, String> {
+    if let Some(user_profile) = profiles.profiles.get_mut(&user_id) {
+        user_profile.status = false;
+        ic_cdk::println!("User ID {} has been made inactive.", user_id);
+        Ok(format!("User ID {} has been made inactive.", user_id))
+    } else {
+        Err(format!("User ID '{}' not found", user_id))
+    }
+}
+

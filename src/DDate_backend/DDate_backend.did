@@ -16,13 +16,20 @@ type Notification = record {
   sender_id : text;
 };
 type NotificationType = variant { Like };
+type PaginatedProfiles = record {
+  total_profiles : nat64;
+  profiles : vec UserProfileCreationInfo;
+};
+type Pagination = record { page : nat64; size : nat64 };
 type Result = variant { Ok : text; Err : text };
 type Result_1 = variant { Ok : nat64; Err : text };
-type Result_2 = variant { Ok : MatchResult; Err : text };
+type Result_2 = variant { Ok : PaginatedProfiles; Err : text };
 type Result_3 = variant { Ok : UserProfileCreationInfo; Err : text };
-type Result_4 = variant { Ok : vec Message; Err : text };
-type Result_5 = variant { Ok : vec Notification; Err : text };
-type Result_6 = variant { Ok; Err : text };
+type Result_4 = variant { Ok : MatchResult; Err : text };
+type Result_5 = variant { Ok : vec Message; Err : text };
+type Result_6 = variant { Ok : vec Notification; Err : text };
+type Result_7 = variant { Ok; Err : text };
+type SwipeInput = record { swiped_user_id : text; swiping_user_id : text };
 type UserInputParams = record {
   age : opt nat64;
   dob : opt text;
@@ -57,6 +64,7 @@ type UserInputParams = record {
   images : opt vec text;
 };
 type UserProfileCreationInfo = record {
+  status : bool;
   notifications : vec Notification;
   matched_profiles : vec text;
   created_at : nat64;
@@ -93,12 +101,14 @@ type UserProfileParams = record {
   gender_pronouns : opt text;
   looking_for : opt text;
   general_habits : opt vec text;
+  leftswipes : opt vec text;
   sports : opt vec text;
   religion : opt text;
   movies : opt vec text;
   location : opt text;
   zodiac : opt text;
   hobbies : opt vec text;
+  rightswipes : opt vec text;
   max_preferred_age : opt nat64;
   images : opt vec text;
 };
@@ -108,11 +118,18 @@ service : {
   create_message : (text, text, text) -> (Result_1);
   delete_an_account : (text) -> (Result);
   delete_message : (nat64) -> (Result);
-  find_matches_for_me : (text, nat64, nat64) -> (Result_2);
+  get_all_accounts : (Pagination) -> (Result_2) query;
   get_an_account : (text) -> (Result_3) query;
-  read_messages : (text, text) -> (Result_4) query;
-  retrieve_notifications_for_user : (text) -> (Result_5);
-  send_like_notification_candid : (text, text) -> (Result_6);
+  get_leftswipes : (text, Pagination) -> (Result_4) query;
+  get_rightswiped_matches : (text, nat64, nat64) -> (Result_4);
+  get_rightswipes : (text, Pagination) -> (Result_4) query;
+  leftswipe : (SwipeInput) -> (text);
+  make_user_inactive : (text) -> (Result);
+  read_messages : (text, text) -> (Result_5) query;
+  remove_user_matches : (text) -> (Result);
+  retrieve_notifications_for_user : (text) -> (Result_6);
+  rightswipe : (SwipeInput) -> (text);
+  send_like_notification_candid : (text, text) -> (Result_7);
   update_an_account : (text, UserInputParams) -> (Result);
   update_message : (nat64, text) -> (Result);
 }
