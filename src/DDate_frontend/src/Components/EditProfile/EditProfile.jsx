@@ -55,57 +55,45 @@ const EditProfile = () => {
   };
   const location = useLocation();
   const userdata = location.state
-  const [value, setValue] = useState(null);
-  useEffect(() => {
-    if (userdata && userdata.dob && Array.isArray(userdata.dob) && userdata.dob[0]) {
-      const dateString = String(userdata.dob[0]);
-      const dateObject = new Date(dateString);
-      if (!isNaN(dateObject.getTime())) {
-        const formattedDate = dateObject.toISOString().split('T')[0];
-        setValue(formattedDate);
-      } else {
-        console.error('Invalid date string:', dateString);
-      }
-    }
-  }, [userdata]);
+  console.log(userdata.dob[0])
+  console.log(typeof userdata.dob[0])
 
-  const convertBigIntToString = (obj) => {
-    for (const key in obj) {
-      if (typeof obj[key] === 'bigint') {
-        obj[key] = obj[key].toString();
-      }
-    }
-  };
+  const myDOB = new Date(userdata.dob[0]);
 
-  if (userdata) {
-    convertBigIntToString(userdata);
+  function formatDate(myDOB) {
+    const year = myDOB.getFullYear();
+    const month = String(myDOB.getMonth() + 1).padStart(2, '0');
+    const day = String(myDOB.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
   }
+
   const PreValue = {
-    username: userdata?.name,
-    usergender: userdata?.gender,
-    email: userdata?.email,
-    mobile: userdata?.mobile_number,
-    dob: value,
-    selectedIntro: userdata?.introduction,
-    selectedsmoking: userdata?.smoking,
-    selecteddrink: userdata?.drinking,
-    selectedhobbies: userdata?.selected_hobbies,
+    username: userdata?.name[0],
+    usergender: userdata?.gender[0],
+    email: userdata?.email[0],
+    mobile: userdata?.mobile_number[0],
+    dob: formatDate(myDOB),
+    selectedIntro: userdata?.introduction[0],
+    selectedsmoking: userdata?.smoking[0],
+    selecteddrink: userdata?.drinking[0],
+    // selectedhobbies: userdata?.selected_hobbies,
+    selectedhobbies: ["Reading", "Astronomy"],
     selectedsports: userdata?.sports,
-    genderPronouns: userdata?.gender_pronouns,
-    selectedReligion: userdata?.religion,
-    selectedZodiac: userdata?.zodiac,
-    selectedFooding: userdata?.diet,
-    selectedWhatYouDo: userdata?.occupation,
-    selectedLookingFor: userdata?.looking_for,
+    genderPronouns: userdata?.gender_pronouns[0],
+    selectedReligion: userdata?.religion[0],
+    selectedZodiac: userdata?.zodiac[0],
+    selectedFooding: userdata?.diet[0],
+    selectedWhatYouDo: userdata?.occupation[0],
+    selectedLookingFor: userdata?.looking_for[0],
     selectedArt: userdata?.art_and_culture,
-    selectedPets: userdata?.pets,
+    selectedPets: userdata?.pets[0],
     selectedHabits: userdata?.habbits,
     selectedActivities: userdata?.outdoor_activities,
     selectedMovies: userdata?.selected_movies,
     selectedTravel: userdata?.travels,
-    selectedInterests: userdata?.interests_in,
-    selectedPreferAge: userdata?.age,
-    selectedPreferLocation: userdata?.preferred_location,
+    selectedInterests: userdata?.interests_in[0],
+    selectedPreferAge: userdata?.age[0],
+    selectedPreferLocation: userdata?.preferred_location[0],
   }
 
   const methods = useForm({
@@ -164,7 +152,7 @@ const EditProfile = () => {
           ]
 
       }
-      console.log('Ddatedata ', DdateData)
+      console.log(' Edited Ddatedata ', DdateData)
 
       try {
         await backendActor.create_an_account(DdateData).then((result) => {
@@ -264,24 +252,26 @@ const EditProfile = () => {
 
             <div className="border-t-2 border-solid md:border-black border-white w-[90% ] mt-4 mb-4 md:ml-6"></div>
 
-            {index === 0 &&
-              <Form1 index={index} setIndex={setIndex} updateFormData={data} AllformData={formData} />
-            }
-            {index === 1 &&
-              <Form2 index={index} setIndex={setIndex} updateFormData={updateFormData} AllformData={formData} />
-            }
-            {index === 2 &&
-              <Form3 index={index} setIndex={setIndex} updateFormData={updateFormData} AllformData={formData} />
-            }
-            {index === 3 &&
-              <Form4 index={index} setIndex={setIndex} updateFormData={updateFormData} AllformData={formData} />
-            }
-            {index === 4 &&
-              <Form5 index={index} setIndex={setIndex} updateFormData={updateFormData} AllformData={formData} />
-            }
-            {index === 5 &&
-              <Form6 AllformData={formData} updateFormData={updateFormData} />
-            }
+            <form onSubmit={handleSubmit(onSubmit)}>
+              {index === 0 &&
+                <Form1 index={index} setIndex={setIndex} updateFormData={data} AllformData={formData} />
+              }
+              {index === 1 &&
+                <Form2 index={index} setIndex={setIndex} updateFormData={updateFormData} AllformData={formData} />
+              }
+              {index === 2 &&
+                <Form3 index={index} setIndex={setIndex} updateFormData={updateFormData} AllformData={formData} prevalue={PreValue} />
+              }
+              {index === 3 &&
+                <Form4 index={index} setIndex={setIndex} updateFormData={updateFormData} AllformData={formData} />
+              }
+              {index === 4 &&
+                <Form5 index={index} setIndex={setIndex} updateFormData={updateFormData} AllformData={formData} />
+              }
+              {index === 5 &&
+                <Form6 AllformData={formData} updateFormData={updateFormData} />
+              }
+            </form>
             <div className="flex justify-between">
               <button type="button" className="bg-yellow-500 font-semibold py-2 px-6 rounded-full hover:bg-yellow-600 text-white md:text-black md:hover:text-black" onClick={handleBack} disabled={index === 0}>Back</button>
               {index === 5 ? (
