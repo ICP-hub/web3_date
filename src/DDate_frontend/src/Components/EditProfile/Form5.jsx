@@ -225,7 +225,7 @@ const Form5 = () => {
     };
   }, []);
 
-  const selectedInterests = watch("selectedInterests", []);
+  const selectedInterests = watch("selectedInterests");
   const selectedPreferAge = watch("selectedPreferAge", "");
   const selectedLocation = watch("selectedLocation", "");
   const selectedPreferLocation = watch("selectedPreferLocation", "");
@@ -247,7 +247,7 @@ const Form5 = () => {
               <input
                 type="checkbox"
                 {...register("selectedInterests")}
-                checked={selectedInterests?.includes(interest)}
+                checked={selectedInterests === interest}
                 className="hidden"
               />
               {interest}

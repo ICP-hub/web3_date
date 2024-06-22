@@ -94,7 +94,7 @@ const Profile = ({ userId }) => {
         await backendActor.get_an_account(id).then((userProfileData) => {
           if (userProfileData) {
             const myData = userProfileData?.Ok?.params;
-            console.log("My Data Abhishek ka hai ", myData?.dob);
+            console.log("My Data Abhishek ka hai ", myData);
             const dateObj = new Date(myData?.dob);
 
             const day = String(dateObj.getDate()).padStart(2, '0');

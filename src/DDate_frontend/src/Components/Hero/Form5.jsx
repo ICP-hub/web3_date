@@ -225,7 +225,7 @@ const Form5 = () => {
     };
   }, []);
 
-  const selectedInterests = watch("selectedInterests", []);
+  const selectedInterests = watch("selectedInterests");
   const selectedPreferAge = watch("selectedPreferAge", "");
   const selectedLocation = watch("selectedLocation", "");
   const selectedPreferLocation = watch("selectedPreferLocation", "");
@@ -248,7 +248,8 @@ const Form5 = () => {
                 type="checkbox"
                 value={interest}
                 {...register("selectedInterests")}
-                checked={selectedInterests?.includes(interest)}
+                // checked={selectedInterests?.includes(interest)}
+                hecked={selectedInterests === interest}
                 className="hidden"
               />
               {interest}
@@ -263,7 +264,7 @@ const Form5 = () => {
           Preferred Age
         </legend>
         <div className="flex flex-wrap gap-2 md:gap-2 mb-2 py-2 px-2 rounded-3xl">
-          {["18-20", "20-25", "25-30", "30 50"].map((preferAge) => (
+          {["18-20", "20-25", "25-30", "30-50"].map((preferAge) => (
             <label
               key={preferAge}
               className={`inline-block px-3 py-2 rounded-full text-sm focus:outline-none transition duration-300 ${selectedPreferAge === preferAge ? "bg-yellow-500 text-black" : "bg-transparent hover:bg-yellow-500 hover:text-black text-white md:text-black border border-white md:border-black"

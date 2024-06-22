@@ -74,6 +74,7 @@ import React, { useState } from 'react';
 import { useForm, FormProvider } from 'react-hook-form';
 import { useNavigate } from "react-router-dom";
 import { yupResolver } from '@hookform/resolvers/yup';
+import { Oval } from "react-loader-spinner";
 import * as yup from 'yup';
 import Form1 from './Form1';
 import ImageContainer from './ImageContainer';
@@ -141,51 +142,39 @@ const CreateAccount1 = () => {
     console.log('Final Form Data', data);
     if (backendActor) {
       const DdateData = {
-        userName: [data?.username],
         email: [data?.email],
         age: [Number((data?.selectedPreferAge).slice(0, 2)) + Math.floor(Math.random() * 10 + 1)],
         gender: [data?.usergender],
         dob: [String(data?.dob)],
-        mobile: [data?.mobile],
+        mobile_number: [data?.mobile],
         gender_pronouns: [data?.genderPronouns],
         religion: [data?.selectedReligion],
         selected_life_pathNumber: [data?.selectedLifePathNumber],
         zodiac: [data?.selectedZodiac],
-        selected_fooding: [data?.selectedFooding],
-        selected_what_do_you_do: [data?.selectedWhatYouDo],
-        selected_looking_for: [data?.selectedLookingFor],
         smoking: [data?.selectedsmoking],
         drinking: [data?.selecteddrink],
         hobbies: [data?.selectedhobbies],
         sports: [data?.selectedsports],
         art_and_culture: [data?.selectedArt],
-        selected_pets: [data?.selectedPets],
         general_habits: [data?.selectedHabits],
-        selected_activities: [data?.selectedActivities],
         movies: [data?.selectedMovies],
-        selected_travel: [data?.selectedTravel],
-        interests_in: [],
+        interests_in: data?.selectedInterests,
         location: [data?.selectedLocation],
         preferred_location: [data?.selectedPreferLocation],
         introduction: [data?.selectedIntro],
-        selected_images: [{ first_image: [data?.firstImage0] },
-        { second_image: [data?.firstImage1] },
-        { third_image: [data?.firstImage2] },
-        { fourth_image: [data?.firstImage3] },
-        { fifth_image: [data?.firstImage4] }],
-        occupation: [],
+        occupation: [data?.selectedWhatYouDo],
         height: [],
-        mobile_number: [],
-        diet: [],
-        travel: [],
+        diet: [data?.selectedFooding],
+        travel: [data?.selectedTravel],
         name: [data?.username],
-        pets: [],
-        outdoor_activities: [],
+        pets: [data?.selectedPets],
+        outdoor_activities: [data?.selectedActivities],
         min_preferred_age: [Number((data?.selectedPreferAge).slice(0, 2))],
         preferred_gender: [data?.usergender],
-        looking_for: ['both'],
+        looking_for: [data?.selectedLookingFor],
         max_preferred_age: [Number((data?.selectedPreferAge).slice(3, 5))],
-        images: []
+        images: [],
+        zodiac: [data?.selectedZodiac]
 
       }
       console.log('Ddatedata ', DdateData)
@@ -193,11 +182,11 @@ const CreateAccount1 = () => {
       try {
         await backendActor.create_an_account(DdateData).then((result) => {
           if (result) {
-            const API = result.Ok;
-            console.log(API)
-            const trimedId = API.split(":")[1].trim();
-            setId(trimedId);
-            navigate("/Swipe", { state: trimedId });
+            const API = result?.Ok;
+            console.log("Api is generated", API)
+            // const trimedId = API.split(":")[1].trim();
+            setId(API);
+            navigate("/Swipe", { state: API });
           } else {
             setId('')
           }
@@ -225,13 +214,35 @@ const CreateAccount1 = () => {
     }
   };
 
-  const handleSwipe = () => {
-    console.log("Navigating with ID:", id);
-    navigate("/Swipe");
-  };
+  // const handleSwipe = () => {
+  //   console.log("Navigating with ID:", id);
+  //   navigate("/Swipe");
+  // };
 
   const onErrorHandler = val => {
     console.log('error', val);
+  };
+
+
+  // loader logic
+  const [isLoading, setIsLoading] = useState(false);
+
+  const fetchData = async () => {
+    setIsLoading(true);
+    try {
+      // Replace with your actual fetch logic
+      await new Promise((resolve) => setTimeout(resolve, 2000));
+      // handle success
+    } catch (error) {
+      // handle error
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleClick = (event) => {
+    event.preventDefault();
+    fetchData();
   };
 
   return (
@@ -264,8 +275,6 @@ const CreateAccount1 = () => {
               {index === 5 && <Form6 />}
 
               <div className="flex justify-between">
-                <button type="button" className="bg-yellow-500 font-semibold py-2 px-6 rounded-full hover:bg-yellow-600 text-white md:text-black md:hover:text-black" onClick={handleSwipe}>Swipe</button>
-
                 <button type="button" className="bg-yellow-500 font-semibold py-2 px-6 rounded-full hover:bg-yellow-600 text-white md:text-black md:hover:text-black" onClick={handleBack} disabled={index === 0}>Back</button>
                 {index === 5 ? (
                   <>
