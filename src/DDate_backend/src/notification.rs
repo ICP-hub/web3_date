@@ -14,11 +14,25 @@ impl State {
             notification_type: NotificationType::Like,
         };
 
-        let keys: Vec<String> = self.user_profiles.iter().map(|(k, _)| k.clone()).collect();
-        ic_cdk::println!("Profiles available before sending notification: {:?}", keys);
+        ic_cdk::println!("Profiles available before sending notification: {:?}", self.user_profiles.iter().map(|(k, _)| k).collect::<Vec<_>>());
 
-        let sender_profile = self.user_profiles.get(&sender_id).ok_or_else(|| format!("Sender ID {} does not exist.", sender_id))?;
-        let receiver_profile = self.user_profiles.get(&receiver_id).ok_or_else(|| format!("Receiver ID {} does not exist.", receiver_id))?;
+        // Check if sender profile exists
+        let sender_profile = match self.user_profiles.get(&sender_id) {
+            Some(profile) => profile,
+            None => return Err(format!("Sender ID {} does not exist.", sender_id)),
+        };
+
+        // Check if receiver profile exists
+        let receiver_profile = match self.user_profiles.remove(&receiver_id) {
+            Some(profile) => profile,
+            None => {
+                ic_cdk::println!("Receiver profile not found: {}", receiver_id);
+                return Err(format!("Receiver ID {} does not exist.", receiver_id));
+            },
+        };
+
+        // Handle receiver profile after removal
+        let mut receiver_profile = receiver_profile;
 
         if !sender_profile.status {
             return Err("Sender's account is inactive".to_string());
@@ -28,18 +42,22 @@ impl State {
             return Err("Receiver's account is inactive".to_string());
         }
 
-        let mut receiver_profile = receiver_profile.clone();
         if receiver_profile.notifications.len() >= MAX_NOTIFICATIONS {
             receiver_profile.notifications.pop_front();
         }
-        receiver_profile.notifications.push_back(like_notification.clone());
 
+        receiver_profile.notifications.push_back(like_notification.clone());
+        ic_cdk::println!("Notification sent: {:?}", like_notification);
+
+        // Insert modified receiver profile back into the map
         self.user_profiles.insert(receiver_id.clone(), receiver_profile);
 
-        ic_cdk::println!("Notification sent: {:?}", like_notification);
         Ok(())
     }
 }
+
+
+
 
 
 pub fn get_notifications(state: &State, user_id: String) -> Result<Vec<Notification>, String> {

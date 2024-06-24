@@ -2,19 +2,23 @@
 use ic_stable_structures::memory_manager::{MemoryId, MemoryManager, VirtualMemory};
 use ic_stable_structures::DefaultMemoryImpl;
 use ic_stable_structures::StableBTreeMap;
+use serde::Deserialize;
 use std::cell::RefCell;
+use std::collections::VecDeque;
+use std::ops::{Deref, DerefMut};
 use ic_stable_structures::{storable::Bound,Storable};
-use candid::{Decode, Encode};
+use candid::{CandidType, Decode, Encode};
 use std::borrow::Cow;
-use crate::profile_creation::UserProfileCreationInfo;
+use crate::profile_creation::{Message, UserProfileCreationInfo};
 
 
 
 pub type Memory = VirtualMemory<DefaultMemoryImpl>;
 pub type UserProfiles = StableBTreeMap<String, UserProfileCreationInfo, Memory>;
-
+pub type UserMessages = StableBTreeMap<String,Candid<VecDeque<Message>>,Memory>;
 
 const PROFILE_DATA: MemoryId = MemoryId::new(0);
+const MESSAGE_DATA: MemoryId = MemoryId::new(1);
 
 thread_local! {
     static MEMORY_MANAGER: RefCell<MemoryManager<DefaultMemoryImpl>> = RefCell::new(
@@ -23,7 +27,8 @@ thread_local! {
 
     pub static STATE: RefCell<State> = RefCell::new(
         MEMORY_MANAGER.with(|mm| State {
-            user_profiles:UserProfiles::init(mm.borrow().get(PROFILE_DATA))
+            user_profiles:UserProfiles::init(mm.borrow().get(PROFILE_DATA)),
+            user_messages:UserMessages::init(mm.borrow().get(MESSAGE_DATA)),
         })
     );
 }
@@ -41,10 +46,14 @@ pub fn get_profiledata_memory() -> Memory {
     MEMORY_MANAGER.with(|m| m.borrow().get(PROFILE_DATA))
 }
 
+pub fn get_messagedata_memory() -> Memory {
+    MEMORY_MANAGER.with(|m| m.borrow().get(MESSAGE_DATA))
+}
 
 pub struct State {
 
-    pub user_profiles : StableBTreeMap<String, UserProfileCreationInfo,Memory>,
+    pub user_profiles : UserProfiles,
+    pub user_messages : UserMessages,
     
 
 }
@@ -53,7 +62,8 @@ impl State {
     pub fn new() -> Self {
         Self {
 
-            user_profiles: init_file_contents()
+            user_profiles: init_file_contents(),
+            user_messages: post_file_contents()
         }
     }
 }
@@ -71,9 +81,12 @@ pub fn init_file_contents() -> StableBTreeMap<String, UserProfileCreationInfo,Me
 
 }
 
+pub fn post_file_contents() -> StableBTreeMap<String,Candid<VecDeque<Message>>,Memory> {
+    StableBTreeMap::init(get_messagedata_memory())
+
+}
 
 
-const MAX_VALUE_SIZE: u32 = 600;
 
 impl Storable for UserProfileCreationInfo{
     fn to_bytes(&self) -> std::borrow::Cow<[u8]> {
@@ -84,10 +97,45 @@ impl Storable for UserProfileCreationInfo{
         Decode!(bytes.as_ref(), Self).unwrap()
     }
 
-    const BOUND: Bound = Bound::Bounded {
-        max_size: MAX_VALUE_SIZE,
-        is_fixed_size: false,
-    };
+    const BOUND: Bound = Bound::Unbounded;
+}
+#[derive(Default)]
+pub struct Candid<T>(pub T)
+where
+    T: CandidType + for<'de> Deserialize<'de>;
+
+impl<T> Storable for Candid<T>
+where
+    T: CandidType + for<'de> Deserialize<'de>,
+{
+    const BOUND: Bound = Bound::Unbounded;
+
+    fn to_bytes(&self) -> Cow<'_, [u8]> {
+        Cow::Owned(candid::encode_one(&self.0).expect("encoding should always succeed"))
+    }
+
+    fn from_bytes(bytes: Cow<'_, [u8]>) -> Self {
+        Self(candid::decode_one(bytes.as_ref()).expect("decoding should succeed"))
+    }
 }
 
+impl<T> Deref for Candid<T>
+where
+    T: CandidType + for<'de> Deserialize<'de>,
+{
+    type Target = T;
 
+    fn deref(&self) -> &T {
+        &self.0
+    }
+}
+
+// Implement DerefMut for Candid
+impl<T> DerefMut for Candid<T>
+where
+    T: CandidType + for<'de> Deserialize<'de>,
+{
+    fn deref_mut(&mut self) -> &mut T {
+        &mut self.0
+    }
+}
