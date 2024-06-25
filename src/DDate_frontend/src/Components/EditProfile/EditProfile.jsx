@@ -55,57 +55,45 @@ const EditProfile = () => {
   };
   const location = useLocation();
   const userdata = location.state
-  const [value, setValue] = useState(null);
-  useEffect(() => {
-    if (userdata && userdata.dob && Array.isArray(userdata.dob) && userdata.dob[0]) {
-      const dateString = String(userdata.dob[0]);
-      const dateObject = new Date(dateString);
-      if (!isNaN(dateObject.getTime())) {
-        const formattedDate = dateObject.toISOString().split('T')[0];
-        setValue(formattedDate);
-      } else {
-        console.error('Invalid date string:', dateString);
-      }
-    }
-  }, [userdata]);
+  console.log(userdata.dob[0])
+  console.log(typeof userdata.dob[0])
 
-  const convertBigIntToString = (obj) => {
-    for (const key in obj) {
-      if (typeof obj[key] === 'bigint') {
-        obj[key] = obj[key].toString();
-      }
-    }
-  };
+  const myDOB = new Date(userdata.dob[0]);
 
-  if (userdata) {
-    convertBigIntToString(userdata);
+  function formatDate(myDOB) {
+    const year = myDOB.getFullYear();
+    const month = String(myDOB.getMonth() + 1).padStart(2, '0');
+    const day = String(myDOB.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
   }
+
   const PreValue = {
-    username: userdata?.name,
-    usergender: userdata?.gender,
-    email: userdata?.email,
-    mobile: userdata?.mobile_number,
-    dob: value,
-    selectedIntro: userdata?.introduction,
-    selectedsmoking: userdata?.smoking,
-    selecteddrink: userdata?.drinking,
-    selectedhobbies: userdata?.selected_hobbies,
+    username: userdata?.name[0],
+    usergender: userdata?.gender[0],
+    email: userdata?.email[0],
+    mobile: userdata?.mobile_number[0],
+    dob: formatDate(myDOB),
+    selectedIntro: userdata?.introduction[0],
+    selectedsmoking: userdata?.smoking[0],
+    selecteddrink: userdata?.drinking[0],
+    // selectedhobbies: userdata?.selected_hobbies,
+    selectedhobbies: ["Reading", "Astronomy"],
     selectedsports: userdata?.sports,
-    genderPronouns: userdata?.gender_pronouns,
-    selectedReligion: userdata?.religion,
-    selectedZodiac: userdata?.zodiac,
-    selectedFooding: userdata?.diet,
-    selectedWhatYouDo: userdata?.occupation,
-    selectedLookingFor: userdata?.looking_for,
+    genderPronouns: userdata?.gender_pronouns[0],
+    selectedReligion: userdata?.religion[0],
+    selectedZodiac: userdata?.zodiac[0],
+    selectedFooding: userdata?.diet[0],
+    selectedWhatYouDo: userdata?.occupation[0],
+    selectedLookingFor: userdata?.looking_for[0],
     selectedArt: userdata?.art_and_culture,
-    selectedPets: userdata?.pets,
+    selectedPets: userdata?.pets[0],
     selectedHabits: userdata?.habbits,
     selectedActivities: userdata?.outdoor_activities,
     selectedMovies: userdata?.selected_movies,
     selectedTravel: userdata?.travels,
-    selectedInterests: userdata?.interests_in,
-    selectedPreferAge: userdata?.age,
-    selectedPreferLocation: userdata?.preferred_location,
+    selectedInterests: userdata?.interests_in[0],
+    selectedPreferAge: userdata?.age[0],
+    selectedPreferLocation: userdata?.preferred_location[0],
   }
 
   const methods = useForm({
@@ -164,7 +152,7 @@ const EditProfile = () => {
           ]
 
       }
-      console.log('Ddatedata ', DdateData)
+      console.log(' Edited Ddatedata ', DdateData)
 
       try {
         await backendActor.create_an_account(DdateData).then((result) => {
@@ -287,7 +275,7 @@ const EditProfile = () => {
                   {index === 5 &&
                     <Form6 AllformData={formData} updateFormData={updateFormData} />
                   }
-                  <div className="flex justify-between mt-6">
+                  <div className="flex justify-between">
                     <button type="button" className="bg-yellow-500 font-semibold py-2 px-6 rounded-full hover:bg-yellow-600 text-white md:text-black md:hover:text-black" onClick={handleBack} disabled={index === 0}>Back</button>
                     {index === 5 ? (
                       <>
@@ -298,122 +286,122 @@ const EditProfile = () => {
                     )}
                   </div>
                 </div>
-                <div className="md:w-1/4 w-full">
-                  <div className="border-gray-300 font-viga bg-white  ">
-                    <div className="flex flex-col items-center justify-center p-4 mt-[28px]">
-                      <p className="text-[24px] flex items-center gap-3 font-[700]  text-left"><MdOutlineAddToPhotos />Your Photos</p>
+              </div>
+              <div className="border-gray-300 font-viga bg-white">
+                <div className="flex flex-col items-center justify-center p-4 mb-2">
+                  <p className="text-[24px] flex items-center gap-3 font-[700] mt-[31px] text-left"><MdOutlineAddToPhotos />Your Photos</p>
 
-                      <hr className="w-full border-black border-[1px] my-[10px] " />
+                  <hr className="w-full border-black border-[1px] my-[10px] " />
 
 
-                      <div className=" text-black text-opacity-50 font-normal text-sm">
-                        Add maximum 2 photos for better reach
-                      </div>
-                    </div>
+                  <div className=" text-black text-opacity-50 font-normal text-sm">
+                    Add maximum 2 photos for better reach
+                  </div>
+                </div>
 
-                    <div className="bg-white flex justify-center gap-1 mb-10">
-                      <div className="w-40 h-[180px] md:w-36 md:h-[196px] rounded-[15px] bg-zinc-200  flex justify-center items-center">
+                <div className="bg-white flex justify-center gap-1 mb-10">
+                  <div className="w-40 h-[180px] md:w-36 md:h-[196px] rounded-[15px] bg-zinc-200  flex justify-center items-center">
 
-                        <label htmlFor={`additional-image-1`}>
-                          {false ? (
-                            <div
-                              className="flex items-center justify-center w-40 h-[180px] md:w-36 md:h-[196px] rounded-[15px] bg-zinc-200"
-                              // className="rounded-[15px] cursor-pointer"
+                    <label htmlFor={`additional-image-1`}>
+                      {false ? (
+                        <div
+                          className="flex items-center justify-center w-40 h-[180px] md:w-36 md:h-[196px] rounded-[15px] bg-zinc-200"
+                          // className="rounded-[15px] cursor-pointer"
 
-                              key="1"
-                            >
-                              <svg
-                                className="w-10 h-10 text-gray-200 dark:text-gray-600"
-                                aria-hidden="true"
-                                xmlns="http://www.w3.org/2000/svg"
-                                fill="currentColor"
-                                viewBox="0 0 20 18"
-                              >
-                                <path d="M18 0H2a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2Zm-5.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3Zm4.376 10.481A1 1 0 0 1 16 15H4a1 1 0 0 1-.895-1.447l3.5-7A1 1 0 0 1 7.468 6a.965.965 0 0 1 .9.5l2.775 4.757 1.546-1.887a1 1 0 0 1 1.618.1l2.541 4a1 1 0 0 1 .028 1.011Z" />
-                              </svg>
-                            </div>
-                          ) :
-                            //   formData?.images[1]
-                            false
-                              ? (
-                                <img
-                                  src={formData?.images[1]}
-                                  alt={`Additional Image 1`}
-                                  className="w-40 h-[180px] md:w-36 md:h-[196px] rounded-[15px] cursor-pointer"
-                                />
-                              ) : (
-                                <img
-                                  src={uploadProfile}
-                                  alt="uploadProfile"
-                                  className=" rounded-[15px] cursor-pointer"
-                                />
-                              )}
-                          <input
-                            id={`additional-image-1`}
-                            type="file"
-                            // onChange={handleAdditionalImageChange(1)}
-                            className="hidden"
-                          />
-                        </label>
-                      </div>
+                          key="1"
+                        >
+                          <svg
+                            className="w-10 h-10 text-gray-200 dark:text-gray-600"
+                            aria-hidden="true"
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="currentColor"
+                            viewBox="0 0 20 18"
+                          >
+                            <path d="M18 0H2a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2Zm-5.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3Zm4.376 10.481A1 1 0 0 1 16 15H4a1 1 0 0 1-.895-1.447l3.5-7A1 1 0 0 1 7.468 6a.965.965 0 0 1 .9.5l2.775 4.757 1.546-1.887a1 1 0 0 1 1.618.1l2.541 4a1 1 0 0 1 .028 1.011Z" />
+                          </svg>
+                        </div>
+                      ) :
+                        //   formData?.images[1]
+                        false
+                          ? (
+                            <img
+                              src={formData?.images[1]}
+                              alt={`Additional Image 1`}
+                              className="w-40 h-[180px] md:w-36 md:h-[196px] rounded-[15px] cursor-pointer"
+                            />
+                          ) : (
+                            <img
+                              src={uploadProfile}
+                              alt="uploadProfile"
+                              className=" rounded-[15px] cursor-pointer"
+                            />
+                          )}
+                      <input
+                        id={`additional-image-1`}
+                        type="file"
+                        // onChange={handleAdditionalImageChange(1)}
+                        className="hidden"
+                      />
+                    </label>
+                  </div>
 
-                    </div>
-                    {/* Second input field for additional photos */}
+                </div>
+                {/* Second input field for additional photos */}
 
-                    <div className="bg-white flex justify-center gap-1 mb-10">
-                      <div className="w-40 h-[180px] md:w-36 md:h-[196px] rounded-[15px] bg-zinc-200  flex justify-center items-center">
-                        <label htmlFor={`additional-image-2`}>
-                          {false ? (
-                            <div
-                              // className="flex items-center justify-center w-40 h-[180px] md:w-36 md:h-[196px] rounded-[15px] bg-zinc-200"
+                <div className="bg-white flex justify-center gap-1 mb-10">
+                  <div className="w-40 h-[180px] md:w-36 md:h-[196px] rounded-[15px] bg-zinc-200  flex justify-center items-center">
+                    <label htmlFor={`additional-image-2`}>
+                      {false ? (
+                        <div
+                          // className="flex items-center justify-center w-40 h-[180px] md:w-36 md:h-[196px] rounded-[15px] bg-zinc-200"
+                          className="rounded-[15px] cursor-pointer"
+
+                          key="1"
+                        >
+                          <svg
+                            className="w-10 h-10 text-gray-200 dark:text-gray-600"
+                            aria-hidden="true"
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="currentColor"
+                            viewBox="0 0 20 18"
+                          >
+                            <path d="M18 0H2a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2Zm-5.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3Zm4.376 10.481A1 1 0 0 1 16 15H4a1 1 0 0 1-.895-1.447l3.5-7A1 1 0 0 1 7.468 6a.965.965 0 0 1 .9.5l2.775 4.757 1.546-1.887a1 1 0 0 1 1.618.1l2.541 4a1 1 0 0 1 .028 1.011Z" />
+                          </svg>
+                        </div>
+                      ) :
+                        //   formData?.images[2] 
+                        false
+                          ? (
+                            <img
+                              src={formData?.images[2]}
+                              alt={`Additional Image 2`}
+                              // className="w-40 h-[180px] md:w-36 md:h-[196px] rounded-[15px] cursor-pointer"
                               className="rounded-[15px] cursor-pointer"
-
-                              key="1"
-                            >
-                              <svg
-                                className="w-10 h-10 text-gray-200 dark:text-gray-600"
-                                aria-hidden="true"
-                                xmlns="http://www.w3.org/2000/svg"
-                                fill="currentColor"
-                                viewBox="0 0 20 18"
-                              >
-                                <path d="M18 0H2a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2Zm-5.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3Zm4.376 10.481A1 1 0 0 1 16 15H4a1 1 0 0 1-.895-1.447l3.5-7A1 1 0 0 1 7.468 6a.965.965 0 0 1 .9.5l2.775 4.757 1.546-1.887a1 1 0 0 1 1.618.1l2.541 4a1 1 0 0 1 .028 1.011Z" />
-                              </svg>
-                            </div>
-                          ) :
-                            //   formData?.images[2] 
-                            false
-                              ? (
-                                <img
-                                  src={formData?.images[2]}
-                                  alt={`Additional Image 2`}
-                                  // className="w-40 h-[180px] md:w-36 md:h-[196px] rounded-[15px] cursor-pointer"
-                                  className="rounded-[15px] cursor-pointer"
-                                />
-                              ) : (
-                                <img
-                                  src={uploadProfile}
-                                  alt="uploadProfile"
-                                  className="rounded-[15px] cursor-pointer"
-                                />
-                              )}
-                          <input
-                            id={`additional-image-2`}
-                            type="file"
-                            // onChange={handleAdditionalImageChange(2)}
-                            className="hidden"
-                          />
-                        </label>
-                      </div>
-                    </div>
+                            />
+                          ) : (
+                            <img
+                              src={uploadProfile}
+                              alt="uploadProfile"
+                              className="rounded-[15px] cursor-pointer"
+                            />
+                          )}
+                      <input
+                        id={`additional-image-2`}
+                        type="file"
+                        // onChange={handleAdditionalImageChange(2)}
+                        className="hidden"
+                      />
+                    </label>
                   </div>
                 </div>
               </div>
             </div>
           </div>
-
-        </FormProvider>
       </div>
+    </div >
+
+        </FormProvider >
+      </div >
 
     </>
 

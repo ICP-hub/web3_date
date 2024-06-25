@@ -112,7 +112,7 @@ type UserProfileParams = record {
   max_preferred_age : opt nat64;
   images : opt vec text;
 };
-service : {
+service : () -> {
   check_user_match : (text, text) -> (bool);
   create_an_account : (UserInputParams) -> (Result);
   create_message : (text, text, text) -> (Result_1);
@@ -123,6 +123,7 @@ service : {
   get_leftswipes : (text, Pagination) -> (Result_4) query;
   get_rightswiped_matches : (text, nat64, nat64) -> (Result_4);
   get_rightswipes : (text, Pagination) -> (Result_4) query;
+  get_user_id_by_principal : () -> (Result) query;
   leftswipe : (SwipeInput) -> (text);
   make_user_inactive : (text) -> (Result);
   read_messages : (text, text) -> (Result_5) query;

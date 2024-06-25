@@ -16,13 +16,18 @@ import Loader from "./Loader";
 // import logo from "../../assets/Images/SwapImage/swapLogo.svg";
 import logo from "../../assets/Images/SwapImage/slideLogo1.svg";
 import { useLocation } from 'react-router-dom';
+import { useAuth } from '../auth/useAuthClient';
 import {
   faClose,
   faHeart,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
+const page = 1;
+const itemPerPages = 10;
+
 function Swipe() {
+  const { backendActor } = useAuth();
   // const principalString =
   //   "lqfrt-gz5bh-7z76h-3hb7a-jh2hq-be7jp-equjq-b7wrw-u2xub-tnk3x-qqe";
 
@@ -63,6 +68,7 @@ function Swipe() {
   const [startY, setStartY] = useState(0);
   const [moveX, setMoveX] = useState(0);
   const [moveY, setMoveY] = useState(0);
+  const [pageData, setMyPageData] = useState([]);
 
   console.log("profiles are being returned overhere!", matchedProfiles);
   console.log("aha array aa jehra profiles sambhi betha", db);
@@ -135,6 +141,29 @@ function Swipe() {
       return null; // or you can return a default user profile structure
     }
   };
+
+  const [page, setPage] = useState(1);
+  const [size, setSize] = useState(10);
+
+  useEffect(() => {
+    const getAllPages = async () => {
+      try {
+        const result = await backendActor.get_all_accounts({ page: page, size: size });
+        console.log("Pages data", result);
+        if (result) {
+          console.log("Pages data", result);
+          console.log("Pages data array", result.Ok.profiles)
+          const myPageData = result.Ok.profiles.map(data => data)
+          setMyPageData(myPageData);
+        }
+      } catch (error) {
+        console.error("Error getting pages to the backend:", error);
+      }
+    };
+    getAllPages();
+  }, [page, size, backendActor]);
+
+  console.log("my page data in the form of array: ", pageData);
 
   const fetchAllUserProfiles = async (principals) => {
     setStartLoader(true);
@@ -442,22 +471,20 @@ function Swipe() {
                 </div>
               </div>
             ) : (
-
-
-              <div className="w-full h-full flex flex-col items-center  relative">
-                {db.map((character, index) => (
+              <div className="w-full h-full flex flex-col items-center justify-center relative">
+                {pageData.map((character, index) => (
                   <TinderCard
                     ref={childRefs[index]}
-                    className="swipe w-full h-full flex justify-center items-center absolute lg:left-[10%] transform "
-                    key={character.name}
-                    onSwipe={(dir) => swiped(dir, character.name, index)}
-                    onCardLeftScreen={() => outOfFrame(character.name, index)}
+                    className="swipe w-full h-full flex justify-center items-center"
+                    key={character.params.name[0]}
+                    onSwipe={(dir) => swiped(dir, character.params.name[0], index)}
+                    onCardLeftScreen={() => outOfFrame(character.params.name[0], index)}
                   >
                     <div className="h-full  w-full flex flex-col items-center justify-center relative">
                       <img
                         alt="img"
-                        src={character.images[0]}
-                        className="h-full w-full  lg:max-w-lg  "
+                        // src={character.images[0]}
+                        className="h-full w-full rounded-xl lg:max-w-[30%]  "
                         style={{ height: "106vh" }}
                       />
                       <div
@@ -470,14 +497,14 @@ function Swipe() {
                       </div>
                       <div className="pl-4 md:bottom-16 bottom-[8rem] absolute z-20 justify-center lg:ml-[-10%]">
                         <h2 className="text-4xl font-bold text-white  mb-2 ">
-                          {character.name}
+                          {character.params.name[0]}
                         </h2>
                         <p className="text-lg text-gray-700 font-bold ">
-                          {character.location}
+                          {character.params.location[0]}
                         </p>
 
-                        <p className="mt-2 font-bold text-white lg:mb-6 sm:mb-0 ">
-                          {character.introduction}
+                        <p className="mt-2 font-bold text-white mb-6 ">
+                          {character.params.introduction[0]}
                         </p>
                         {match && (
                           <ProfileModal
