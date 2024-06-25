@@ -6,7 +6,7 @@ mod state_handler;
 use std::collections::VecDeque;
 
 use crate::profile_creation::UserProfileCreationInfo;
-use ic_cdk::{export_candid, query, update};
+use ic_cdk::{caller, export_candid, query, update};
 pub use notification::*;
 use profile_creation::Message;
 use profile_creation::{Notification, Pagination};
@@ -15,6 +15,22 @@ pub use right_and_left_swipe::*;
 use state_handler::*;
 use crate::profile_creation::UserInputParams;
 use crate::profile_creation::PaginatedProfiles;
+
+#[query]
+fn get_user_id_by_principal() -> Result<String, String> {
+    let principal = caller();
+
+    let user_id = read_state(|state| {
+        state.user_profiles.iter().find(|(_, profile)| {
+            profile.creator_principal == principal
+        }).map(|(user_id, _)| user_id.clone())
+    });
+
+    match user_id {
+        Some(id) => Ok(id),
+        None => Err(format!("No account found for principal ID: {}", principal)),
+    }
+}
 
 #[update]
 pub fn send_like_notification_candid(sender_id: String, receiver_id: String) -> Result<(), String> {

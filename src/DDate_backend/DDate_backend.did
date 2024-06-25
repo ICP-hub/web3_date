@@ -123,6 +123,7 @@ service : () -> {
   get_leftswipes : (text, Pagination) -> (Result_4) query;
   get_rightswiped_matches : (text, nat64, nat64) -> (Result_4);
   get_rightswipes : (text, Pagination) -> (Result_4) query;
+  get_user_id_by_principal : () -> (Result) query;
   leftswipe : (SwipeInput) -> (text);
   make_user_inactive : (text) -> (Result);
   read_messages : (text, text) -> (Result_5) query;

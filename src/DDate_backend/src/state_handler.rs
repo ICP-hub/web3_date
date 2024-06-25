@@ -61,7 +61,7 @@ pub struct State {
 impl State {
     pub fn new() -> Self {
         Self {
-
+            
             user_profiles: init_file_contents(),
             user_messages: post_file_contents()
         }
@@ -75,7 +75,6 @@ impl Default for State {
     }
 }
 
-
 pub fn init_file_contents() -> StableBTreeMap<String, UserProfileCreationInfo,Memory> {
     StableBTreeMap::init(get_profiledata_memory())
 
@@ -85,8 +84,6 @@ pub fn post_file_contents() -> StableBTreeMap<String,Candid<VecDeque<Message>>,M
     StableBTreeMap::init(get_messagedata_memory())
 
 }
-
-
 
 impl Storable for UserProfileCreationInfo{
     fn to_bytes(&self) -> std::borrow::Cow<[u8]> {
@@ -99,6 +96,7 @@ impl Storable for UserProfileCreationInfo{
 
     const BOUND: Bound = Bound::Unbounded;
 }
+
 #[derive(Default)]
 pub struct Candid<T>(pub T)
 where
@@ -130,7 +128,6 @@ where
     }
 }
 
-// Implement DerefMut for Candid
 impl<T> DerefMut for Candid<T>
 where
     T: CandidType + for<'de> Deserialize<'de>,
