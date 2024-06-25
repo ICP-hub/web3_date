@@ -63,12 +63,12 @@ const Form1 = ({ index, setIndex, updateFormData, AllformData }) => {
     };
 
     return (
-        <div className="w-3/5">
+        <div className="w-full md:w-3/5 mx-auto px-4 md:px-0">
             <form
                 className="w-full rounded-lg p-6 shadow-md md:bg-transparent md:shadow-none"
                 onSubmit={handleSubmit(onSubmit)}
             >
-                <div className="mb-4 relative">
+                <div className="mb-4 relative flex justify-center">
                     <input
                         id="images"
                         type="file"
@@ -107,35 +107,35 @@ const Form1 = ({ index, setIndex, updateFormData, AllformData }) => {
                     </label>
                 </div>
 
-                <label htmlFor="username" className="block text-lg font-semibold mb-2 text-white md:text-black">
+                <label htmlFor="username" className="block text-lg font-semibold mb-2">
                     Username
                 </label>
                 <input
                     id="username"
                     type="text"
                     {...register('username')}
-                    className="form-input bg-transparent w-full border-2 px-2 border-gray-300 py-1.5 rounded-3xl text-white md:text-black text-sm"
+                    className="form-input bg-transparent w-full border-2 px-2 border-gray-300 py-1.5 rounded-3xl text-sm"
                 />
                 {errors.username && <p className="text-red-500">{errors.username.message}</p>}
 
-                <label className="block text-lg font-semibold mb-1 text-white md:text-black">
+                <label className="block text-lg font-semibold mb-1">
                     Gender
                 </label>
-                <div className="flex flex-wrap gap-2 col-span-3 md:gap-2 -mb-1 py-2 px-0 rounded-3xl">
+                <div className="flex flex-wrap gap-2 col-span-3 -mb-1 py-2 px-0 rounded-3xl">
                     {["Male", "Female", "Others"].map((gender) => (
                         <label
                             key={gender}
                             className={`inline-block px-3 py-2 rounded-full text-sm focus:outline-none transition duration-300 ${selectedGender === gender
                                 ? "bg-yellow-500 text-black"
-                                : "bg-transparent hover:bg-yellow-500 hover:text-black text-white md:text-black border border-white md:border-black"
+                                : "bg-transparent hover:bg-yellow-500 hover:text-black border border-white"
                                 }`}
                         >
                             <input
                                 type="radio"
                                 value={gender}
                                 {...register('usergender')}
-                                className="text-sm"
-                                style={{ display: "none" }}
+                                className="hidden"
+                                onChange={() => setSelectedGender(gender)}
                             />
                             {gender}
                         </label>
@@ -143,55 +143,48 @@ const Form1 = ({ index, setIndex, updateFormData, AllformData }) => {
                 </div>
                 {errors.usergender && <p className="text-red-500">{errors.usergender.message}</p>}
 
-                <label htmlFor="email" className="block text-lg font-semibold mb-2 text-white md:text-black font-viga">
+                <label htmlFor="email" className="block text-lg font-semibold mb-2">
                     Email
                 </label>
-                <div className="flex flex-col">
-                    <div className="w-full">
-                        <input
-                            id="email"
-                            type="email"
-                            {...register('email')}
-                            className="form-input col-span-3 bg-transparent w-full border-2 text-sm px-2 border-gray-300 py-1.5 rounded-3xl text-white md:text-black w-full"
-                        />
-                    </div>
-                    {errors.email && <p className="text-red-500">{errors.email.message}</p>}
-                </div>
+                <input
+                    id="email"
+                    type="email"
+                    {...register('email')}
+                    className="form-input bg-transparent w-full border-2 px-2 border-gray-300 py-1.5 rounded-3xl text-sm"
+                />
+                {errors.email && <p className="text-red-500">{errors.email.message}</p>}
 
-                <label htmlFor="mobile" className="block text-lg font-semibold mb-2 text-white md:text-black">
+                <label htmlFor="mobile" className="block text-lg font-semibold mb-2">
                     Mobile No
                 </label>
                 <input
                     id="mobile"
                     type="tel"
                     {...register('mobile')}
-                    className="form-input text-sm col-span-3 bg-transparent w-full border-2 px-2 border-gray-300 py-1.5 rounded-3xl text-white md:text-black"
+                    className="form-input bg-transparent w-full border-2 px-2 border-gray-300 py-1.5 rounded-3xl text-sm"
                 />
                 {errors.mobile && <p className="text-red-500">{errors.mobile.message}</p>}
 
-                <label htmlFor="dob" className="block text-lg font-semibold mb-2 text-white md:text-black">
+                <label htmlFor="dob" className="block text-lg font-semibold mb-2">
                     DOB
                 </label>
                 <input
                     id="dob"
                     type="date"
                     {...register('dob')}
-                    placeholder="dd/mm/yyyy"
-                    className="form-input bg-transparent col-span-3 text-sm w-full border-2 px-2 border-gray-300 py-1.5 rounded-3xl text-white md:text-black"
+                    className="form-input bg-transparent w-full border-2 px-2 border-gray-300 py-1.5 rounded-3xl text-sm"
                 />
                 {errors.dob && <p className="text-red-500">{errors.dob.message}</p>}
 
-                <div className="flex flex-col mb-6 mt-[12px]">
-                    <label htmlFor="selectedIntro" className="block text-lg font-semibold mb-1 text-white md:text-black">
-                        My Introduction
-                    </label>
-                    <textarea
-                        id="selectedIntro"
-                        {...register('selectedIntro')}
-                        placeholder="Let us know something about you"
-                        className="w-full px-4 py-2 col-span-3 rounded-lg border border-white md:border-black bg-transparent text-white md:text-black"
-                    />
-                </div>
+                <label htmlFor="selectedIntro" className="block text-lg font-semibold mb-1">
+                    My Introduction
+                </label>
+                <textarea
+                    id="selectedIntro"
+                    {...register('selectedIntro')}
+                    placeholder="Let us know something about you"
+                    className="w-full px-4 py-2 rounded-lg border border-white bg-transparent"
+                />
                 {errors.selectedIntro && <p className="text-red-500">{errors.selectedIntro.message}</p>}
             </form>
         </div>

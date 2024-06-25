@@ -1,4 +1,3 @@
-
 import React, {
   useState,
   useMemo,
@@ -396,13 +395,13 @@ function Swipe() {
       introduction: "Avid reader and coffee enthusiast.",
       images: ["https://via.placeholder.com/300?text=Maria"]
     },
-    {
-      id: 3,
-      name: "John Doe",
-      location: "Toronto, Canada",
-      introduction: "Tech geek, love to code and explore new technologies.",
-      images: ["https://via.placeholder.com/300?text=John"]
-    },
+    // {
+    //   id: 3,
+    //   name: "John Doe",
+    //   location: "Toronto, Canada",
+    //   introduction: "Tech geek, love to code and explore new technologies.",
+    //   images: ["https://via.placeholder.com/300?text=John"]
+    // },
     {
       id: 4,
       name: "Emily Smith",
@@ -420,32 +419,36 @@ function Swipe() {
 
   return (
     <div className="flex flex-col grid-cols-9 h-screen z-10 ">
-      <SidebarComponent userId={userId} className="hidden md:block  " />
+      <SidebarComponent userId={userId} className="hidden   " />
       <h1>{location.state}</h1>
       {startLoader ? (
         <div className="w-full flex justify-center items-center  ">
           <div className="container flex justify-center">
-            <div className="max-w-xs md:max-w-md lg:max-w-lg xl:max-w-xl bg-white h-screen flex items-center justify-center relative ">
+            <div className="max-w-xs  lg:max-w-lg xl:max-w-xl bg-white h-screen flex items-center justify-center relative ">
               <Loader />
             </div>
           </div>
-          h1        </div>
+        </div>
       ) : (<div className="mx-auto md:col-start-5 w-full h-screen flex flex-col items-center absolute  ">
         {
           false
             // db.length === 0
             ? (
               <div className="flex justify-center">
-                <div className="max-w-xs md:max-w-md lg:max-w-lg xl:max-w-xl bg-white h-screen ">
+
+
+                <div className="max-w-xs md:max-w-md  bg-white h-screen ">
                   <Loader />
                 </div>
               </div>
             ) : (
-              <div className="w-full h-full flex flex-col items-center justify-center relative">
+
+
+              <div className="w-full h-full flex flex-col items-center  relative">
                 {db.map((character, index) => (
                   <TinderCard
                     ref={childRefs[index]}
-                    className="swipe w-full h-full flex justify-center items-center"
+                    className="swipe w-full h-full flex justify-center items-center absolute lg:left-[10%] transform "
                     key={character.name}
                     onSwipe={(dir) => swiped(dir, character.name, index)}
                     onCardLeftScreen={() => outOfFrame(character.name, index)}
@@ -454,18 +457,18 @@ function Swipe() {
                       <img
                         alt="img"
                         src={character.images[0]}
-                        className="h-full w-full rounded-xl lg:max-w-[30%]  "
+                        className="h-full w-full  lg:max-w-lg  "
                         style={{ height: "106vh" }}
                       />
                       <div
-                        className="bg-black rounded-b-xl w-full  lg:max-w-[30%] h-[30%] absolute bottom-0"
+                        className="bg-black rounded-b-xl w-full  lg:max-w-lg h-[30%] absolute bottom-0"
                         style={{
                           background:
                             "linear-gradient(to top, rgb(0, 0, 0) 50%, rgba(255, 255, 255, 0) 100%)",
                         }}
                       >
                       </div>
-                      <div className="pl-4 md:bottom-16 bottom-[8rem] absolute z-20 justify-center">
+                      <div className="pl-4 md:bottom-16 bottom-[8rem] absolute z-20 justify-center lg:ml-[-10%]">
                         <h2 className="text-4xl font-bold text-white  mb-2 ">
                           {character.name}
                         </h2>
@@ -473,7 +476,7 @@ function Swipe() {
                           {character.location}
                         </p>
 
-                        <p className="mt-2 font-bold text-white mb-6 ">
+                        <p className="mt-2 font-bold text-white lg:mb-6 sm:mb-0 ">
                           {character.introduction}
                         </p>
                         {match && (
@@ -488,7 +491,7 @@ function Swipe() {
                 ))}
               </div>
             )}
-        <div className="flex gap-4  p-6 bottom-[10%] fixed bottom-4 w-full justify-center z-30 ">
+        <div className="flex gap-4  p-6  absolute bottom-[0%]  w-full justify-center z-30  ">
           <button
             className="rounded-full  h-12 w-12 bg-transparent shadow-md text-3xl border border-pink-700 hover:bg-red-300 font-bold text-gray-800 "
             onClick={() => swipe("left")}
@@ -515,8 +518,6 @@ function Swipe() {
       )}
     </div>
   );
-
-
 
 }
 

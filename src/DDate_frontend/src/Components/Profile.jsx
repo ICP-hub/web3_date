@@ -173,18 +173,18 @@ const Profile = ({ userId }) => {
         </div>
       ) : (
         <div className="h-screen md:col-span-5 font-viga ">
-          <div className=" px-6 lg:px-10 xl:px-12">
-            <div className="flex items-center md:mt-15 gap-2 ">
+          <div className=" lg:px-10 px-6 xl:px-12">
+            <div className="flex items-center mt-[15px] md:mt-15 gap-2 ">
               <img
                 src={back}
                 alt="back"
                 onClick={() => navigate("/Swipe")}
                 className="w-4 h-4 cursor-pointer"
               />
-              <div className="text-lg font-medium">My Profile</div>
+              <div className=" ml-2 text-lg font-medium">My Profile</div>
             </div>
             <div className="px-6 sm:p-4 md:px-8 lg:px-10 xl:px-12 overflow-y-auto">
-              <div className="relative flex justify-center items-center w-full mb-16 mt-2">
+              <div className="relative flex justify-center items-center w-full mb-8 mt-8">
                 <p className="border-t border-black  w-full "></p>
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -285,7 +285,7 @@ const Profile = ({ userId }) => {
                   <p className="text-[20px] font-viga mr-[10px] text-center font-[600]">{formData.name}</p><div onClick={() => navigate("/editProfile", { state: result })} div><CiEdit className="text-cursor" size={22} /></div>
                 </div>
                 <div className="w-full font-viga p-4">
-                  <div className="grid grid-cols-3 gap-2">
+                  <div className="grid lg:grid-cols-3 gap-2">
                     <div className="flex items-center">
                       <label
                         htmlFor="gender"
