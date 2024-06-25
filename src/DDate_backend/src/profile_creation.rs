@@ -5,7 +5,9 @@ use serde::{Deserialize, Serialize};
 use sha2::{Digest, Sha256};
 use std::collections::{HashSet, VecDeque};
 
+use crate::{post_file_contents, state_handler};
 use crate::state_handler::{init_file_contents, mutate_state, read_state, State, STATE};
+use crate::state_handler::Candid;
 
 #[derive(Debug, Serialize, Deserialize, CandidType)]
 pub struct PaginatedProfiles {
@@ -136,6 +138,7 @@ fn init() {
     STATE.with(|state| {
         let mut state = state.borrow_mut();
         state.user_profiles = init_file_contents();
+        state.user_messages = post_file_contents();
     });
 }
 
@@ -252,6 +255,184 @@ impl State {
         })
     }
     
+    pub fn create_message_internal(&mut self, sender_id: String, receiver_id: String, content: String) -> Result<u64, String> {
+        // Validate input
+        if sender_id.trim().is_empty() {
+            return Err("Sender ID is required".to_string());
+        }
+        if receiver_id.trim().is_empty() {
+            return Err("Receiver ID is required".to_string());
+        }
+        if sender_id == receiver_id {
+            return Err("Sender and receiver IDs must be different".to_string());
+        }
+        if content.trim().is_empty() {
+            return Err("Message content is required".to_string());
+        }
+
+        // Check if sender exists and is active
+        let sender_profile = self.user_profiles.get(&sender_id).ok_or_else(|| format!("Sender ID '{}' does not exist", sender_id))?;
+        if !sender_profile.status {
+            return Err(format!("Sender ID '{}' is inactive", sender_id));
+        }
+
+        // Check if receiver exists and is active
+        let receiver_profile = self.user_profiles.get(&receiver_id).ok_or_else(|| format!("Receiver ID '{}' does not exist", receiver_id))?;
+        if !receiver_profile.status {
+            return Err(format!("Receiver ID '{}' is inactive", receiver_id));
+        }
+
+        // Create the message
+        let timestamp = ic_cdk::api::time();
+        let message = Message {
+            id: timestamp.to_string(),
+            sender_id: sender_id.clone(),
+            receiver_id: receiver_id.clone(),
+            content,
+            timestamp,
+        };
+
+        let chat_id = Self::get_chat_id(&sender_id, &receiver_id);
+        let mut candid_messages = self.user_messages.get(&chat_id).map_or_else(|| Candid(VecDeque::new()), |c| state_handler::Candid(c.clone()));
+        candid_messages.push_back(message);
+        self.user_messages.insert(chat_id, candid_messages);
+
+        Ok(timestamp)
+    }
+    
+    pub fn read_messages(user_id: &String, other_user_id: &String) -> Result<Vec<Message>, String> {
+        // Validate input
+        if user_id.trim().is_empty() {
+            return Err("User ID is required".to_string());
+        }
+        if other_user_id.trim().is_empty() {
+            return Err("Other user ID is required".to_string());
+        }
+    
+        STATE.with(|state| {
+            let state = state.borrow();
+    
+            // Check if user exists and is active
+            if let Some(user_profile) = state.user_profiles.get(user_id) {
+                if !user_profile.status {
+                    return Err(format!("User ID '{}' is inactive", user_id));
+                }
+            } else {
+                return Err(format!("User ID '{}' does not exist", user_id));
+            }
+    
+            // Check if other user exists and is active
+            if let Some(other_user_profile) = state.user_profiles.get(other_user_id) {
+                if !other_user_profile.status {
+                    return Err(format!("Other user ID '{}' is inactive", other_user_id));
+                }
+            } else {
+                return Err(format!("Other user ID '{}' does not exist", other_user_id));
+            }
+    
+            // Retrieve messages
+            let chat_id = Self::get_chat_id(user_id, other_user_id);
+            match state.user_messages.get(&chat_id) {
+                Some(messages) => Ok(messages.iter().cloned().collect()),
+                None => Err("No messages found".to_string()),
+            }
+        })
+    }
+    
+    pub fn update_message(&mut self, timestamp: u64, new_content: String) -> Result<String, String> {
+        // Validate input
+        if new_content.trim().is_empty() {
+            return Err("New content is required".to_string());
+        }
+    
+        let mut message_found = false;
+    
+        // Iterate through all user messages
+        let keys: Vec<_> = self.user_messages.iter().map(|(k, _)| k.clone()).collect();
+        for key in keys {
+            if let Some(messages) = self.user_messages.get(&key) {
+                let mut messages_data: VecDeque<Message> = messages.0.clone();
+    
+                for message in messages_data.iter_mut() {
+                    if message.timestamp == timestamp {
+                        if let Some(sender_profile) = self.user_profiles.get(&message.sender_id) {
+                            if !sender_profile.status {
+                                return Err("Sender's account is inactive".to_string());
+                            }
+                        } else {
+                            return Err(format!("Sender ID '{}' does not exist", message.sender_id));
+                        }
+    
+                        message.content = new_content.clone();
+                        message_found = true;
+    
+                        // Update the user_messages map with modified messages
+                        self.user_messages.insert(key.clone(), Candid(messages_data)).unwrap();
+                        break;
+                    }
+                }
+    
+                if message_found {
+                    break;
+                }
+            }
+        }
+    
+        // Return result based on whether the message was found or not
+        if message_found {
+            Ok("Message updated successfully".to_string())
+        } else {
+            Err("Message not found".to_string())
+        }
+    }
+    
+    
+    pub fn delete_message(&mut self, timestamp: u64) -> Result<String, String> {
+        // Delete message if sender is active
+        let mut message_found = false;
+    
+        // Iterate through all keys in user_messages to find and delete the message
+        let keys: Vec<_> = self.user_messages.iter().map(|(k, _)| k.clone()).collect();
+        for key in keys {
+            if let Some(candid_messages) = self.user_messages.get(&key) {
+                let mut messages_data: VecDeque<Message> = candid_messages.0.clone();
+    
+                if let Some(pos) = messages_data.iter().position(|m| m.timestamp == timestamp) {
+                    let sender_id = messages_data[pos].sender_id.clone();
+                    if let Some(sender_profile) = self.user_profiles.get(&sender_id) {
+                        if !sender_profile.status {
+                            return Err("Sender's account is inactive".to_string());
+                        }
+                    } else {
+                        return Err(format!("Sender ID '{}' does not exist", sender_id));
+                    }
+    
+                    messages_data.remove(pos);
+                    message_found = true;
+    
+                    // Update the user_messages map with modified messages
+                    self.user_messages.insert(key.clone(), Candid(messages_data)).unwrap();
+                    break;
+                }
+            }
+        }
+    
+        if message_found {
+            Ok("Message deleted successfully".to_string())
+        } else {
+            Err("Message not found".to_string())
+        }
+    }
+    
+    
+
+    // Utility function to generate a chat ID
+    fn get_chat_id(user1: &String, user2: &String) -> String {
+        let mut ids = vec![user1.clone(), user2.clone()];
+        ids.sort();
+        format!("{}_{}", ids[0], ids[1])
+    }
+
 
     pub fn set_user_inactive(&mut self, user_id: String) -> Result<String, String> {
         if let Some(user_profile) = self.user_profiles.get(&user_id) {

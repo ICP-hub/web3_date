@@ -3,93 +3,112 @@ mod notification;
 mod profile_matcher;
 mod right_and_left_swipe;
 mod state_handler;
+use std::collections::VecDeque;
+
 use crate::profile_creation::UserProfileCreationInfo;
-use ic_cdk::{export_candid, query, update};
+use ic_cdk::{caller, export_candid, query, update};
 pub use notification::*;
+use profile_creation::Message;
 use profile_creation::{Notification, Pagination};
 pub use profile_matcher::*;
 pub use right_and_left_swipe::*;
 use state_handler::*;
-// use crate::profile_creation::Message;
 use crate::profile_creation::UserInputParams;
 use crate::profile_creation::PaginatedProfiles;
+
+#[query]
+fn get_user_id_by_principal() -> Result<String, String> {
+    let principal = caller();
+
+    let user_id = read_state(|state| {
+        state.user_profiles.iter().find(|(_, profile)| {
+            profile.creator_principal == principal
+        }).map(|(user_id, _)| user_id.clone())
+    });
+
+    match user_id {
+        Some(id) => Ok(id),
+        None => Err(format!("No account found for principal ID: {}", principal)),
+    }
+}
+
 #[update]
 pub fn send_like_notification_candid(sender_id: String, receiver_id: String) -> Result<(), String> {
     ic_cdk::println!("Sender ID: {}", sender_id);
     ic_cdk::println!("Receiver ID: {}", receiver_id);
 
-    mutate_state(|state| {
-        // Collect keys manually since StableBTreeMap doesn't have a keys() method
-        let keys: Vec<String> = state.user_profiles.iter().map(|(k, _)| k.clone()).collect();
-        ic_cdk::println!("Profiles available: {:?}", keys);
+    STATE.with(|state| {
+        let mut state = state.borrow_mut();
+        ic_cdk::println!("Profiles available: {:?}", state.user_profiles.iter().map(|(k, _)| k).collect::<Vec<_>>());
 
-        let sender_profile = state.user_profiles.get(&sender_id).ok_or_else(|| format!("Sender profile not found: {}", sender_id))?;
-        let receiver_profile = state.user_profiles.get(&receiver_id).ok_or_else(|| format!("Receiver profile not found: {}", receiver_id))?;
+        // Check if sender profile exists
+        let _sender_profile = match state.user_profiles.get(&sender_id) {
+            Some(profile) => profile,
+            None => return Err(format!("Sender profile not found: {}", sender_id)),
+        };
 
-        if !sender_profile.status {
-            return Err("Sender's account is inactive".to_string());
-        }
-
-        if !receiver_profile.status {
-            return Err("Receiver's account is inactive".to_string());
-        }
-
-        // Send like notification
-        state.send_like_notification(sender_id, receiver_id)?;
-
-        Ok(())
+        // Check if receiver profile exists and send notification
+        state.send_like_notification(sender_id, receiver_id)
     })
 }
 
+
+
+
 #[update]
-pub fn get_rightswiped_matches(user_id: String, page: usize, size: usize) -> Result<MatchResult, String> {
+pub fn get_rightswiped_matches(
+    user_id: String,
+    page: usize,
+    size: usize,
+) -> Result<MatchResult, String> {
     ic_cdk::println!("Finding matches for user: {}", user_id);
 
-    // Check if the user ID is valid and active
-    let user_exists = read_state(|state| {
-        state.user_profiles.get(&user_id).map_or(false, |profile| profile.status)
+    let user_profile = STATE.with(|state| {
+        state
+            .borrow()
+            .user_profiles
+            .get(&user_id)
+            .map(|profile| profile.clone())
     });
 
-    if !user_exists {
-        return Err(format!("User ID '{}' does not exist or is inactive", user_id));
-    }
+    let _new_profile = match user_profile {
+        Some(profile) => profile,
+        None => return Err(format!("User ID '{}' does not exist or is inactive", user_id)),
+    };
 
-    // Check if page number is 0, and return an error immediately
     if page == 0 {
         return Err("Page number must be greater than 0".to_string());
     }
 
     let pagination = Pagination { page, size };
 
-    // Borrow profiles to find matches
-    let match_result = read_state(|state| {
-        match state.user_profiles.get(&user_id) {
-            Some(_) => {
-                // Call find_matches with borrowed state, user_id, and pagination
-                find_matches(state, &user_id, pagination)
-            },
-            None => {
-                // This check is redundant as we already verified the user exists
-                Err("User profile not found".to_string())
-            }
+    let match_result = STATE.with(|state| {
+        let state = state.borrow();
+        find_matches(&state.user_profiles, &user_id, pagination)
+    })?;
+
+    STATE.with(|state| {
+        let mut state = state.borrow_mut();
+        // Remove the old profile and insert the updated one with matched_profiles
+        if let Some(user_profile) = state.user_profiles.remove(&user_id) {
+            let mut updated_profile = user_profile;
+            updated_profile.matched_profiles = match_result
+                .paginated_profiles
+                .iter()
+                .map(|profile| profile.user_id.clone())
+                .collect();
+            state.user_profiles.insert(user_id.clone(), updated_profile);
         }
     });
 
-    // Update matched_profiles in the user's profile
-    if let Ok(match_result) = &match_result {
-        mutate_state(|state| {
-            if let Some(user_profile) = state.user_profiles.get(&user_id) {
-                let mut updated_profile = user_profile.clone();
-                updated_profile.matched_profiles = match_result.paginated_profiles.iter()
-                    .map(|profile| profile.user_id.clone())
-                    .collect();
-                state.user_profiles.insert(user_id.clone(), updated_profile);
-            }
-        });
-    }
-
-    match_result
+    Ok(match_result)
 }
+
+
+
+
+
+
 
 #[update]
 fn leftswipe(input: SwipeInput) -> String {
@@ -197,5 +216,138 @@ pub fn retrieve_notifications_for_user(user_id: String) -> Result<Vec<Notificati
         }
     })
 }
+
+#[update]
+pub fn create_message(sender_id: String, receiver_id: String, content: String) -> Result<u64, String> {
+    STATE.with(|state| {
+        let mut state = state.borrow_mut();
+
+        let sender_profile = state.user_profiles.get(&sender_id).ok_or_else(|| format!("Sender ID {} does not exist.", sender_id))?;
+        let receiver_profile = state.user_profiles.get(&receiver_id).ok_or_else(|| format!("Receiver ID {} does not exist.", receiver_id))?;
+
+        if !sender_profile.status {
+            return Err("Sender's account is inactive".to_string());
+        }
+
+        if !receiver_profile.status {
+            return Err("Receiver's account is inactive".to_string());
+        }
+
+        state.create_message_internal(sender_id, receiver_id, content)
+    })
+}
+
+
+#[query]
+pub fn read_messages(user_id: String, other_user_id: String) -> Result<Vec<Message>, String> {
+    STATE.with(|state| {
+        let state = state.borrow();
+
+        let user_profile = state.user_profiles.get(&user_id).ok_or_else(|| format!("User ID {} does not exist.", user_id))?;
+        let other_user_profile = state.user_profiles.get(&other_user_id).ok_or_else(|| format!("Other user ID {} does not exist.", other_user_id))?;
+
+        if !user_profile.status {
+            return Err("User's account is inactive".to_string());
+        }
+
+        if !other_user_profile.status {
+            return Err("Other user's account is inactive".to_string());
+        }
+
+        state_handler::State::read_messages(&user_id, &other_user_id)
+    })
+}
+
+#[update]
+pub fn update_message(timestamp: u64, new_content: String) -> Result<String, String> {
+    STATE.with(|state| {
+        let mut sender_id = None;
+
+        // Find the message and check if the sender is active
+        let mut message_found = false;
+        {
+            let mut state = state.borrow_mut(); // Borrow mutably here
+
+            // Iterate through all keys in user_messages to find and update the message
+            let keys: Vec<_> = state.user_messages.iter().map(|(k, _)| k.clone()).collect();
+            for key in keys {
+                if let Some(candid_messages) = state.user_messages.get(&key) {
+                    let mut messages_data: VecDeque<Message> = candid_messages.0.clone();
+
+                    if let Some(message) = messages_data.iter_mut().find(|message| message.timestamp == timestamp) {
+                        sender_id = Some(message.sender_id.clone());
+                        message.content = new_content.clone();
+                        message_found = true;
+
+                        // Update the user_messages map with modified messages
+                        state.user_messages.insert(key.clone(), Candid(messages_data)).unwrap();
+                        break;
+                    }
+                }
+            }
+        }
+
+        // Check if message was found and update sender status if necessary
+        if message_found {
+            let state = state.borrow(); // Borrow immutably again if needed
+
+            if let Some(sender_id) = sender_id {
+                let sender_profile = state.user_profiles.get(&sender_id).ok_or_else(|| {
+                    format!("Sender ID {} does not exist.", sender_id)
+                })?;
+                if !sender_profile.status {
+                    return Err("Sender's account is inactive".to_string());
+                }
+            }
+
+            Ok("Message updated successfully".to_string())
+        } else {
+            Err("Message not found".to_string())
+        }
+    })
+}
+
+
+#[update]
+pub fn delete_message(timestamp: u64) -> Result<String, String> {
+    STATE.with(|state| {
+        let mut state = state.borrow_mut();
+
+        // Find the message and check if the sender is active
+        let mut sender_id = None;
+
+        // Iterate through all keys in user_messages to find the message
+        let keys: Vec<_> = state.user_messages.iter().map(|(k, _)| k.clone()).collect();
+        for key in keys {
+            if let Some(candid_messages) = state.user_messages.get(&key) {
+                let messages_data: VecDeque<Message> = candid_messages.0.clone();
+
+                if let Some(pos) = messages_data.iter().position(|m| m.timestamp == timestamp) {
+                    sender_id = Some(messages_data[pos].sender_id.clone());
+                    break;
+                }
+            }
+            if sender_id.is_some() {
+                break;
+            }
+        }
+
+        if let Some(sender_id) = sender_id {
+            let sender_profile = state.user_profiles.get(&sender_id).ok_or_else(|| {
+                format!("Sender ID {} does not exist.", sender_id)
+            })?;
+            if !sender_profile.status {
+                return Err("Sender's account is inactive".to_string());
+            }
+            // Call the delete_message function to delete the message
+            state_handler::State::delete_message(&mut state, timestamp)
+        } else {
+            Err("Message not found".to_string())
+        }
+    })
+}
+
+
+
 
 export_candid!();
