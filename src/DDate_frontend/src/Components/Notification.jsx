@@ -124,12 +124,14 @@ const Notification = () => {
           </div>
         </div>
       ) : (
-        <div className="h-screen grid grid-cols-12">
+        <div className="h-screen grid ">
           {/* Sidebar - hidden on smaller screens */}
           <div className="hidden md:block md:col-span-2"></div>
 
           {/* Main content area */}
-          <div className="col-span-12 md:col-span-10 lg:col-span-6 xl:col-span-6 px-6 lg:px-10 xl:px-12">
+          {/* <div className="col-span-12 md:col-span-10  md:col-start-4 px-6 lg:px-10 xl:px-12">
+           */}
+          <div className="col-span-12 md:col-span-10   md:col-start-6 lg:col-start-3 px-6 lg:px-10 xl:px-12">
             <div className="flex items-center md:mt-10 ml-12 gap-2 mb-4">
               <img
                 src={back}

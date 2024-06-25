@@ -33,7 +33,7 @@ const Explore = () => {
         </div>
 
         <div className="flex flex-col items-center justify-between my-10 px-[6%] w-full">
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-4 w-full px-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-4 w-full px-6 place-items-center	">
             {/* Friendships */}
             <div className="flex flex-col sm:flex-row items-center text-start mt-8 md:mb-16 mb-6 relative">
               <div className="w-40 h-40 bg-yellow-400 rounded-full relative mb-6 sm:mb-0">
