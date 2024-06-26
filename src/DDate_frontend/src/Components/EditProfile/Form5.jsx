@@ -246,8 +246,10 @@ const Form5 = () => {
             >
               <input
                 type="checkbox"
+                value={interest}
                 {...register("selectedInterests")}
-                checked={selectedInterests === interest}
+                // checked={selectedInterests?.includes(interest)}
+                hecked={selectedInterests === interest}
                 className="hidden"
               />
               {interest}
@@ -270,6 +272,8 @@ const Form5 = () => {
             >
               <input
                 type="radio"
+                name="selectedPreferAge"
+                value={preferAge}
                 {...register("selectedPreferAge")}
                 checked={selectedPreferAge === preferAge}
                 className="hidden"
@@ -310,6 +314,7 @@ const Form5 = () => {
           <input
             type="text"
             id="selectedPreferLocation"
+            name="selectedPreferLocation"
             placeholder="Your Preferred Location"
             {...register("selectedPreferLocation")}
             className="w-full px-4 py-2 rounded-full border border-white md:border-black bg-transparent text-white md:text-black focus:ring-yellow-500 focus:border-yellow-500"
@@ -328,6 +333,7 @@ const Form5 = () => {
           </label>
           <textarea
             id="selectedIntro"
+            name="selectedIntro"
             placeholder="Let us know something about you"
             {...register("selectedIntro")}
             className="w-full px-4 py-2 rounded-lg border border-white md:border-black bg-transparent text-white md:text-black"

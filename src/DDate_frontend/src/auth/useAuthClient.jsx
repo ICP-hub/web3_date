@@ -31,8 +31,8 @@ const defaultOptions = {
       process.env.DFX_NETWORK === "ic"
         ? "https://identity.ic0.app/#authorize"
         : `http://rdmx6-jaaaa-aaaaa-aaadq-cai.localhost:4943`,
-        // : `https://nfid.one/authenticate/?applicationName=my-ic-app#authorize`,
-        // :`https://nfid.one/authenticate/?applicationName=my-ic-app#authorize`
+    // : `https://nfid.one/authenticate/?applicationName=my-ic-app#authorize`,
+    // :`https://nfid.one/authenticate/?applicationName=my-ic-app#authorize`
   },
   loginOptionsnfid: {
     identityProvider:
@@ -44,45 +44,45 @@ const defaultOptions = {
   },
 };
 export const useAuthClient = (options = defaultOptions) => {
-    const [authClient, setAuthClient] = useState(null);
-    const [isAuthenticated, setIsAuthenticated] = useState(null);
-    const [identity, setIdentity] = useState(null);
-    const [principal, setPrincipal] = useState(null);
-    const [backendActor, setBackendActor] = useState(null);
+  const [authClient, setAuthClient] = useState(null);
+  const [isAuthenticated, setIsAuthenticated] = useState(null);
+  const [identity, setIdentity] = useState(null);
+  const [principal, setPrincipal] = useState(null);
+  const [backendActor, setBackendActor] = useState(null);
 
-    const backendCanisterId =
-        process.env.CANISTER_ID_DDATE_BACKEND ||
-        process.env.CANISTER_ID_DDATE_BACKEND;
+  const backendCanisterId =
+    process.env.CANISTER_ID_DDATE_BACKEND ||
+    process.env.CANISTER_ID_DDATE_BACKEND;
 
-    const frontendCanisterId =
-        process.env.CANISTER_ID_DDATE_FRONTEND ||
-        process.env.CANISTER_ID_DDATE_FRONTEND;
-        
-        useEffect(() => {
-          AuthClient.create(options.createOptions).then((client) => {
-            setAuthClient(client);
-          });
-        }, []);
-      
-      // console.log('authClient',authClient)
-        const login = async (val) => {
-          // console.log('val',val)
-            return new Promise(async (resolve, reject) => {
-                try {
+  const frontendCanisterId =
+    process.env.CANISTER_ID_DDATE_FRONTEND ||
+    process.env.CANISTER_ID_DDATE_FRONTEND;
 
-                  // console.log("authClient.getIdentity().getPrincipal().isAnonymous() =>>>>>>>>>>",authClient.getIdentity().getPrincipal().isAnonymous());
-                  if (
-                    authClient.isAuthenticated() &&
-                    (await authClient.getIdentity().getPrincipal().isAnonymous()) ===
-                      false
-                  ) {
+  useEffect(() => {
+    AuthClient.create(options.createOptions).then((client) => {
+      setAuthClient(client);
+    });
+  }, []);
 
-                    clientInfo(authClient);
-                    resolve(AuthClient);
-                  } else {
+  // console.log('authClient',authClient)
+  const login = async (val) => {
+    // console.log('val',val)
+    return new Promise(async (resolve, reject) => {
+      try {
 
-                // console.log("val=>>>.", val);
-                    let opt = val === "ii" ? "loginOptionsii" : "loginOptionsnfid"
+        // console.log("authClient.getIdentity().getPrincipal().isAnonymous() =>>>>>>>>>>",authClient.getIdentity().getPrincipal().isAnonymous());
+        if (
+          authClient.isAuthenticated() &&
+          (await authClient.getIdentity().getPrincipal().isAnonymous()) ===
+          false
+        ) {
+
+          clientInfo(authClient);
+          resolve(AuthClient);
+        } else {
+
+          // console.log("val=>>>.", val);
+          let opt = val === "ii" ? "loginOptionsii" : "loginOptionsnfid"
           authClient.login({
             ...options[opt],
             onError: (error) => reject(error),
@@ -91,83 +91,83 @@ export const useAuthClient = (options = defaultOptions) => {
               resolve(authClient);
             },
           });
-                  }
-                } catch (error) {
-                  console.log('error',error)
-                    reject(error);
-                }
-            });
-        };
-
-    const reloadLogin = () => {
-      return new Promise(async (resolve, reject) => {
-        try {
-          if (
-            authClient.isAuthenticated() &&
-            (await authClient.getIdentity().getPrincipal().isAnonymous()) ===
-              false
-          ) {
-            updateClient(authClient);
-            resolve(AuthClient);
-          }
-        } catch (error) {
-          reject(error);
         }
-      });
-    };
-
-  
-
-    
-    const clientInfo = async (client) => {
-      const isAuthenticated = await client.isAuthenticated();
-      const identity = client.getIdentity();
-      const principal = identity.getPrincipal();
-
-
-      // console.log("isAuthenticated",isAuthenticated,"principal",principal, "identity",identity );
-      setAuthClient(client);
-      setIsAuthenticated(isAuthenticated);
-      setIdentity(identity);
-      setPrincipal(principal);
-        let principalText = principal.toText();
-
-        // console.log("principalText???? ",principalText);
-        localStorage.setItem("id",JSON.stringify(principalText))
-
-      if (isAuthenticated && identity && principal && principal.isAnonymous() === false) {
-          let backendActor = createActor(backendCanisterId, { agentOptions: { identity: identity, verifyQuerySignatures: false } });
-          
-          // console.log("backendActor",backendActor);
-          setBackendActor(backendActor);
+      } catch (error) {
+        console.log('error', error)
+        reject(error);
       }
+    });
+  };
 
-      return true;
-  }
-    const logout = async () => {
-        await authClient?.logout();
+  const reloadLogin = () => {
+    return new Promise(async (resolve, reject) => {
+      try {
+        if (
+          authClient.isAuthenticated() &&
+          (await authClient.getIdentity().getPrincipal().isAnonymous()) ===
+          false
+        ) {
+          updateClient(authClient);
+          resolve(AuthClient);
+        }
+      } catch (error) {
+        reject(error);
+      }
+    });
+  };
+
+
+
+
+  const clientInfo = async (client) => {
+    const isAuthenticated = await client.isAuthenticated();
+    const identity = client.getIdentity();
+    const principal = identity.getPrincipal();
+
+
+    console.log("isAuthenticated", isAuthenticated, "principal", principal, "identity", identity);
+    setAuthClient(client);
+    setIsAuthenticated(isAuthenticated);
+    setIdentity(identity);
+    setPrincipal(principal);
+    let principalText = principal.toText();
+
+    // console.log("principalText???? ",principalText);
+    localStorage.setItem("id", JSON.stringify(principalText))
+
+    if (isAuthenticated && identity && principal && principal.isAnonymous() === false) {
+      let backendActor = createActor(backendCanisterId, { agentOptions: { identity: identity, verifyQuerySignatures: false } });
+
+      console.log("backendActor", backendActor);
+      setBackendActor(backendActor);
     }
 
-    return {
-        login, logout, authClient, isAuthenticated, identity, principal, frontendCanisterId, backendCanisterId, backendActor,reloadLogin
-    };
+    return true;
+  }
+  const logout = async () => {
+    await authClient?.logout();
+  }
+
+  return {
+    login, logout, authClient, isAuthenticated, identity, principal, frontendCanisterId, backendCanisterId, backendActor, reloadLogin
+  };
 }
 
 export const AuthProvider = ({ children }) => {
-    const auth = useAuthClient();
-    if (!auth.isAuthenticated || !auth.backendActor) {
-        return (
-            <AuthContext.Provider value={auth}>
-                <WalletModal/>
-                <HomePage/>
-            </AuthContext.Provider>
-        )
-    }
+  const auth = useAuthClient();
+  if (!auth.isAuthenticated || !auth.backendActor) {
     return (
-        <AuthContext.Provider value={auth}>
-            {children}
-        </AuthContext.Provider>
+      <AuthContext.Provider value={auth}>
+        <WalletModal />
+        <HomePage />
+      </AuthContext.Provider>
     )
+  }
+  return (
+    <AuthContext.Provider value={auth}>
+      {children}
+    </AuthContext.Provider>
+  )
 };
 
 export const useAuth = () => useContext(AuthContext);

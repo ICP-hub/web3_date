@@ -237,13 +237,15 @@ const Form6 = ({ AllformData, updateFormData }) => {
 
 export default Form6;
 
-*/}
+
+
 
 import React, { useState } from 'react';
 import { useFormContext } from 'react-hook-form';
+import compressImage from '../ImageCompressFolder/CompressImage';
 
 const Form6 = () => {
-    const { register, setValue, formState: { errors }, unregister } = useFormContext();
+    const { register, setValue, formState: { errors }, setError, unregister, getValues } = useFormContext();
     const [imageFields, setImageFields] = useState([{ id: Date.now(), file: null }]);
     const [err, setErr] = useState(false);
 
@@ -251,15 +253,54 @@ const Form6 = () => {
         setErr(true);
     }
 
-    const handleImageUpload = (e, index) => {
-        const file = e.target.files[0];
-        if (file) {
-            const newImageFields = [...imageFields];
-            newImageFields[index].file = URL.createObjectURL(file);
-            setImageFields(newImageFields);
-            setValue(`firstImage${index}`, file);
+    console.log("Y mera byte array of image hai")
+    console.log('getValues', getValues(`firstImage`))
+
+
+
+    const handleImageUpload = async (e, index) => {
+        const files = e.target.files; // Get all selected files
+        const newImageFields = [...imageFields]; // Assuming imageFields is your state for storing image data
+
+        try {
+            const compressedFiles = await Promise.all(
+                Array.from(files).map(async (file) => {
+                    const compressedFile = await compressImage(file); // Assuming compressImage function returns compressed image as Blob
+                    return compressedFile;
+                })
+            );
+
+            // Iterate through each compressed file
+            for (let i = 0; i < compressedFiles.length; i++) {
+                const compressedFile = compressedFiles[i];
+
+                const reader = new FileReader();
+                reader.readAsArrayBuffer(compressedFile); // Read file as array buffer
+
+                reader.onload = async () => {
+                    const byteArray = reader.result; // This is your array buffer
+
+                    // Update state or perform any other operations with the array buffer
+                    newImageFields[index + i].file = URL.createObjectURL(compressedFile);
+                    setImageFields(newImageFields);
+
+                    // Example of storing array buffer in state using useState hook
+                    setImageData((prevImageData) => [
+                        ...prevImageData,
+                        {
+                            index: index + i,
+                            byteArray: new Uint8Array(byteArray),
+                        },
+                    ]);
+                };
+            }
+        } catch (error) {
+            console.error("Error processing images:", error);
+            // Handle errors as needed
         }
     };
+
+
 
     const handleAddField = () => {
         if (imageFields.length < 5) {
@@ -331,6 +372,106 @@ const Form6 = () => {
             </div>
         </div>
     );
+};
+
+export default Form6;
+
+*/}
+
+
+import React, { useState } from 'react';
+import { useFormContext } from 'react-hook-form';
+
+const Form6 = () => {
+  const { register, setValue, formState: { errors }, unregister } = useFormContext();
+  const [imageFields, setImageFields] = useState([{ id: Date.now(), file: null }]);
+  const [err, setErr] = useState(false);
+
+  function handleError() {
+    setErr(true);
+  }
+
+  const handleImageUpload = (e, index) => {
+    const file = e.target.files[0];
+    if (file) {
+      const newImageFields = [...imageFields];
+      console.log("My image field",newImageFields)
+      newImageFields[index].file = URL.createObjectURL(file);
+      setImageFields(newImageFields);
+      setValue(`firstImage${index}`, file);
+    }
+  };
+
+  const handleAddField = () => {
+    if (imageFields.length < 5) {
+      setImageFields([...imageFields, { id: Date.now(), file: null }]);
+    }
+  };
+
+  const handleRemoveField = (index) => {
+    const newImageFields = imageFields.filter((_, i) => i !== index);
+    setImageFields(newImageFields);
+    unregister(`firstImage${index}`);
+  };
+
+  const renderImagePreviews = () => {
+    return imageFields.map((field, index) => (
+      <div key={field.id} className="relative group mb-4">
+        {field.file ? (
+          <div className="relative">
+            <img src={field.file} alt={`Preview ${index + 1}`} className="h-36 w-full object-fill rounded-2xl" />
+            <button
+              type="button"
+              onClick={() => handleRemoveField(index)}
+              className="absolute top-1 right-1 bg-red-900 text-white p-1 rounded-md opacity-75 group-hover:opacity-100 text-xs"
+            >
+              X
+            </button>
+          </div>
+        ) : (
+          <div
+            className="h-36 w-full flex justify-center items-center border border-gray-400 bg-gray-200 rounded-2xl cursor-pointer"
+            onClick={() => document.getElementById(`file-input-${index}`).click()}
+          >
+            <div className="flex items-center justify-center w-10 h-10 bg-white border-2 border-gray-600 rounded-full">
+              <span className="text-2xl text-gray-600">+</span>
+            </div>
+          </div>
+        )}
+        <input
+          type="file"
+          accept="image/*"
+          {...register(`firstImage${index}`)}
+          className="hidden"
+          id={`file-input-${index}`}
+          onChange={(e) => {handleImageUpload(e, index); handleError()}}
+        />
+      </div>
+    ));
+  };
+
+  return (
+    <div className="p-4">
+      <h3 className="text-xl font-semibold mb-4">Upload Your Images</h3>
+
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
+        {renderImagePreviews()}
+      </div>
+
+      {imageFields.length < 5 && (
+        <button
+          type="button"
+          onClick={handleAddField}
+          className="px-4 py-2 bg-yellow-500 text-black rounded mb-4"
+        >
+          Add Image
+        </button>
+      )}
+      <div>
+      {!err && <p className="text-red-500 text-sm">At least one image is required</p>}
+      </div>
+    </div>
+  );
 };
 
 export default Form6;

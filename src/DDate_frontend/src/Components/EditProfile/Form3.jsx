@@ -289,40 +289,38 @@
 //     )
 // }
 
+// const selectedhobbies = watch("selectedhobbies", props.prevalue.selectedhobbies || []);
+// const selectedsports = watch("selectedsports", []);
+
+// useEffect(() => {
+//   setValue("selectedhobbies", props.prevalue.selectedhobbies || []);
+//   setValue("selectedsports", []);
+// }, [props.prevalue.selectedhobbies, setValue]);
 // export default Form3
 
 import React, { useEffect, useState } from "react";
 import { SlArrowUp, SlArrowDown } from "react-icons/sl";
 import { useFormContext } from "react-hook-form";
 
-const Form3 = (props) => {
+const Form3 = () => {
   const {
     register,
     formState: { errors },
     watch,
     setValue,
   } = useFormContext();
-
   const [showHobbies, setShowHobbies] = useState(false);
   const [showSports, setShowSports] = useState(false);
-
   const selectedsmoking = watch("selectedsmoking");
   const selecteddrink = watch("selecteddrink");
-  const selectedhobbies = watch("selectedhobbies", props.prevalue.selectedhobbies || []);
-  const selectedsports = watch("selectedsports", []);
+  const selectedhobbies = watch("selectedhobbies",[]);
+  const selectedsports = watch("selectedsports",[]);
 
+  console.log(errors);
   useEffect(() => {
-    setValue("selectedhobbies", props.prevalue.selectedhobbies || []);
+    setValue("selectedhobbies", []);
     setValue("selectedsports", []);
-  }, [props.prevalue.selectedhobbies, setValue]);
-
-  const handleCheckboxChange = (value) => {
-    const updatedHobbies = selectedhobbies.includes(value)
-      ? selectedhobbies.filter((hobby) => hobby !== value)
-      : [...selectedhobbies, value].slice(0, 2); // Ensure no more than 2 are selected
-
-    setValue("selectedhobbies", updatedHobbies);
-  };
+  }, [setValue]);
 
   return (
     <div className="w-full max-w-lg rounded-lg p-6 shadow-md md:bg-transparent md:shadow-none">
@@ -336,10 +334,11 @@ const Form3 = (props) => {
             <label
               key={smoking}
               className={`inline-block px-3 py-2 rounded-full text-sm focus:outline-none transition duration-300
-                ${selectedsmoking === smoking
-                  ? "bg-yellow-500 text-black"
-                  : "bg-transparent hover:bg-yellow-500 hover:text-black text-white md:text-black border border-white md:border-black"
-                }`}
+                          ${
+                            selectedsmoking === smoking
+                              ? "bg-yellow-500 text-black"
+                              : "bg-transparent hover:bg-yellow-500 hover:text-black text-white md:text-black border border-white md:border-black"
+                          }`}
             >
               <input
                 type="radio"
@@ -353,7 +352,8 @@ const Form3 = (props) => {
             </label>
           ))}
         </div>
-        {errors.selectedsmoking && <p className="text-red-500">{errors.selectedsmoking.message}</p>}
+      {errors.selectedsmoking && <p className="text-red-500">{errors.selectedsmoking.message}</p>}
+
       </fieldset>
 
       {/* Drink Selection */}
@@ -367,11 +367,12 @@ const Form3 = (props) => {
               <label
                 key={drink}
                 className={`inline-block px-3 py-2 rounded-full text-sm focus:outline-none transition duration-300
-                  ${errors.selecteddrink && "border-red-500"}
-                  ${selecteddrink === drink
-                    ? "bg-yellow-500 text-black"
-                    : "bg-transparent hover:bg-yellow-500 hover:text-black text-white md:text-black border border-white md:border-black"
-                  }`}
+                          ${errors.selecteddrink && "border-red-500"}
+                          ${
+                            selecteddrink === drink
+                              ? "bg-yellow-500 text-black"
+                              : "bg-transparent hover:bg-yellow-500 hover:text-black text-white md:text-black border border-white md:border-black"
+                          }`}
               >
                 <input
                   type="radio"
@@ -386,10 +387,8 @@ const Form3 = (props) => {
             )
           )}
         </div>
-        {errors.selecteddrink && <p className="text-red-500">{errors.selecteddrink.message}</p>}
+      {errors.selecteddrink && <p className="text-red-500">{errors.selecteddrink.message}</p>}
       </fieldset>
-
-      {/* Hobbies Selection */}
       <fieldset className="mb-4">
         <legend className="block text-lg font-semibold mb-2 text-white md:text-black">
           Hobbies <span className="text-gray-400 text-sm">(select any 2)</span>
@@ -416,10 +415,11 @@ const Form3 = (props) => {
               <label
                 key={hobby}
                 className={`inline-block px-3 py-2 rounded-full text-sm focus:outline-none transition duration-300
-                  ${selectedhobbies?.includes(hobby)
-                    ? "bg-yellow-500 text-black"
-                    : "bg-transparent hover:bg-yellow-500 hover:text-black text-white md:text-black border border-white md:border-black"
-                  }`}
+                            ${
+                              selectedhobbies?.includes(hobby)
+                                ? "bg-yellow-500 text-black"
+                                : "bg-transparent hover:bg-yellow-500 hover:text-black text-white md:text-black border border-white md:border-black"
+                            }`}
               >
                 <input
                   type="checkbox"
@@ -428,7 +428,6 @@ const Form3 = (props) => {
                     validate: (value) =>
                       value.length <= 2 || "Select up to 2 hobbies only",
                   })}
-                  onChange={() => handleCheckboxChange(hobby)}
                   checked={selectedhobbies?.includes(hobby)}
                   className="hidden"
                 />
@@ -437,11 +436,11 @@ const Form3 = (props) => {
             ))}
           <button
             onClick={() => setShowHobbies(!showHobbies)}
-            className="text-black text-[12px] md:text-[16px] font-semibold"
+            className="text-black text-[12px] md:text-[16px]  font-semibold"
             type="button"
           >
             <span className="flex text-base text-nowrap items-center">
-              {showHobbies ? "see less" : "see more"}
+                {showHobbies ? "see less" : "see more"}
               <span>
                 {showHobbies ? (
                   <SlArrowUp size={12} className="font-extrabold ml-2" />
@@ -452,7 +451,7 @@ const Form3 = (props) => {
             </span>
           </button>
         </div>
-        {errors.selectedhobbies && <p className="text-red-500">{errors.selectedhobbies.message}</p>}
+      {errors.selectedhobbies && <p className="text-red-500">{errors.selectedhobbies.message}</p>}
       </fieldset>
       <fieldset className="mb-4">
         <legend className="block text-lg font-semibold mb-1 text-white md:text-black">
@@ -491,10 +490,11 @@ const Form3 = (props) => {
             .map((sport) => (
               <label
                 key={sport}
-                className={`inline-block px-3 py-2 rounded-full text-sm focus:outline-none transition duration-300 ${selectedsports?.includes(sport)
-                  ? "bg-yellow-500 text-black"
-                  : "bg-transparent hover:bg-yellow-500 hover:text-black text-white md:text-black border border-white md:border-black"
-                  }`}
+                className={`inline-block px-3 py-2 rounded-full text-sm focus:outline-none transition duration-300 ${
+                  selectedsports?.includes(sport)
+                    ? "bg-yellow-500 text-black"
+                    : "bg-transparent hover:bg-yellow-500 hover:text-black text-white md:text-black border border-white md:border-black"
+                }`}
               >
                 <input
                   type="checkbox"
@@ -524,7 +524,7 @@ const Form3 = (props) => {
             </span>
           </button>
         </div>
-        {errors.selectedsports && <p className="text-red-500">{errors.selectedsports.message}</p>}
+      {errors.selectedsports && <p className="text-red-500">{errors.selectedsports.message}</p>}
       </fieldset>
     </div>
   );

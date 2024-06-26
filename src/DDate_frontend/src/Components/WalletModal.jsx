@@ -9,6 +9,7 @@ const WalletModal = ({ isOpen, onClose }) => {
   const navigate = useNavigate();
   const { login, isAuthenticated } = useAuth();
 
+  console.log("isAuthenticated", isAuthenticated)
   const walletModalSvg = [
     {
       id: "ii",

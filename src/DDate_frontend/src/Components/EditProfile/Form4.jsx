@@ -412,7 +412,7 @@ const Form4 = () => {
   const selectedActivities = watch("selectedActivities", []);
   const selectedMovies = watch("selectedMovies", []);
   const selectedTravel = watch("selectedTravel", []);
-
+  
   // Optionally set default values on mount using setValue
   useEffect(() => {
     setValue("selectedArt", []);
@@ -433,7 +433,7 @@ const Form4 = () => {
     if (updatedValues.length <= 2) {
       setValue(name, updatedValues);
     }
-
+    
     // Manually trigger validation
     trigger(name);
   };
@@ -474,6 +474,7 @@ const Form4 = () => {
               >
                 <input
                   type="checkbox"
+                  value={art}
                   {...register("selectedArt", {
                     validate: (value) =>
                       value.length === 0 || value.length === 2 || "Select either 0 or 2 arts",
@@ -520,6 +521,7 @@ const Form4 = () => {
             >
               <input
                 type="radio"
+                value={pet}
                 {...register("selectedPets", {
                   required: "Selecting a pet is required",
                 })}
@@ -549,6 +551,7 @@ const Form4 = () => {
             >
               <input
                 type="checkbox"
+                value={habit}
                 {...register("selectedHabits", {
                   validate: (value) =>
                     value.length === 0 || value.length === 2 || "Select either 0 or 2 habits",
@@ -596,6 +599,7 @@ const Form4 = () => {
               >
                 <input
                   type="checkbox"
+                  value={activity}
                   {...register("selectedActivities", {
                     validate: (value) =>
                       value.length === 0 || value.length === 2 || "Select either 0 or 2 activities",
@@ -650,6 +654,7 @@ const Form4 = () => {
             >
               <input
                 type="checkbox"
+                value={movie}
                 {...register("selectedMovies", {
                   validate: (value) =>
                     value.length === 0 || value.length === 2 || "Select either 0 or 2 movies",
@@ -696,6 +701,7 @@ const Form4 = () => {
               >
                 <input
                   type="checkbox"
+                  value={travel}
                   {...register("selectedTravel", {
                     validate: (value) =>
                       value.length === 0 || value.length === 2 || "Select either 0 or 2 travel options",

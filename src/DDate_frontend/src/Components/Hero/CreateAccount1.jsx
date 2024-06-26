@@ -120,7 +120,7 @@ const CreateAccount1 = () => {
 
   const navigate = useNavigate();
 
-  console.log('backendActor', backendActor)
+  // console.log('backendActor', backendActor)
   const formFields = {
     0: ['usergender', 'email', 'username', 'mobile', 'dob'],
     1: ['genderPronouns', 'selectedReligion', 'selectedLifePathNumber', 'selectedZodiac', 'selectedFooding', 'selectedWhatYouDo', 'selectedLookingFor'],
@@ -140,6 +140,7 @@ const CreateAccount1 = () => {
 
   const onSubmit = async (data) => {
     console.log('Final Form Data', data);
+
     if (backendActor) {
       const DdateData = {
         email: [data?.email],
@@ -173,11 +174,14 @@ const CreateAccount1 = () => {
         preferred_gender: [data?.usergender],
         looking_for: [data?.selectedLookingFor],
         max_preferred_age: [Number((data?.selectedPreferAge).slice(3, 5))],
+        // images: data?.firstImage0 ? [data.firstImage0] : [],
         images: [],
-        zodiac: [data?.selectedZodiac]
+        zodiac: [data?.selectedZodiac],
 
       }
       console.log('Ddatedata ', DdateData)
+      console.log("Ddatae iamge", DdateData.images);
+      console.log("Ddate image type", typeof DdateData.images)
 
       try {
         await backendActor.create_an_account(DdateData).then((result) => {
