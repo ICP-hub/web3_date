@@ -324,15 +324,15 @@ const Form2 = ({ setIndex }) => {
   const selectedFoodingValue = watch("selectedFooding");
   const selectedWhatYouDo = watch("selectedWhatYouDo");
   const selectedLookingFor = watch("selectedLookingFor");
-//   useEffect(() => {
-//     setValue("genderPronouns", "Man");
-//     setValue("selectedlifePathNumber", "1");
-//     setValue("selectedReligion", "Hindu");
-//     setValue("selectedZodiac", "Rat");
-//     setValue("selectedFooding", "Vegan");
-//     setValue("selectedWhatYouDo", "Employed");
-//     setValue("selectedLookingFor", "Long-term relationship");
-//   }, []);
+  //   useEffect(() => {
+  //     setValue("genderPronouns", "Man");
+  //     setValue("selectedlifePathNumber", "1");
+  //     setValue("selectedReligion", "Hindu");
+  //     setValue("selectedZodiac", "Rat");
+  //     setValue("selectedFooding", "Vegan");
+  //     setValue("selectedWhatYouDo", "Employed");
+  //     setValue("selectedLookingFor", "Long-term relationship");
+  //   }, []);
 
   // const onSubmit = data => {
   //     console.log("Submitted Data:", data); // Log or handle the form data
@@ -340,7 +340,7 @@ const Form2 = ({ setIndex }) => {
   // };
 
   return (
-    <div className="w-full max-w-lg rounded-lg p-6 shadow-md md:bg-transparent md:shadow-none">
+    <div className="w-full rounded-lg p-6 shadow-md md:bg-transparent md:shadow-none">
       {/* Gender Pronouns Selection */}
       <fieldset className="mb-4">
         <legend className="block text-lg font-semibold mb-1 text-white md:text-black">
@@ -351,11 +351,10 @@ const Form2 = ({ setIndex }) => {
             <label
               key={genPro}
               className={`inline-block px-3 py-2 rounded-full text-sm focus:outline-none transition duration-300
-                            ${
-                              selectedGenderPronouns === genPro
-                                ? "bg-yellow-500 text-black"
-                                : "bg-transparent hover:bg-yellow-500 hover:text-black text-white md:text-black border border-white md:border-black"
-                            }`}
+                            ${selectedGenderPronouns === genPro
+                  ? "bg-yellow-500 text-black"
+                  : "bg-transparent hover:bg-yellow-500 hover:text-black text-white md:text-black border border-white md:border-black"
+                }`}
             >
               <input
                 type="radio"
@@ -384,11 +383,10 @@ const Form2 = ({ setIndex }) => {
               <label
                 key={lifePathNumber}
                 className={`inline-block px-3 py-2 rounded-full text-sm focus:outline-none transition duration-300
-                            ${
-                              selectedlifePath === lifePathNumber
-                                ? "bg-yellow-500 text-black"
-                                : "bg-transparent hover:bg-yellow-500 hover:text-black text-white md:text-black border border-white md:border-black"
-                            }`}
+                            ${selectedlifePath === lifePathNumber
+                    ? "bg-yellow-500 text-black"
+                    : "bg-transparent hover:bg-yellow-500 hover:text-black text-white md:text-black border border-white md:border-black"
+                  }`}
               >
                 <input
                   type="radio"
@@ -428,11 +426,10 @@ const Form2 = ({ setIndex }) => {
             <label
               key={religion}
               className={`inline-block px-3 py-2 rounded-full text-sm focus:outline-none transition duration-300
-                            ${
-                              selectedReligionValue === religion
-                                ? "bg-yellow-500 text-black"
-                                : "bg-transparent hover:bg-yellow-500 hover:text-black text-white md:text-black border border-white md:border-black"
-                            }`}
+                            ${selectedReligionValue === religion
+                  ? "bg-yellow-500 text-black"
+                  : "bg-transparent hover:bg-yellow-500 hover:text-black text-white md:text-black border border-white md:border-black"
+                }`}
             >
               <input
                 type="radio"
@@ -473,11 +470,10 @@ const Form2 = ({ setIndex }) => {
             <label
               key={zodiac}
               className={`inline-block px-3 py-2 rounded-full text-sm focus:outline-none transition duration-300
-                            ${
-                              zodiac === selectedZodiacSign
-                                ? "bg-yellow-500 text-black"
-                                : "bg-transparent hover:bg-yellow-500 hover:text-black text-white md:text-black border border-white md:border-black"
-                            }`}
+                            ${zodiac === selectedZodiacSign
+                  ? "bg-yellow-500 text-black"
+                  : "bg-transparent hover:bg-yellow-500 hover:text-black text-white md:text-black border border-white md:border-black"
+                }`}
             >
               <input
                 type="radio"
@@ -514,11 +510,10 @@ const Form2 = ({ setIndex }) => {
               key={fooding}
               className={`inline-block px-3 py-2 rounded-full text-sm focus:outline-none transition duration-300
                             ${errors.selectedFooding && "border-red-500"}
-                            ${
-                              fooding === selectedFoodingValue
-                                ? "bg-yellow-500 text-black"
-                                : "bg-transparent hover:bg-yellow-500 hover:text-black text-white md:text-black border border-white md:border-black"
-                            }`}
+                            ${fooding === selectedFoodingValue
+                  ? "bg-yellow-500 text-black"
+                  : "bg-transparent hover:bg-yellow-500 hover:text-black text-white md:text-black border border-white md:border-black"
+                }`}
             >
               <input
                 type="radio"
@@ -544,11 +539,10 @@ const Form2 = ({ setIndex }) => {
               <label
                 key={option}
                 className={`inline-block px-3 py-2 rounded-full text-sm focus:outline-none transition duration-300 
-              ${
-                selectedWhatYouDo === option
-                  ? "bg-yellow-500 text-black"
-                  : "bg-transparent hover:bg-yellow-500 hover:text-black text-white md:text-black border border-white md:border-black"
-              }`}
+              ${selectedWhatYouDo === option
+                    ? "bg-yellow-500 text-black"
+                    : "bg-transparent hover:bg-yellow-500 hover:text-black text-white md:text-black border border-white md:border-black"
+                  }`}
               >
                 <input
                   type="radio"
@@ -581,11 +575,10 @@ const Form2 = ({ setIndex }) => {
             <label
               key={lookingFor}
               className={`inline-block px-3 py-2 rounded-full text-sm focus:outline-none transition duration-300 
-              ${
-                selectedLookingFor === lookingFor
+              ${selectedLookingFor === lookingFor
                   ? "bg-yellow-500 text-black"
                   : "bg-transparent hover:bg-yellow-500 hover:text-black text-white md:text-black border border-white md:border-black"
-              }`}
+                }`}
             >
               <input
                 type="radio"
@@ -600,7 +593,7 @@ const Form2 = ({ setIndex }) => {
             </label>
           ))}
         </div>
-      {errors.selectedLookingFor && <p className="text-red-500">{errors.selectedLookingFor.message}</p>}
+        {errors.selectedLookingFor && <p className="text-red-500">{errors.selectedLookingFor.message}</p>}
       </fieldset>
     </div>
   );

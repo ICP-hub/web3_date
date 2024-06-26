@@ -412,7 +412,7 @@ const Form4 = () => {
   const selectedActivities = watch("selectedActivities", []);
   const selectedMovies = watch("selectedMovies", []);
   const selectedTravel = watch("selectedTravel", []);
-  
+
   // Optionally set default values on mount using setValue
   useEffect(() => {
     setValue("selectedArt", []);
@@ -433,13 +433,13 @@ const Form4 = () => {
     if (updatedValues.length <= 2) {
       setValue(name, updatedValues);
     }
-    
+
     // Manually trigger validation
     trigger(name);
   };
 
   return (
-    <div className="w-full max-w-lg rounded-lg p-6 shadow-md md:bg-transparent md:shadow-none">
+    <div className="w-full rounded-lg p-6 shadow-md md:bg-transparent md:shadow-none">
       {/* Art Selection */}
       <fieldset className="mb-4">
         <legend className="block text-lg font-semibold mb-1 text-white md:text-black">

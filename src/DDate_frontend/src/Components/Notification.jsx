@@ -124,14 +124,14 @@ const Notification = () => {
           </div>
         </div>
       ) : (
-        <div className="h-screen grid ">
+        <div className="h-screen grid grid-cols-12 ">
           {/* Sidebar - hidden on smaller screens */}
           <div className="hidden md:block md:col-span-2"></div>
 
           {/* Main content area */}
           {/* <div className="col-span-12 md:col-span-10  md:col-start-4 px-6 lg:px-10 xl:px-12">
            */}
-          <div className="col-span-12 md:col-span-10   md:col-start-6 lg:col-start-3 px-6 lg:px-10 xl:px-12">
+          <div className="col-span-12 md:col-span-10   px-6 lg:px-10 xl:px-12">
             <div className="flex items-center md:mt-10 ml-12 gap-2 mb-4">
               <img
                 src={back}
@@ -141,8 +141,8 @@ const Notification = () => {
               />
               <div className="ml-2 text-lg font-medium">Your Matches</div>
             </div>
-            <div className="px-6 sm:p-4 md:px-8 lg:px-10 xl:px-12 overflow-y-auto">
-              <div className="relative flex justify-center items-center w-full mb-16 mt-2">
+            <div className="px-6  md:px-8 lg:px-10 xl:px-12">
+              <div className="relative flex justify-center items-center w-full mb-8 mt-8 ">
                 <p className="border-t border-black w-full md:w-3/4 lg:w-2/3"></p>
                 <svg
                   xmlns="http://www.w3.org/2000/svg"

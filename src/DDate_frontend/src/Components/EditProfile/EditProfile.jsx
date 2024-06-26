@@ -55,7 +55,7 @@ const EditProfile = () => {
   };
   const location = useLocation();
   const userdata = location.state
-  console.log(userdata.dob[0])
+  console.log("userdata", userdata)
   console.log(typeof userdata.dob[0])
 
   const myDOB = new Date(userdata.dob[0]);
@@ -397,8 +397,6 @@ const EditProfile = () => {
               </div>
             </div>
           </div>
-      </div>
-    </div >
 
         </FormProvider >
       </div >

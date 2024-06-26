@@ -74,7 +74,7 @@ import React, { useState } from 'react';
 import { useForm, FormProvider } from 'react-hook-form';
 import { useNavigate } from "react-router-dom";
 import { yupResolver } from '@hookform/resolvers/yup';
-import { Oval } from "react-loader-spinner";
+// import { Oval } from "react-loader-spinner";
 import * as yup from 'yup';
 import Form1 from './Form1';
 import ImageContainer from './ImageContainer';
@@ -214,10 +214,10 @@ const CreateAccount1 = () => {
     }
   };
 
-  // const handleSwipe = () => {
-  //   console.log("Navigating with ID:", id);
-  //   navigate("/Swipe");
-  // };
+  const handleSwipe = () => {
+    console.log("Navigating with ID:", id);
+    navigate("/Swipe");
+  };
 
   const onErrorHandler = val => {
     console.log('error', val);
@@ -252,7 +252,7 @@ const CreateAccount1 = () => {
         <ImageContainer />
 
         {/* Form container */}
-        <div className="w-full md:w-1/2 flex flex-col items-center justify-start px-4 md:px-12 z-10 overflow-y-auto">
+        <div className="w-full  md:w-1/2 flex flex-col items-center justify-start px-4 md:px-12 z-10 overflow-y-auto">
           <div className="w-full my-10">
             <h2 className="text-3xl md:text-4xl font-bold mb-4 text-white md:text-black text-center">
               <div className="flex items-center">
@@ -274,7 +274,19 @@ const CreateAccount1 = () => {
               {index === 4 && <Form5 />}
               {index === 5 && <Form6 />}
 
+              {/* <div className="flex justify-between">
+                <button type="button" className="bg-yellow-500 font-semibold py-2 px-6 rounded-full hover:bg-yellow-600 text-white md:text-black md:hover:text-black" onClick={handleBack} disabled={index === 0}>Back</button>
+                {index === 5 ? (
+                  <>
+                    <button type="submit" className="bg-yellow-500 font-semibold py-2 px-6 rounded-full hover:bg-yellow-600 text-white md:text-black md:hover:text-black">Submit</button>
+                  </>
+                ) : (
+                  <button type="button" className="bg-yellow-500 font-semibold py-2 px-6 rounded-full hover:bg-yellow-600 text-white md:text-black md:hover:text-black" onClick={handleNext}>Next</button>
+                )}
+              </div> */}
               <div className="flex justify-between">
+                <button type="button" className="bg-yellow-500 font-semibold py-2 px-6 rounded-full hover:bg-yellow-600 text-white md:text-black md:hover:text-black" onClick={handleSwipe}>Swipe</button>
+
                 <button type="button" className="bg-yellow-500 font-semibold py-2 px-6 rounded-full hover:bg-yellow-600 text-white md:text-black md:hover:text-black" onClick={handleBack} disabled={index === 0}>Back</button>
                 {index === 5 ? (
                   <>

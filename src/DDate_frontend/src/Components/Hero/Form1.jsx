@@ -202,11 +202,11 @@
 // export default Form1
 
 
-import React,{useEffect} from 'react';
+import React, { useEffect } from 'react';
 import { useFormContext } from 'react-hook-form';
 
 const Form1 = () => {
-    const { register, formState: { errors },setValue ,defaultvalues,getValues ,watch} = useFormContext();
+    const { register, formState: { errors }, setValue, defaultvalues, getValues, watch } = useFormContext();
     const selectedGender = watch('usergender');  // This will monitor changes in 'usergender'
 
     console.log(errors)
@@ -214,11 +214,11 @@ const Form1 = () => {
     useEffect(() => {
         // setValue('usergender', 'Male');
     }, [])
-    
+
 
     console.log(selectedGender)
     return (
-        <div className="w-full max-w-lg rounded-lg p-6 shadow-md md:bg-transparent md:shadow-none">
+        <div className="w-full rounded-lg p-6 shadow-md md:bg-transparent md:shadow-none">
             {/* Gender Selection */}
             <fieldset className="mb-3">
                 <legend className="block text-lg font-semibold mb-1 text-white md:text-black">
@@ -302,7 +302,7 @@ const Form1 = () => {
                 {errors.dob && <p className="text-red-500">{errors.dob.message}</p>}
             </div>
 
-           
+
         </div>
     );
 }
