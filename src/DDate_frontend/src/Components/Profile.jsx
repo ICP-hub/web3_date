@@ -404,7 +404,7 @@ const Profile = ({ userId }) => {
                       <div className="flex items-center">
                         Occupation
                       </div>
-                      <p className="col-span-2 w-full px-2 py-1.5">
+                      <p className="col-span-2 w-full pl-[4.5rem] pr-[0.5rem] py-1.5">
                         {formData?.occupation ?? ""}
                       </p>
                       <div className="flex items-center">

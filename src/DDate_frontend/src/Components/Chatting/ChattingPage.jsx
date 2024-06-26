@@ -129,7 +129,7 @@ const ChattingPage = () => {
                   </div>
 
                   <div className="px-6  md:px-8 lg:px-10 xl:px-12 ">
-                    <div className="relative flex justify-center items-center w-full mb-8 mt-8">
+                    <div className="relative flex justify-center items-center w-full mb-8 mt-8 ">
                       <p className="border-t border-black w-full md:w-3/4 lg:w-2/3"></p>
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
