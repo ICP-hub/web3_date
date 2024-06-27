@@ -21,6 +21,7 @@ const SidebarComponent = ({ userId }) => {
 
   });
 
+  console.log("MY user id in the sidebar", userId)
   const navigate = useNavigate();
 
   const [principal, setPrincipal] = useState(null);

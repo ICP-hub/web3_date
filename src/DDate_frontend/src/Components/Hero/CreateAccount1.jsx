@@ -184,9 +184,9 @@ const CreateAccount1 = () => {
           if (result) {
             const API = result?.Ok;
             console.log("Api is generated", API)
-            // const trimedId = API.split(":")[1].trim();
-            setId(API);
-            navigate("/Swipe", { state: API });
+            const trimedId = API.split(":")[1].trim();
+            setId(trimedId);
+            navigate("/Swipe", { state: trimedId });
           } else {
             setId('')
           }
@@ -285,7 +285,7 @@ const CreateAccount1 = () => {
                 )}
               </div> */}
               <div className="flex justify-between">
-                <button type="button" className="bg-yellow-500 font-semibold py-2 px-6 rounded-full hover:bg-yellow-600 text-white md:text-black md:hover:text-black" onClick={handleSwipe}>Swipe</button>
+                {/* <button type="button" className="bg-yellow-500 font-semibold py-2 px-6 rounded-full hover:bg-yellow-600 text-white md:text-black md:hover:text-black" onClick={handleSwipe}>Swipe</button> */}
 
                 <button type="button" className="bg-yellow-500 font-semibold py-2 px-6 rounded-full hover:bg-yellow-600 text-white md:text-black md:hover:text-black" onClick={handleBack} disabled={index === 0}>Back</button>
                 {index === 5 ? (
