@@ -4,10 +4,11 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "../auth/useAuthClient";
 import InternetIdentity from "../../assets/Images/WalletLogos/InternetIdentity.png";
 import NFID from "../../assets/Images/WalletLogos/NFID.png";
+import { DDate_backend } from "../../../declarations/DDate_backend/index";
 
 const WalletModal = ({ isOpen, onClose }) => {
   const navigate = useNavigate();
-  const { login, isAuthenticated } = useAuth();
+  const { login, isAuthenticated, backendActor } = useAuth();
 
   const walletModalSvg = [
     {
@@ -40,13 +41,35 @@ const WalletModal = ({ isOpen, onClose }) => {
     },
   ];
 
+  const [userExists, setUserExists] = useState(null);
+
   useEffect(() => {
-    if (isAuthenticated) {
-      navigate("/Swipe");
-    } else {
-      navigate("/CreateAccount1")
+    const userExistOrNot = async (caller) => {
+      try {
+        const result = await caller.get_user_id_by_principal();
+        console.log('result', result);
+        setUserExists(result);
+      } catch (error) {
+        console.error("Error sending data to the backend:", error);
+      }
     }
-  }, [isAuthenticated, navigate]);
+    if (backendActor) {
+      userExistOrNot(backendActor);
+    }
+    else {
+      userExistOrNot(DDate_backend)
+    }
+  }, [DDate_backend, backendActor]);
+
+  useEffect(() => {
+    if (userExists !== null) {
+      if (userExists) {
+        navigate("/Swipe");
+      } else {
+        navigate("/CreateAccount1");
+      }
+    }
+  }, [userExists, navigate]);
 
   const loginHandler = async (val) => {
     await login(val);

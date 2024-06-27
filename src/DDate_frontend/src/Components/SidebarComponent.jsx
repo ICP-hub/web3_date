@@ -8,8 +8,11 @@ import { useNavigate } from "react-router-dom";
 import { Principal } from "@dfinity/principal";
 import { IoLogOut } from "react-icons/io5";
 import Loader from "./Loader";
+import { useAuth } from "../auth/useAuthClient";
 
 const SidebarComponent = ({ userId }) => {
+  const { logout } = useAuth();
+
   const [formData, setFormData] = useState({
     preferred_location: "",
     interests_in: "",
@@ -32,10 +35,12 @@ const SidebarComponent = ({ userId }) => {
   const [startLoader, setStartLoader] = useState(false);
   const [isInputFocused, setIsInputFocused] = useState(false);
 
-  const logoutHandler = () => {
-    localStorage.removeItem("id");
-    localStorage.removeItem("identity");
-    localStorage.removeItem("wallet");
+  const logoutHandler = async () => {
+    await logout();
+    // localStorage.removeItem("id");
+    // localStorage.removeItem("identity");
+    // localStorage.removeItem("wallet");
+
     // setLoader(false)
     navigate("/");
   };
