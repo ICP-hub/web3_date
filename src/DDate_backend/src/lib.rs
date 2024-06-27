@@ -6,6 +6,7 @@ mod state_handler;
 use std::collections::VecDeque;
 
 use crate::profile_creation::UserProfileCreationInfo;
+// use candid::Principal;
 use ic_cdk::{caller, export_candid, query, update};
 pub use notification::*;
 use profile_creation::Message;
@@ -16,21 +17,36 @@ use state_handler::*;
 use crate::profile_creation::UserInputParams;
 use crate::profile_creation::PaginatedProfiles;
 
+// const ANONYMOUS_PRINCIPAL_ID: &str = "2vxsx-fae";
+
+// fn is_anonymous() -> Result<(), String> {
+//     let caller = ic_cdk::caller();
+//     if caller == Principal::anonymous() || caller.to_text() == ANONYMOUS_PRINCIPAL_ID {
+//         Err("Access denied: Caller is anonymous.".to_string())
+//     } else {
+//         Ok(())
+//     }
+// }
+
+// #[query(guard = "is_anonymous")]
+// #[update(guard = "is_anonymous")]
+
 #[query]
 fn get_user_id_by_principal() -> Result<String, String> {
     let principal = caller();
 
     let user_id = read_state(|state| {
         state.user_profiles.iter().find(|(_, profile)| {
-            profile.creator_principal == principal
+            profile.creator_principal == principal && profile.status == true
         }).map(|(user_id, _)| user_id.clone())
     });
 
     match user_id {
         Some(id) => Ok(id),
-        None => Err(format!("No account found for principal ID: {}", principal)),
+        None => Err(format!("No active account found for principal ID: {}", principal)),
     }
 }
+
 
 #[update]
 pub fn send_like_notification_candid(sender_id: String, receiver_id: String) -> Result<(), String> {
@@ -103,11 +119,6 @@ pub fn get_rightswiped_matches(
 
     Ok(match_result)
 }
-
-
-
-
-
 
 
 #[update]
