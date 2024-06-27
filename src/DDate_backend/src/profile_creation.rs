@@ -4,6 +4,7 @@ use ic_cdk::{init, query, update};
 use serde::{Deserialize, Serialize};
 use sha2::{Digest, Sha256};
 use std::collections::{HashSet, VecDeque};
+// use crate::is_anonymous;
 
 use crate::{post_file_contents, state_handler};
 use crate::state_handler::{init_file_contents, mutate_state, read_state, State, STATE};
