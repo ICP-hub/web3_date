@@ -67,7 +67,7 @@ const HeroRight = () => {
           src={createPageImage}
           alt="Logout"
           onClick={toggleLogoutModal}
-          className="rounded-full h-12 w-12 flex items-center justify-center text-black cursor-pointer absolute right-6 top-4 "
+          className="rounded-full h-12 w-12 flex items-center justify-center text-black cursor-pointer absolute right-6 top-4 hidden md:hidden lg:flex"
         />
       )}
       <div className="text-center mx-auto mt-4 md:mt-10">

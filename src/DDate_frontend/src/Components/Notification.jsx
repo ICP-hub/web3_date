@@ -131,7 +131,7 @@ const Notification = () => {
           {/* Main content area */}
           {/* <div className="col-span-12 md:col-span-10  md:col-start-4 px-6 lg:px-10 xl:px-12">
            */}
-          <div className="col-span-12 md:col-span-10   px-6 lg:px-10 xl:px-12">
+          <div className="col-span-12 md:col-span-10  ipad:col-start-4 px-6 lg:px-10 xl:px-12">
             <div className="flex items-center md:mt-10 ml-12 gap-2 mb-4">
               <img
                 src={back}
