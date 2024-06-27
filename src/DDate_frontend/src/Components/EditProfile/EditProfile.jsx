@@ -76,8 +76,7 @@ const EditProfile = () => {
     selectedIntro: userdata?.introduction[0],
     selectedsmoking: userdata?.smoking[0],
     selecteddrink: userdata?.drinking[0],
-    // selectedhobbies: userdata?.selected_hobbies,
-    selectedhobbies: ["Reading", "Astronomy"],
+    selectedhobbies: userdata?.hobbies,
     selectedsports: userdata?.sports,
     genderPronouns: userdata?.gender_pronouns[0],
     selectedReligion: userdata?.religion[0],
@@ -87,14 +86,16 @@ const EditProfile = () => {
     selectedLookingFor: userdata?.looking_for[0],
     selectedArt: userdata?.art_and_culture,
     selectedPets: userdata?.pets[0],
-    selectedHabits: userdata?.habbits,
+    selectedHabits: userdata?.general_habits,
     selectedActivities: userdata?.outdoor_activities,
-    selectedMovies: userdata?.selected_movies,
-    selectedTravel: userdata?.travels,
+    selectedMovies: userdata?.movies,
+    selectedTravel: userdata?.travel,
     selectedInterests: userdata?.interests_in[0],
     selectedPreferAge: userdata?.age[0],
     selectedPreferLocation: userdata?.preferred_location[0],
   }
+
+  console.log("Previosu data to set as default", PreValue)
 
   const methods = useForm({
     resolver: yupResolver(schema),
@@ -264,7 +265,7 @@ const EditProfile = () => {
                     <Form2 index={index} setIndex={setIndex} updateFormData={updateFormData} AllformData={formData} />
                   }
                   {index === 2 &&
-                    <Form3 index={index} setIndex={setIndex} updateFormData={updateFormData} AllformData={formData} />
+                    <Form3 index={index} setIndex={setIndex} updateFormData={updateFormData} AllformData={formData} prevalue={PreValue} />
                   }
                   {index === 3 &&
                     <Form4 index={index} setIndex={setIndex} updateFormData={updateFormData} AllformData={formData} />

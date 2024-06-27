@@ -288,19 +288,51 @@ function Swipe() {
     currentIndexRef.current >= idx && childRefs[idx].current.restoreCard();
   };
 
+  const allTenUserId = pageData.map(data => data.user_id);
+  console.log("all Ten user id ", allTenUserId);
+  console.log("first userId", allTenUserId[0]);
+
   const swipe = async (dir) => {
-    // console.log(`to ${dir}`)
-    if (canSwipe && currentIndex >= 0 && currentIndex < db.length) {
-      const cardRef = childRefs[currentIndex];
-      if (cardRef && cardRef.current) {
-        console.log("Swiping card with index:", currentIndex);
-        await cardRef.current.swipe(dir); // Swipe the card!
-      } else {
-        console.error("Invalid card reference at index:", currentIndex);
+    if (dir === "left") {
+      try {
+        await backendActor.leftswipe({ swiped_user_id: userId, swiping_user_id: allTenUserId[0] }).then((result) => {
+          if (result) {
+            console.log(result)
+          } else {
+            console.log("error can't swipe")
+          }
+        });
+
+      } catch (error) {
+        console.error("Error sending data to the backend:", error);
       }
-    } else {
-      console.error("Cannot swipe. Index or db length issue.");
     }
+    else if (dir === "right") {
+      try {
+        await backendActor.rightswipe({ swiped_user_id: userId, swiping_user_id: allTenUserId[0] }).then((result) => {
+          if (result) {
+            console.log(result)
+          } else {
+            console.log("error can't swipe")
+          }
+        });
+
+      } catch (error) {
+        console.error("Error sending data to the backend:", error);
+      }
+    }
+    // console.log(`to ${dir}`)
+    // if (canSwipe && currentIndex >= 0 && currentIndex < db.length) {
+    //   const cardRef = childRefs[currentIndex];
+    //   if (cardRef && cardRef.current) {
+    //     console.log("Swiping card with index:", currentIndex);
+    //     await cardRef.current.swipe(dir); // Swipe the card!
+    //   } else {
+    //     console.error("Invalid card reference at index:", currentIndex);
+    //   }
+    // } else {
+    //   console.error("Cannot swipe. Index or db length issue.");
+    // }
   };
 
   // {console.log("Princiapl to like state" +pToLike)}
