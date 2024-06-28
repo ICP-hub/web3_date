@@ -1,60 +1,40 @@
-import React, {
-  useState,
-  useMemo,
-  useRef,
-  useEffect,
-  useCallback,
-} from "react";
+import React, { useState, useMemo, useRef, useEffect } from "react";
 import ProfileModal from "./ProfileModal";
 import TinderCard from "react-tinder-card";
-import SidebarComponent from "./SidebarComponent"; // Importing SidebarComponent
+import SidebarComponent from "./SidebarComponent";
 import "./Swipe.css";
 import { Principal } from "@dfinity/principal";
 import { DDate_backend } from "../../../declarations/DDate_backend/index";
 import SwipeBottomBar from "./SwipeBottomBar";
 import Loader from "./Loader";
-// import logo from "../../assets/Images/SwapImage/swapLogo.svg";
 import logo from "../../assets/Images/SwapImage/slideLogo1.svg";
 import { useLocation } from 'react-router-dom';
 import { useAuth } from '../auth/useAuthClient';
-import {
-  faClose,
-  faHeart,
-} from "@fortawesome/free-solid-svg-icons";
+import { faClose, faHeart } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-const page = 1;
 const itemPerPages = 10;
 
 function Swipe() {
   const { backendActor } = useAuth();
-  // const principalString =
-  //   "lqfrt-gz5bh-7z76h-3hb7a-jh2hq-be7jp-equjq-b7wrw-u2xub-tnk3x-qqe";
-
   const location = useLocation();
-  const userId = location.state
-  console.log('location', location.state)
+  const userId = location.state;
 
   useEffect(() => {
     const getData = async () => {
       try {
-        await backendActor.get_an_account(userId).then((result) => {
-          console.log('get_an_account', result)
-        });
-
+        const result = await backendActor.get_an_account(userId);
+        console.log('get_an_account', result);
       } catch (error) {
         console.error("Error getting data to the backend:", error);
       }
     }
     getData();
-  }, [])
+  }, [backendActor, userId]);
 
   const principalString = localStorage.getItem("id");
-
-  console.log("this is principal strinng", principalString);
-
-  const [matchedProfiles, setMatchedProfiles] = useState([]); //principals
-  const [db, setSwipeProfiles] = useState([]); // profiles
+  const [matchedProfiles, setMatchedProfiles] = useState([]);
+  const [db, setSwipeProfiles] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(db.length - 1);
   const [lastDirection, setLastDirection] = useState();
   const [indexxx, setIndexxx] = useState();
@@ -64,23 +44,16 @@ function Swipe() {
   const [noMatch, setNoMatch] = useState(false);
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   const [current, setCurrent] = useState(null);
-  const [startX, setStartX] = useState(0);
-  const [startY, setStartY] = useState(0);
-  const [moveX, setMoveX] = useState(0);
-  const [moveY, setMoveY] = useState(0);
   const [pageData, setMyPageData] = useState([]);
-
-  console.log("profiles are being returned overhere!", matchedProfiles);
-  console.log("aha array aa jehra profiles sambhi betha", db);
+  const [page, setPage] = useState(1);
+  const [size, setSize] = useState(10);
 
   const handleDislike = () => {
     console.log("Dislike button is clicked");
-    // setCurrentIndex(prevIndex => (prevIndex + 1) % swipeProfiles.length);
   };
 
   const handleLike = () => {
     console.log("Like button is clicked");
-    // setCurrentIndex(prevIndex => (prevIndex + 1) % swipeProfiles.length);
   };
 
   useEffect(() => {
@@ -92,22 +65,15 @@ function Swipe() {
   }, []);
 
   function convertStringToPrincipal(principalString) {
-    console.log("conversion principal is being called");
     try {
-      const principal = Principal.fromText(principalString);
-      console.log("Converted Principal: ", principal.toText());
-      return principal;
+      return Principal.fromText(principalString);
     } catch (error) {
       console.error("Error converting string to Principal: ", error);
       return null;
     }
   }
 
-  const principal = convertStringToPrincipal(principalString); //principal
-
-  console.log("pri =>", principal);
-
-  // DDate_backend.find_match_for_me(principal);
+  const principal = convertStringToPrincipal(principalString);
 
   const findMatchesForMe = async (principal) => {
     try {
@@ -120,41 +86,27 @@ function Swipe() {
   };
 
   useEffect(() => {
-    console.log("outside useEffect!!!");
     if (principal) {
       setStartLoader(true);
       findMatchesForMe(principal);
-      console.log("useEffect is getting called");
     }
-  }, []);
+  }, [principal]);
 
   const fetchUserProfile = async (principal) => {
     try {
-      const userProfile = await DDate_backend.get_profile(principal);
-      return userProfile;
+      return await DDate_backend.get_profile(principal);
     } catch (error) {
-      console.error(
-        "Error fetching user profile for principal:",
-        principal,
-        error
-      );
-      return null; // or you can return a default user profile structure
+      console.error("Error fetching user profile for principal:", principal, error);
+      return null;
     }
   };
-
-  const [page, setPage] = useState(1);
-  const [size, setSize] = useState(10);
 
   useEffect(() => {
     const getAllPages = async () => {
       try {
-        const result = await backendActor.get_all_accounts({ page: page, size: size });
-        console.log("Pages data", result);
-        if (result) {
-          console.log("Pages data", result);
-          console.log("Pages data array", result.Ok.profiles)
-          const myPageData = result.Ok.profiles.map(data => data)
-          setMyPageData(myPageData);
+        const result = await backendActor.get_all_accounts({ page, size });
+        if (result && result.Ok && result.Ok.profiles) {
+          setMyPageData(prevData => [...prevData, ...result.Ok.profiles]);
         }
       } catch (error) {
         console.error("Error getting pages to the backend:", error);
@@ -163,17 +115,11 @@ function Swipe() {
     getAllPages();
   }, [page, size, backendActor]);
 
-  console.log("my page data in the form of array: ", pageData);
-
   const fetchAllUserProfiles = async (principals) => {
     setStartLoader(true);
     try {
-      const profilesPromises = principals.map((principal) =>
-        fetchUserProfile(principal)
-      );
+      const profilesPromises = principals.map((principal) => fetchUserProfile(principal));
       const profiles = await Promise.all(profilesPromises);
-      //setMatchedProfiles(profiles.filter(profile => profile !== null)); // Update state with non-null profiles
-
       setSwipeProfiles(profiles.filter((profile) => profile !== null));
       setStartLoader(false);
     } catch (error) {
@@ -187,26 +133,17 @@ function Swipe() {
     }
   }, [matchedProfiles]);
 
-  // console.log("find_match_for_me will find match for you");
-
-  // DDate_backend.get_matched_profiles(principal);
-
-  function closeKrna() {
+  const closeKrna = () => {
     setNoMatch(false);
-  }
+  };
 
   const getMatchedProfiles = async (principal) => {
     try {
-      const matchedProfiles = await DDate_backend.get_matched_profiles(
-        principal
-      );
+      const matchedProfiles = await DDate_backend.get_matched_profiles(principal);
       if (matchedProfiles.length === 0) {
-        console.log("No matches found.");
         setNoMatch(true);
       } else {
-        console.log("Matched Profiles:", matchedProfiles);
-        setMatchedProfiles(matchedProfiles); //array
-        // You can set the matched profiles to a state or use them as needed
+        setMatchedProfiles(matchedProfiles);
       }
     } catch (error) {
       console.error("Error fetching matched profiles:", error);
@@ -217,13 +154,10 @@ function Swipe() {
     setCurrentIndex(db.length - 1);
   }, [db]);
 
-  console.log("length of data base", db.length);
   const currentIndexRef = useRef(currentIndex);
 
   const childRefs = useMemo(() => {
-    return Array(db.length)
-      .fill(0)
-      .map(() => React.createRef());
+    return Array(db.length).fill(0).map(() => React.createRef());
   }, [db.length]);
 
   const updateCurrentIndex = (val) => {
@@ -232,256 +166,77 @@ function Swipe() {
   };
 
   const canGoBack = currentIndex < db.length - 1;
-
   const canSwipe = currentIndex >= 0;
-  console.log("selected idd dekhde aa ke milda", selectedId);
 
   const swiped = (direction, nameToDelete, index) => {
-
-    console.log("this is direction", direction)
-
-    if (direction == 'right') {
+    if (direction === 'right') {
       setSelectedId(db[index].id);
     }
-
-
     setIndexxx(index);
-
-    console.log("Swipedddd is called !!!!!!!!!!!!!!!!!!!!");
-
     setLastDirection(direction);
-
     updateCurrentIndex(index - 1);
+    if (index === 0) {
+      setPage(prevPage => prevPage + 1);
+    }
   };
 
-  // Define the checkMatch function
   const checkMatch = async (id) => {
-    console.log("Checking match for selected ID:", id);
-
-    // Assuming DDate_backend.check_user_match is an async function
     try {
       const isMatch = await DDate_backend.check_user_match(principal, id);
       if (isMatch) {
-        console.log("It's a match response from backend!!");
         setMatch(true);
-      } else {
-        console.log(
-          "You have liked the profile, but a match could not be made! ! !"
-        );
       }
     } catch (error) {
       console.error("Error in checking match:", error);
     }
   };
 
-  useEffect(() => {
-    if (selectedId !== null) {
-      console.log("swiped profile has this principal", selectedId.toText());
-      checkMatch(selectedId);
-    }
-  }, [selectedId]);
-
-
-
   const outOfFrame = (name, idx) => {
-    console.log(`${name} (${idx}) left the screen!`, currentIndexRef.current);
-    currentIndexRef.current >= idx && childRefs[idx].current.restoreCard();
+    if (currentIndexRef.current >= idx && childRefs[idx] && childRefs[idx].current) {
+      childRefs[idx].current.restoreCard();
+    }
   };
 
   const allTenUserId = pageData.map(data => data.user_id);
-  console.log("all Ten user id ", allTenUserId);
-  console.log("first userId", allTenUserId[0]);
+  let userIndex = 0;
 
   const swipe = async (dir) => {
-    if (dir === "left") {
-      try {
-        await backendActor.leftswipe({ swiped_user_id: userId, swiping_user_id: allTenUserId[0] }).then((result) => {
-          if (result) {
-            console.log(result)
-          } else {
-            console.log("error can't swipe")
-          }
-        });
-
-      } catch (error) {
-        console.error("Error sending data to the backend:", error);
+    if (canSwipe && currentIndex >= 0 && currentIndex < db.length) {
+      const cardRef = childRefs[currentIndex];
+      if (cardRef && cardRef.current) {
+        await cardRef.current.swipe(dir);
       }
-    }
-    else if (dir === "right") {
-      try {
-        await backendActor.rightswipe({ swiped_user_id: userId, swiping_user_id: allTenUserId[0] }).then((result) => {
-          if (result) {
-            console.log(result)
-          } else {
-            console.log("error can't swipe")
-          }
-        });
 
-      } catch (error) {
-        console.error("Error sending data to the backend:", error);
+      if (dir === "left") {
+        try {
+          await backendActor.leftswipe({ swiped_user_id: userId, swiping_user_id: allTenUserId[userIndex] });
+        } catch (error) {
+          console.error("Error sending data to the backend:", error);
+        }
+      } else if (dir === "right") {
+        try {
+          await backendActor.rightswipe({ swiped_user_id: userId, swiping_user_id: allTenUserId[userIndex] });
+        } catch (error) {
+          console.error("Error sending data to the backend:", error);
+        }
       }
+      userIndex++;
     }
-    // console.log(`to ${dir}`)
-    // if (canSwipe && currentIndex >= 0 && currentIndex < db.length) {
-    //   const cardRef = childRefs[currentIndex];
-    //   if (cardRef && cardRef.current) {
-    //     console.log("Swiping card with index:", currentIndex);
-    //     await cardRef.current.swipe(dir); // Swipe the card!
-    //   } else {
-    //     console.error("Invalid card reference at index:", currentIndex);
-    //   }
-    // } else {
-    //   console.error("Cannot swipe. Index or db length issue.");
-    // }
   };
 
-  // {console.log("Princiapl to like state" +pToLike)}
   const handleCloseModal = () => {
     setMatch(false);
-    //setMatchedProfile(null);
   };
 
-  const mobileBackgroundStyle = {
-    background:
-      "radial-gradient(84.33% 84.32% at 51.71% 43.22%, #2F2F2F 0%, #000 100%)",
-  };
-
-  const setTransform = useCallback(
-    (x, y, deg, duration) => {
-      if (current) {
-        const card = current;
-        card.style.transform = `translate3d(${x}px, ${y}px, 0) rotate(${deg}deg)`;
-        card.style.transition = duration ? `transform ${duration}ms` : "";
-      }
-    },
-    [current]
-  );
-
-  const onPointerDown = useCallback(
-    (event) => {
-      setStartX(event.clientX);
-      setStartY(event.clientY);
-      setTransform(0, 0, 0, 0); // Reset any transition
-    },
-    [setTransform]
-  );
-
-  const onPointerMove = useCallback(
-    (event) => {
-      setMoveX(event.clientX - startX);
-      setMoveY(event.clientY - startY);
-      setTransform(moveX, moveY, (moveX / window.innerWidth) * 50, 0);
-    },
-    [startX, startY, moveX, moveY, setTransform]
-  );
-
-  const onPointerUp = useCallback(() => {
-    if (Math.abs(moveX) > window.innerWidth / 2) {
-      const flyX = (Math.abs(moveX) / moveX) * window.innerWidth * 1.3;
-      const flyY = (moveY / moveX) * flyX;
-      setTransform(
-        flyX,
-        flyY,
-        (flyX / window.innerWidth) * 50,
-        window.innerWidth
-      );
-      setTimeout(
-        // () => setCards((prevCards) => prevCards.slice(1)),
-        window.innerWidth
-      );
-    } else {
-      setTransform(0, 0, 0, 100);
-    }
-  }, [moveX, moveY, setTransform]);
-
-  // useEffect(() => {
-  //   if (cards.length > 0) {
-  //     setCurrent(document.querySelector(".card:last-child"));
-  //   }
-  // }, [cards]);
+  console.log("I am at pageData this page number ", pageData);
 
   useEffect(() => {
-    if (current) {
-      current.addEventListener("pointerdown", onPointerDown);
-      current.addEventListener("pointermove", onPointerMove);
-      current.addEventListener("pointerup", onPointerUp);
-      current.addEventListener("pointerleave", onPointerUp);
-    }
-    return () => {
-      if (current) {
-        current.removeEventListener("pointerdown", onPointerDown);
-        current.removeEventListener("pointermove", onPointerMove);
-        current.removeEventListener("pointerup", onPointerUp);
-        current.removeEventListener("pointerleave", onPointerUp);
-      }
-    };
-  }, [current, onPointerDown, onPointerMove, onPointerUp]);
-
-  // New function to handle left swipe
-  const handleLeftSwipe = useCallback(() => {
-    if (current) {
-      const flyX = -window.innerWidth * 1.3;
-      setTransform(flyX, 0, (flyX / window.innerWidth) * 50, window.innerWidth);
-      setTimeout(
-        // () => setCards((prevCards) => prevCards.slice(1)),
-        window.innerWidth
-      );
-    }
-  }, [current, setTransform]);
-
-  // New function to handle right swipe
-  const handleRightSwipe = useCallback(() => {
-    if (current) {
-      const flyX = window.innerWidth * 1.3;
-      setTransform(flyX, 0, (flyX / window.innerWidth) * 50, window.innerWidth);
-      setTimeout(
-        // () => setCards((prevCards) => prevCards.slice(1)),
-        window.innerWidth
-      );
-    }
-  }, [current, setTransform]);
-
-  const sampleProfiles = [
-    {
-      id: 1,
-      name: "Alex Johnson",
-      location: "New York, USA",
-      introduction: "Love hiking and outdoor activities.",
-      images: ["https://via.placeholder.com/300?text=Alex"]
-    },
-    {
-      id: 2,
-      name: "Maria Garcia",
-      location: "San Francisco, USA",
-      introduction: "Avid reader and coffee enthusiast.",
-      images: ["https://via.placeholder.com/300?text=Maria"]
-    },
-    // {
-    //   id: 3,
-    //   name: "John Doe",
-    //   location: "Toronto, Canada",
-    //   introduction: "Tech geek, love to code and explore new technologies.",
-    //   images: ["https://via.placeholder.com/300?text=John"]
-    // },
-    {
-      id: 4,
-      name: "Emily Smith",
-      location: "London, UK",
-      introduction: "Art lover and museum wanderer.",
-      images: ["https://via.placeholder.com/300?text=Emily"]
-    }
-  ];
-
-  useEffect(() => {
-    setSwipeProfiles(sampleProfiles)
-  }, []);
-
-  console.log(location.state)
+    setSwipeProfiles(pageData);
+  }, [pageData]);
 
   return (
     <div className="flex flex-col grid-cols-9 h-screen z-10 ">
       <SidebarComponent userId={userId} className="hidden md:block  " />
-      <h1>{location.state}</h1>
       {startLoader ? (
         <div className="w-full flex justify-center items-center  ">
           <div className="container flex justify-center">
