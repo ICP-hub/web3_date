@@ -62,7 +62,7 @@ const SidebarComponent = ({ userId }) => {
     setIsSidebarOpen(!isSidebarOpen);
   };
 
-  const isMobileOrTablet = windowWidth <= 768;
+  const isMobileOrTablet = windowWidth <= 870;
 
   useEffect(() => {
     const principalString = localStorage.getItem("id");
@@ -260,7 +260,7 @@ const SidebarComponent = ({ userId }) => {
         </div>
       ) : (
         <aside
-          className={`fixed top-0 w-64 h-screen z-50 transition-transform ${isSidebarOpen || !isMobileOrTablet ? "" : "-translate-x-full"
+          className={`fixed top-0 w-64  md:w-[20%] h-screen z-50  transition-transform ${isSidebarOpen || !isMobileOrTablet ? "" : "-translate-x-full"
             }`}
           aria-label="Sidebar"
         >

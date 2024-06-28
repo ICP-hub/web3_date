@@ -159,7 +159,7 @@ const Profile = ({ userId }) => {
 
 
   return (
-    <div className="md:grid grid-cols-6">
+    <div>
       <SidebarComponent />
       {loader ? (
         <div className="sm:ml-64">
@@ -172,7 +172,7 @@ const Profile = ({ userId }) => {
           </div>
         </div>
       ) : (
-        <div className="h-screen md:col-span-5 font-viga ">
+        <div className="h-screen float-right md:w-[80%] font-viga ">
           <div className=" lg:px-10 px-6 xl:px-12">
             <div className="flex items-center mt-[15px] md:mt-15 gap-2 ">
               <img
@@ -183,7 +183,7 @@ const Profile = ({ userId }) => {
               />
               <div className=" ml-2 text-lg font-medium">My Profile</div>
             </div>
-            <div className="px-6 sm:p-4 md:px-8 lg:px-10 xl:px-12 overflow-y-auto">
+            <div className=" sm:p-4 md:px-8 lg:px-10 xl:px-12 overflow-y-auto">
               <div className="relative flex justify-center items-center w-full mb-8 mt-8">
                 <p className="border-t border-black  w-full "></p>
                 <svg
@@ -285,7 +285,7 @@ const Profile = ({ userId }) => {
                   <p className="text-[20px] font-viga mr-[10px] text-center font-[600]">{formData.name}</p><div onClick={() => navigate("/editProfile", { state: result })} div><CiEdit className="text-cursor" size={22} /></div>
                 </div>
                 <div className="w-full font-viga p-4">
-                  <div className="grid grid-cols-3 gap-2">
+                  <div className="grid grid-cols-3 gap-y-2 gap-x-4 ">
                     <div className="flex items-center">
                       <label
                         htmlFor="gender"
@@ -524,130 +524,6 @@ const Profile = ({ userId }) => {
               </div>
             </div>
           </div>
-          {/* <div className="col-span-12 lg:col-span-4 xl:col-span-4 px-4 lg:px-8 xl:px-10">
-            <div className="flex items-center md:mt-10 ml-6 gap-2 mb-6">
-              <img
-                src={addProfile}
-                alt="addProfile"
-                className="w-4 h-4 cursor-pointer"
-              />
-              <div className="ml-2 text-lg font-medium">Your Photos</div>
-            </div>
-            <div className="relative flex justify-center items-center w-full mb-2 mt-2">
-              <p className="border-t border-black w-2/3 px-12
-               md:w-3/4 lg:w-2/3"></p>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="14"
-                height="14"
-                viewBox="0 0 20 19"
-                fill="none"
-                className="absolute text-black"
-              >
-                <path
-                  d="M10 18.35L8.55 17.03C3.4 12.36 0 9.27 0 5.5C0 2.41 2.42 0 5.5 0C7.24 0 8.91 0.81 10 2.08C11.09 0.81 12.76 0 14.5 0C17.58 0 20 2.41 20 5.5C20 9.27 16.6 12.36 11.45 17.03L10 18.35Z"
-                  fill="currentColor"
-                />
-              </svg>
-            </div>
-            <div className="border-gray-300">
-              <div className="flex items-center justify-center p-4 bg-white mb-2">
-                <div className=" text-black text-opacity-50 font-normal text-sm">
-                  Add maximum 2 photos for better reach
-                </div>
-              </div>
-
-              <div className="bg-white">
-                <div className="flex items-center flex-wrap p-3 md:p-4 justify-center cursor-pointer gap-4">
-                  
-                  <div className="w-40 h-[180px] md:w-36 md:h-[196px] rounded-[15px] bg-zinc-200 flex justify-center items-center">
-                    <label htmlFor={`additional-image-1`}>
-                      {isLoading[1] ? (
-                        <div
-                          className="flex items-center justify-center w-40 h-[180px] md:w-36 md:h-[196px] rounded-[15px] bg-zinc-200"
-                          key="1"
-                        >
-                          <svg
-                            className="w-10 h-10 text-gray-200 dark:text-gray-600"
-                            aria-hidden="true"
-                            xmlns="http://www.w3.org/2000/svg"
-                            fill="currentColor"
-                            viewBox="0 0 20 18"
-                          >
-                            <path d="M18 0H2a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2Zm-5.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3Zm4.376 10.481A1 1 0 0 1 16 15H4a1 1 0 0 1-.895-1.447l3.5-7A1 1 0 0 1 7.468 6a.965.965 0 0 1 .9.5l2.775 4.757 1.546-1.887a1 1 0 0 1 1.618.1l2.541 4a1 1 0 0 1 .028 1.011Z" />
-                          </svg>
-                        </div>
-                      ) : formData.images[1] ? (
-                        <img
-                          src={formData.images[1]}
-                          alt={`Additional Image 1`}
-                          className="w-40 h-[180px] md:w-36 md:h-[196px] rounded-[15px] cursor-pointer"
-                        />
-                      ) : (
-                        <img
-                          src={uploadProfile}
-                          alt="uploadProfile"
-                          className=" rounded-[15px] cursor-pointer"
-                        />
-                      )}
-                      <input
-                      disabled
-                        id={`additional-image-1`}
-                        type="file"
-                        onChange={handleAdditionalImageChange(1)}
-                        className="hidden"
-                      />
-                    </label>
-                  </div>
-
-                  {Object.entries(isLoading).map(([key, //value]) =>
-                    console.log(//value)
-                  )}
-                  
-                  <div className="w-40 h-[180px] md:w-36 md:h-[196px] rounded-[15px] bg-zinc-200  flex justify-center items-center">
-                    <label htmlFor={`additional-image-2`}>
-                      {isLoading[2] ? (
-                        <div
-                          className="flex items-center justify-center w-40 h-[180px] md:w-36 md:h-[196px] rounded-[15px] bg-zinc-200"
-                          key="1"
-                        >
-                          <svg
-                            className="w-10 h-10 text-gray-200 dark:text-gray-600"
-                            aria-hidden="true"
-                            xmlns="http://www.w3.org/2000/svg"
-                            fill="currentColor"
-                            viewBox="0 0 20 18"
-                          >
-                            <path d="M18 0H2a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2Zm-5.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3Zm4.376 10.481A1 1 0 0 1 16 15H4a1 1 0 0 1-.895-1.447l3.5-7A1 1 0 0 1 7.468 6a.965.965 0 0 1 .9.5l2.775 4.757 1.546-1.887a1 1 0 0 1 1.618.1l2.541 4a1 1 0 0 1 .028 1.011Z" />
-                          </svg>
-                        </div>
-                      ) : formData.images[2] ? (
-                        <img
-                          src={formData.images[2]}
-                          alt={`Additional Image 2`}
-                          className="w-40 h-[180px] md:w-36 md:h-[196px] rounded-[15px] cursor-pointer"
-                        />
-                      ) : (
-                        <img
-                          src={uploadProfile}
-                          alt="uploadProfile"
-                          className="rounded-[15px] cursor-pointer"
-                        />
-                      )}
-                      <input
-                      disabled
-                        id={`additional-image-2`}
-                        type="file"
-                        onChange={handleAdditionalImageChange(2)}
-                        className="hidden"
-                      />
-                    </label>
-                  </div>
-                </div>
-              </div>
-             
-            </div>
-          </div> */}
         </div>
       )}
     </div>

@@ -57,8 +57,9 @@
         sm3: "550px",
         sm5: "600px",
         sm: "640px",
-        md: "870px",
+        
         ipad: "769px",
+        md: "870px",
         // md1: "870px",
         md2: "914px",
         md3: "936px",
