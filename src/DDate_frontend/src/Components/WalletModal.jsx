@@ -15,7 +15,8 @@ const WalletModal = ({ isOpen, onClose }) => {
       id: "ii",
       content: (
         <li
-          className="border border-gray-300 rounded-3xl flex items-center p-2 cursor-pointer transition-colors duration-300 ease-in-out hover:bg-yellow-900 hover:border-yellow-500 active:bg-yellow-700 active:border-yellow-600 "
+          className="border border-gray-300 rounded-3xl flex items-center p-2 cursor-pointer transition-colors duration-300 ease-in-out hover:bg-yellow-900 hover:border-yellow-500 active:bg-yellow-700 active:border-yellow-600"
+          onClick={() => loginHandler("ii")}
         >
           <img
             src={InternetIdentity}
@@ -29,7 +30,10 @@ const WalletModal = ({ isOpen, onClose }) => {
     {
       id: "nfid",
       content: (
-        <li className="border border-gray-300 rounded-3xl flex items-center p-2 cursor-pointer transition-colors duration-300 ease-in-out hover:bg-yellow-900 hover:border-yellow-500 active:bg-yellow-700 active:border-yellow-600">
+        <li
+          className="border border-gray-300 rounded-3xl flex items-center p-2 cursor-pointer transition-colors duration-300 ease-in-out hover:bg-yellow-900 hover:border-yellow-500 active:bg-yellow-700 active:border-yellow-600"
+          onClick={() => loginHandler("nfid")}
+        >
           <img
             src={NFID}
             alt="NFID"
@@ -44,36 +48,46 @@ const WalletModal = ({ isOpen, onClose }) => {
   const [userExists, setUserExists] = useState(null);
 
   useEffect(() => {
+    let isMounted = true; // Flag to track mounted state
+
     const userExistOrNot = async (caller) => {
       try {
         const result = await caller.get_user_id_by_principal();
         console.log('result', result);
-        setUserExists(result);
+        if (isMounted) { 
+          if(result){
+          setUserExists(result?.Ok);
+          }
+          else{
+            setUserExists('')
+          }
+        }
       } catch (error) {
         console.error("Error sending data to the backend:", error);
       }
-    }
+    };
+
     if (backendActor) {
-      userExistOrNot(backendActor);
+      userExistOrNot(backendActor); // Pass backendActor to the async function
     }
-    else {
-      userExistOrNot(DDate_backend)
-    }
-  }, [DDate_backend, backendActor]);
+
+    return () => {
+      isMounted = false; // Set mounted flag to false on cleanup
+    };
+  }, [backendActor]);
 
   useEffect(() => {
-    if (userExists !== null) {
+    if (isAuthenticated && userExists !== null) { // Ensure userExists is not null before navigating
       if (userExists) {
-        navigate("/Swipe");
+        navigate("/Swipe", { state: userExists });
       } else {
         navigate("/CreateAccount1");
       }
     }
-  }, [userExists, navigate]);
+  }, [isAuthenticated, userExists]);
 
-  const loginHandler = async (val) => {
-    await login(val);
-    navigate("/CreateAccount1");
+  const loginHandler = async (walletId) => {
+    await login(walletId);
   };
 
   if (!isOpen) return null;
@@ -91,7 +105,7 @@ const WalletModal = ({ isOpen, onClose }) => {
         <p className="border-t border-white w-full md:w-3/4 lg:w-2/3 mx-auto mb-4"></p>
         <ul className="space-y-3">
           {walletModalSvg.map((wallet, index) => (
-            <div key={index} onClick={() => loginHandler(wallet.id)}>
+            <div key={index}>
               {wallet.content}
             </div>
           ))}

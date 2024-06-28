@@ -133,7 +133,7 @@ export const useAuthClient = (options = defaultOptions) => {
         let principalText = principal.toText();
 
         // console.log("principalText???? ",principalText);
-        localStorage.setItem("id",JSON.stringify(principalText))
+        // localStorage.setItem("id",JSON.stringify(principalText))
 
       if (isAuthenticated && identity && principal && principal.isAnonymous() === false) {
           let backendActor = createActor(backendCanisterId, { agentOptions: { identity: identity, verifyQuerySignatures: false } });
