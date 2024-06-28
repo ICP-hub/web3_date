@@ -308,13 +308,13 @@ const Form3 = (props) => {
 
   const selectedsmoking = watch("selectedsmoking");
   const selecteddrink = watch("selecteddrink");
-  const selectedhobbies = watch("selectedhobbies", props.prevalue.selectedhobbies || []);
+  const selectedhobbies = watch("selectedhobbies");
   const selectedsports = watch("selectedsports", []);
 
   useEffect(() => {
-    setValue("selectedhobbies", props.prevalue.selectedhobbies || []);
+    setValue("selectedhobbies", []);
     setValue("selectedsports", []);
-  }, [props.prevalue.selectedhobbies, setValue]);
+  }, [setValue]);
 
   const handleCheckboxChange = (value) => {
     const updatedHobbies = selectedhobbies.includes(value)
