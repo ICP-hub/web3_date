@@ -4,34 +4,34 @@ import { Principal } from "@dfinity/principal";
 
 const LogoutModal = ({ isOpen, onClose }) => {
   if (!isOpen) return null;
-  const {logout, principal} = useAuth();
+  const { logout, principal } = useAuth();
 
-  console.log("principal in logoutmodal => ",principal);
-  const logoutHandler = async() => {
+  console.log("principal in logoutmodal => ", principal);
+  const logoutHandler = async () => {
     // localStorage.removeItem("id");
     // localStorage.removeItem("identity");
     // localStorage.removeItem("wallet");
-     await logout()
-         localStorage.removeItem("id");
+    await logout()
+    localStorage.removeItem("id");
 
     onClose();
 
   };
-// let principal = localStorage.getItem("id");
+  // let principal = localStorage.getItem("id");
 
   return (
     <div
-      className="fixed inset-0 flex justify-end overflow-hidden items-start pt-24 z-50"
+      className="fixed inset-0 flex justify-end overflow-hidden items-start pt-14 sm:pt-12 z-50"
       onClick={onClose}
     >
       <div
         className="relative m-5 p-5 rounded-lg shadow-lg bg-walletColor text-white
-              w-full max-w-xs sm:max-w-xs md:max-w-xs lg:w-1/3 xl:w-1/4 sm:w-1/3 h-auto"
+           max-w-xs sm:max-w-xs md:max-w-xs lg:w-1/3 xl:w-1/4 sm:w-1/3 h-auto"
         onClick={(e) => e.stopPropagation()}
       >
         <h3 className="text-base font-base mb-2 text-center">Wallet Details</h3>
         <p className="border-t border-white w-3/4 mx-auto mb-4">
-          Principal :{ principal && principal.toText()}
+          Principal :{principal && principal.toText()}
         </p>
 
         <div

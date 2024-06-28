@@ -891,7 +891,7 @@ const EditProfile = () => {
                           <label htmlFor={`additional-image-1`}>
                             {false ? (
                               <div
-                                className="flex items-center justify-center w-40 h-[180px] md:w-36 md:h-[196px] rounded-[15px] bg-zinc-200"
+                                className="flex items-center justify-center w-40 h-[180px] md:w-32 md:h-[196px] rounded-[15px] bg-zinc-200"
                                 key="1"
                               >
                                 <svg
@@ -931,7 +931,7 @@ const EditProfile = () => {
 
                       </div>
                       {/* Second input field for additional photos */}
-                      <div className="w-40 h-[180px] md:w-36 md:h-[196px] rounded-[15px] bg-zinc-200  flex justify-center items-center">
+                      <div className="w-40 h-[180px] md:w-32 md:h-[196px] rounded-[15px] bg-zinc-200  flex justify-center items-center">
                         <label htmlFor={`additional-image-2`}>
                           {false ? (
                             <div
@@ -955,7 +955,7 @@ const EditProfile = () => {
                                 <img
                                   src={formData?.images[2]}
                                   alt={`Additional Image 2`}
-                                  className="w-40 h-[180px] md:w-36 md:h-[196px] rounded-[15px] cursor-pointer"
+                                  className="w-40 h-[180px] md:w-32 md:h-[196px] rounded-[15px] cursor-pointer"
                                 />
                               ) : (
                                 <img
