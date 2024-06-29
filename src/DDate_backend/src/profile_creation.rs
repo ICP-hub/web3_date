@@ -74,6 +74,23 @@ pub struct UserProfileCreationInfo {
     pub notifications: VecDeque<Notification>,
     pub matched_profiles: Vec<String>,
     pub status: bool,
+    pub expired: bool,
+}
+
+
+impl Default for UserProfileCreationInfo {
+    fn default() -> Self {
+        UserProfileCreationInfo {
+            user_id: String::new(),
+            created_at: 0,
+            creator_principal: Principal::anonymous(),
+            params: UserProfileParams::default(),
+            notifications: VecDeque::new(),
+            matched_profiles: Vec::new(),
+            status: true,
+            expired: false, 
+        }
+    }
 }
 
 #[derive(Default, Clone, Deserialize, CandidType, Debug, Serialize)]
@@ -144,7 +161,7 @@ fn init() {
 }
 
 impl State {
-    pub fn create_account(&mut self, user_id: String, params: UserProfileCreationInfo) -> Result<String, String> {
+    pub fn create_account(&mut self, user_id: String, mut params: UserProfileCreationInfo) -> Result<String, String> {
         // Validation
         if params.params.name.is_none() || params.params.name.as_ref().unwrap().trim().is_empty() {
             return Err("Name is required".to_string());
@@ -173,7 +190,10 @@ impl State {
         if params.params.preferred_gender.is_none() || params.params.preferred_gender.as_ref().unwrap().trim().is_empty() {
             return Err("Preferred gender is required".to_string());
         }
-
+    
+        // Initialize expired to false
+        params.expired =false ;
+    
         ic_cdk::println!("Creating profile with user_id: {}", user_id);
         if self.user_profiles.insert(user_id.clone(), params).is_some() {
             Err(format!("User profile with id {} already exists", user_id))
@@ -182,6 +202,7 @@ impl State {
             Ok(format!("User profile created with id: {}", user_id))
         }
     }
+    
 
     pub fn update_account(&mut self, user_id: String, new_params: UserProfileParams) -> Result<String, String> {
         match self.user_profiles.get(&user_id) {
@@ -228,23 +249,16 @@ impl State {
         }
     }
     
-
     pub fn get_all_accounts(&self, pagination: Pagination) -> Result<PaginatedProfiles, String> {
         let all_profiles: Vec<UserProfileCreationInfo> = self.user_profiles.iter()
-            .filter_map(|(_, profile)| {
-                if profile.status {
-                    Some(profile.clone())
-                } else {
-                    None
-                }
-            })
+            .map(|(_, profile)| profile.clone()) // Clone each profile
             .collect();
     
         let total_profiles = all_profiles.len();
     
         let start = (pagination.page - 1) * pagination.size;
         if start >= total_profiles {
-            return Err("Page number out of range".to_string());
+            return Err("No profiles are matched.".to_string());
         }
         let end = std::cmp::min(start + pagination.size, total_profiles);
     
@@ -255,6 +269,8 @@ impl State {
             profiles: paginated_profiles,
         })
     }
+    
+    
     
     pub fn create_message_internal(&mut self, sender_id: String, receiver_id: String, content: String) -> Result<u64, String> {
         // Validate input
@@ -619,11 +635,13 @@ pub async fn create_an_account(params: UserInputParams) -> Result<String, String
         notifications: VecDeque::new(),
         matched_profiles: Vec::new(),
         status: true,
+        expired: false, // Initialize expired to false
     };
 
     ic_cdk::println!("Creating account with user_id: {}", unique_user_id);
     mutate_state(|state| state.create_account(unique_user_id, profile_info))
 }
+
 
 
 #[update]
