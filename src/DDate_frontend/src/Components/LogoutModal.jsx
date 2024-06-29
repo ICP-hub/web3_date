@@ -12,9 +12,10 @@ const LogoutModal = ({ isOpen, onClose }) => {
     // localStorage.removeItem("identity");
     // localStorage.removeItem("wallet");
     await logout()
-    localStorage.removeItem("id");
+    // localStorage.removeItem("id");
 
     onClose();
+    window.location.href = "/";
 
   };
   // let principal = localStorage.getItem("id");

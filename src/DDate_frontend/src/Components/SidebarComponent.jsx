@@ -42,7 +42,8 @@ const SidebarComponent = ({ userId }) => {
     // localStorage.removeItem("wallet");
 
     // setLoader(false)
-    navigate("/");
+    window.location.href = "/";
+
   };
 
   useEffect(() => {

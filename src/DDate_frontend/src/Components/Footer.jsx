@@ -11,8 +11,9 @@ import {
 
 const Footer = () => {
   return (
+    
     <footer
-      className="text-white py-8 px-[6%]"
+      className="text-white py-8 px-[8%]"
       style={{
         background:
           "radial-gradient(84.33% 84.32% at 51.71% 43.22%, #E28110 0%, #26011C 100%)",

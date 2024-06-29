@@ -25,7 +25,7 @@ const Feedback = () => {
   ];
 
   return (
-    <>
+    <div className="container mx-auto">
       <div className="bg-white flex font-num flex-col items-center w-full mt-14  md:px-6 lg:px-[4%]">
         <h2 className="text-center text-black text-2xl md:text-3xl lg:text-4xl font-bold mb-2">
           Happy Customers
@@ -88,7 +88,7 @@ const Feedback = () => {
           <button className="text-sm md:text-base lg:text-lg">Read More</button>
         </div> */}
       </div>
-    </>
+    </div>
   );
 };
 

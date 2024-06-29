@@ -4,12 +4,13 @@ import React from "react";
 const MemberStatistics = () => {
   return (
     <div
-      className="font-num flex  flex-wrap w-full  md: items-center  "
       style={{
         background:
           "radial-gradient(84.33% 84.32% at 51.71% 43.22%, #E28110 0%, #26011C 100%)",
       }}
     >
+    <div className="container mx-auto">
+<div className="font-num flex  flex-wrap w-full  md: items-center  ">
       {/* Adjust width and padding for each stat block for different breakpoints */}
       <div className="w-full md:w-1/2 lg:w-1/4 flex flex-col items-center p-2 md:p-2">
         {/* SVG and layout adjustments */}
@@ -111,6 +112,8 @@ const MemberStatistics = () => {
           Women
         </p>
       </div>
+    </div>
+    </div>
     </div>
   );
 };
