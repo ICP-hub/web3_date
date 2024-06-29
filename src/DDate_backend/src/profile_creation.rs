@@ -254,6 +254,13 @@ impl State {
             .map(|(_, profile)| profile.clone()) // Clone each profile
             .collect();
     
+        // Check if all profiles have expired status true
+        let all_expired = all_profiles.iter().all(|profile| profile.expired);
+    
+        if all_expired {
+            return Err("No profiles are available.".to_string());
+        }
+    
         let total_profiles = all_profiles.len();
     
         let start = (pagination.page - 1) * pagination.size;
@@ -269,6 +276,7 @@ impl State {
             profiles: paginated_profiles,
         })
     }
+    
     
     
     
