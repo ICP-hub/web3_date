@@ -4,18 +4,17 @@ import logo from "../../../assets/Images/CreateAccount/logo.png";
 import createPageImage from '../../../assets/Images/CreateAccount/createPageImage.png';
 import WalletModal from '../WalletModal';
 import LogoutModal from '../LogoutModal';
-
+import { useAuth } from '../../auth/useAuthClient';
 
 const HeroLeft = () => {
   const [isWalletModalOpen, setWalletModalOpen] = useState(false);
   const [isLogoutModal, setLogoutModal] = useState(false);
+  const { principal, isAuthenticated } = useAuth();
 
   const toggleWalletModal = () => {
     setWalletModalOpen(!isWalletModalOpen);
   };
 
-  const id = localStorage.getItem('id');
-  const isUserLoggedIn = !!id;
   const toggleLogoutModal = () => {
     setLogoutModal(!isLogoutModal);
   };
@@ -38,15 +37,16 @@ const HeroLeft = () => {
       body.style.paddingRight = '0';
     };
   }, [isWalletModalOpen, isLogoutModal]);
+
   return (
     <div className="w-full lg:w-2/5 h-full relative">
-      <img src={heroLeft} alt="heroLeft" className="object-cover" />
+      <img src={heroLeft} alt="heroLeft" className="object-cover w-full h-full" />
       <img
         src={logo}
         alt="Logo"
         className="h-16 w-16 lg:h-18 lg:w-18 mb-4 absolute top-5 left-5 lg:top-8 lg:left-8"
       />
-      {isUserLoggedIn && (
+      {isAuthenticated && (
         <img
           src={createPageImage}
           alt="Logout"
@@ -56,7 +56,6 @@ const HeroLeft = () => {
       )}
       <LogoutModal isOpen={isLogoutModal} onClose={toggleLogoutModal} />
       <WalletModal isOpen={isWalletModalOpen} onClose={toggleWalletModal} />
-
     </div>
   );
 };

@@ -135,7 +135,7 @@ const ProfileViewer = ({ setFinalMatch, finalMatch }) => {
 
   console.log("senderId is this______", senderId);
 
-  const principalString = localStorage.getItem("id");
+  // const principalString = localStorage.getItem("id");
 
   console.log("its mine only principaaaaaaaaaaaaaaaaal", principalString);
 

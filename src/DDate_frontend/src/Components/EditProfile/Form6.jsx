@@ -241,26 +241,45 @@ export default Form6;
 
 import React, { useState } from 'react';
 import { useFormContext } from 'react-hook-form';
+import compressImage from '../ImageCompressFolder/CompressImage';
 
 const Form6 = () => {
-  const { register, setValue, formState: { errors }, unregister } = useFormContext();
+  const { register, setValue, formState: { errors }, unregister ,setError} = useFormContext();
   const [imageFields, setImageFields] = useState([{ id: Date.now(), file: null }]);
   const [err, setErr] = useState(false);
 
-  function handleError() {
-    setErr(true);
-  }
+//   function handleError() {
+//     setErr(true);
+//   }
 
-  const handleImageUpload = (e, index) => {
+const handleImageUpload = async (e, index) => {
     const file = e.target.files[0];
-    if (file) {
+    if (!file) {
+      console.log("ERROR -- handleImageUpload: file is missing");
+      return;
+    }
+    try {
+      const compressedFile = await compressImage(file); 
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        const newImageFields = [...imageFields]; 
+        newImageFields[index].file = reader.result;
+        setImageFields(newImageFields); 
+      };
+      reader.readAsDataURL(compressedFile);
+      const byteArray = await compressedFile.arrayBuffer();
       const newImageFields = [...imageFields];
-      newImageFields[index].file = URL.createObjectURL(file);
+      newImageFields[index].arrayBuffer = Array.from(new Uint8Array(byteArray));
       setImageFields(newImageFields);
-      setValue(`firstImage${index}`, file);
+      setValue(`firstImage${index}`, Array.from(new Uint8Array(byteArray)));
+    } catch (error) {
+      setError("image", {
+        type: "manual",
+        message: "Could not process image, please try another.",
+      });
+      console.error("Error processing image:", error);
     }
   };
-
   const handleAddField = () => {
     if (imageFields.length < 5) {
       setImageFields([...imageFields, { id: Date.now(), file: null }]);
@@ -273,6 +292,7 @@ const Form6 = () => {
     unregister(`firstImage${index}`);
   };
 
+  console.log('imageFields',imageFields)
   const renderImagePreviews = () => {
     return imageFields.map((field, index) => (
       <div key={field.id} className="relative group mb-4">

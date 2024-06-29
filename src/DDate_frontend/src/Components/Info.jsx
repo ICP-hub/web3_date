@@ -3,13 +3,15 @@ import React from "react";
 
 const Info = () => {
   return (
-    <div className="bg-white flex flex-col items-center w-full font-num">
+    <div  style={{
+      background:
+        "radial-gradient(84.33% 84.32% at 51.71% 43.22%, #E28110 0%, #26011C 100%)",
+    }}>
+    <div className="container mx-auto">
+    <div className=" flex flex-col items-center w-full font-num">
       <div
         className="w-full py-8 sm:py-10 md:py-12 lg:py-14 px-[6%]"
-        style={{
-          background:
-            "radial-gradient(84.33% 84.32% at 51.71% 43.22%, #E28110 0%, #26011C 100%)",
-        }}
+       
       >
         <h2 className="text-center font-num text-white text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold mb-2 mt-2">
           How It Works
@@ -73,6 +75,8 @@ const Info = () => {
           </div>
         </div>
       </div>
+    </div>
+    </div>
     </div>
   );
 };

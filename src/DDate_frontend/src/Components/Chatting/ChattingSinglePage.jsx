@@ -55,8 +55,8 @@ const ChattingSinglePage = () => {
     //mera principal
     //userToken
 
-    let userToken = localStorage.getItem('userToken');
-    let userPrincipal = localStorage.getItem('userPrincipal');
+    // let userToken = localStorage.getItem('userToken');
+    // let userPrincipal = localStorage.getItem('userPrincipal');
 
 
     // if (!profile) {

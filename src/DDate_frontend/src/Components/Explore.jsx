@@ -7,7 +7,7 @@ import networkingImage from "../../assets/Images/ExploreImages/networking.png";
 
 const Explore = () => {
   return (
-    <>
+    <div className="container mx-auto">
       <div className="bg-white font-num flex flex-col items-center w-full mt-14">
         <h2 className="text-center text-black text-4xl font-bold font-num mb-2">
           Explore Us
@@ -114,7 +114,7 @@ const Explore = () => {
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
 };
 
