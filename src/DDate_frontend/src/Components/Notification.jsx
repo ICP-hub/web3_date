@@ -8,6 +8,23 @@ import "./Notification.css";
 import back from "../../assets/Images/CreateAccount/back.svg";
 import Loader from "./Loader";
 
+const fetchedProfiles = [
+  {
+    id: 1,
+    name: "John Doe",
+    images: ["https://via.placeholder.com/150"],
+  },
+  {
+    id: 2,
+    name: "Jane Smith",
+    images: ["https://via.placeholder.com/150"],
+  },
+  {
+    id: 3,
+    name: "Alice Johnson",
+    images: ["https://via.placeholder.com/150"],
+  },
+];
 const Notification = () => {
   const navigate = useNavigate();
   const [notifications, setNotifications] = useState([]);
@@ -108,7 +125,6 @@ const Notification = () => {
       <p className="notification-text">Someone liked your profile</p>
     </div>
   ));
-
   return (
     <>
       <SidebarComponent />
@@ -116,7 +132,7 @@ const Notification = () => {
       {loading ? (
         <div className="sm:ml-64">
           <div className="container flex justify-center">
-            <div className="max-w-xs md:max-w-md lg:max-w-lg xl:max-w-xl bg-white  h-screen ">
+            <div className="max-w-xs md:max-w-md lg:max-w-lg xl:max-w-xl bg-white h-screen">
               <div className="h-screen">
                 <Loader />
               </div>
@@ -124,77 +140,150 @@ const Notification = () => {
           </div>
         </div>
       ) : (
-        <div className="h-screen grid grid-cols-12 ">
+        <div className="h-screen grid grid-cols-12">
           {/* Sidebar - hidden on smaller screens */}
           <div className="hidden md:block md:col-span-2"></div>
 
           {/* Main content area */}
-          {/* <div className="col-span-12 md:col-span-10  md:col-start-4 px-6 lg:px-10 xl:px-12">
-           */}
-          <div className="col-span-12 md:col-span-10   px-6 lg:px-10 xl:px-12">
-            <div className="flex items-center md:mt-10 ml-12 gap-2 mb-4">
-              <img
-                src={back}
-                alt="back"
-                onClick={() => navigate("/Swipe")}
-                className="w-4 h-4 cursor-pointer"
-              />
-              <div className="ml-2 text-lg font-medium">Your Matches</div>
-            </div>
-            <div className="px-6  md:px-8 lg:px-10 xl:px-12">
-              <div className="relative flex justify-center items-center w-full mb-8 mt-8 ">
-                <p className="border-t border-black w-full md:w-3/4 lg:w-2/3"></p>
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="14"
-                  height="14"
-                  viewBox="0 0 20 19"
-                  fill="none"
-                  className="absolute text-black z-10"
-                >
-                  <path
-                    d="M10 18.35L8.55 17.03C3.4 12.36 0 9.27 0 5.5C0 2.41 2.42 0 5.5 0C7.24 0 8.91 0.81 10 2.08C11.09 0.81 12.76 0 14.5 0C17.58 0 20 2.41 20 5.5C20 9.27 16.6 12.36 11.45 17.03L10 18.35Z"
-                    fill="currentColor"
-                  />
-                </svg>
+          <div className="col-span-12 md:col-span-10 grid grid-cols-1 lg:grid-cols-2">
+            {/* Matches Column */}
+            <div className="px-6 lg:px-10 xl:px-12">
+              <div className="flex items-center md:mt-10 ml-12 gap-2 mb-4">
+                <img
+                  src={back}
+                  alt="back"
+                  onClick={() => navigate("/Swipe")}
+                  className="w-4 h-4 cursor-pointer"
+                />
+                <div className="ml-2 text-lg font-medium">Your Matches</div>
               </div>
-
-              <div className="p-4 flex flex-wrap gap-2">
-                {profiles.map((profile, index) => (
-                  <div
-                    key={index}
-                    className="relative w-full sm:w-1/2 md:w-1/3 lg:w-full"
-                    onClick={() => handleNotificationClick(profile.id.toText())}
+              <div className="px-6 md:px-8 lg:px-10 xl:px-12">
+                <div className="relative flex justify-center items-center w-full mb-8 mt-8">
+                  <p className="border-t border-black w-full md:w-3/4 lg:w-2/3"></p>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="14"
+                    height="14"
+                    viewBox="0 0 20 19"
+                    fill="none"
+                    className="absolute text-black z-10"
                   >
-                    <img
-                      className="w-[230px] h-[280px] rounded-[20px]"
-                      src={profile.images[0]}
-                      alt={profile.name}
+                    <path
+                      d="M10 18.35L8.55 17.03C3.4 12.36 0 9.27 0 5.5C0 2.41 2.42 0 5.5 0C7.24 0 8.91 0.81 10 2.08C11.09 0.81 12.76 0 14.5 0C17.58 0 20 2.41 20 5.5C20 9.27 16.6 12.36 11.45 17.03L10 18.35Z"
+                      fill="currentColor"
                     />
-                    {/* <img src={profile.images[0]}></img> */}
-                    <div className="w-[41px] h-[41px]">
-                      <div
-                        className="w-[41px] h-[41px] absolute bg-yellow-400 rounded-full flex justify-center items-center"
-                        style={{ top: "14.2rem", left: "11.2rem" }}
-                      >
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          height="20"
-                          width="20"
-                          viewBox="0 0 512 512"
-                        >
-                          <path d="M47.6 300.4L228.3 469.1c7.5 7 17.4 10.9 27.7 10.9s20.2-3.9 27.7-10.9L464.4 300.4c30.4-28.3 47.6-68 47.6-109.5v-5.8c0-69.9-50.5-129.5-119.4-141C347 36.5 300.6 51.4 268 84L256 96 244 84c-32.6-32.6-79-47.5-124.6-39.9C50.5 55.6 0 115.2 0 185.1v5.8c0 41.5 17.2 81.2 47.6 109.5z" />
-                        </svg>
-                      </div>
-                      <div className="text-lg font-medium text-center absolute top-56 left-4">
-                        <span className="block -mb-2">{profile.name}</span>
-                        <span className="flex justify-start">
-                          {profile.age}
-                        </span>
+                  </svg>
+                </div>
+                <div>
+                  <div className="justify-center lg:flex">
+                    {/* {profiles.map((profile, index) => ( */}
+                    <div
+                      //  key={index}
+                      className="p-4">
+                      <div className="relative w-full sm:w-1/2 md:w-1/3 lg:w-full">
+                        <img
+                          className="w-[230px] h-[280px] rounded-[20px]"
+                          src="https://cdn.pixabay.com/photo/2022/01/17/22/20/add-6945894_640.png"
+                          // {profile.images[0]}
+
+                          alt="chirag photo"
+                        // {profile.name}
+                        />
+                        <div className="w-[41px] h-[41px]">
+                          <div
+                            className="w-[41px] h-[41px] absolute bg-yellow-400 rounded-full flex justify-center items-center"
+                            style={{ top: "14.2rem", left: "11.2rem" }}
+                          >
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              height="20"
+                              width="20"
+                              viewBox="0 0 512 512"
+                            >
+                              <path d="M47.6 300.4L228.3 469.1c7.5 7 17.4 10.9 27.7 10.9s20.2-3.9 27.7-10.9L464.4 300.4c30.4-28.3 47.6-68 47.6-109.5v-5.8c0-69.9-50.5-129.5-119.4-141C347 36.5 300.6 51.4 268 84L256 96 244 84c-32.6-32.6-79-47.5-124.6-39.9C50.5 55.6 0 115.2 0 185.1v5.8c0 41.5 17.2 81.2 47.6 109.5z" />
+                            </svg>
+                          </div>
+                          <div className="text-lg font-medium text-center absolute top-56 left-4 text-black">
+                            <span className="block -mb-2">
+                              {/* {profile.name} */}
+                              chirag sangwan
+                            </span>
+                            <span className="flex justify-start">
+                              {/* {profile.age} */}
+                              22
+                            </span>
+                          </div>
+                        </div>
                       </div>
                     </div>
                   </div>
-                ))}
+                </div>
+              </div>
+            </div>
+
+            {/* Messages Column */}
+            <div className="px-6 lg:px-10 xl:px-12">
+              <div className="bg-[#BF6A13]">
+                <div className="flex items-center md:mt-10 ml-12 gap-2 mb-4">
+                  <img
+                    src={back}
+                    alt="back"
+                    onClick={() => navigate("/Swipe")}
+                    className="w-4 h-4 cursor-pointer"
+                  />
+                  <div className="ml-2 text-lg font-medium">Your Messages</div>
+                </div>
+
+                <div className="px-6 md:px-8 lg:px-10 xl:px-12">
+                  <div className="relative flex justify-center items-center w-full mb-8 mt-8">
+                    <p className="border-t border-black w-full md:w-3/4 lg:w-2/3"></p>
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="14"
+                      height="14"
+                      viewBox="0 0 20 19"
+                      fill="none"
+                      className="absolute text-black z-10"
+                    >
+                      <path
+                        d="M10 18.35L8.55 17.03C3.4 12.36 0 9.27 0 5.5C0 2.41 2.42 0 5.5 0C7.24 0 8.91 0.81 10 2.08C11.09 0.81 12.76 0 14.5 0C17.58 0 20 2.41 20 5.5C20 9.27 16.6 12.36 11.45 17.03L10 18.35Z"
+                        fill="currentColor"
+                      />
+                    </svg>
+                  </div>
+                </div>
+
+                <div className="border-b border-gray-300">
+                  <div className="flex items-center p-4 bg-white">
+                    <input
+                      className="flex-grow py-2 px-4 border bg-gray-200 rounded-full"
+                      type="text"
+                      placeholder="Search by name"
+                    />
+                  </div>
+
+                  <div className="bg-white">
+                    {fetchedProfiles.map((pro) => (
+                      <div
+                        key={pro.id}
+                        className="flex items-center p-3 md:p-4 hover:bg-gray-100 cursor-pointer"
+                        onClick={() => navigate(`/ChattingSinglePage/${pro.id}`, { state: { profile: pro } })}
+                      >
+                        <img
+                          src={pro.images[0]}
+                          alt={pro.name}
+                          className="w-10 h-10 md:w-10 md:h-10 rounded-full mr-3 md:mr-4"
+                        />
+                        <div className="flex flex-col">
+                          <span className="font-medium">{pro.name}</span>
+                          <span className="text-gray-600 text-ellipsis">
+                            write your message
+                          </span>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -203,4 +292,6 @@ const Notification = () => {
     </>
   );
 };
+
+
 export default Notification;
