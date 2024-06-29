@@ -104,14 +104,14 @@ pub fn remove_matches(state: &mut State, user_id: String) -> Result<String, Stri
         user_profile.matched_profiles.clear();
 
         // Collect all user IDs that this user has rightswiped
-        let rightswiped_user_ids: Vec<String> = user_profile
+        let rightreceiver_ids: Vec<String> = user_profile
             .params
             .rightswipes
             .as_ref()
             .map_or(vec![], |rightswipes| rightswipes.iter().cloned().collect());
 
         // Collect all user IDs that this user has leftswiped
-        let leftswiped_user_ids: Vec<String> = user_profile
+        let leftreceiver_ids: Vec<String> = user_profile
             .params
             .leftswipes
             .as_ref()
@@ -128,21 +128,21 @@ pub fn remove_matches(state: &mut State, user_id: String) -> Result<String, Stri
 
         // Prepare changes for rightswipes and leftswipes in other profiles that involve this user
         let mut profiles_to_update = Vec::new();
-        for swiped_user_id in rightswiped_user_ids {
-            if let Some(mut swiped_user_profile) = state.user_profiles.get(&swiped_user_id).map(|p| p.clone()) {
+        for receiver_id in rightreceiver_ids {
+            if let Some(mut swiped_user_profile) = state.user_profiles.get(&receiver_id).map(|p| p.clone()) {
                 if let Some(swiped_user_rightswipes) = swiped_user_profile.params.rightswipes.as_mut() {
                     swiped_user_rightswipes.remove(&user_id);
                 }
-                profiles_to_update.push((swiped_user_id, swiped_user_profile));
+                profiles_to_update.push((receiver_id, swiped_user_profile));
             }
         }
 
-        for swiped_user_id in leftswiped_user_ids {
-            if let Some(mut swiped_user_profile) = state.user_profiles.get(&swiped_user_id).map(|p| p.clone()) {
+        for receiver_id in leftreceiver_ids {
+            if let Some(mut swiped_user_profile) = state.user_profiles.get(&receiver_id).map(|p| p.clone()) {
                 if let Some(swiped_user_leftswipes) = swiped_user_profile.params.leftswipes.as_mut() {
                     swiped_user_leftswipes.remove(&user_id);
                 }
-                profiles_to_update.push((swiped_user_id, swiped_user_profile));
+                profiles_to_update.push((receiver_id, swiped_user_profile));
             }
         }
 

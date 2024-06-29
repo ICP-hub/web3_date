@@ -29,7 +29,7 @@ type Result_4 = variant { Ok : MatchResult; Err : text };
 type Result_5 = variant { Ok : vec Message; Err : text };
 type Result_6 = variant { Ok : vec Notification; Err : text };
 type Result_7 = variant { Ok; Err : text };
-type SwipeInput = record { swiped_user_id : text; swiping_user_id : text };
+type SwipeInput = record { receiver_id : text; sender_id : text };
 type UserInputParams = record {
   age : opt nat64;
   dob : opt text;
@@ -65,6 +65,7 @@ type UserInputParams = record {
 };
 type UserProfileCreationInfo = record {
   status : bool;
+  expired : bool;
   notifications : vec Notification;
   matched_profiles : vec text;
   created_at : nat64;
