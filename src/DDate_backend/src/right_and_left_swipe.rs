@@ -98,10 +98,18 @@ pub fn leftswipe_profile(
     // Update profiles in state
     state.user_profiles.insert(sender_id.clone(), swiping_user_profile.clone());
 
+    // Update expired status of swiped user
+    if let Some(mut swiped_user_profile) = state.user_profiles.remove(&receiver_id) {
+        swiped_user_profile.expired = true;
+        state.user_profiles.insert(receiver_id.clone(), swiped_user_profile);
+    } else {
+        return Err(format!("Failed to update expired status for user ID {}", receiver_id));
+    }
 
     ic_cdk::println!("Leftswiped! Swiping user profile: {:?}", swiping_user_profile);
     Ok("Left swiped successfully.".to_string())
 }
+
 
 pub fn rightswipe_profile(
     state: &mut State,
@@ -144,10 +152,18 @@ pub fn rightswipe_profile(
     // Update profiles in state
     state.user_profiles.insert(sender_id.clone(), swiping_user_profile.clone());
 
+    // Update expired status of swiped user
+    if let Some(mut swiped_user_profile) = state.user_profiles.remove(&receiver_id) {
+        swiped_user_profile.expired = true;
+        state.user_profiles.insert(receiver_id.clone(), swiped_user_profile);
+    } else {
+        return Err(format!("Failed to update expired status for user ID {}", receiver_id));
+    }
 
     ic_cdk::println!("Rightswiped! Swiping user profile: {:?}", swiping_user_profile);
     Ok("Right swiped successfully.".to_string())
 }
+
 
 
 
