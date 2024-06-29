@@ -3,7 +3,7 @@ import { useFormContext } from 'react-hook-form';
 import compressImage from '../ImageCompressFolder/CompressImage';
 
 const Form6 = () => {
-    const { register, setValue, formState: { errors }, unregister,  trigger,setError} = useFormContext();
+    const { register, setValue, formState: { errors }, unregister, trigger, setError } = useFormContext();
     const [imageFields, setImageFields] = useState([]);
     const [err, setErr] = useState(false);
 
@@ -14,40 +14,40 @@ const Form6 = () => {
     const handleImageUpload = async (e, index) => {
         const file = e.target.files[0];
         if (!file) {
-          console.log("ERROR -- handleImageUpload: file is missing");
-          return;
+            console.log("ERROR -- handleImageUpload: file is missing");
+            return;
         }
-        
+
         try {
-          const result = await trigger(`firstImage${index}`); // Assuming trigger function is correctly implemented
-          if (result) {
-            const compressedFile = await compressImage(file); // Assuming compressImage function is correctly implemented and returns a File object
-      
-            const reader = new FileReader();
-            reader.onloadend = () => {
-              const newImageFields = [...imageFields];
-              const arrayBuffer = reader.result;
-              newImageFields[index].arrayBuffer = arrayBuffer;
-              // Optionally update state with newImageFields if needed
-            };
-            reader.readAsArrayBuffer(compressedFile);
-      
-            const byteArray = await compressedFile.arrayBuffer(); // Convert compressedFile to byte array
-            setImageFields([...imageFields, Array.from(new Uint8Array(byteArray))]); // Update imageFields state with new byte array
-            setValue(`firstImage${index}`, Array.from(new Uint8Array(byteArray))); // Update form value with byte array
-      
-          } else {
-            console.log("ERROR -- handleImageUpload: image trigger failed");
-          }
+            const result = await trigger(`firstImage${index}`); // Assuming trigger function is correctly implemented
+            if (result) {
+                const compressedFile = await compressImage(file); // Assuming compressImage function is correctly implemented and returns a File object
+
+                const reader = new FileReader();
+                reader.onloadend = () => {
+                    const newImageFields = [...imageFields];
+                    const arrayBuffer = reader.result;
+                    newImageFields[index].arrayBuffer = arrayBuffer;
+                    // Optionally update state with newImageFields if needed
+                };
+                reader.readAsArrayBuffer(compressedFile);
+
+                const byteArray = await compressedFile.arrayBuffer(); // Convert compressedFile to byte array
+                setImageFields([...imageFields, Array.from(new Uint8Array(byteArray))]); // Update imageFields state with new byte array
+                setValue(`firstImage${index}`, Array.from(new Uint8Array(byteArray))); // Update form value with byte array
+
+            } else {
+                console.log("ERROR -- handleImageUpload: image trigger failed");
+            }
         } catch (error) {
-          console.error("Error processing image:", error);
-          // Handle errors here if needed
+            console.error("Error processing image:", error);
+            // Handle errors here if needed
         }
-      };
-      
+    };
+
     const handleAddField = () => {
         if (imageFields.length < 5) {
-            setImageFields([...imageFields, { }]);
+            setImageFields([...imageFields, {}]);
         }
     };
 
@@ -57,13 +57,13 @@ const Form6 = () => {
         unregister(`firstImage${index}`);
     };
 
-    console.log('imageFields',imageFields)
+    console.log('imageFields', imageFields)
     const renderImagePreviews = () => {
         return imageFields.map((field, index) => (
             <div key={index} className="relative group mb-4">
                 {field.arrayBuffer ? (
                     <div className="relative">
-                        <img src={URL.createObjectURL(new Blob([new Uint8Array(field.arrayBuffer)], { type: 'image/jpeg' }))} alt={`Preview ${index + 1}`} className="h-36 w-full object-fill rounded-2xl" />
+                        <img src={URL.createObjectURL(new Blob([new Uint8Array(field.arrayBuffer)], { type: 'image/jpeg' }))} alt={`Preview ${index + 1}`} className=" w-full object-fill rounded-2xl" />
                         <button
                             type="button"
                             onClick={() => handleRemoveField(index)}
