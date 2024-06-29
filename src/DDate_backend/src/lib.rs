@@ -4,7 +4,6 @@ mod profile_matcher;
 mod right_and_left_swipe;
 mod state_handler;
 use std::collections::VecDeque;
-
 use crate::profile_creation::UserProfileCreationInfo;
 // use candid::Principal;
 use ic_cdk::{caller, export_candid, query, update};
@@ -30,6 +29,9 @@ use crate::profile_creation::PaginatedProfiles;
 
 // #[query(guard = "is_anonymous")]
 // #[update(guard = "is_anonymous")]
+
+
+
 
 #[query]
 fn get_user_id_by_principal() -> Result<String, String> {

@@ -76,6 +76,21 @@ pub struct UserProfileCreationInfo {
     pub status: bool,
 }
 
+
+impl Default for UserProfileCreationInfo {
+    fn default() -> Self {
+        UserProfileCreationInfo {
+            user_id: String::new(),
+            created_at: 0,
+            creator_principal: Principal::anonymous(),
+            params: UserProfileParams::default(),
+            notifications: VecDeque::new(),
+            matched_profiles: Vec::new(),
+            status: true,
+        }
+    }
+}
+
 #[derive(Default, Clone, Deserialize, CandidType, Debug, Serialize)]
 pub struct UserProfileParams {
     pub user_id: Option<String>,
@@ -244,7 +259,7 @@ impl State {
     
         let start = (pagination.page - 1) * pagination.size;
         if start >= total_profiles {
-            return Err("Page number out of range".to_string());
+            return Err("no profiles are matched".to_string());
         }
         let end = std::cmp::min(start + pagination.size, total_profiles);
     

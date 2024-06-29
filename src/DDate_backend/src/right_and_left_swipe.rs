@@ -15,8 +15,8 @@ pub struct PaginatedResult {
 
 #[derive(CandidType, Deserialize)]
 pub struct SwipeInput {
-    pub swiping_user_id: String,
-    pub swiped_user_id: String,
+    pub sender_id: String,
+    pub receiver_id: String,
 }
 
 pub fn like_profile(
@@ -62,16 +62,19 @@ pub fn leftswipe_profile(
     input: SwipeInput,
 ) -> Result<String, String> {
     let SwipeInput {
-        swiping_user_id,
-        swiped_user_id,
+        sender_id,
+        receiver_id,
+        ..
     } = input;
 
-    if swiping_user_id == swiped_user_id {
+    if sender_id == receiver_id {
         return Err("User cannot leftswipe themselves.".to_string());
     }
 
-    let swiping_user_profile = state.user_profiles.get(&swiping_user_id).ok_or_else(|| format!("Swiping user ID {} does not exist.", swiping_user_id))?;
-    let swiped_user_profile = state.user_profiles.get(&swiped_user_id).ok_or_else(|| format!("Swiped user ID {} does not exist.", swiped_user_id))?;
+    let swiping_user_profile = state.user_profiles.get(&sender_id)
+        .ok_or_else(|| format!("Swiping user ID {} does not exist.", sender_id))?;
+    let swiped_user_profile = state.user_profiles.get(&receiver_id)
+        .ok_or_else(|| format!("Swiped user ID {} does not exist.", receiver_id))?;
 
     if !swiping_user_profile.status {
         return Err("Swiping user account is inactive".to_string());
@@ -81,25 +84,22 @@ pub fn leftswipe_profile(
         return Err("Swiped user account is inactive".to_string());
     }
 
-    let mut swiped_user_profile = swiped_user_profile.clone();
-
-    // Remove the like if it exists
-    if let Some(likes) = swiped_user_profile.params.likes.as_mut() {
-        likes.remove(&swiping_user_id);
-    }
+    let mut swiping_user_profile = swiping_user_profile.clone();
 
     // Add to leftswipes
-    if let Some(leftswipes) = swiped_user_profile.params.leftswipes.as_mut() {
-        leftswipes.insert(swiping_user_id.clone());
+    if let Some(leftswipes) = swiping_user_profile.params.leftswipes.as_mut() {
+        leftswipes.insert(receiver_id.clone());
     } else {
         let mut new_leftswipes = HashSet::new();
-        new_leftswipes.insert(swiping_user_id.clone());
-        swiped_user_profile.params.leftswipes = Some(new_leftswipes);
+        new_leftswipes.insert(receiver_id.clone());
+        swiping_user_profile.params.leftswipes = Some(new_leftswipes);
     }
 
-    state.user_profiles.insert(swiped_user_id.clone(), swiped_user_profile);
+    // Update profiles in state
+    state.user_profiles.insert(sender_id.clone(), swiping_user_profile.clone());
 
-    ic_cdk::println!("leftswiped!");
+
+    ic_cdk::println!("Leftswiped! Swiping user profile: {:?}", swiping_user_profile);
     Ok("Left swiped successfully.".to_string())
 }
 
@@ -108,16 +108,19 @@ pub fn rightswipe_profile(
     input: SwipeInput,
 ) -> Result<String, String> {
     let SwipeInput {
-        swiping_user_id,
-        swiped_user_id,
+        sender_id,
+        receiver_id,
+        ..
     } = input;
 
-    if swiping_user_id == swiped_user_id {
+    if sender_id == receiver_id {
         return Err("User cannot rightswipe themselves.".to_string());
     }
 
-    let swiping_user_profile = state.user_profiles.get(&swiping_user_id).ok_or_else(|| format!("Swiping user ID {} does not exist.", swiping_user_id))?;
-    let swiped_user_profile = state.user_profiles.get(&swiped_user_id).ok_or_else(|| format!("Swiped user ID {} does not exist.", swiped_user_id))?;
+    let swiping_user_profile = state.user_profiles.get(&sender_id)
+        .ok_or_else(|| format!("Swiping user ID {} does not exist.", sender_id))?;
+    let swiped_user_profile = state.user_profiles.get(&receiver_id)
+        .ok_or_else(|| format!("Swiped user ID {} does not exist.", receiver_id))?;
 
     if !swiping_user_profile.status {
         return Err("Swiping user account is inactive".to_string());
@@ -127,22 +130,27 @@ pub fn rightswipe_profile(
         return Err("Swiped user account is inactive".to_string());
     }
 
-    let mut swiped_user_profile = swiped_user_profile.clone();
+    let mut swiping_user_profile = swiping_user_profile.clone();
 
     // Add to rightswipes
-    if let Some(rightswipes) = swiped_user_profile.params.rightswipes.as_mut() {
-        rightswipes.insert(swiping_user_id.clone());
+    if let Some(rightswipes) = swiping_user_profile.params.rightswipes.as_mut() {
+        rightswipes.insert(receiver_id.clone());
     } else {
         let mut new_rightswipes = HashSet::new();
-        new_rightswipes.insert(swiping_user_id.clone());
-        swiped_user_profile.params.rightswipes = Some(new_rightswipes);
+        new_rightswipes.insert(receiver_id.clone());
+        swiping_user_profile.params.rightswipes = Some(new_rightswipes);
     }
 
-    state.user_profiles.insert(swiped_user_id.clone(), swiped_user_profile);
+    // Update profiles in state
+    state.user_profiles.insert(sender_id.clone(), swiping_user_profile.clone());
 
-    ic_cdk::println!("rightswiped!");
+
+    ic_cdk::println!("Rightswiped! Swiping user profile: {:?}", swiping_user_profile);
     Ok("Right swiped successfully.".to_string())
 }
+
+
+
 
 pub fn fetch_leftswipes(state: &State, user_id: String, pagination: Pagination) -> Result<MatchResult, String> {
     ic_cdk::println!("Fetching leftswipes for user ID: {}", user_id);
@@ -166,8 +174,8 @@ pub fn fetch_leftswipes(state: &State, user_id: String, pagination: Pagination) 
         .as_ref()
         .unwrap_or(&HashSet::new())
         .iter()
-        .filter_map(|swiped_user_id| {
-            let swiped_profile = state.user_profiles.get(swiped_user_id)?;
+        .filter_map(|receiver_id| {
+            let swiped_profile = state.user_profiles.get(receiver_id)?;
             if swiped_profile.status {
                 Some(swiped_profile.clone())
             } else {
@@ -216,8 +224,8 @@ pub fn fetch_rightswipes(state: &State, user_id: String, pagination: Pagination)
         .as_ref()
         .unwrap_or(&HashSet::new())
         .iter()
-        .filter_map(|swiped_user_id| {
-            let swiped_profile = state.user_profiles.get(swiped_user_id)?;
+        .filter_map(|receiver_id| {
+            let swiped_profile = state.user_profiles.get(receiver_id)?;
             if swiped_profile.status {
                 Some(swiped_profile.clone())
             } else {
