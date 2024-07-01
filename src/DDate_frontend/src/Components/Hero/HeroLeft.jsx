@@ -54,6 +54,13 @@ const HeroLeft = () => {
           className="rounded-full h-16 w-16 flex items-center justify-center text-black cursor-pointer absolute right-6 top-4 lg:hidden"
         />
       )}
+
+      <img
+        src={createPageImage}
+        alt="Logout"
+        onClick={toggleLogoutModal}
+        className="rounded-full h-16 w-16 flex items-center justify-center text-black cursor-pointer absolute right-6 top-4  lg:hidden"
+      />
       <LogoutModal isOpen={isLogoutModal} onClose={toggleLogoutModal} />
       <WalletModal isOpen={isWalletModalOpen} onClose={toggleWalletModal} />
     </div>

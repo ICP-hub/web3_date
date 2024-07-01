@@ -7,10 +7,12 @@ import { useAuth } from '../../auth/useAuthClient';
 
 const HeroRight = () => {
   const navigate = useNavigate();
-  const { principal, isAuthenticated } = useAuth();
+
+  const { isAuthenticated } = useAuth();
   const [isWalletModalOpen, setWalletModalOpen] = useState(false);
   const [isLogoutModal, setLogoutModal] = useState(false);
-
+  const id = localStorage.getItem('id');
+  const isUserLoggedIn = !!id;
   const toggleWalletModal = () => {
     setWalletModalOpen(!isWalletModalOpen);
   };
@@ -41,13 +43,13 @@ const HeroRight = () => {
   return (
     <div className="relative w-full lg:w-3/5 h-auto flex flex-col justify-center items-center lg:p-8">
       {/* {isAuthenticated && */}
-       {/* ( */}
-        <img
-          src={createPageImage}
-          alt="Logout"
-          onClick={toggleLogoutModal}
-          className="rounded-full h-12 w-12 flex items-center justify-center text-black cursor-pointer absolute right-6 top-4 lg:flex"
-        />
+      {/* ( */}
+      <img
+        src={createPageImage}
+        alt="Logout"
+        onClick={toggleLogoutModal}
+        className="rounded-full h-12 w-12 flex items-center justify-center text-black cursor-pointer absolute right-6 top-4 lg:flex hidden md:hidden "
+      />
       {/* ) */}
       {/* } */}
       <div className="text-center mx-auto mt-4 md:mt-10">

@@ -283,7 +283,8 @@ function Swipe() {
                         }}
                       >
                       </div>
-                      <div className="pl-4 md:bottom-16 bottom-[8rem] absolute z-20 justify-center ">
+                      {/* <div className="pl-4 md:bottom-16 bottom-[8rem] absolute z-20 justify-center "> */}
+                      <div className="z-20 md:-ml-[17.5rem]  dsx:-ml-[14rem] -ml-[12rem] md:bottom-16 bottom-[4rem] absolute">
                         <h2 className="text-4xl font-bold text-white  mb-2 ">
                           {character.params.name[0]}
                         </h2>
