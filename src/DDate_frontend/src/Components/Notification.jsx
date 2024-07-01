@@ -59,9 +59,43 @@ const Notification = () => {
     }
   }, [notifications]);
 
+  const principalString = localStorage.getItem("id");
+  console.log("this is principal strinng", principalString);
+
+  function convertStringToPrincipal(principalString) {
+    console.log("conversion principal is being called");
+    try {
+      const principal = Principal.fromText(principalString);
+      console.log("Converted Principal: ", principal.toText());
+      return principal;
+    } catch (error) {
+      console.error("Error converting string to Principal: ", error);
+      return null;
+    }
+  }
+
+  // const principal = convertStringToPrincipal(principalString); //principal
+
+  useEffect(() => {
+    const fetchNotifications = async () => {
+      setLoading(true);
+      try {
+        const notificationData =
+          await DDate_backend.retrieve_notifications_for_user(principal);
+        setNotifications(notificationData);
+        setLoading(false);
+      } catch (error) {
+        console.error("Failed to fetch notifications:", error);
+        setLoading(false);
+      }
+    };
+
+    fetchNotifications();
+  }, []);
+
   // const principalString = "tc7cw-ilo2x-rwqep-gohde-puqog-soeyv-szxvv-ybcgw-lbrkl-sm7ab-wae";
 
-  const principalString = localStorage.getItem("id");
+  // const principalString = localStorage.getItem("id");
   console.log("this is principal strinng", principalString);
 
   function convertStringToPrincipal(principalString) {

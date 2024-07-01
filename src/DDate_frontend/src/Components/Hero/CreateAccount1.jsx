@@ -183,10 +183,10 @@ const CreateAccount1 = () => {
         data?.firstImage4,
       ];
 
-      const imageArray = await Promise.all(imagesBase64.map(async (image) => {
-        const base64String = btoa(String.fromCharCode(...image));
-        return base64String;
-      }));
+      // const imageArray = await Promise.all(imagesBase64.map(async (image) => {
+      //   const base64String = btoa(String.fromCharCode(...image));
+      //   return base64String;
+      // }));
 
       const DdateData = {
         email: [data?.email],
@@ -223,7 +223,8 @@ const CreateAccount1 = () => {
         preferred_gender: [data?.usergender],
         looking_for: [data?.selectedLookingFor],
         max_preferred_age: [Number((data?.selectedPreferAge).slice(3, 5))],
-        images: imageArray ? [imageArray] : [],
+        // images: imageArray ? [imageArray] : [],
+        images: [],
         zodiac: [data?.selectedZodiac],
       };
       console.log("Ddatedata ", DdateData);
