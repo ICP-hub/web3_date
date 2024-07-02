@@ -5,6 +5,7 @@ mod right_and_left_swipe;
 mod state_handler;
 use std::collections::VecDeque;
 use crate::profile_creation::UserProfileCreationInfo;
+use candid::CandidType;
 // use candid::Principal;
 use ic_cdk::{caller, export_candid, query, update};
 pub use notification::*;
@@ -12,6 +13,7 @@ use profile_creation::Message;
 use profile_creation::{Notification, Pagination};
 pub use profile_matcher::*;
 pub use right_and_left_swipe::*;
+use serde::Serialize;
 use state_handler::*;
 use crate::profile_creation::UserInputParams;
 use crate::profile_creation::PaginatedProfiles;
@@ -29,6 +31,78 @@ use crate::profile_creation::PaginatedProfiles;
 
 // #[query(guard = "is_anonymous")]
 // #[update(guard = "is_anonymous")]
+
+#[update]
+pub fn add_user_to_chatlist(user_id: String) -> Result<Vec<ChatListItem>, String> {
+    ic_cdk::println!("Adding user to chatlist with user_id: {}", user_id);
+
+    read_state(|state| {
+        let user_profile = state
+            .user_profiles
+            .get(&user_id)
+            .ok_or_else(|| format!("User ID '{}' not found", user_id))?;
+
+        if !user_profile.status {
+            return Err("User account is inactive".to_string());
+        }
+
+        let mut chatlist: Vec<ChatListItem> = Vec::new();
+
+        for matched_user_id in &user_profile.matched_profiles {
+            let matched_user_profile = state
+                .user_profiles
+                .get(matched_user_id)
+                .ok_or_else(|| format!("Matched User ID '{}' not found", matched_user_id))?;
+
+            // Example: Get name from matched_user_profile (UserProfileParams)
+            let name = matched_user_profile
+                .params
+                .name
+                .clone()
+                .unwrap_or_else(|| "Unknown".to_string());
+
+            // Example: Get image from matched_user_profile (UserProfileParams)
+            let image = matched_user_profile
+                .params
+                .images
+                .clone()
+                .unwrap_or_else(|| vec!["default.jpg".to_string()]);
+
+
+            // Example: Get content (message) from Message struct
+            let content = "Hello, Start a Conversation!".to_string();
+
+            // Example: Get timestamp from Message struct
+            let timestamp = ic_cdk::api::time();
+
+            // Example: Construct chat_id using UUID and user IDs
+            let chat_id = format!("chat-{}-{}", user_id, matched_user_id);
+
+            // Create ChatListItem with extracted fields
+            let chat_item = ChatListItem {
+                name,
+                image,
+                content,
+                timestamp,
+                chat_id,
+            };
+
+            chatlist.push(chat_item);
+        }
+
+        Ok(chatlist)
+    })
+}
+
+// Define ChatListItem struct for storing extracted fields
+#[derive(Debug, Serialize,CandidType)]
+pub struct ChatListItem {
+    pub name: String,
+    pub image: Vec<String>,
+    pub content: String,
+    pub timestamp: u64,
+    pub chat_id: String,
+}
 
 
 
@@ -70,9 +144,6 @@ pub fn send_like_notification_candid(sender_id: String, receiver_id: String) -> 
     })
 }
 
-
-
-
 #[update]
 pub fn get_rightswiped_matches(
     user_id: String,
@@ -81,18 +152,16 @@ pub fn get_rightswiped_matches(
 ) -> Result<MatchResult, String> {
     ic_cdk::println!("Finding matches for user: {}", user_id);
 
-    let user_profile = STATE.with(|state| {
+    let user_profile_exists = STATE.with(|state| {
         state
             .borrow()
             .user_profiles
-            .get(&user_id)
-            .map(|profile| profile.clone())
+            .contains_key(&user_id)
     });
 
-    let _new_profile = match user_profile {
-        Some(profile) => profile,
-        None => return Err(format!("User ID '{}' does not exist or is inactive", user_id)),
-    };
+    if !user_profile_exists {
+        return Err(format!("User ID '{}' does not exist or is inactive", user_id));
+    }
 
     if page == 0 {
         return Err("Page number must be greater than 0".to_string());
@@ -100,27 +169,26 @@ pub fn get_rightswiped_matches(
 
     let pagination = Pagination { page, size };
 
-    let match_result = STATE.with(|state| {
-        let state = state.borrow();
-        find_matches(&state.user_profiles, &user_id, pagination)
-    })?;
+    let match_result = find_matches(&user_id, pagination)?;
 
     STATE.with(|state| {
         let mut state = state.borrow_mut();
-        // Remove the old profile and insert the updated one with matched_profiles
-        if let Some(user_profile) = state.user_profiles.remove(&user_id) {
-            let mut updated_profile = user_profile;
-            updated_profile.matched_profiles = match_result
+        // Remove the old profile, update matched_profiles, and reinsert it
+        if let Some(mut user_profile) = state.user_profiles.remove(&user_id) {
+            user_profile.matched_profiles = match_result
                 .paginated_profiles
                 .iter()
                 .map(|profile| profile.user_id.clone())
                 .collect();
-            state.user_profiles.insert(user_id.clone(), updated_profile);
+            state.user_profiles.insert(user_id.clone(), user_profile);
         }
     });
 
     Ok(match_result)
 }
+
+
+
 
 
 #[update]

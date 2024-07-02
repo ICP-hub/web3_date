@@ -20,6 +20,14 @@ pub type UserMessages = StableBTreeMap<String,Candid<VecDeque<Message>>,Memory>;
 const PROFILE_DATA: MemoryId = MemoryId::new(0);
 const MESSAGE_DATA: MemoryId = MemoryId::new(1);
 
+pub struct State {
+
+    pub user_profiles : UserProfiles,
+    pub user_messages : UserMessages,
+    
+
+}
+
 thread_local! {
     static MEMORY_MANAGER: RefCell<MemoryManager<DefaultMemoryImpl>> = RefCell::new(
         MemoryManager::init(DefaultMemoryImpl::default())
@@ -50,13 +58,8 @@ pub fn get_messagedata_memory() -> Memory {
     MEMORY_MANAGER.with(|m| m.borrow().get(MESSAGE_DATA))
 }
 
-pub struct State {
 
-    pub user_profiles : UserProfiles,
-    pub user_messages : UserMessages,
-    
 
-}
 
 impl State {
     pub fn new() -> Self {
