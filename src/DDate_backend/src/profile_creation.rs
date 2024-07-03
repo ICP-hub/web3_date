@@ -160,63 +160,6 @@ pub struct UserChatList {
     pub chat_id: String,
 }
 
-// impl UserMatch {
-//     pub fn add_user_to_chatlist(user_id: String) -> Result<Vec<UserMatch>, String> {
-//         // Access the user profiles from the state
-//         let profiles = STATE.with(|state| {
-//             let state = state.borrow();
-//             &state.user_profiles // Use reference to avoid cloning entire map
-//         });
-    
-//         // Define pagination
-//         let pagination = Pagination { page: 1, size: 10 };
-    
-//         // Find matches for the user ID
-//         let match_result = find_matches(profiles, &user_id, pagination)?;
-    
-//         // Initialize an empty vector to store matches
-//         let mut matches = Vec::new();
-    
-//         // Iterate through the matched profiles
-//         for (key, profile_info) in match_result.paginated_profiles.iter() {
-//             // Get the current timestamp
-//             let current_time = SystemTime::now().duration_since(UNIX_EPOCH).unwrap().as_secs();
-//             // Generate a random chat ID
-//             let chat_id = Self::generate_random_chat_id();
-    
-//             // Create a welcome message
-//             let message = String::from("Welcome to the chat!");
-    
-//             // Construct the UserMatch instance
-//             let user_match = UserMatch {
-//                 name: profile_info.name.clone().unwrap_or_else(|| String::from("Unknown")), // Example field access, adjust as per your struct
-//                 image: profile_info.image.clone().unwrap_or_else(|| String::from("default_image.jpg")), // Example field access, adjust as per your struct
-//                 timestamp: current_time,
-//                 message: message.clone(),
-//                 chat_id,
-//             };
-    
-//             // Add the user match to the list
-//             matches.push(user_match);
-//         }
-    
-//         // Return the list of matches
-//         Ok(matches)
-//     }
-
-//     fn generate_random_chat_id() -> String {
-//         // Generate a random alphanumeric chat ID
-//         let mut rng = rand::thread_rng();
-//         (0..10).map(|_| rng.sample(rand::distributions::Alphanumeric) as char).collect()
-//     }
-// }
-
-    
-
-
-
-
-
 
 #[init]
 fn init() {
