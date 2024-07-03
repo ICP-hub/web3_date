@@ -209,13 +209,16 @@ function Swipe() {
 
       if (dir === "left") {
         try {
-          await backendActor.leftswipe({ swiped_user_id: userId, swiping_user_id: allTenUserId[userIndex] });
+          const left = await backendActor.leftswipe({ receiver_id: userId, sender_id: allTenUserId[userIndex] });
+          console.log("left", left)
         } catch (error) {
           console.error("Error sending data to the backend:", error);
         }
       } else if (dir === "right") {
         try {
-          await backendActor.rightswipe({ swiped_user_id: userId, swiping_user_id: allTenUserId[userIndex] });
+          const right = await backendActor.rightswipe({ receiver_id: userId, sender_id: allTenUserId[userIndex] });
+
+          console.log("right", right)
         } catch (error) {
           console.error("Error sending data to the backend:", error);
         }
@@ -271,7 +274,7 @@ function Swipe() {
                     <div className="h-full  w-full flex flex-col items-center justify-center relative">
                       <img
                         alt="img"
-                        // src={character.images[0]}
+                        src="https://cdn.pixabay.com/photo/2022/01/17/22/20/add-6945894_640.png"
                         className="h-full w-full  lg:max-w-lg  "
                         style={{ height: "106vh" }}
                       />
@@ -283,7 +286,8 @@ function Swipe() {
                         }}
                       >
                       </div>
-                      <div className="pl-4 md:bottom-16 bottom-[8rem] absolute z-20 justify-center ">
+
+                      <div className="z-20 md:-ml-[12rem] sm2:-ml-[14rem]   ipad:-ml-[24rem] -ml-[5rem] md:bottom-16 bottom-[4rem] absolute">
                         <h2 className="text-4xl font-bold text-white  mb-2 ">
                           {character.params.name[0]}
                         </h2>
@@ -304,30 +308,32 @@ function Swipe() {
                     </div>
                   </TinderCard>
                 ))}
+                <div className="flex gap-4  p-6  absolute bottom-[0%]  w-full justify-center z-30  ">
+                  <button
+                    className="rounded-full  h-12 w-12 bg-transparent shadow-md text-3xl border border-pink-700 hover:bg-red-300 font-bold text-gray-800 "
+                    onClick={() => swipe("left")}
+                    disabled={db.length === 0}
+                  >
+                    <FontAwesomeIcon
+                      icon={faClose}
+                      style={{ color: db.length === 0 ? "#b2b2b2" : "#fd5068" }}
+                    />
+                  </button>
+                  <button
+                    className="rounded-full  h-12 w-12 bg-transparent shadow-md text-3xl border border-green-700 hover:bg-green-700 font-bold text-gray-800"
+                    onClick={() => swipe("right")}
+                    disabled={db.length === 0}
+                  >
+                    <FontAwesomeIcon
+                      icon={faHeart}
+                      style={{ color: db.length === 0 ? "#b2b2b2" : "#1be4a1" }}
+                    />
+                  </button>
+                </div>
               </div>
+
             )}
-        <div className="flex gap-4  p-6  absolute bottom-[0%]  w-full justify-center z-30  ">
-          <button
-            className="rounded-full  h-12 w-12 bg-transparent shadow-md text-3xl border border-pink-700 hover:bg-red-300 font-bold text-gray-800 "
-            onClick={() => swipe("left")}
-            disabled={db.length === 0}
-          >
-            <FontAwesomeIcon
-              icon={faClose}
-              style={{ color: db.length === 0 ? "#b2b2b2" : "#fd5068" }}
-            />
-          </button>
-          <button
-            className="rounded-full  h-12 w-12 bg-transparent shadow-md text-3xl border border-green-700 hover:bg-green-700 font-bold text-gray-800"
-            onClick={() => swipe("right")}
-            disabled={db.length === 0}
-          >
-            <FontAwesomeIcon
-              icon={faHeart}
-              style={{ color: db.length === 0 ? "#b2b2b2" : "#1be4a1" }}
-            />
-          </button>
-        </div>
+
 
       </div>
       )}

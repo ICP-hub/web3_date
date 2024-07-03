@@ -11,7 +11,7 @@ import { Principal } from "@dfinity/principal";
 const ChattingPage = () => {
 
 
-  // const navigate = useNavigate();
+  const navigate = useNavigate();
 
   // // const [fetchedProfiles, setFetchedProfiles] = useState([]);
   // const [loading, setLoading] = useState(true);
@@ -93,6 +93,7 @@ const ChattingPage = () => {
   return (
     <>
       <SidebarComponent />
+
 
       {
         false

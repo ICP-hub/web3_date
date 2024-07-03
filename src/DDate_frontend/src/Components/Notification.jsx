@@ -257,14 +257,14 @@ const Notification = () => {
 
             {/* Messages Column */}
             <div className="px-6 lg:px-10 xl:px-12">
-              <div className="bg-[#BF6A13]">
-                <div className="flex items-center md:mt-10 ml-12 gap-2 mb-4">
-                  <img
+              <div className="bg-gradient-to-b from-[#DB7D11] to-[#6B3018]">
+                <div className="flex items-center md:mt-10 mx-4 gap-2 mt-2 mb-4">
+                  {/* <img
                     src={back}
                     alt="back"
                     onClick={() => navigate("/Swipe")}
                     className="w-4 h-4 cursor-pointer"
-                  />
+                  /> */}
                   <div className="ml-2 text-lg font-medium">Your Messages</div>
                 </div>
 

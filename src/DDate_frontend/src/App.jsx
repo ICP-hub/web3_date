@@ -1,11 +1,11 @@
 
-import React,{useEffect} from 'react'
+import React, { useEffect } from 'react'
 import AllRoutes from './AllRoutes'
 
 function App() {
 
   return (
-    <div className='container'>
+    <div className=''>
       <AllRoutes />
     </div>
   )
