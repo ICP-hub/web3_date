@@ -1,3 +1,10 @@
+type ChatListItem = record {
+  content : text;
+  name : text;
+  timestamp : nat64;
+  image : vec text;
+  chat_id : text;
+};
 type MatchResult = record {
   total_matches : nat64;
   error_message : opt text;
@@ -21,14 +28,15 @@ type PaginatedProfiles = record {
   profiles : vec UserProfileCreationInfo;
 };
 type Pagination = record { page : nat64; size : nat64 };
-type Result = variant { Ok : text; Err : text };
-type Result_1 = variant { Ok : nat64; Err : text };
-type Result_2 = variant { Ok : PaginatedProfiles; Err : text };
-type Result_3 = variant { Ok : UserProfileCreationInfo; Err : text };
-type Result_4 = variant { Ok : MatchResult; Err : text };
-type Result_5 = variant { Ok : vec Message; Err : text };
-type Result_6 = variant { Ok : vec Notification; Err : text };
-type Result_7 = variant { Ok; Err : text };
+type Result = variant { Ok : vec ChatListItem; Err : text };
+type Result_1 = variant { Ok : text; Err : text };
+type Result_2 = variant { Ok : nat64; Err : text };
+type Result_3 = variant { Ok : PaginatedProfiles; Err : text };
+type Result_4 = variant { Ok : UserProfileCreationInfo; Err : text };
+type Result_5 = variant { Ok : MatchResult; Err : text };
+type Result_6 = variant { Ok : vec Message; Err : text };
+type Result_7 = variant { Ok : vec Notification; Err : text };
+type Result_8 = variant { Ok; Err : text };
 type SwipeInput = record { receiver_id : text; sender_id : text };
 type UserInputParams = record {
   age : opt nat64;
@@ -114,24 +122,25 @@ type UserProfileParams = record {
   images : opt vec text;
 };
 service : () -> {
+  add_user_to_chatlist : (text) -> (Result);
   check_user_match : (text, text) -> (bool);
-  create_an_account : (UserInputParams) -> (Result);
-  create_message : (text, text, text) -> (Result_1);
-  delete_an_account : (text) -> (Result);
-  delete_message : (nat64) -> (Result);
-  get_all_accounts : (Pagination) -> (Result_2) query;
-  get_an_account : (text) -> (Result_3) query;
-  get_leftswipes : (text, Pagination) -> (Result_4) query;
-  get_rightswiped_matches : (text, nat64, nat64) -> (Result_4);
-  get_rightswipes : (text, Pagination) -> (Result_4) query;
-  get_user_id_by_principal : () -> (Result) query;
+  create_an_account : (UserInputParams) -> (Result_1);
+  create_message : (text, text, text) -> (Result_2);
+  delete_an_account : (text) -> (Result_1);
+  delete_message : (nat64) -> (Result_1);
+  get_all_accounts : (Pagination) -> (Result_3) query;
+  get_an_account : (text) -> (Result_4) query;
+  get_leftswipes : (text, Pagination) -> (Result_5) query;
+  get_rightswiped_matches : (text, nat64, nat64) -> (Result_5);
+  get_rightswipes : (text, Pagination) -> (Result_5) query;
+  get_user_id_by_principal : () -> (Result_1) query;
   leftswipe : (SwipeInput) -> (text);
-  make_user_inactive : (text) -> (Result);
-  read_messages : (text, text) -> (Result_5) query;
-  remove_user_matches : (text) -> (Result);
-  retrieve_notifications_for_user : (text) -> (Result_6);
+  make_user_inactive : (text) -> (Result_1);
+  read_messages : (text, text) -> (Result_6) query;
+  remove_user_matches : (text) -> (Result_1);
+  retrieve_notifications_for_user : (text) -> (Result_7);
   rightswipe : (SwipeInput) -> (text);
-  send_like_notification_candid : (text, text) -> (Result_7);
-  update_an_account : (text, UserInputParams) -> (Result);
-  update_message : (nat64, text) -> (Result);
+  send_like_notification_candid : (text, text) -> (Result_8);
+  update_an_account : (text, UserInputParams) -> (Result_1);
+  update_message : (nat64, text) -> (Result_1);
 }

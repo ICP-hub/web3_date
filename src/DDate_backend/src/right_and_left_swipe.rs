@@ -164,10 +164,6 @@ pub fn rightswipe_profile(
     Ok("Right swiped successfully.".to_string())
 }
 
-
-
-
-
 pub fn fetch_leftswipes(state: &State, user_id: String, pagination: Pagination) -> Result<MatchResult, String> {
     ic_cdk::println!("Fetching leftswipes for user ID: {}", user_id);
 
@@ -217,6 +213,8 @@ pub fn fetch_leftswipes(state: &State, user_id: String, pagination: Pagination) 
         error_message: None,
     })
 }
+
+
 
 pub fn fetch_rightswipes(state: &State, user_id: String, pagination: Pagination) -> Result<MatchResult, String> {
     ic_cdk::println!("Fetching rightswipes for user ID: {}", user_id);

@@ -1,9 +1,10 @@
+
 use candid::CandidType;
 use serde::Deserialize;
 
 use crate::profile_creation::{Pagination, UserProfileCreationInfo};
 use crate::state_handler::State;
-use crate::UserProfiles;
+use crate::mutate_state;
 
 #[derive(Clone, Debug, CandidType, Deserialize, Default)]
 pub struct MatchResult {
@@ -12,16 +13,16 @@ pub struct MatchResult {
     pub error_message: Option<String>,
 }
 
+
 pub fn find_matches(
-    profiles: &UserProfiles,
     profile_id: &String,
     pagination: Pagination,
 ) -> Result<MatchResult, String> {
-    ic_cdk::println!("Finding matches for profile ID: {}", profile_id);
+    println!("Finding matches for profile ID: {}", profile_id);
 
-    let new_profile = profiles
-        .get(profile_id)
-        .ok_or_else(|| format!("Profile ID '{}' not found", profile_id))?;
+    let mut new_profile = mutate_state(|state| {
+        state.user_profiles.get(profile_id).map(|p| p.clone())
+    }).ok_or_else(|| format!("Profile ID '{}' not found", profile_id))?;
 
     if !new_profile.status {
         return Err("Account is inactive".to_string());
@@ -35,9 +36,11 @@ pub fn find_matches(
         return Err("Page size must be greater than 0".to_string());
     }
 
-    let all_matched_profiles: Vec<UserProfileCreationInfo> = profiles
-        .iter()
-        .filter_map(|(id, existing_profile)| {
+    let mut all_matched_profiles: Vec<UserProfileCreationInfo> = Vec::new();
+    let mut updated_profiles: Vec<(String, UserProfileCreationInfo)> = Vec::new();
+
+    mutate_state(|state| {
+        for (id, existing_profile) in state.user_profiles.iter() {
             let id = id.clone();
             if &id != profile_id
                 && existing_profile.status
@@ -60,13 +63,32 @@ pub fn find_matches(
                     .as_ref()
                     .map_or(false, |rightswipes| rightswipes.contains(&id))
             {
-                ic_cdk::println!("Match found: {:?}", id);
-                Some(existing_profile.clone())
-            } else {
-                None
+                println!("Match found: {:?}", id);
+
+                // Update matched_profiles for both profiles
+                if !new_profile.matched_profiles.contains(&id) {
+                    new_profile.matched_profiles.push(id.clone());
+                }
+
+                let mut existing_profile = existing_profile.clone();
+                if !existing_profile.matched_profiles.contains(profile_id) {
+                    existing_profile.matched_profiles.push(profile_id.clone());
+                    updated_profiles.push((id.clone(), existing_profile.clone()));
+                }
+
+                all_matched_profiles.push(existing_profile);
             }
-        })
-        .collect();
+        }
+
+        // Insert the updated new_profile
+        state.user_profiles.insert(profile_id.clone(), new_profile.clone());
+    });
+
+    mutate_state(|state| {
+        for (id, updated_profile) in updated_profiles {
+            state.user_profiles.insert(id, updated_profile);
+        }
+    });
 
     let total_matches = all_matched_profiles.len();
 
@@ -85,6 +107,19 @@ pub fn find_matches(
         error_message: None,
     })
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
