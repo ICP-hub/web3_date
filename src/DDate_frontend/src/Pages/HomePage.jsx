@@ -5,8 +5,12 @@ import Explore from "../Components/Explore";
 import MemberStatistics from "../Components/MemberStatistics";
 import Feedback from "../Components/Feedback";
 import Footer from "../Components/Footer";
-
+import { useAuth } from "./auth/useAuthClient";
 const HomePage = () => {
+  const { reloadLogin, isAuthenticated } = useAuth();
+  useEffect(() => {
+    reloadLogin();
+  })
   return (
     <div >
       <Hero />

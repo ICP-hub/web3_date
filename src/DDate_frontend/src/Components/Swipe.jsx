@@ -49,6 +49,7 @@ function Swipe() {
   const [page, setPage] = useState(1);
   const [size, setSize] = useState(10);
   const [swipeStatus, setSwipeStatus] = useState(null); // State for swipe status
+  const [animate, setAnimate] = useState(false);
 
   const handleDislike = () => {
     console.log("Dislike button is clicked");
@@ -69,6 +70,11 @@ function Swipe() {
       setSwipeStatus(null); // Reset swipe status after 1 second
     }, 500);
   };
+  useEffect(() => {
+    if (swipeStatus === 'Nope' || swipeStatus === "Liked") {
+      setAnimate(true);
+    }
+  }, [swipeStatus]);
 
   useEffect(() => {
     const handleResize = () => {
@@ -327,8 +333,22 @@ function Swipe() {
               />
             </button>
           </div>
-          {swipeStatus && (
-            <div className="status-text text-white font-bold text-3xl z-10 absolute top-4 p-3 bg-gradient-to-b from-[#DB7D11] to-[#6B3018] rounded-full shadow-lg popup-content  status-text-container">
+          {swipeStatus === 'Nope' && (
+            <div
+              className={`status-text text-white font-bold text-3xl z-10 absolute top-4 p-3 
+          bg-green-500 rounded-full shadow-lg popup-content status-text-container  ss4:-ml-[17rem]  ipad:-ml-[35rem] lg:-ml-[25rem]  
+          bg-red-500 rounded-full shadow-lg popup-content status-text-container  
+          ${animate ? ' zoom-out' : ''}`}
+            >
+              {swipeStatus}
+            </div>
+          )}
+          {swipeStatus === 'Liked' && (
+            <div
+              className={`status-text text-white font-bold text-3xl z-10 absolute top-4 p-3 
+          bg-green-500 rounded-full shadow-lg popup-content status-text-container  ss4:ml-[17rem] lg:ml-[25rem] ipad:ml-[35rem]  
+          ${animate ? ' zoom-out' : ''}`}
+            >
               {swipeStatus}
             </div>
           )}
