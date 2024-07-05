@@ -128,7 +128,7 @@ service : () -> {
   create_message : (text, text, text) -> (Result_2);
   delete_an_account : (text) -> (Result_1);
   delete_message : (nat64) -> (Result_1);
-  get_all_accounts : (Pagination) -> (Result_3) query;
+  get_all_accounts : (text, Pagination) -> (Result_3) query;
   get_an_account : (text) -> (Result_4) query;
   get_leftswipes : (text, Pagination) -> (Result_5) query;
   get_rightswiped_matches : (text, nat64, nat64) -> (Result_5);

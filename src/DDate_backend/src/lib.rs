@@ -97,6 +97,7 @@ pub fn add_user_to_chatlist(user_id: String) -> Result<Vec<ChatListItem>, String
 }
 
 
+
 // Define ChatListItem struct for storing extracted fields
 #[derive(Debug, Serialize,CandidType)]
 pub struct ChatListItem {
@@ -178,18 +179,28 @@ pub fn get_rightswiped_matches(
         let mut state = state.borrow_mut();
         // Remove the old profile, update matched_profiles, and reinsert it
         if let Some(mut user_profile) = state.user_profiles.remove(&user_id) {
-            user_profile.matched_profiles = match_result
+            // Ensure we only include profiles that have mutually right-swiped
+            let valid_matched_profiles: Vec<String> = match_result
                 .paginated_profiles
                 .iter()
+                .filter(|profile| {
+                    profile
+                        .params
+                        .rightswipes
+                        .as_ref()
+                        .map_or(false, |rightswipes| rightswipes.contains(&user_id))
+                        && user_profile.params.rightswipes.as_ref().map_or(false, |rightswipes| rightswipes.contains(&profile.user_id))
+                })
                 .map(|profile| profile.user_id.clone())
                 .collect();
+
+            user_profile.matched_profiles = valid_matched_profiles;
             state.user_profiles.insert(user_id.clone(), user_profile);
         }
     });
 
     Ok(match_result)
 }
-
 
 
 

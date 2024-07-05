@@ -42,41 +42,26 @@ pub fn find_matches(
     mutate_state(|state| {
         for (id, existing_profile) in state.user_profiles.iter() {
             let id = id.clone();
-            if &id != profile_id
-                && existing_profile.status
-                && existing_profile.params.age.unwrap_or(0)
-                    >= new_profile.params.min_preferred_age.unwrap_or(0)
-                && existing_profile.params.age.unwrap_or(0)
-                    <= new_profile.params.max_preferred_age.unwrap_or(0)
-                && existing_profile.params.gender.as_ref()
-                    == new_profile.params.preferred_gender.as_ref()
-                && existing_profile.params.location.as_ref()
-                    == new_profile.params.preferred_location.as_ref()
-                && existing_profile
-                    .params
-                    .rightswipes
-                    .as_ref()
-                    .map_or(false, |rightswipes| rightswipes.contains(profile_id))
-                && new_profile
-                    .params
-                    .rightswipes
-                    .as_ref()
-                    .map_or(false, |rightswipes| rightswipes.contains(&id))
-            {
-                println!("Match found: {:?}", id);
+            if &id != profile_id && existing_profile.status {
+                let both_rightswiped = existing_profile.params.rightswipes.as_ref().map_or(false, |rightswipes| rightswipes.contains(profile_id)) &&
+                                       new_profile.params.rightswipes.as_ref().map_or(false, |rightswipes| rightswipes.contains(&id));
 
-                // Update matched_profiles for both profiles
-                if !new_profile.matched_profiles.contains(&id) {
-                    new_profile.matched_profiles.push(id.clone());
+                if both_rightswiped {
+                    println!("Mutual rightswipe match found: {:?}", id);
+
+                    // Update matched_profiles for both profiles
+                    if !new_profile.matched_profiles.contains(&id) {
+                        new_profile.matched_profiles.push(id.clone());
+                    }
+
+                    let mut existing_profile = existing_profile.clone();
+                    if !existing_profile.matched_profiles.contains(profile_id) {
+                        existing_profile.matched_profiles.push(profile_id.clone());
+                        updated_profiles.push((id.clone(), existing_profile.clone()));
+                    }
+
+                    all_matched_profiles.push(existing_profile);
                 }
-
-                let mut existing_profile = existing_profile.clone();
-                if !existing_profile.matched_profiles.contains(profile_id) {
-                    existing_profile.matched_profiles.push(profile_id.clone());
-                    updated_profiles.push((id.clone(), existing_profile.clone()));
-                }
-
-                all_matched_profiles.push(existing_profile);
             }
         }
 
@@ -91,7 +76,6 @@ pub fn find_matches(
     });
 
     let total_matches = all_matched_profiles.len();
-
     let start = (pagination.page - 1) * pagination.size;
     let end = std::cmp::min(start + pagination.size, total_matches);
 
@@ -107,6 +91,7 @@ pub fn find_matches(
         error_message: None,
     })
 }
+
 
 pub fn remove_matches(state: &mut State, user_id: String) -> Result<String, String> {
     let user_profile_option = state.user_profiles.get(&user_id).map(|p| p.clone());

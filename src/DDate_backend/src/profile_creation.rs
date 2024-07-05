@@ -259,20 +259,53 @@ impl State {
         }
     }
     
-    pub fn get_all_accounts(&self, pagination: Pagination) -> Result<PaginatedProfiles, String> {
-        let all_profiles: Vec<UserProfileCreationInfo> = self.user_profiles.iter()
-            .map(|(_, profile)| profile.clone()) // Clone each profile
-            .collect();
+    pub fn get_all_accounts(&self, user_id: String, pagination: Pagination) -> Result<PaginatedProfiles, String> {
+        let mut suggested_profiles: Vec<UserProfileCreationInfo> = Vec::new();
+        let mut matching_profiles: Vec<UserProfileCreationInfo> = Vec::new();
+        let mut other_profiles: Vec<UserProfileCreationInfo> = Vec::new();
     
-        // Check if all profiles have expired status true
-        let all_expired = all_profiles.iter().all(|profile| profile.expired);
+        let new_profile = self.user_profiles.get(&user_id).ok_or_else(|| "User not found".to_string())?;
     
-        if all_expired {
+        // Iterate over the user profiles in the map
+        for entry in self.user_profiles.iter() {
+            let (id, profile) = entry;
+            if *id == user_id || profile.expired {
+                continue;
+            }
+    
+            // Check if the profile has left-swiped the user_id
+            let profile_leftswiped_user = profile.params.leftswipes.as_ref().map_or(false, |leftswipes| leftswipes.contains(&user_id));
+            if profile_leftswiped_user {
+                continue;
+            }
+    
+            if profile.params.rightswipes.as_ref().map_or(false, |rightswipes| rightswipes.contains(&user_id)) {
+                suggested_profiles.push(profile.clone());
+            } else {
+                let is_preferred = profile.params.age.unwrap_or(0) >= new_profile.params.min_preferred_age.unwrap_or(0) &&
+                                   profile.params.age.unwrap_or(0) <= new_profile.params.max_preferred_age.unwrap_or(0) &&
+                                   profile.params.gender.as_ref() == new_profile.params.preferred_gender.as_ref() &&
+                                   profile.params.location.as_ref() == new_profile.params.preferred_location.as_ref();
+    
+                if is_preferred {
+                    matching_profiles.push(profile.clone());
+                } else {
+                    other_profiles.push(profile.clone());
+                }
+            }
+        }
+    
+        // Combine the suggested profiles, matching profiles, and other profiles
+        let mut all_profiles = Vec::with_capacity(suggested_profiles.len() + matching_profiles.len() + other_profiles.len());
+        all_profiles.append(&mut suggested_profiles);
+        all_profiles.append(&mut matching_profiles);
+        all_profiles.append(&mut other_profiles);
+    
+        if all_profiles.is_empty() {
             return Err("No profiles are available.".to_string());
         }
     
         let total_profiles = all_profiles.len();
-    
         let start = (pagination.page - 1) * pagination.size;
         if start >= total_profiles {
             return Err("No profiles are matched.".to_string());
@@ -289,7 +322,8 @@ impl State {
     
     
     
-    
+
+
     pub fn create_message_internal(&mut self, sender_id: String, receiver_id: String, content: String) -> Result<u64, String> {
         // Validate input
         if sender_id.trim().is_empty() {
@@ -684,9 +718,10 @@ pub fn get_an_account(user_id: String) -> Result<UserProfileCreationInfo, String
 }
 
 #[query]
-pub fn get_all_accounts(pagination: Pagination) -> Result<PaginatedProfiles, String> {
-    read_state(|state| state.get_all_accounts(pagination))
+pub fn get_all_accounts(user_id: String, pagination: Pagination) -> Result<PaginatedProfiles, String> {
+    read_state(|state| state.get_all_accounts(user_id, pagination))
 }
+
 
 
 
