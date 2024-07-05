@@ -21,6 +21,7 @@ function Swipe() {
   const location = useLocation();
   const userId = location.state;
 
+  console.log('userId', userId)
   useEffect(() => {
     const getData = async () => {
       try {
@@ -50,6 +51,7 @@ function Swipe() {
   const [size, setSize] = useState(10);
   const [swipeStatus, setSwipeStatus] = useState(null); // State for swipe status
   const [animate, setAnimate] = useState(false);
+  const [Loading, setLoading] = useState(true);
 
   const handleDislike = () => {
     console.log("Dislike button is clicked");
@@ -124,16 +126,22 @@ function Swipe() {
   useEffect(() => {
     const getAllPages = async () => {
       try {
-        const result = await backendActor.get_all_accounts({ page, size });
-        if (result && result.Ok && result.Ok.profiles) {
-          setMyPageData(prevData => [...prevData, ...result.Ok.profiles]);
+        setLoading(true);
+        const result = await backendActor.get_all_accounts(userId, { page, size });
+        console.log('result', result)
+        if (result && result?.Ok && result?.Ok?.profiles) {
+          setMyPageData(prevData => [...prevData, ...result?.Ok?.profiles]);
         }
+        setLoading(true);
       } catch (error) {
-        console.error("Error getting pages to the backend:", error);
+        console.error("Error fetching data from backend:", error);
+        setLoading(false);
+
       }
     };
+
     getAllPages();
-  }, [page, size, backendActor]);
+  }, [userId, page, size, backendActor]);
 
   const fetchAllUserProfiles = async (principals) => {
     setStartLoader(true);

@@ -10,28 +10,31 @@ import ChattingPage from "./Components/Chatting/ChattingPage";
 import ProfileViewer from "./Components/ProfileViewer";
 import ChattingSinglePage from "./Components/Chatting/ChattingSinglePage";
 import EditProfile from "./Components/EditProfile/EditProfile"
-
+import { useAuth } from "./auth/useAuthClient";
 
 
 const AllRoutes = () => {
 
   const [finalMatch, setFinalMatch] = useState([]);
-
+  const { reloadLogin, isAuthenticated } = useAuth();
+  useEffect(() => {
+    reloadLogin();
+  }, [])
   return (
     <>
-        <Routes>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/editProfile" element={<EditProfile />} />
-          <Route path="/CreateAccount1" element={<CreateAccount1 />} />
-          <Route path="/Swipe" element={<Swipe />} />
-          <Route path="/Profile" element={<Profile />} />
-          <Route path="/Notification" element={<Notification />} />
-          <Route path="/ChattingPage" element={<ChattingPage finalMatch={finalMatch} />} />
-          <Route path="/ChattingSinglePage/:chatId" element={<ChattingSinglePage />} />
+      <Routes>
+        <Route path="/" element={<HomePage />} />
+        <Route path="/editProfile" element={<EditProfile />} />
+        <Route path="/CreateAccount1" element={<CreateAccount1 />} />
+        <Route path="/Swipe" element={<Swipe />} />
+        <Route path="/Profile" element={<Profile />} />
+        <Route path="/Notification" element={<Notification />} />
+        <Route path="/ChattingPage" element={<ChattingPage finalMatch={finalMatch} />} />
+        <Route path="/ChattingSinglePage/:chatId" element={<ChattingSinglePage />} />
 
-          <Route path="/profile/:senderId" element={<ProfileViewer finalMatch={finalMatch} setFinalMatch={setFinalMatch} />} />
+        <Route path="/profile/:senderId" element={<ProfileViewer finalMatch={finalMatch} setFinalMatch={setFinalMatch} />} />
 
-        </Routes>
+      </Routes>
     </>
   );
 };

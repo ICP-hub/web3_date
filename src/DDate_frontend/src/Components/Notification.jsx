@@ -41,8 +41,8 @@ const Notification = () => {
   const { backendActor } = useAuth();
   const location = useLocation();
   const userId = location.state;
-  // const [page,setpage] = useState(1);
-  // const [size,setsize] = useState(10);
+  const [page, setpage] = useState(1);
+  const [size, setsize] = useState(10);
   useEffect(() => {
     const fetchProfiles = async () => {
       const fetchedProfiles = [];
@@ -74,6 +74,8 @@ const Notification = () => {
     const fetchedprofiledata = async () => {
       try {
         console.log("userid 76====>>>>> ", userId)
+        console.log("page number ", page)
+        console.log("size of content", size)
         const result = await backendActor.get_rightswiped_matches(userId, page, size);
         console.log('get_fetchedprofile', result);
       } catch (error) {
@@ -81,7 +83,36 @@ const Notification = () => {
       }
     }
     fetchedprofiledata();
-  }, [backendActor, userId]);
+  }, [backendActor, userId, page, size]);
+  // useEffect(() => {
+  //   const fetchProfileData = async () => {
+  //     try {
+  //       console.log("User ID: ", userId);
+  //       console.log("Page number: ", page);
+  //       console.log("Size of content: ", size);
+
+  //       const result = await backendActor.get_rightswiped_matches(userId, page, size);
+
+  //       if (result && result.Ok && result.Ok.profiles) {
+  //         setMyPageData(prevData => [...prevData, ...result.Ok.profiles]);
+  //       } else if (result && result.Err) {
+  //         console.error("Error from backend: ", result.Err);
+  //         setError(result.Err);
+  //       } else {
+  //         console.error("Unknown error from backend");
+
+  //       }
+  //     } catch (error) {
+  //       console.error("Error getting data from the backend: ", error);
+
+  //     } finally {
+  //       setLoading(false);
+  //     }
+  //   };
+
+  //   setLoading(true);
+  //   fetchProfileData();
+  // }, [backendActor, userId, page, size]);
 
   const principalString = localStorage.getItem("id");
   console.log("this is principal strinng", principalString);
@@ -234,46 +265,49 @@ const Notification = () => {
                 </div>
                 <div>
                   <div className="justify-center lg:flex">
-                    {/* {profiles.map((profile, index) => ( */}
-                    <div
-                      //  key={index}
-                      className="p-4">
-                      <div className="relative w-full sm:w-1/2 md:w-1/3 lg:w-full">
-                        <img
-                          className="w-[230px] h-[280px] rounded-[20px]"
-                          src="https://cdn.pixabay.com/photo/2022/01/17/22/20/add-6945894_640.png"
-                          // {profile.images[0]}
+                    {profiles.map((profile, index) => (
+                      <div
+                        key={index}
+                        className="p-4">
+                        <div className="relative w-full sm:w-1/2 md:w-1/3 lg:w-full">
+                          <img
+                            className="w-[230px] h-[280px] rounded-[20px]"
+                            src={profile.images[0]}
+                            //  "https://cdn.pixabay.com/photo/2022/01/17/22/20/add-6945894_640.png"
 
-                          alt="chirag photo"
-                        // {profile.name}
-                        />
-                        <div className="w-[41px] h-[41px]">
-                          <div
-                            className="w-[41px] h-[41px] absolute bg-yellow-400 rounded-full flex justify-center items-center"
-                            style={{ top: "14.2rem", left: "11.2rem" }}
-                          >
-                            <svg
-                              xmlns="http://www.w3.org/2000/svg"
-                              height="20"
-                              width="20"
-                              viewBox="0 0 512 512"
+
+                            alt=
+                            // "chirag photo"
+                            {profile.name}
+                          />
+                          <div className="w-[41px] h-[41px]">
+                            <div
+                              className="w-[41px] h-[41px] absolute bg-yellow-400 rounded-full flex justify-center items-center"
+                              style={{ top: "14.2rem", left: "11.2rem" }}
                             >
-                              <path d="M47.6 300.4L228.3 469.1c7.5 7 17.4 10.9 27.7 10.9s20.2-3.9 27.7-10.9L464.4 300.4c30.4-28.3 47.6-68 47.6-109.5v-5.8c0-69.9-50.5-129.5-119.4-141C347 36.5 300.6 51.4 268 84L256 96 244 84c-32.6-32.6-79-47.5-124.6-39.9C50.5 55.6 0 115.2 0 185.1v5.8c0 41.5 17.2 81.2 47.6 109.5z" />
-                            </svg>
-                          </div>
-                          <div className="text-lg font-medium text-center absolute top-56 left-4 text-black">
-                            <span className="block -mb-2">
-                              {/* {profile.name} */}
-                              chirag sangwan
-                            </span>
-                            <span className="flex justify-start">
-                              {/* {profile.age} */}
-                              22
-                            </span>
+                              <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                height="20"
+                                width="20"
+                                viewBox="0 0 512 512"
+                              >
+                                <path d="M47.6 300.4L228.3 469.1c7.5 7 17.4 10.9 27.7 10.9s20.2-3.9 27.7-10.9L464.4 300.4c30.4-28.3 47.6-68 47.6-109.5v-5.8c0-69.9-50.5-129.5-119.4-141C347 36.5 300.6 51.4 268 84L256 96 244 84c-32.6-32.6-79-47.5-124.6-39.9C50.5 55.6 0 115.2 0 185.1v5.8c0 41.5 17.2 81.2 47.6 109.5z" />
+                              </svg>
+                            </div>
+                            <div className="text-lg font-medium text-center absolute top-56 left-4 text-black">
+                              <span className="block -mb-2">
+                                {profile.name}
+                                {/* chirag sangwan */}
+                              </span>
+                              <span className="flex justify-start">
+                                {profile.age}
+                                {/* 22 */}
+                              </span>
+                            </div>
                           </div>
                         </div>
                       </div>
-                    </div>
+                    ))}
                   </div>
                 </div>
               </div>
