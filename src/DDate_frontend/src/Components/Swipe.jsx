@@ -1,3 +1,4 @@
+
 import React, { useState, useMemo, useRef, useEffect } from "react";
 import ProfileModal from "./ProfileModal";
 import TinderCard from "react-tinder-card";
@@ -47,14 +48,33 @@ function Swipe() {
   const [pageData, setMyPageData] = useState([]);
   const [page, setPage] = useState(1);
   const [size, setSize] = useState(10);
+  const [swipeStatus, setSwipeStatus] = useState(null); // State for swipe status
+  const [animate, setAnimate] = useState(false);
 
   const handleDislike = () => {
     console.log("Dislike button is clicked");
+    setSwipeStatus("Nope"); // Set swipe status to "Unliked"
+    hideStatusTextAfterDelay();
+    swipe("left");
   };
 
   const handleLike = () => {
     console.log("Like button is clicked");
+    setSwipeStatus("Liked"); // Set swipe status to "Liked"
+    hideStatusTextAfterDelay();
+    swipe("right");
   };
+
+  const hideStatusTextAfterDelay = () => {
+    setTimeout(() => {
+      setSwipeStatus(null); // Reset swipe status after 1 second
+    }, 500);
+  };
+  useEffect(() => {
+    if (swipeStatus === 'Nope' || swipeStatus === "Liked") {
+      setAnimate(true);
+    }
+  }, [swipeStatus]);
 
   useEffect(() => {
     const handleResize = () => {
@@ -231,116 +251,111 @@ function Swipe() {
     setMatch(false);
   };
 
-  console.log("I am at pageData this page number ", pageData);
-
   useEffect(() => {
     setSwipeProfiles(pageData);
   }, [pageData]);
 
   return (
-    <div className="flex flex-col grid-cols-9 h-screen z-10 ">
-      <SidebarComponent userId={userId} className="hidden md:block  " />
+    <div className="flex flex-col grid-cols-9 h-screen z-10">
+      <SidebarComponent userId={userId} className="hidden md:block" />
 
       {startLoader ? (
-        <div className="w-full flex justify-center items-center  ">
-          <div className="container flex justify-center">
-            <div className="max-w-xs  lg:max-w-lg xl:max-w-xl bg-white h-screen flex items-center justify-center relative ">
-              <Loader />
-            </div>
+
+        <Loader />
+
+      ) : (
+        // <div className="mx-auto md:col-start-5 w-full h-screen flex flex-col items-center absolute">
+        <div className="w-full h-full flex flex-col items-center absolute lg:left-[9%] transform md:left-[9%] transform">
+          {pageData.map((character, index) => (
+            <TinderCard
+              ref={childRefs[index]}
+              className="swipe w-full h-full flex justify-center items-center"
+              key={character.params.name[0]}
+              onSwipe={(dir) => swiped(dir, character.params.name[0], index)}
+              onCardLeftScreen={() => outOfFrame(character.params.name[0], index)}
+            >
+              <div className="h-full w-full flex flex-col items-center justify-center relative">
+                <img
+                  alt="img"
+                  src="https://cdn.pixabay.com/photo/2022/01/17/22/20/add-6945894_640.png"
+                  className="h-full w-full lg:max-w-lg"
+                  style={{ height: "106vh" }}
+                />
+                <div
+                  className="bg-black rounded-b-xl w-full lg:max-w-lg h-[30%] absolute bottom-0"
+                  style={{
+                    background:
+                      "linear-gradient(to top, rgb(0, 0, 0) 50%, rgba(255, 255, 255, 0) 100%)",
+                  }}
+                ></div>
+
+                <div className="z-20 md:-ml-[12rem] sm2:-ml-[14rem] ipad:-ml-[24rem] -ml-[5rem] md:bottom-16 bottom-[4rem] absolute">
+                  <h2 className="text-4xl font-bold text-white mb-2">
+                    {character.params.name[0]}
+                  </h2>
+                  <p className="text-lg text-gray-700 font-bold">
+                    {character.params.location[0]}
+                  </p>
+
+                  <p className="mt-2 font-bold text-white mb-6">
+                    {character.params.introduction[0]}
+                  </p>
+                  {match && (
+                    <ProfileModal
+                      profile={db[indexxx]}
+                      indexxx={indexxx}
+                      onClose={handleCloseModal}
+                    />
+                  )}
+                </div>
+              </div>
+            </TinderCard>
+          ))}
+          <div className="flex gap-4 p-6 absolute bottom-[0%] w-full justify-center z-30">
+            <button
+              className="rounded-full h-12 w-12 bg-transparent shadow-md text-3xl border border-pink-700 hover:bg-red-300 font-bold text-gray-800"
+              onClick={() => handleDislike()}
+              disabled={db.length === 0}
+            >
+              <FontAwesomeIcon
+                icon={faClose}
+                style={{ color: db.length === 0 ? "#b2b2b2" : "#fd5068" }}
+              />
+            </button>
+            <button
+              className="rounded-full h-12 w-12 bg-transparent shadow-md text-3xl border border-green-700 hover:bg-green-700 font-bold text-gray-800"
+              onClick={() => handleLike()}
+              disabled={db.length === 0}
+            >
+              <FontAwesomeIcon
+                icon={faHeart}
+                style={{ color: db.length === 0 ? "#b2b2b2" : "#1be4a1" }}
+              />
+            </button>
           </div>
+          {swipeStatus === 'Nope' && (
+            <div
+              className={`status-text text-white font-bold text-3xl z-10 absolute top-4 p-3 
+          bg-green-500 rounded-full shadow-lg popup-content status-text-container  ss4:-ml-[17rem]  ipad:-ml-[35rem] lg:-ml-[25rem]  
+          bg-red-500 rounded-full shadow-lg popup-content status-text-container  
+          ${animate ? ' zoom-out' : ''}`}
+            >
+              {swipeStatus}
+            </div>
+          )}
+          {swipeStatus === 'Liked' && (
+            <div
+              className={`status-text text-white font-bold text-3xl z-10 absolute top-4 p-3 
+          bg-green-500 rounded-full shadow-lg popup-content status-text-container  ss4:ml-[17rem] lg:ml-[25rem] ipad:ml-[35rem]  
+          ${animate ? ' zoom-out' : ''}`}
+            >
+              {swipeStatus}
+            </div>
+          )}
         </div>
-      ) : (<div className="mx-auto md:col-start-5 w-full h-screen flex flex-col items-center absolute  ">
-        {
-          false
-            // db.length === 0
-            ? (
-              <div className="flex justify-center">
-
-
-                <div className="max-w-xs md:max-w-md  bg-white h-screen ">
-                  <Loader />
-                </div>
-              </div>
-            ) : (
-              <div className="w-full h-full flex flex-col items-center absolute  lg:left-[9%] transform md:left-[9%] transform" >
-                {pageData.map((character, index) => (
-                  <TinderCard
-                    ref={childRefs[index]}
-                    className="swipe w-full h-full flex justify-center items-center"
-                    key={character.params.name[0]}
-                    onSwipe={(dir) => swiped(dir, character.params.name[0], index)}
-                    onCardLeftScreen={() => outOfFrame(character.params.name[0], index)}
-                  >
-                    <div className="h-full  w-full flex flex-col items-center justify-center relative">
-                      <img
-                        alt="img"
-                        src="https://cdn.pixabay.com/photo/2022/01/17/22/20/add-6945894_640.png"
-                        className="h-full w-full  lg:max-w-lg  "
-                        style={{ height: "106vh" }}
-                      />
-                      <div
-                        className="bg-black rounded-b-xl w-full  lg:max-w-lg h-[30%] absolute bottom-0"
-                        style={{
-                          background:
-                            "linear-gradient(to top, rgb(0, 0, 0) 50%, rgba(255, 255, 255, 0) 100%)",
-                        }}
-                      >
-                      </div>
-
-                      <div className="z-20 md:-ml-[12rem] sm2:-ml-[14rem]   ipad:-ml-[24rem] -ml-[5rem] md:bottom-16 bottom-[4rem] absolute">
-                        <h2 className="text-4xl font-bold text-white  mb-2 ">
-                          {character.params.name[0]}
-                        </h2>
-                        <p className="text-lg text-gray-700 font-bold ">
-                          {character.params.location[0]}
-                        </p>
-
-                        <p className="mt-2 font-bold text-white mb-6 ">
-                          {character.params.introduction[0]}
-                        </p>
-                        {match && (
-                          <ProfileModal
-                            profile={db[indexxx]}
-                            indexxx={indexxx}
-                            onClose={handleCloseModal} />
-                        )}
-                      </div>
-                    </div>
-                  </TinderCard>
-                ))}
-                <div className="flex gap-4  p-6  absolute bottom-[0%]  w-full justify-center z-30  ">
-                  <button
-                    className="rounded-full  h-12 w-12 bg-transparent shadow-md text-3xl border border-pink-700 hover:bg-red-300 font-bold text-gray-800 "
-                    onClick={() => swipe("left")}
-                    disabled={db.length === 0}
-                  >
-                    <FontAwesomeIcon
-                      icon={faClose}
-                      style={{ color: db.length === 0 ? "#b2b2b2" : "#fd5068" }}
-                    />
-                  </button>
-                  <button
-                    className="rounded-full  h-12 w-12 bg-transparent shadow-md text-3xl border border-green-700 hover:bg-green-700 font-bold text-gray-800"
-                    onClick={() => swipe("right")}
-                    disabled={db.length === 0}
-                  >
-                    <FontAwesomeIcon
-                      icon={faHeart}
-                      style={{ color: db.length === 0 ? "#b2b2b2" : "#1be4a1" }}
-                    />
-                  </button>
-                </div>
-              </div>
-
-            )}
-
-
-      </div>
       )}
     </div>
   );
-
 }
 
 export default Swipe;
-

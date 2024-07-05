@@ -340,7 +340,7 @@ const SidebarComponent = ({ userId }) => {
                   <span className="absolute top-0  right-0 w-2 h-2 bg-yellow-600 rounded-full"></span>
                 </div>
                 <button
-                  onClick={() => navigate("/Notification")}
+                  onClick={() => navigate("/Notification", { state: userId })}
                   className="block p-2 text-white text-sm rounded"
                 >
                   <span>Matches</span>

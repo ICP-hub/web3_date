@@ -7,6 +7,9 @@ import { Principal } from "@dfinity/principal";
 import "./Notification.css";
 import back from "../../assets/Images/CreateAccount/back.svg";
 import Loader from "./Loader";
+import { useAuth } from '../auth/useAuthClient';
+import { useLocation } from 'react-router-dom';
+
 
 const fetchedProfiles = [
   {
@@ -25,13 +28,21 @@ const fetchedProfiles = [
     images: ["https://via.placeholder.com/150"],
   },
 ];
+
+
 const Notification = () => {
   const navigate = useNavigate();
   const [notifications, setNotifications] = useState([]);
   const [selectedUserPrincipal, setSelectedUserPrincipal] = useState(null);
   const [loading, setLoading] = useState(false);
   const [profiles, setProfiles] = useState([]); // State to store fetched profiles
-
+  const auth = useAuth();
+  console.log(auth)
+  const { backendActor } = useAuth();
+  const location = useLocation();
+  const userId = location.state;
+  // const [page,setpage] = useState(1);
+  // const [size,setsize] = useState(10);
   useEffect(() => {
     const fetchProfiles = async () => {
       const fetchedProfiles = [];
@@ -59,6 +70,19 @@ const Notification = () => {
     }
   }, [notifications]);
 
+  useEffect(() => {
+    const fetchedprofiledata = async () => {
+      try {
+        console.log("userid 76====>>>>> ", userId)
+        const result = await backendActor.get_rightswiped_matches(userId, page, size);
+        console.log('get_fetchedprofile', result);
+      } catch (error) {
+        console.error("Error getting data to the backend:", error);
+      }
+    }
+    fetchedprofiledata();
+  }, [backendActor, userId]);
+
   const principalString = localStorage.getItem("id");
   console.log("this is principal strinng", principalString);
 
@@ -81,7 +105,7 @@ const Notification = () => {
       setLoading(true);
       try {
         const notificationData =
-          await DDate_backend.retrieve_notifications_for_user(principal);
+          await backendActor.retrieve_notifications_for_user(principal);
         setNotifications(notificationData);
         setLoading(false);
       } catch (error) {
@@ -91,7 +115,7 @@ const Notification = () => {
     };
 
     fetchNotifications();
-  }, []);
+  }, [backendActor]);
 
   // const principalString = "tc7cw-ilo2x-rwqep-gohde-puqog-soeyv-szxvv-ybcgw-lbrkl-sm7ab-wae";
 
