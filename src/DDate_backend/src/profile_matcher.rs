@@ -42,41 +42,26 @@ pub fn find_matches(
     mutate_state(|state| {
         for (id, existing_profile) in state.user_profiles.iter() {
             let id = id.clone();
-            if &id != profile_id
-                && existing_profile.status
-                && existing_profile.params.age.unwrap_or(0)
-                    >= new_profile.params.min_preferred_age.unwrap_or(0)
-                && existing_profile.params.age.unwrap_or(0)
-                    <= new_profile.params.max_preferred_age.unwrap_or(0)
-                && existing_profile.params.gender.as_ref()
-                    == new_profile.params.preferred_gender.as_ref()
-                && existing_profile.params.location.as_ref()
-                    == new_profile.params.preferred_location.as_ref()
-                && existing_profile
-                    .params
-                    .rightswipes
-                    .as_ref()
-                    .map_or(false, |rightswipes| rightswipes.contains(profile_id))
-                && new_profile
-                    .params
-                    .rightswipes
-                    .as_ref()
-                    .map_or(false, |rightswipes| rightswipes.contains(&id))
-            {
-                println!("Match found: {:?}", id);
+            if &id != profile_id && existing_profile.status {
+                let both_rightswiped = existing_profile.params.rightswipes.as_ref().map_or(false, |rightswipes| rightswipes.contains(profile_id)) &&
+                                       new_profile.params.rightswipes.as_ref().map_or(false, |rightswipes| rightswipes.contains(&id));
 
-                // Update matched_profiles for both profiles
-                if !new_profile.matched_profiles.contains(&id) {
-                    new_profile.matched_profiles.push(id.clone());
+                if both_rightswiped {
+                    println!("Mutual rightswipe match found: {:?}", id);
+
+                    // Update matched_profiles for both profiles
+                    if !new_profile.matched_profiles.contains(&id) {
+                        new_profile.matched_profiles.push(id.clone());
+                    }
+
+                    let mut existing_profile = existing_profile.clone();
+                    if !existing_profile.matched_profiles.contains(profile_id) {
+                        existing_profile.matched_profiles.push(profile_id.clone());
+                        updated_profiles.push((id.clone(), existing_profile.clone()));
+                    }
+
+                    all_matched_profiles.push(existing_profile);
                 }
-
-                let mut existing_profile = existing_profile.clone();
-                if !existing_profile.matched_profiles.contains(profile_id) {
-                    existing_profile.matched_profiles.push(profile_id.clone());
-                    updated_profiles.push((id.clone(), existing_profile.clone()));
-                }
-
-                all_matched_profiles.push(existing_profile);
             }
         }
 
@@ -91,7 +76,6 @@ pub fn find_matches(
     });
 
     let total_matches = all_matched_profiles.len();
-
     let start = (pagination.page - 1) * pagination.size;
     let end = std::cmp::min(start + pagination.size, total_matches);
 
@@ -109,24 +93,6 @@ pub fn find_matches(
 }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 pub fn remove_matches(state: &mut State, user_id: String) -> Result<String, String> {
     let user_profile_option = state.user_profiles.get(&user_id).map(|p| p.clone());
     if let Some(mut user_profile) = user_profile_option {
@@ -138,20 +104,6 @@ pub fn remove_matches(state: &mut State, user_id: String) -> Result<String, Stri
         // Clear the matched profiles for the user
         user_profile.matched_profiles.clear();
 
-        // Collect all user IDs that this user has rightswiped
-        let rightreceiver_ids: Vec<String> = user_profile
-            .params
-            .rightswipes
-            .as_ref()
-            .map_or(vec![], |rightswipes| rightswipes.iter().cloned().collect());
-
-        // Collect all user IDs that this user has leftswiped
-        let leftreceiver_ids: Vec<String> = user_profile
-            .params
-            .leftswipes
-            .as_ref()
-            .map_or(vec![], |leftswipes| leftswipes.iter().cloned().collect());
-
         // Clear the user's rightswipes and leftswipes
         if let Some(rightswipes) = user_profile.params.rightswipes.as_mut() {
             rightswipes.clear();
@@ -161,50 +113,37 @@ pub fn remove_matches(state: &mut State, user_id: String) -> Result<String, Stri
             leftswipes.clear();
         }
 
-        // Prepare changes for rightswipes and leftswipes in other profiles that involve this user
+        // Prepare a vector to hold updates
         let mut profiles_to_update = Vec::new();
-        for receiver_id in rightreceiver_ids {
-            if let Some(mut swiped_user_profile) = state.user_profiles.get(&receiver_id).map(|p| p.clone()) {
-                if let Some(swiped_user_rightswipes) = swiped_user_profile.params.rightswipes.as_mut() {
-                    swiped_user_rightswipes.remove(&user_id);
+
+        // Iterate over all profiles to find those that need updates
+        for entry in state.user_profiles.iter() {
+            let (key, mut profile) = entry;
+            let mut updated = false;
+
+            if let Some(swiped_user_rightswipes) = profile.params.rightswipes.as_mut() {
+                if swiped_user_rightswipes.remove(&user_id) {
+                    updated = true;
                 }
-                profiles_to_update.push((receiver_id, swiped_user_profile));
             }
-        }
 
-        for receiver_id in leftreceiver_ids {
-            if let Some(mut swiped_user_profile) = state.user_profiles.get(&receiver_id).map(|p| p.clone()) {
-                if let Some(swiped_user_leftswipes) = swiped_user_profile.params.leftswipes.as_mut() {
-                    swiped_user_leftswipes.remove(&user_id);
+            if let Some(swiped_user_leftswipes) = profile.params.leftswipes.as_mut() {
+                if swiped_user_leftswipes.remove(&user_id) {
+                    updated = true;
                 }
-                profiles_to_update.push((receiver_id, swiped_user_profile));
             }
-        }
 
-        // Clear rightswipes where others have swiped right on this user
-        for (id, profile) in state.user_profiles.iter() {
-            let mut profile = profile.clone();
-            if let Some(rightswipes) = profile.params.rightswipes.as_mut() {
-                rightswipes.remove(&user_id);
+            if updated {
+                profiles_to_update.push((key.clone(), profile.clone()));
             }
-            profiles_to_update.push((id.clone(), profile));
-        }
-
-        // Clear leftswipes where others have swiped left on this user
-        for (id, profile) in state.user_profiles.iter() {
-            let mut profile = profile.clone();
-            if let Some(leftswipes) = profile.params.leftswipes.as_mut() {
-                leftswipes.remove(&user_id);
-            }
-            profiles_to_update.push((id.clone(), profile));
         }
 
         // Insert the updated user profile
         state.user_profiles.insert(user_id.clone(), user_profile);
 
         // Apply the collected changes
-        for (id, profile) in profiles_to_update {
-            state.user_profiles.insert(id, profile);
+        for (key, profile) in profiles_to_update {
+            state.user_profiles.insert(key, profile);
         }
 
         ic_cdk::println!("Removed all matches for user ID: {}", user_id);
@@ -213,6 +152,9 @@ pub fn remove_matches(state: &mut State, user_id: String) -> Result<String, Stri
         Err(format!("User ID '{}' not found", user_id))
     }
 }
+
+
+
 
 
 

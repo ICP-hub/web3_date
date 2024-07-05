@@ -36,6 +36,9 @@ use crate::profile_creation::PaginatedProfiles;
 pub fn add_user_to_chatlist(user_id: String) -> Result<Vec<ChatListItem>, String> {
     ic_cdk::println!("Adding user to chatlist with user_id: {}", user_id);
 
+    // Call get_rightswiped_matches with page = 1 and size = 100 to get the latest matched profiles
+    let match_result = get_rightswiped_matches(user_id.clone(), 1, 100)?;
+
     read_state(|state| {
         let user_profile = state
             .user_profiles
@@ -48,10 +51,10 @@ pub fn add_user_to_chatlist(user_id: String) -> Result<Vec<ChatListItem>, String
 
         let mut chatlist: Vec<ChatListItem> = Vec::new();
 
-        for matched_user_id in &user_profile.matched_profiles {
+        for matched_user_id in match_result.paginated_profiles.iter().map(|profile| profile.user_id.clone()) {
             let matched_user_profile = state
                 .user_profiles
-                .get(matched_user_id)
+                .get(&matched_user_id)
                 .ok_or_else(|| format!("Matched User ID '{}' not found", matched_user_id))?;
 
             // Example: Get name from matched_user_profile (UserProfileParams)
@@ -67,7 +70,6 @@ pub fn add_user_to_chatlist(user_id: String) -> Result<Vec<ChatListItem>, String
                 .images
                 .clone()
                 .unwrap_or_else(|| vec!["default.jpg".to_string()]);
-
 
             // Example: Get content (message) from Message struct
             let content = "Hello, Start a Conversation!".to_string();
@@ -93,6 +95,8 @@ pub fn add_user_to_chatlist(user_id: String) -> Result<Vec<ChatListItem>, String
         Ok(chatlist)
     })
 }
+
+
 
 // Define ChatListItem struct for storing extracted fields
 #[derive(Debug, Serialize,CandidType)]
@@ -175,18 +179,28 @@ pub fn get_rightswiped_matches(
         let mut state = state.borrow_mut();
         // Remove the old profile, update matched_profiles, and reinsert it
         if let Some(mut user_profile) = state.user_profiles.remove(&user_id) {
-            user_profile.matched_profiles = match_result
+            // Ensure we only include profiles that have mutually right-swiped
+            let valid_matched_profiles: Vec<String> = match_result
                 .paginated_profiles
                 .iter()
+                .filter(|profile| {
+                    profile
+                        .params
+                        .rightswipes
+                        .as_ref()
+                        .map_or(false, |rightswipes| rightswipes.contains(&user_id))
+                        && user_profile.params.rightswipes.as_ref().map_or(false, |rightswipes| rightswipes.contains(&profile.user_id))
+                })
                 .map(|profile| profile.user_id.clone())
                 .collect();
+
+            user_profile.matched_profiles = valid_matched_profiles;
             state.user_profiles.insert(user_id.clone(), user_profile);
         }
     });
 
     Ok(match_result)
 }
-
 
 
 

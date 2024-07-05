@@ -160,63 +160,6 @@ pub struct UserChatList {
     pub chat_id: String,
 }
 
-// impl UserMatch {
-//     pub fn add_user_to_chatlist(user_id: String) -> Result<Vec<UserMatch>, String> {
-//         // Access the user profiles from the state
-//         let profiles = STATE.with(|state| {
-//             let state = state.borrow();
-//             &state.user_profiles // Use reference to avoid cloning entire map
-//         });
-    
-//         // Define pagination
-//         let pagination = Pagination { page: 1, size: 10 };
-    
-//         // Find matches for the user ID
-//         let match_result = find_matches(profiles, &user_id, pagination)?;
-    
-//         // Initialize an empty vector to store matches
-//         let mut matches = Vec::new();
-    
-//         // Iterate through the matched profiles
-//         for (key, profile_info) in match_result.paginated_profiles.iter() {
-//             // Get the current timestamp
-//             let current_time = SystemTime::now().duration_since(UNIX_EPOCH).unwrap().as_secs();
-//             // Generate a random chat ID
-//             let chat_id = Self::generate_random_chat_id();
-    
-//             // Create a welcome message
-//             let message = String::from("Welcome to the chat!");
-    
-//             // Construct the UserMatch instance
-//             let user_match = UserMatch {
-//                 name: profile_info.name.clone().unwrap_or_else(|| String::from("Unknown")), // Example field access, adjust as per your struct
-//                 image: profile_info.image.clone().unwrap_or_else(|| String::from("default_image.jpg")), // Example field access, adjust as per your struct
-//                 timestamp: current_time,
-//                 message: message.clone(),
-//                 chat_id,
-//             };
-    
-//             // Add the user match to the list
-//             matches.push(user_match);
-//         }
-    
-//         // Return the list of matches
-//         Ok(matches)
-//     }
-
-//     fn generate_random_chat_id() -> String {
-//         // Generate a random alphanumeric chat ID
-//         let mut rng = rand::thread_rng();
-//         (0..10).map(|_| rng.sample(rand::distributions::Alphanumeric) as char).collect()
-//     }
-// }
-
-    
-
-
-
-
-
 
 #[init]
 fn init() {
@@ -316,20 +259,53 @@ impl State {
         }
     }
     
-    pub fn get_all_accounts(&self, pagination: Pagination) -> Result<PaginatedProfiles, String> {
-        let all_profiles: Vec<UserProfileCreationInfo> = self.user_profiles.iter()
-            .map(|(_, profile)| profile.clone()) // Clone each profile
-            .collect();
+    pub fn get_all_accounts(&self, user_id: String, pagination: Pagination) -> Result<PaginatedProfiles, String> {
+        let mut suggested_profiles: Vec<UserProfileCreationInfo> = Vec::new();
+        let mut matching_profiles: Vec<UserProfileCreationInfo> = Vec::new();
+        let mut other_profiles: Vec<UserProfileCreationInfo> = Vec::new();
     
-        // Check if all profiles have expired status true
-        let all_expired = all_profiles.iter().all(|profile| profile.expired);
+        let new_profile = self.user_profiles.get(&user_id).ok_or_else(|| "User not found".to_string())?;
     
-        if all_expired {
+        // Iterate over the user profiles in the map
+        for entry in self.user_profiles.iter() {
+            let (id, profile) = entry;
+            if *id == user_id || profile.expired {
+                continue;
+            }
+    
+            // Check if the profile has left-swiped the user_id
+            let profile_leftswiped_user = profile.params.leftswipes.as_ref().map_or(false, |leftswipes| leftswipes.contains(&user_id));
+            if profile_leftswiped_user {
+                continue;
+            }
+    
+            if profile.params.rightswipes.as_ref().map_or(false, |rightswipes| rightswipes.contains(&user_id)) {
+                suggested_profiles.push(profile.clone());
+            } else {
+                let is_preferred = profile.params.age.unwrap_or(0) >= new_profile.params.min_preferred_age.unwrap_or(0) &&
+                                   profile.params.age.unwrap_or(0) <= new_profile.params.max_preferred_age.unwrap_or(0) &&
+                                   profile.params.gender.as_ref() == new_profile.params.preferred_gender.as_ref() &&
+                                   profile.params.location.as_ref() == new_profile.params.preferred_location.as_ref();
+    
+                if is_preferred {
+                    matching_profiles.push(profile.clone());
+                } else {
+                    other_profiles.push(profile.clone());
+                }
+            }
+        }
+    
+        // Combine the suggested profiles, matching profiles, and other profiles
+        let mut all_profiles = Vec::with_capacity(suggested_profiles.len() + matching_profiles.len() + other_profiles.len());
+        all_profiles.append(&mut suggested_profiles);
+        all_profiles.append(&mut matching_profiles);
+        all_profiles.append(&mut other_profiles);
+    
+        if all_profiles.is_empty() {
             return Err("No profiles are available.".to_string());
         }
     
         let total_profiles = all_profiles.len();
-    
         let start = (pagination.page - 1) * pagination.size;
         if start >= total_profiles {
             return Err("No profiles are matched.".to_string());
@@ -346,7 +322,8 @@ impl State {
     
     
     
-    
+
+
     pub fn create_message_internal(&mut self, sender_id: String, receiver_id: String, content: String) -> Result<u64, String> {
         // Validate input
         if sender_id.trim().is_empty() {
@@ -741,9 +718,10 @@ pub fn get_an_account(user_id: String) -> Result<UserProfileCreationInfo, String
 }
 
 #[query]
-pub fn get_all_accounts(pagination: Pagination) -> Result<PaginatedProfiles, String> {
-    read_state(|state| state.get_all_accounts(pagination))
+pub fn get_all_accounts(user_id: String, pagination: Pagination) -> Result<PaginatedProfiles, String> {
+    read_state(|state| state.get_all_accounts(user_id, pagination))
 }
+
 
 
 
