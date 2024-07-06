@@ -13,7 +13,7 @@ import { useLocation } from 'react-router-dom';
 import { useAuth } from '../auth/useAuthClient';
 import { faClose, faHeart } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-
+import Nodatacard from "../Components/Nodatacard";
 const itemPerPages = 10;
 
 function Swipe() {
@@ -245,13 +245,18 @@ function Swipe() {
       } else if (dir === "right") {
         try {
           const right = await backendActor.rightswipe({ receiver_id: userId, sender_id: allTenUserId[userIndex] });
-
           console.log("right", right)
         } catch (error) {
           console.error("Error sending data to the backend:", error);
         }
       }
       userIndex++;
+      setMyPageData(prevData => {
+        const newData = [...prevData];
+        newData.splice(currentIndex, 1);
+        return newData;
+      });
+
     }
   };
 
@@ -268,57 +273,58 @@ function Swipe() {
       <SidebarComponent userId={userId} className="hidden md:block" />
 
       {startLoader ? (
-
         <Loader />
-
       ) : (
-        // <div className="mx-auto md:col-start-5 w-full h-screen flex flex-col items-center absolute">
         <div className="w-full h-full flex flex-col items-center absolute lg:left-[9%] transform md:left-[9%] transform">
-          {pageData.map((character, index) => (
-            <TinderCard
-              ref={childRefs[index]}
-              className="swipe w-full h-full flex justify-center items-center"
-              key={character.params.name[0]}
-              onSwipe={(dir) => swiped(dir, character.params.name[0], index)}
-              onCardLeftScreen={() => outOfFrame(character.params.name[0], index)}
-            >
-              <div className="h-full w-full flex flex-col items-center justify-center relative">
-                <img
-                  alt="img"
-                  src="https://cdn.pixabay.com/photo/2022/01/17/22/20/add-6945894_640.png"
-                  className="h-full w-full lg:max-w-lg"
-                  style={{ height: "106vh" }}
-                />
-                <div
-                  className="bg-black rounded-b-xl w-full lg:max-w-lg h-[30%] absolute bottom-0"
-                  style={{
-                    background:
-                      "linear-gradient(to top, rgb(0, 0, 0) 50%, rgba(255, 255, 255, 0) 100%)",
-                  }}
-                ></div>
+          {pageData.length === 0 ? (
+            <Nodatacard />
+          ) : (
+            pageData.map((character, index) => (
+              <TinderCard
+                ref={childRefs[index]}
+                className="swipe w-full h-full flex justify-center items-center"
+                key={character.params.name[0]}
+                onSwipe={(dir) => swiped(dir, character.params.name[0], index)}
+                onCardLeftScreen={() => outOfFrame(character.params.name[0], index)}
+              >
+                <div className="h-full w-full flex flex-col items-center justify-center relative">
+                  <img
+                    alt="img"
+                    src="https://cdn.pixabay.com/photo/2022/01/17/22/20/add-6945894_640.png"
+                    className="h-full w-full lg:max-w-lg"
+                    style={{ height: "106vh" }}
+                  />
+                  <div
+                    className="bg-black rounded-b-xl w-full lg:max-w-lg h-[30%] absolute bottom-0"
+                    style={{
+                      background:
+                        "linear-gradient(to top, rgb(0, 0, 0) 50%, rgba(255, 255, 255, 0) 100%)",
+                    }}
+                  ></div>
 
-                <div className="z-20 md:-ml-[12rem] sm2:-ml-[14rem] ipad:-ml-[24rem] -ml-[5rem] md:bottom-16 bottom-[4rem] absolute">
-                  <h2 className="text-4xl font-bold text-white mb-2">
-                    {character.params.name[0]}
-                  </h2>
-                  <p className="text-lg text-gray-700 font-bold">
-                    {character.params.location[0]}
-                  </p>
+                  <div className="z-20 md:-ml-[12rem] sm2:-ml-[14rem] ipad:-ml-[24rem] -ml-[5rem] md:bottom-16 bottom-[4rem] absolute">
+                    <h2 className="text-4xl font-bold text-white mb-2">
+                      {character.params.name[0]}
+                    </h2>
+                    <p className="text-lg text-gray-700 font-bold">
+                      {character.params.location[0]}
+                    </p>
 
-                  <p className="mt-2 font-bold text-white mb-6">
-                    {character.params.introduction[0]}
-                  </p>
-                  {match && (
-                    <ProfileModal
-                      profile={db[indexxx]}
-                      indexxx={indexxx}
-                      onClose={handleCloseModal}
-                    />
-                  )}
+                    <p className="mt-2 font-bold text-white mb-6">
+                      {character.params.introduction[0]}
+                    </p>
+                    {match && (
+                      <ProfileModal
+                        profile={db[indexxx]}
+                        indexxx={indexxx}
+                        onClose={handleCloseModal}
+                      />
+                    )}
+                  </div>
                 </div>
-              </div>
-            </TinderCard>
-          ))}
+              </TinderCard>
+            ))
+          )}
           <div className="flex gap-4 p-6 absolute bottom-[0%] w-full justify-center z-30">
             <button
               className="rounded-full h-12 w-12 bg-transparent shadow-md text-3xl border border-pink-700 hover:bg-red-300 font-bold text-gray-800"
@@ -344,9 +350,9 @@ function Swipe() {
           {swipeStatus === 'Nope' && (
             <div
               className={`status-text text-white font-bold text-3xl z-10 absolute top-4 p-3 
-          bg-green-500 rounded-full shadow-lg popup-content status-text-container  ss4:-ml-[17rem]  ipad:-ml-[35rem] lg:-ml-[25rem]  
-          bg-red-500 rounded-full shadow-lg popup-content status-text-container  
-          ${animate ? ' zoom-out' : ''}`}
+            bg-green-500 rounded-full shadow-lg popup-content status-text-container  ss4:-ml-[17rem]  ipad:-ml-[35rem] lg:-ml-[25rem]  
+            bg-red-500 rounded-full shadow-lg popup-content status-text-container  
+            ${animate ? ' zoom-out' : ''}`}
             >
               {swipeStatus}
             </div>
@@ -354,8 +360,8 @@ function Swipe() {
           {swipeStatus === 'Liked' && (
             <div
               className={`status-text text-white font-bold text-3xl z-10 absolute top-4 p-3 
-          bg-green-500 rounded-full shadow-lg popup-content status-text-container  ss4:ml-[17rem] lg:ml-[25rem] ipad:ml-[35rem]  
-          ${animate ? ' zoom-out' : ''}`}
+            bg-green-500 rounded-full shadow-lg popup-content status-text-container  ss4:ml-[17rem] lg:ml-[25rem] ipad:ml-[35rem]  
+            ${animate ? ' zoom-out' : ''}`}
             >
               {swipeStatus}
             </div>
@@ -365,5 +371,4 @@ function Swipe() {
     </div>
   );
 }
-
 export default Swipe;
