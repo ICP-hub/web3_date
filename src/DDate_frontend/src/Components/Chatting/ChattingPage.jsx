@@ -164,6 +164,7 @@ const ChattingPage = () => {
                             className="flex items-center p-3 md:p-4 hover:bg-gray-100 cursor-pointer"
                             onClick={() => navigate(`/ChattingSinglePage/${pro.id}`, { state: { profile: pro } })}
                           >
+                            <hr />
                             <img
                               src={pro.images[0]}
                               alt={pro.name}
