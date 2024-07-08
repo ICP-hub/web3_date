@@ -171,6 +171,7 @@ fn init() {
 }
 
 impl State {
+    
     pub fn create_account(&mut self, user_id: String, mut params: UserProfileCreationInfo) -> Result<String, String> {
         // Validation
         if params.params.name.is_none() || params.params.name.as_ref().unwrap().trim().is_empty() {
@@ -212,6 +213,7 @@ impl State {
             Ok(format!("User profile created with id: {}", user_id))
         }
     }
+
     
 
     pub fn update_account(&mut self, user_id: String, new_params: UserProfileParams) -> Result<String, String> {
@@ -321,6 +323,20 @@ impl State {
     }
     
     
+    pub fn get_all_profiles(&self) -> Result<(usize, Vec<(String, UserProfileCreationInfo)>), String> {
+        let all_profiles: Vec<(String, UserProfileCreationInfo)> = self.user_profiles.iter()
+            .map(|(user_id, profile)| (user_id.clone(), profile.clone()))
+            .collect();
+        
+        let count = all_profiles.len();
+        
+        if count == 0 {
+            return Err("No profiles found".to_string());
+        }
+        
+        ic_cdk::println!("Retrieved all profiles.");
+        Ok((count, all_profiles))
+    }
     
 
 
@@ -672,6 +688,7 @@ impl UserProfileParams {
     }
 }
 
+// #[update(guard = "is_anonymous")]
 #[update]
 pub async fn create_an_account(params: UserInputParams) -> Result<String, String> {
     let caller = ic_cdk::api::caller();
@@ -695,7 +712,7 @@ pub async fn create_an_account(params: UserInputParams) -> Result<String, String
 }
 
 
-
+// #[update(guard = "is_anonymous")]
 #[update]
 pub fn update_an_account(user_id: String, params: UserInputParams) -> Result<String, String> {
     ic_cdk::println!("Updating account with user_id: {}", user_id);
@@ -704,6 +721,7 @@ pub fn update_an_account(user_id: String, params: UserInputParams) -> Result<Str
     mutate_state(|state| state.update_account(user_id, user_profile_params))
 }
 
+// #[update(guard = "is_anonymous")]
 #[update]
 pub fn delete_an_account(user_id: String) -> Result<String, String> {
     ic_cdk::println!("Deleting account with user_id: {}", user_id);
@@ -711,16 +729,29 @@ pub fn delete_an_account(user_id: String) -> Result<String, String> {
 }
 
 
+// #[query(guard = "is_anonymous")]
 #[query]
 pub fn get_an_account(user_id: String) -> Result<UserProfileCreationInfo, String> {
     ic_cdk::println!("Retrieving account with user_id: {}", user_id);
     read_state(|state| state.get_account(user_id))
 }
 
+// #[query(guard = "is_anonymous")]
 #[query]
 pub fn get_all_accounts(user_id: String, pagination: Pagination) -> Result<PaginatedProfiles, String> {
     read_state(|state| state.get_all_accounts(user_id, pagination))
 }
+
+// #[query(guard = "is_anonymous")]
+#[query]
+fn get_all() -> Result<(usize, Vec<(String, UserProfileCreationInfo)>), String> {
+    STATE.with(|state| {
+        let state = state.borrow();
+        state.get_all_profiles()
+    })
+}
+
+
 
 
 
