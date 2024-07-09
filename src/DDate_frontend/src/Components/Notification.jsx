@@ -4,12 +4,11 @@ import { useNavigate } from "react-router-dom";
 //import { getProfileComponent } from "./GetProfileComponent"; // Assume this is the component that uses get_profile
 import { DDate_backend } from "../../../declarations/DDate_backend/index";
 import { Principal } from "@dfinity/principal";
-import "./Notification.css";
+// import "./Notification.css";
 import back from "../../assets/Images/CreateAccount/back.svg";
 import Loader from "./Loader";
-import { useAuth } from '../auth/useAuthClient';
-import { useLocation } from 'react-router-dom';
-
+import { useAuth } from "../auth/useAuthClient";
+import { useLocation } from "react-router-dom";
 
 const fetchedProfiles = [
   {
@@ -29,7 +28,6 @@ const fetchedProfiles = [
   },
 ];
 
-
 const Notification = () => {
   const navigate = useNavigate();
   const [notifications, setNotifications] = useState([]);
@@ -37,7 +35,7 @@ const Notification = () => {
   const [loading, setLoading] = useState(false);
   const [profiles, setProfiles] = useState([]); // State to store fetched profiles
   const auth = useAuth();
-  console.log(auth)
+  console.log(auth);
   const { backendActor } = useAuth();
   const location = useLocation();
   const userId = location.state;
@@ -73,15 +71,19 @@ const Notification = () => {
   useEffect(() => {
     const fetchedprofiledata = async () => {
       try {
-        console.log("userid 76====>>>>> ", userId)
-        console.log("page number ", page)
-        console.log("size of content", size)
-        const result = await backendActor.get_rightswiped_matches(userId, page, size);
-        console.log('get_fetchedprofile', result);
+        console.log("userid 76====>>>>> ", userId);
+        console.log("page number ", page);
+        console.log("size of content", size);
+        const result = await backendActor.get_rightswiped_matches(
+          userId,
+          page,
+          size
+        );
+        console.log("get_fetchedprofile", result);
       } catch (error) {
         console.error("Error getting data to the backend:", error);
       }
-    }
+    };
     fetchedprofiledata();
   }, [backendActor, userId, page, size]);
   // useEffect(() => {
@@ -234,9 +236,9 @@ const Notification = () => {
           <div className="hidden md:block md:col-span-2"></div>
 
           {/* Main content area */}
-          <div className="col-span-12 md:col-span-10 lg:grid lg:grid-cols-12">
+          <div className="col-span-12 md:col-span-10 grid grid-cols-1 lg:grid-cols-5">
             {/* Matches Column */}
-            <div className="lg:col-span-5 px-6 lg:pl-10 xl:pl-12 grow-0">
+            <div className="px-6 lg:px-10 xl:px-12 lg:col-span-2">
               <div className="flex items-center md:mt-10 ml-12 gap-2 mb-4">
                 <img
                   src={back}
@@ -246,9 +248,9 @@ const Notification = () => {
                 />
                 <div className="ml-2 text-lg font-medium">Your Matches</div>
               </div>
-              <div className="px-6">
+              <div className="px-6 xl2:px-12">
                 <div className="relative flex justify-center items-center w-full mb-8 mt-8">
-                  <p className="border-t border-black w-full"></p>
+                  <p className="border-t border-black w-full md:w-3/4 lg:w-2/3"></p>
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     width="14"
@@ -264,17 +266,22 @@ const Notification = () => {
                   </svg>
                 </div>
                 <div>
-                  <div className="ipad:flex">
-
-                    <div className="">
-                      <div className="relative w-full  md:w-1/3 lg:w-full">
+                  <div className="grid grid-cols-1 sm3:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2 xl4:grid-cols-3 gap-4">
+                    {fetchedProfiles.map((profile, index) => (
+                      <div
+                        key={index}
+                        className="relative w -[230px] h-[280px] "
+                      >
                         <img
-                          className="w-[210px] h-[280px] rounded-[20px]"
-                          src="https://cdn.pixabay.com/photo/2022/01/17/22/20/add-6945894_640.png"
-                          alt="chirag photo"
+                          className="rounded-[20px] w-full h-full"
+                          src="https://cdn.pixabay.com/photo/2022/01/17/22/20/add-6945894_640.png" // {profile.images[0]}
+                          alt={
+                            // "chirag photo"
+                            profile.name
+                          }
                         />
-                        <div className="w-[41px] h-[41px]">
-                          <div className="w-[41px] h-[41px] absolute bg-yellow-400 rounded-full flex justify-center items-center" style={{ top: "14.5rem", left: "8.9rem" }}>
+                        <div className="flex items-center justify-between">
+                          <div className="absolute bg-yellow-400 m-3 bottom-0 flex h-[41px] items-center justify-center right-0 rounded-full w-[41px]">
                             <svg
                               xmlns="http://www.w3.org/2000/svg"
                               height="20"
@@ -284,53 +291,26 @@ const Notification = () => {
                               <path d="M47.6 300.4L228.3 469.1c7.5 7 17.4 10.9 27.7 10.9s20.2-3.9 27.7-10.9L464.4 300.4c30.4-28.3 47.6-68 47.6-109.5v-5.8c0-69.9-50.5-129.5-119.4-141C347 36.5 300.6 51.4 268 84L256 96 244 84c-32.6-32.6-79-47.5-124.6-39.9C50.5 55.6 0 115.2 0 185.1v5.8c0 41.5 17.2 81.2 47.6 109.5z" />
                             </svg>
                           </div>
-                          <div className="text-lg font-medium text-center absolute top-56 left-4 text-black">
-                            <span className="block -mb-2">
-                              chirag sangwan
+                          <div className="absolute bottom-0 p-2 w-9/12 font-medium text-black text-center text-lg">
+                            <span className="line-clamp-1 hover:line-clamp-none hover:block text-left w-full">
+                              {profile.name}
+                              {/* chirag sangwan */}
                             </span>
                             <span className="flex justify-start">
+                              {/* {profile.age} */}
                               22
                             </span>
                           </div>
                         </div>
                       </div>
-                    </div>
-                    <div className="lg:px-2">
-                      <div className="relative w-full  md:w-1/3 lg:w-full">
-                        <img
-                          className="w-[210px] h-[280px] rounded-[20px]"
-                          src="https://cdn.pixabay.com/photo/2022/01/17/22/20/add-6945894_640.png"
-                          alt="chirag photo"
-                        />
-                        <div className="w-[41px] h-[41px]">
-                          <div className="w-[41px] h-[41px] absolute bg-yellow-400 rounded-full flex justify-center items-center" style={{ top: "14.5rem", left: "8.9rem" }}>
-                            <svg
-                              xmlns="http://www.w3.org/2000/svg"
-                              height="20"
-                              width="20"
-                              viewBox="0 0 512 512"
-                            >
-                              <path d="M47.6 300.4L228.3 469.1c7.5 7 17.4 10.9 27.7 10.9s20.2-3.9 27.7-10.9L464.4 300.4c30.4-28.3 47.6-68 47.6-109.5v-5.8c0-69.9-50.5-129.5-119.4-141C347 36.5 300.6 51.4 268 84L256 96 244 84c-32.6-32.6-79-47.5-124.6-39.9C50.5 55.6 0 115.2 0 185.1v5.8c0 41.5 17.2 81.2 47.6 109.5z" />
-                            </svg>
-                          </div>
-                          <div className="text-lg font-medium text-center absolute top-56 left-4 text-black">
-                            <span className="block -mb-2">
-                              chirag sangwan
-                            </span>
-                            <span className="flex justify-start">
-                              22
-                            </span>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
+                    ))}
                   </div>
                 </div>
               </div>
             </div>
 
             {/* Messages Column */}
-            <div className="lg:col-span-7 px-6 lg:px-0 border-l-4 grow-1">
+            <div className="lg:col-span-3 px-6 lg:px-0 border-l-4 grow-1">
               <div className="">
                 <div className="flex items-center md:mt-10 mx-4 gap-2 mt-2 mb-4">
                   {/* <img
@@ -362,7 +342,7 @@ const Notification = () => {
                 </div>
 
                 <div className="">
-                  <div className="flex items-center px-12 bg-white">
+                  <div className="flex items-center ss4:px-12 bg-white">
                     <input
                       className="flex-grow py-2 px-4 border bg-gray-200 rounded-full"
                       type="text"
@@ -394,12 +374,16 @@ const Notification = () => {
                       </div>
                     ))}
                   </div> */}
-                  <div className="bg-white px-8">
+                  <div className="bg-white ss4:px-8">
                     {fetchedProfiles.map((pro, index) => (
                       <div
                         key={pro.id}
                         className="flex items-center p-3 md:p-4 hover:bg-gray-100 cursor-pointer relative"
-                        onClick={() => navigate(`/ChattingSinglePage/${pro.id}`, { state: { profile: pro } })}
+                        onClick={() =>
+                          navigate(`/ChattingSinglePage/${pro.id}`, {
+                            state: { profile: pro },
+                          })
+                        }
                       >
                         <img
                           src={pro.images[0]}
@@ -420,7 +404,6 @@ const Notification = () => {
                       </div>
                     ))}
                   </div>
-
                 </div>
               </div>
             </div>
