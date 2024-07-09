@@ -30,8 +30,10 @@ use crate::profile_creation::PaginatedProfiles;
 // }
 
 // #[query(guard = "is_anonymous")]
-// #[update(guard = "is_anonymous")]
 
+
+
+// #[update(guard = "is_anonymous")]
 #[update]
 pub fn add_user_to_chatlist(user_id: String) -> Result<Vec<ChatListItem>, String> {
     ic_cdk::println!("Adding user to chatlist with user_id: {}", user_id);
@@ -111,6 +113,7 @@ pub struct ChatListItem {
 
 
 
+// #[query(guard = "is_anonymous")]
 #[query]
 fn get_user_id_by_principal() -> Result<String, String> {
     let principal = caller();
@@ -127,7 +130,7 @@ fn get_user_id_by_principal() -> Result<String, String> {
     }
 }
 
-
+// #[update(guard = "is_anonymous")]
 #[update]
 pub fn send_like_notification_candid(sender_id: String, receiver_id: String) -> Result<(), String> {
     ic_cdk::println!("Sender ID: {}", sender_id);
@@ -148,6 +151,7 @@ pub fn send_like_notification_candid(sender_id: String, receiver_id: String) -> 
     })
 }
 
+// #[update(guard = "is_anonymous")]
 #[update]
 pub fn get_rightswiped_matches(
     user_id: String,
@@ -204,7 +208,7 @@ pub fn get_rightswiped_matches(
 
 
 
-
+// #[update(guard = "is_anonymous")]
 #[update]
 fn leftswipe(input: SwipeInput) -> String {
     mutate_state(|state| {
@@ -215,6 +219,7 @@ fn leftswipe(input: SwipeInput) -> String {
     })
 }
 
+// #[update(guard = "is_anonymous")]
 #[update]
 fn rightswipe(input: SwipeInput) -> String {
     mutate_state(|state| {
@@ -225,6 +230,8 @@ fn rightswipe(input: SwipeInput) -> String {
     })
 }
 
+
+// #[query(guard = "is_anonymous")]
 #[query]
 fn get_leftswipes(user_id: String, pagination: Pagination) -> Result<MatchResult, String> {
     read_state(|state| {
@@ -232,6 +239,8 @@ fn get_leftswipes(user_id: String, pagination: Pagination) -> Result<MatchResult
     })
 }
 
+
+// #[query(guard = "is_anonymous")]
 #[query]
 fn get_rightswipes(user_id: String, pagination: Pagination) -> Result<MatchResult, String> {
     read_state(|state| {
@@ -239,6 +248,7 @@ fn get_rightswipes(user_id: String, pagination: Pagination) -> Result<MatchResul
     })
 }
 
+// #[update(guard = "is_anonymous")]
 #[update]
 fn check_user_match(current_user_id: String, potential_match_id: String) -> bool {
     // Check if current_user_id is the same as potential_match_id
@@ -279,6 +289,7 @@ fn check_user_match(current_user_id: String, potential_match_id: String) -> bool
     })
 }
 
+// #[update(guard = "is_anonymous")]
 #[update]
 fn remove_user_matches(user_id: String) -> Result<String, String> {
     mutate_state(|state| {
@@ -286,6 +297,7 @@ fn remove_user_matches(user_id: String) -> Result<String, String> {
     })
 }
 
+// #[update(guard = "is_anonymous")]
 #[update]
 fn make_user_inactive(user_id: String) -> Result<String, String> {
     mutate_state(|state| {
@@ -293,7 +305,7 @@ fn make_user_inactive(user_id: String) -> Result<String, String> {
     })
 }
 
-
+// #[update(guard = "is_anonymous")]
 #[update]
 pub fn retrieve_notifications_for_user(user_id: String) -> Result<Vec<Notification>, String> {
     read_state(|state| {
@@ -312,6 +324,7 @@ pub fn retrieve_notifications_for_user(user_id: String) -> Result<Vec<Notificati
     })
 }
 
+// #[update(guard = "is_anonymous")]
 #[update]
 pub fn create_message(sender_id: String, receiver_id: String, content: String) -> Result<u64, String> {
     STATE.with(|state| {
@@ -333,6 +346,7 @@ pub fn create_message(sender_id: String, receiver_id: String, content: String) -
 }
 
 
+// #[query(guard = "is_anonymous")]
 #[query]
 pub fn read_messages(user_id: String, other_user_id: String) -> Result<Vec<Message>, String> {
     STATE.with(|state| {
@@ -353,6 +367,7 @@ pub fn read_messages(user_id: String, other_user_id: String) -> Result<Vec<Messa
     })
 }
 
+// #[update(guard = "is_anonymous")]
 #[update]
 pub fn update_message(timestamp: u64, new_content: String) -> Result<String, String> {
     STATE.with(|state| {
@@ -402,7 +417,7 @@ pub fn update_message(timestamp: u64, new_content: String) -> Result<String, Str
     })
 }
 
-
+// #[update(guard = "is_anonymous")]
 #[update]
 pub fn delete_message(timestamp: u64) -> Result<String, String> {
     STATE.with(|state| {
