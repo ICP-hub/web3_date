@@ -234,9 +234,9 @@ const Notification = () => {
           <div className="hidden md:block md:col-span-2"></div>
 
           {/* Main content area */}
-          <div className="col-span-12 md:col-span-10 grid grid-cols-1 lg:grid-cols-2">
+          <div className="col-span-12 md:col-span-10 lg:grid lg:grid-cols-12">
             {/* Matches Column */}
-            <div className="px-6 lg:px-10 xl:px-12">
+            <div className="lg:col-span-5 px-6 lg:pl-10 xl:pl-12 grow-0">
               <div className="flex items-center md:mt-10 ml-12 gap-2 mb-4">
                 <img
                   src={back}
@@ -246,9 +246,9 @@ const Notification = () => {
                 />
                 <div className="ml-2 text-lg font-medium">Your Matches</div>
               </div>
-              <div className="px-6 md:px-8 lg:px-10 xl:px-12">
+              <div className="px-6">
                 <div className="relative flex justify-center items-center w-full mb-8 mt-8">
-                  <p className="border-t border-black w-full md:w-3/4 lg:w-2/3"></p>
+                  <p className="border-t border-black w-full"></p>
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     width="14"
@@ -264,71 +264,87 @@ const Notification = () => {
                   </svg>
                 </div>
                 <div>
-                  <div className="justify-center lg:flex">
-                    {profiles.map((profile, index) => (
-                      <div
-                        key={index}
-                        className="p-4">
-                        <div className="relative w-full sm:w-1/2 md:w-1/3 lg:w-full">
-                          <img
-                            className="w-[230px] h-[280px] rounded-[20px]"
-                            src={profile.images[0]}
-                            //  "https://cdn.pixabay.com/photo/2022/01/17/22/20/add-6945894_640.png"
+                  <div className="ipad:flex">
 
-
-                            alt=
-                            // "chirag photo"
-                            {profile.name}
-                          />
-                          <div className="w-[41px] h-[41px]">
-                            <div
-                              className="w-[41px] h-[41px] absolute bg-yellow-400 rounded-full flex justify-center items-center"
-                              style={{ top: "14.2rem", left: "11.2rem" }}
+                    <div className="">
+                      <div className="relative w-full  md:w-1/3 lg:w-full">
+                        <img
+                          className="w-[210px] h-[280px] rounded-[20px]"
+                          src="https://cdn.pixabay.com/photo/2022/01/17/22/20/add-6945894_640.png"
+                          alt="chirag photo"
+                        />
+                        <div className="w-[41px] h-[41px]">
+                          <div className="w-[41px] h-[41px] absolute bg-yellow-400 rounded-full flex justify-center items-center" style={{ top: "14.5rem", left: "8.9rem" }}>
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              height="20"
+                              width="20"
+                              viewBox="0 0 512 512"
                             >
-                              <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                height="20"
-                                width="20"
-                                viewBox="0 0 512 512"
-                              >
-                                <path d="M47.6 300.4L228.3 469.1c7.5 7 17.4 10.9 27.7 10.9s20.2-3.9 27.7-10.9L464.4 300.4c30.4-28.3 47.6-68 47.6-109.5v-5.8c0-69.9-50.5-129.5-119.4-141C347 36.5 300.6 51.4 268 84L256 96 244 84c-32.6-32.6-79-47.5-124.6-39.9C50.5 55.6 0 115.2 0 185.1v5.8c0 41.5 17.2 81.2 47.6 109.5z" />
-                              </svg>
-                            </div>
-                            <div className="text-lg font-medium text-center absolute top-56 left-4 text-black">
-                              <span className="block -mb-2">
-                                {profile.name}
-                                {/* chirag sangwan */}
-                              </span>
-                              <span className="flex justify-start">
-                                {profile.age}
-                                {/* 22 */}
-                              </span>
-                            </div>
+                              <path d="M47.6 300.4L228.3 469.1c7.5 7 17.4 10.9 27.7 10.9s20.2-3.9 27.7-10.9L464.4 300.4c30.4-28.3 47.6-68 47.6-109.5v-5.8c0-69.9-50.5-129.5-119.4-141C347 36.5 300.6 51.4 268 84L256 96 244 84c-32.6-32.6-79-47.5-124.6-39.9C50.5 55.6 0 115.2 0 185.1v5.8c0 41.5 17.2 81.2 47.6 109.5z" />
+                            </svg>
+                          </div>
+                          <div className="text-lg font-medium text-center absolute top-56 left-4 text-black">
+                            <span className="block -mb-2">
+                              chirag sangwan
+                            </span>
+                            <span className="flex justify-start">
+                              22
+                            </span>
                           </div>
                         </div>
                       </div>
-                    ))}
+                    </div>
+                    <div className="lg:px-2">
+                      <div className="relative w-full  md:w-1/3 lg:w-full">
+                        <img
+                          className="w-[210px] h-[280px] rounded-[20px]"
+                          src="https://cdn.pixabay.com/photo/2022/01/17/22/20/add-6945894_640.png"
+                          alt="chirag photo"
+                        />
+                        <div className="w-[41px] h-[41px]">
+                          <div className="w-[41px] h-[41px] absolute bg-yellow-400 rounded-full flex justify-center items-center" style={{ top: "14.5rem", left: "8.9rem" }}>
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              height="20"
+                              width="20"
+                              viewBox="0 0 512 512"
+                            >
+                              <path d="M47.6 300.4L228.3 469.1c7.5 7 17.4 10.9 27.7 10.9s20.2-3.9 27.7-10.9L464.4 300.4c30.4-28.3 47.6-68 47.6-109.5v-5.8c0-69.9-50.5-129.5-119.4-141C347 36.5 300.6 51.4 268 84L256 96 244 84c-32.6-32.6-79-47.5-124.6-39.9C50.5 55.6 0 115.2 0 185.1v5.8c0 41.5 17.2 81.2 47.6 109.5z" />
+                            </svg>
+                          </div>
+                          <div className="text-lg font-medium text-center absolute top-56 left-4 text-black">
+                            <span className="block -mb-2">
+                              chirag sangwan
+                            </span>
+                            <span className="flex justify-start">
+                              22
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
 
             {/* Messages Column */}
-            <div className="px-6 lg:px-10 xl:px-12">
-              <div className="bg-gradient-to-b from-[#DB7D11] to-[#6B3018]">
+            <div className="lg:col-span-7 px-6 lg:px-0 border-l-4 grow-1">
+              <div className="">
                 <div className="flex items-center md:mt-10 mx-4 gap-2 mt-2 mb-4">
                   {/* <img
-                    src={back}
-                    alt="back"
-                    onClick={() => navigate("/Swipe")}
-                    className="w-4 h-4 cursor-pointer"
-                  /> */}
-                  <div className="ml-2 text-lg font-medium">Your Messages</div>
+                  src={back}
+                  alt="back"
+                  onClick={() => navigate("/Swipe")}
+                  className="w-4 h-4 cursor-pointer"
+                /> */}
+                  <div className="ml-7 text-lg font-medium">Your Messages</div>
                 </div>
 
                 <div className="px-6 md:px-8 lg:px-10 xl:px-12">
                   <div className="relative flex justify-center items-center w-full mb-8 mt-8">
-                    <p className="border-t border-black w-full md:w-3/4 lg:w-2/3"></p>
+                    <p className="border-t border-black w-full"></p>
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       width="14"
@@ -345,8 +361,8 @@ const Notification = () => {
                   </div>
                 </div>
 
-                <div className="border-b border-gray-300">
-                  <div className="flex items-center p-4 bg-white">
+                <div className="">
+                  <div className="flex items-center px-12 bg-white">
                     <input
                       className="flex-grow py-2 px-4 border bg-gray-200 rounded-full"
                       type="text"
@@ -354,11 +370,35 @@ const Notification = () => {
                     />
                   </div>
 
-                  <div className="bg-white">
+                  {/* <div className="bg-white px-8">
                     {fetchedProfiles.map((pro) => (
                       <div
                         key={pro.id}
                         className="flex items-center p-3 md:p-4 hover:bg-gray-100 cursor-pointer"
+                        onClick={() => navigate(`/ChattingSinglePage/${pro.id}`, { state: { profile: pro } })}
+                      >
+                        
+                        <img
+                          src={pro.images[0]}
+                          alt={pro.name}
+                          className="w-10 h-10 md:w-10 md:h-10 rounded-full mr-3 md:mr-4"
+                        />
+                        <div className="flex flex-col">
+                          <span className="font-medium">{pro.name}</span>
+                          <span className="text-gray-600 text-ellipsis">
+                            write your message
+                          </span>
+
+                         
+                        </div>
+                      </div>
+                    ))}
+                  </div> */}
+                  <div className="bg-white px-8">
+                    {fetchedProfiles.map((pro, index) => (
+                      <div
+                        key={pro.id}
+                        className="flex items-center p-3 md:p-4 hover:bg-gray-100 cursor-pointer relative"
                         onClick={() => navigate(`/ChattingSinglePage/${pro.id}`, { state: { profile: pro } })}
                       >
                         <img
@@ -372,9 +412,15 @@ const Notification = () => {
                             write your message
                           </span>
                         </div>
+
+                        {/* Grey horizontal line */}
+                        {index !== fetchedProfiles.length - 1 && (
+                          <div className="absolute bottom-0 px-8 w-[95%] border-t border-gray-300 "></div>
+                        )}
                       </div>
                     ))}
                   </div>
+
                 </div>
               </div>
             </div>
@@ -384,6 +430,4 @@ const Notification = () => {
     </>
   );
 };
-
-
 export default Notification;
