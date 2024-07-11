@@ -146,7 +146,7 @@ const ChattingSinglePage = () => {
                                         <img
                                             src={backarrow}
                                             alt="back"
-                                            onClick={() => navigate("/ChattingPage")}
+                                            onClick={() => navigate("/Notification")}
                                             className="w-8 h-8 cursor-pointer"
                                         />
                                     </div>

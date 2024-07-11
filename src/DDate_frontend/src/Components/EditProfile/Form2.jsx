@@ -41,7 +41,7 @@ const Form2 = ({ setIndex }) => {
           Gender Pronouns {errors.genderPronouns && <span className="text-red-500">*</span>}
         </legend>
         <div className="flex flex-wrap gap-2 md:gap-2 py-2 px-0 rounded-3xl">
-          {["Man", "Woman", "Nonbinary"].map((genPro) => (
+          {["He/Him", "She/Her", "They/Them"].map((genPro) => (
             <label
               key={genPro}
               className={`inline-block px-3 py-2 rounded-full text-sm focus:outline-none transition duration-300

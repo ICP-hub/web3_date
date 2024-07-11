@@ -1,10 +1,8 @@
 import React, { useEffect, useState } from "react";
 import SidebarComponent from "./SidebarComponent";
 import { useNavigate } from "react-router-dom";
-//import { getProfileComponent } from "./GetProfileComponent"; // Assume this is the component that uses get_profile
 import { DDate_backend } from "../../../declarations/DDate_backend/index";
 import { Principal } from "@dfinity/principal";
-// import "./Notification.css";
 import back from "../../assets/Images/CreateAccount/back.svg";
 import Loader from "./Loader";
 import { useAuth } from "../auth/useAuthClient";
@@ -313,12 +311,6 @@ const Notification = () => {
             <div className="lg:col-span-3 px-6 lg:px-0 border-l-4 grow-1">
               <div className="">
                 <div className="flex items-center md:mt-10 mx-4 gap-2 mt-2 mb-4">
-                  {/* <img
-                  src={back}
-                  alt="back"
-                  onClick={() => navigate("/Swipe")}
-                  className="w-4 h-4 cursor-pointer"
-                /> */}
                   <div className="ml-7 text-lg font-medium">Your Messages</div>
                 </div>
 
@@ -350,30 +342,6 @@ const Notification = () => {
                     />
                   </div>
 
-                  {/* <div className="bg-white px-8">
-                    {fetchedProfiles.map((pro) => (
-                      <div
-                        key={pro.id}
-                        className="flex items-center p-3 md:p-4 hover:bg-gray-100 cursor-pointer"
-                        onClick={() => navigate(`/ChattingSinglePage/${pro.id}`, { state: { profile: pro } })}
-                      >
-                        
-                        <img
-                          src={pro.images[0]}
-                          alt={pro.name}
-                          className="w-10 h-10 md:w-10 md:h-10 rounded-full mr-3 md:mr-4"
-                        />
-                        <div className="flex flex-col">
-                          <span className="font-medium">{pro.name}</span>
-                          <span className="text-gray-600 text-ellipsis">
-                            write your message
-                          </span>
-
-                         
-                        </div>
-                      </div>
-                    ))}
-                  </div> */}
                   <div className="bg-white ss4:px-8">
                     {fetchedProfiles.map((pro, index) => (
                       <div
