@@ -8,18 +8,18 @@ import backarrow from "../../../assets/Images/CreateAccount/backarrow.png";
 import { useNavigate } from "react-router-dom";
 import SidebarComponent from "../SidebarComponent";
 
-const ChattingSinglePage = () => {
+const ChattingPageformessage = () => {
     const { chatId } = useParams(); //toPrincipal
     const navigate = useNavigate();
     const location = useLocation();
     const { profile } = location.state || {};
     const [selectedProfile, setSelectedProfile] = useState(null);
+    const [toggleBarVisible, setToggleBarVisible] = useState(false); // State for toggle bar visibility
 
-    const handleProfileClick = (profile) => {
-        setSelectedProfile(profile);
-    };
+
     const handleBackClick = () => {
-        setSelectedProfile(null);
+        navigate(-1);
+        // setSelectedProfile(null);
     };
 
     const today = new Date();
@@ -61,7 +61,9 @@ const ChattingSinglePage = () => {
 
         }
     ];
-
+    const toggleBar = () => {
+        setToggleBarVisible(!toggleBarVisible);
+    };
 
     const [sentMessages, setSentMessages] = useState(dummySentMessages);
     //mera principal
@@ -154,7 +156,8 @@ const ChattingSinglePage = () => {
                                         <img
                                             src={backarrow}
                                             alt="back"
-                                            onClick={() => handleBackClick()}
+                                            // onClick={() => handleBackClick()}
+                                            onClick={() => navigate("/Notification")}
                                             className="w-8 h-8 cursor-pointer"
                                         />
                                     </div>
@@ -179,10 +182,11 @@ const ChattingSinglePage = () => {
                                         </svg>
                                     </div>
                                     <div className="ml-6">
-                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
-                                            onClick
-                                            <path fill="white" d="M12 7a2 2 0 1 0-.001-4.001A2 2 0 0 0 12 7zm0 2a2 2 0 1 0-.001 3.999A2 2 0 0 0 12 9zm0 6a2 2 0 1 0-.001 3.999A2 2 0 0 0 12 15z"></path>
-                                        </svg>
+                                        <div onClick={toggleBar} className="cursor-pointer">
+                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
+                                                <path fill="white" d="M12 7a2 2 0 1 0-.001-4.001A2 2 0 0 0 12 7zm0 2a2 2 0 1 0-.001 3.999A2 2 0 0 0 12 9zm0 6a2 2 0 1 0-.001 3.999A2 2 0 0 0 12 15z"></path>
+                                            </svg>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -270,13 +274,41 @@ const ChattingSinglePage = () => {
                                         </span>
                                     </button>
                                 </div>
+                                {toggleBarVisible && (
+                                    <div className="absolute right-0 top-16 bg-white border shadow-lg pr-4 pl-4 pt-0 pb-4  mt-11 md:-mt-1  rounded-xl">
+                                        <div className="flex ">
+                                            <button className=" pt-2 md:hidden">Search</button>
+                                        </div>
+                                        <div className="flex items-center">
+                                            <button className=" pt-2 md:hidden">Attachment</button>
+                                        </div>
+                                        <div className="">
+                                            <button className=" pt-2  ">View Contact</button>
+                                        </div>
+                                        <div className="">
+                                            <button className=" pt-2  ">Wallpaper</button>
+                                        </div>
+                                        <div className="">
+                                            <button className=" pt-2  ">Mute Notification</button>
+                                        </div>
+                                        <div className="">
+                                            <button className=" pt-2  ">Media,links</button>
+                                        </div>
+                                        <div className="">
+                                            <button className=" pt-2 ">More</button>
+                                        </div>
+
+                                    </div>
+                                )}
                             </div>
                         </div>
                     ) : null
+
                 )
             }
         </>
     );
 }
 
-export default ChattingSinglePage
+export default ChattingPageformessage;
+

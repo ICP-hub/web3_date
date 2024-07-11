@@ -30,7 +30,12 @@ const schema = yup
       .string()
       .email("Invalid email format")
       .required("Email is required"),
-    username: yup.string().required("Username is required"),
+    // username: yup.string().required("Username is required"),
+    username: yup
+      .string()
+      .matches(/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{4,}$/, 'Username must be a mixture of alphabet and number')
+      .required('Username is required'),
+
     mobile: yup
       .string()
       .matches(/^\d{10}$/, "Invalid mobile number")

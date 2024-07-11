@@ -211,7 +211,7 @@ const EditProfile = () => {
               </div>
               <div className="font-viga justify-center md:flex block md:w-[80%] w-full float-right">
 
-                <div className="md:w-1/2 w-full px-6">
+                <div className="md:w-3/5 w-full px-6">
 
                   <h2 className="text-3xl md:text-4xl font-bold mb-4 text-white md:text-black text-center ">
                     <div className="flex items-center">
@@ -255,7 +255,7 @@ const EditProfile = () => {
                     )}
                   </div>
                 </div>
-                <div className="md:w-1/2 ">
+                <div className="md:w-2/5 md:border-l-4">
                   <div className="border-gray-300 font-viga bg-white  ">
                     <div className="flex flex-col items-center justify-center p-4 mt-[28px]">
                       <p className="text-[24px] flex items-center gap-3 font-[700]  text-left"><MdOutlineAddToPhotos />Your Photos</p>
