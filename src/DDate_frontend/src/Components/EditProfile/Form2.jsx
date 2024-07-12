@@ -18,26 +18,12 @@ const Form2 = ({ setIndex }) => {
   const selectedFoodingValue = watch("selectedFooding");
   const selectedWhatYouDo = watch("selectedWhatYouDo");
   const selectedLookingFor = watch("selectedLookingFor");
-  //   useEffect(() => {
-  //     setValue("genderPronouns", "Man");
-  //     setValue("selectedlifePathNumber", "1");
-  //     setValue("selectedReligion", "Hindu");
-  //     setValue("selectedZodiac", "Rat");
-  //     setValue("selectedFooding", "Vegan");
-  //     setValue("selectedWhatYouDo", "Employed");
-  //     setValue("selectedLookingFor", "Long-term relationship");
-  //   }, []);
-
-  // const onSubmit = data => {
-  //     console.log("Submitted Data:", data); // Log or handle the form data
-  //     setIndex(currentIndex => currentIndex + 1); // Move to next step
-  // };
 
   return (
-    <div className="w-full max-w-lg rounded-lg p-6 shadow-md md:bg-transparent md:shadow-none">
+    <div className="w-full  rounded-lg p-6 shadow-md md:bg-transparent md:shadow-none">
       {/* Gender Pronouns Selection */}
       <fieldset className="mb-4">
-        <legend className="block text-lg font-semibold mb-1  text-black">
+        <legend className="block text-lg font-semibold   text-black">
           Gender Pronouns {errors.genderPronouns && <span className="text-red-500">*</span>}
         </legend>
         <div className="flex flex-wrap gap-2 md:gap-2 py-2 px-0 rounded-3xl">
@@ -69,7 +55,7 @@ const Form2 = ({ setIndex }) => {
 
       {/* Life Path Number Selection */}
       <fieldset className="mb-4">
-        <legend className="block text-lg font-semibold mb-2  text-black">
+        <legend className="block text-lg font-semibold   text-black">
           Life-Path Number {errors.selectedLifePathNumber && <span className="text-red-500">*</span>}
         </legend>
         <div className="flex flex-wrap gap-2 md:gap-2 py-2 rounded-3xl">
@@ -101,10 +87,10 @@ const Form2 = ({ setIndex }) => {
 
       {/* Religion Selection */}
       <fieldset className="mb-4">
-        <legend className="block text-lg font-semibold mb-1 text-black">
+        <legend className="block text-lg font-semibold  text-black">
           Religion {errors.selectedReligion && <span className="text-red-500">*</span>}
         </legend>
-        <div className="flex flex-wrap gap-2 md:gap-2 px-0 rounded-3xl">
+        <div className="flex flex-wrap gap-2 md:gap-2 py-2 px-0 rounded-3xl">
           {[
             "Hindu",
             "Muslim",
@@ -144,7 +130,7 @@ const Form2 = ({ setIndex }) => {
 
       {/* Zodiac Sign Selection */}
       <fieldset className="mb-4">
-        <legend className="block text-lg font-semibold mb-2  text-black">
+        <legend className="block text-lg font-semibold   text-black">
           Animal Zodiac Sign {errors.selectedZodiac && <span className="text-red-500">*</span>}
         </legend>
         <div className="flex flex-wrap gap-2 md:gap-2 py-2 rounded-3xl">
@@ -187,7 +173,7 @@ const Form2 = ({ setIndex }) => {
 
       {/* Fooding Selection */}
       <fieldset className="mb-4">
-        <legend className="block text-lg font-semibold mb-2  text-black">
+        <legend className="block text-lg font-semibold  text-black">
           Fooding {errors.selectedFooding && <span className="text-red-500">*</span>}
         </legend>
         <div className="flex flex-wrap gap-2 md:gap-2 py-2 rounded-3xl">
@@ -225,7 +211,7 @@ const Form2 = ({ setIndex }) => {
         {errors.selectedFooding && <p className="text-red-500">{errors.selectedFooding.message}</p>}
       </fieldset>
       <fieldset className="mb-4">
-        <legend className="block text-lg font-semibold mb-1  text-black">
+        <legend className="block text-lg font-semibold   text-black">
           What You Do {errors.selectedWhatYouDo && <span className="text-red-500">*</span>}
         </legend>
         <div className="flex flex-wrap gap-2 md:gap-2 py-2 px-0 rounded-3xl">
@@ -256,7 +242,7 @@ const Form2 = ({ setIndex }) => {
         {errors.selectedWhatYouDo && <p className="text-red-500">{errors.selectedWhatYouDo.message}</p>}
       </fieldset>
       <fieldset className="mb-4">
-        <legend className="block text-lg font-semibold mb-1  text-black">
+        <legend className="block text-lg font-semibold   text-black">
           What are you looking for? {errors.selectedLookingFor && <span className="text-red-500">*</span>}
         </legend>
         <div className="flex flex-wrap gap-2 md:gap-2 py-2 px-0 rounded-3xl">

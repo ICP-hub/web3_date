@@ -150,7 +150,7 @@ const ChattingPageformessage = () => {
                     true ? (
                         <div className="
                          border flex flex-col w-full float-right ">
-                            <div className="py-2 px-3 bg-gradient-to-b from-[#DB7D11] to-[#6B3018] flex flex-row justify-between items-center">
+                            <div className="py-2 px-3 bg-gradient-to-r from-[#5F290E] via-[#944E02] to-[#5F290E] flex flex-row justify-between items-center">
                                 <div className="flex gap-4 items-center">
                                     <div className="flex items-center">
                                         <img
@@ -252,7 +252,7 @@ const ChattingPageformessage = () => {
                                 </div>
                                 <div className="ml-4">
                                     <button
-                                        className="flex items-center justify-center bg-gradient-to-b from-[#DB7D11] to-[#6B3018] dark:hover:bg-yellow-500 rounded-xl text-white px-4 py-1 flex-shrink-0"
+                                        className="flex items-center justify-center bg-gradient-to-r from-[#350B19] via-[#904B03] to-[#350B19] dark:hover:bg-yellow-500 rounded-xl text-white px-4 py-1 flex-shrink-0"
                                         onClick={sendMessage}
                                     >
                                         <span>Send</span>

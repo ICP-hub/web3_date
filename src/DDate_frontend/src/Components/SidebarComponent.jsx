@@ -1,7 +1,7 @@
 
 import React from "react";
 // import userpic from "../../assets/Images/UserProfiles/userpic.svg";
-import logo from "../../assets/Images/CreateAccount/logo.png";
+import logo from "../../assets/Images/CreateAccount/logo.svg";
 import { useState, useEffect } from "react";
 import { DDate_backend } from "../../../declarations/DDate_backend/index";
 import { useNavigate } from "react-router-dom";
@@ -9,6 +9,10 @@ import { Principal } from "@dfinity/principal";
 import { IoLogOut } from "react-icons/io5";
 import Loader from "./Loader";
 import { useAuth } from "../auth/useAuthClient";
+import chirag from "../../assets/Images/CreateAccount/chirag.jpg";
+
+
+
 
 const SidebarComponent = ({ userId }) => {
   const { logout } = useAuth();
@@ -270,7 +274,18 @@ const SidebarComponent = ({ userId }) => {
             }`}
           aria-label="Sidebar"
         >
-          <div className="h-full px-3 py-4 overflow-y-auto bg-gradient-to-b from-[#DB7D11] to-[#6B3018]">
+
+          {/* <div className="h-full px-3 py-4 overflow-y-auto bg-gradient-to-r from-[#26011C] via-[#9E5500] to-[#26011C]"> */}
+          <div
+            className="h-full px-3 py-4 overflow-y-auto"
+            style={{
+              background: "radial-gradient( rgba(158,85,0,1) 0%, rgba(158,85,0,1) 4%, rgba(38,1,28,1) 100%)"
+            }}
+          >
+
+
+
+
             <div className="flex justify-end px-3 py-4">
               <button onClick={toggleSidebar}>
                 <svg
@@ -285,8 +300,8 @@ const SidebarComponent = ({ userId }) => {
               </button>
             </div>
             <div
-              className="mb-6 flex justify-center "
-              style={{ marginTop: "-36.5px" }}
+              className="mb-6 flex ml-2"
+            // style={{ marginTop: "-36.5px" }}
             >
               <img
                 className="h-20 w-20 "
@@ -308,12 +323,12 @@ const SidebarComponent = ({ userId }) => {
                     />
                   </div>
                 ) : (
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-12 w-12 text-gray-400"
-                    viewBox="0 0 20 20"
-                    fill="currentColor"
-                  ></svg>
+                  <img
+                    src={chirag}
+                    alt="Profile"
+                    className="rounded-full h-12 w-12"
+
+                  />
                 )}
                 <button
                   onClick={() => navigate("/Profile", { state: userId })}
@@ -371,7 +386,7 @@ const SidebarComponent = ({ userId }) => {
               </li>
 
               <li
-                className=" mb-2 cursor-pointer flex flex-row items-center bg-yellow-600 py-1 rounded-full"
+                className=" mb-2 cursor-pointer flex flex-row items-center bg-yellow-600 py-1 rounded-full  "
                 onClick={() => { setShowDropdown(!showDropDown) }}
                 style={{
                   background:
@@ -384,7 +399,7 @@ const SidebarComponent = ({ userId }) => {
                   height="20"
                   viewBox="0 0 26 29"
                   fill="none"
-                  className="mr-2 ml-6"
+                  className="mr-2 ml-6 hover:text-white"
                 >
                   <path
                     d="M12.9929 3.9541L24.8418 3.9541M1.14391 24.6321L5.58727 24.6321M1.14391 3.9541L7.06838 3.9541M11.5117 24.6321L24.8418 24.6321M20.3984 14.2931L24.8418 14.2931M1.14391 14.2931L14.474 14.2931"
@@ -411,7 +426,7 @@ const SidebarComponent = ({ userId }) => {
                     strokeLinecap="round"
                   />
                 </svg>
-                <div className="block p-2 text-black text-sm rounded ">
+                <div className="block p-2 text-black hover:text-white text-sm rounded ">
                   <span>Filter </span>
                 </div>
               </li>
