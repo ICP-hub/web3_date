@@ -108,7 +108,7 @@ const Form1 = ({ index, setIndex, updateFormData, AllformData }) => {
                     </label>
                 </div>
 
-                <label htmlFor="username" className="block text-lg font-semibold mb-2">
+                <label htmlFor="username" className="block text-lg font-semibold ">
                     Username
                 </label>
                 <input
@@ -119,14 +119,14 @@ const Form1 = ({ index, setIndex, updateFormData, AllformData }) => {
                 />
                 {errors.username && <p className="text-red-500">{errors.username.message}</p>}
 
-                <label className="block text-lg font-semibold mb-1">
+                <label className="block font-semibold pt-2 text-lg">
                     Gender
                 </label>
-                <div className="flex flex-wrap gap-2 col-span-3 -mb-1 py-2 px-0 rounded-3xl">
+                <div className="flex flex-wrap gap-2 col-span-3   px-0 rounded-3xl">
                     {["Male", "Female", "Others"].map((gender) => (
                         <label
                             key={gender}
-                            className={`inline-block px-3 py-2 rounded-full text-sm focus:outline-none transition duration-300 ${selectedGender === gender
+                            className={`inline-block px-3 py-1.5 rounded-full text-sm focus:outline-none transition duration-300 ${selectedGender === gender
                                 ? "bg-yellow-500 text-black"
                                 : "bg-transparent hover:bg-yellow-500 hover:text-black border border-black"
                                 }`}
@@ -144,7 +144,7 @@ const Form1 = ({ index, setIndex, updateFormData, AllformData }) => {
                 </div>
                 {errors.usergender && <p className="text-red-500">{errors.usergender.message}</p>}
 
-                <label htmlFor="email" className="block text-lg font-semibold mb-2">
+                <label htmlFor="email" className="block font-semibold pt-2 text-lg">
                     Email
                 </label>
                 <input
@@ -155,7 +155,7 @@ const Form1 = ({ index, setIndex, updateFormData, AllformData }) => {
                 />
                 {errors.email && <p className="text-red-500">{errors.email.message}</p>}
 
-                <label htmlFor="mobile" className="block text-lg font-semibold mb-2">
+                <label htmlFor="mobile" className="block font-semibold pt-2 text-lg">
                     Mobile No
                 </label>
                 <input
@@ -166,7 +166,7 @@ const Form1 = ({ index, setIndex, updateFormData, AllformData }) => {
                 />
                 {errors.mobile && <p className="text-red-500">{errors.mobile.message}</p>}
 
-                <label htmlFor="dob" className="block text-lg font-semibold mb-2">
+                <label htmlFor="dob" className="block font-semibold pt-2 text-lg">
                     DOB
                 </label>
                 <input
@@ -177,14 +177,14 @@ const Form1 = ({ index, setIndex, updateFormData, AllformData }) => {
                 />
                 {errors.dob && <p className="text-red-500">{errors.dob.message}</p>}
 
-                <label htmlFor="selectedIntro" className="block text-lg font-semibold mb-1">
+                <label htmlFor="selectedIntro" className="block font-semibold pt-2 text-lg">
                     My Introduction
                 </label>
                 <textarea
                     id="selectedIntro"
                     {...register('selectedIntro')}
                     placeholder="Let us know something about you"
-                    className="w-full px-4 py-2 rounded-lg border border-white bg-transparent"
+                    className="w-full px-4 py-1.5 rounded-lg border border-white bg-transparent"
                 />
                 {errors.selectedIntro && <p className="text-red-500">{errors.selectedIntro.message}</p>}
             </form>

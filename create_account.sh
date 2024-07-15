@@ -12,7 +12,7 @@ echo "Canister ID: $CANISTER"
 # Function to generate random user input parameters
 generate_user_input_params() {
   local gender=("Male" "Female" "Others")
-  local gender_pronouns=("Man" "Woman" "Nonbinary")
+  local gender_pronouns=("He/Him" "She/Her" "They/Them")
   local religion=("Hindu" "Muslim" "Sikh" "Christian" "Jain" "Catholic" "Agnostic" "Jewish" "Atheist" "Buddhist" "Spiritual")
   local zodiac=("Rat" "Ox" "Tiger" "Cat" "Dragon" "Snake" "Horse" "Goat" "Monkey" "Rooster" "Dog" "Pig")
   local diet=("Vegan" "Vegetarian" "Omnivore" "Kosher" "Carnivore" "Halal" "Pescatarian" "Others")

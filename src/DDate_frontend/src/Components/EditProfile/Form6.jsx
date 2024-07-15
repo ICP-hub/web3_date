@@ -307,7 +307,7 @@ const Form6 = () => {
                         <button
                             type="button"
                             onClick={() => handleRemoveField(index)}
-                            className="absolute top-1 right-1 bg-red-900 text-white p-1 rounded-md opacity-75 group-hover:opacity-100 text-xs"
+                            className="absolute top-1 right-1 bg-red-900 p-1 rounded-md opacity-75 group-hover:opacity-100 text-xs"
                         >
                             X
                         </button>
