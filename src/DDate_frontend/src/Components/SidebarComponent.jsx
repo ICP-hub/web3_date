@@ -1,7 +1,7 @@
 
 import React from "react";
 // import userpic from "../../assets/Images/UserProfiles/userpic.svg";
-import logo from "../../assets/Images/CreateAccount/logo.svg";
+import logo from "../../assets/Images/CreateAccount/logo.png";
 import { useState, useEffect } from "react";
 import { DDate_backend } from "../../../declarations/DDate_backend/index";
 import { useNavigate } from "react-router-dom";
@@ -28,7 +28,7 @@ const SidebarComponent = ({ userId }) => {
 
   });
 
-  console.log("MY user id in the sidebar", userId)
+  // console.log("MY user id in the sidebar", userId)
   const navigate = useNavigate();
 
   const [principal, setPrincipal] = useState(null);

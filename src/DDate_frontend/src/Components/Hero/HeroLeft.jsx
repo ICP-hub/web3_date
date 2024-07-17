@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import heroLeft from "../../../assets/Images/heroLeft.png";
-import logo from "../../../assets/Images/CreateAccount/logo.svg";
+import logo from "../../../assets/Images/CreateAccount/logo.png";
 import createPageImage from '../../../assets/Images/CreateAccount/createPageImage.png';
 import WalletModal from '../WalletModal';
 import LogoutModal from '../LogoutModal';
