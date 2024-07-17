@@ -7,15 +7,13 @@ import { useParams } from 'react-router-dom';
 import backarrow from "../../../assets/Images/CreateAccount/backarrow.png";
 import { useNavigate } from "react-router-dom";
 import SidebarComponent from "../SidebarComponent";
+import { useAuth } from '../../auth/useAuthClient';
 
 const ChattingSinglePage = () => {
-    const { chatId } = useParams(); //toPrincipal
+    const { chatId } = useParams(); // toPrincipal
     const navigate = useNavigate();
     const location = useLocation();
     const { profile } = location.state || {};
-
-    const today = new Date();
-    console.log(today);
 
     const dummySentMessages = [
         {
@@ -31,7 +29,6 @@ const ChattingSinglePage = () => {
             message: '2How are you?',
             privateToken: 'token1',
             dateTime: "5/8/2024, 10:30:45 AM"
-
         }
     ];
 
@@ -42,7 +39,6 @@ const ChattingSinglePage = () => {
             message: 'Hi! I am good, thank you. from user2 to user1',
             privateToken: 'token2',
             dateTime: "5/8/2024, 10:30:43 AM"
-
         },
         {
             fromPrincipal: 'user2',
@@ -50,62 +46,47 @@ const ChattingSinglePage = () => {
             message: '2Hi! I am good, thank you. from user2 to user1',
             privateToken: 'token2',
             dateTime: "5/8/2024, 10:30:46 AM"
-
         }
     ];
-
-
+    const toggleBar = () => {
+        setToggleBarVisible(!toggleBarVisible);
+    };
     const [sentMessages, setSentMessages] = useState(dummySentMessages);
-    //mera principal
-    //userToken
-
-    // let userToken = localStorage.getItem('userToken');
-    // let userPrincipal = localStorage.getItem('userPrincipal');
-
-
-    // if (!profile) {
-    //     // Handle the case where profile is not available
-    //     return <div>No profile data available.</div>;
-    // }
-
-    console.log("you will be chating with this id", chatId);
-
-
+    const { principal } = useAuth();
+    console.log("Principal: ", principal.toText())
     const [socket, setSocket] = useState(null);
     const [message, setMessage] = useState('');
-    //const [toPrincipal, setToPrincipal] = useState(''); // State for recipient's principal
     const [receivedMessages, setReceivedMessages] = useState(dummyReceivedMessages);
+    const [toggleBarVisible, setToggleBarVisible] = useState(false); // State for toggle bar visibility
 
+    useEffect(() => {
+        const newSocket = io('http://localhost:5000', {
+            query: { principal }
+        });
 
+        newSocket.on('connect', () => {
+            console.log("Connected to Socket", newSocket.id)
+        })
 
-    // useEffect(() => {
-    //     //const newSocket = io('http://localhost:3000');
+        newSocket.on('receiveMessage', (data) => {
+            set((prevMessages) => [...prevMessages, data]);
+        });
 
-    //     const newSocket = io('https://ddate.kaifoundry.com', {
-    //         query: { principal: userPrincipal }
-    //     });
+        setSocket(newSocket);
 
-
-    //     setSocket(newSocket);
-
-    //     newSocket.on('receiveMessage', (data) => {
-    //         setReceivedMessages((prevMessages) => [...prevMessages, data]);
-    //     });
-
-    //     return () => newSocket.close();
-    // }, [userToken]);
-
-
+        return () => newSocket.close();
+    }, [principal]);
 
     const sendMessage = () => {
+        console.log('Sending messages ...')
         if (socket && chatId) {
             const newMessage = {
-                fromPrincipal: userPrincipal,
-                toPrincipal: chatId,
-                message: message,
-                privateToken: userToken
+                user_id: principal.toText(),
+                to_user_id: chatId,
+                message,
+                chat_id: principal.toText()
             };
-
+            console.log(newMessage);
             socket.emit('sendMessage', JSON.stringify(newMessage));
 
             // Add the new message to sent messages state
@@ -115,8 +96,8 @@ const ChattingSinglePage = () => {
         }
     };
 
-    // Function to determine if a message is sent or received
-    // const isMessageSent = (msg) => msg.fromPrincipal === userPrincipal;
+    // const isMessageSent = (msg) => msg.fromPrincipal === 'user1';
+    // const sortedMessages = [...receivedMessages, ...sentMessages].sort((a, b) => new Date(a.dateTime) - new Date(b.dateTime));
     const isMessageSent = (msg) => { if (msg.fromPrincipal === 'user1') return true; else return false };
     const sortedMessages = [...receivedMessages, ...sentMessages].sort((a, b) => new Date(a.dateTime) - new Date(b.dateTime));
 
@@ -171,9 +152,11 @@ const ChattingSinglePage = () => {
                                         </svg>
                                     </div>
                                     <div className="ml-6">
-                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
-                                            <path fill="white" d="M12 7a2 2 0 1 0-.001-4.001A2 2 0 0 0 12 7zm0 2a2 2 0 1 0-.001 3.999A2 2 0 0 0 12 9zm0 6a2 2 0 1 0-.001 3.999A2 2 0 0 0 12 15z"></path>
-                                        </svg>
+                                        <div onClick={toggleBar} className="cursor-pointer">
+                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
+                                                <path fill="white" d="M12 7a2 2 0 1 0-.001-4.001A2 2 0 0 0 12 7zm0 2a2 2 0 1 0-.001 3.999A2 2 0 0 0 12 9zm0 6a2 2 0 1 0-.001 3.999A2 2 0 0 0 12 15z"></path>
+                                            </svg>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -261,6 +244,32 @@ const ChattingSinglePage = () => {
                                         </span>
                                     </button>
                                 </div>
+                                {toggleBarVisible && (
+                                    <div className="absolute right-0 top-16 bg-white border shadow-lg pr-4 pl-4 pt-0 pb-4  mt-11 md:-mt-1  rounded-xl">
+                                        <div className="flex ">
+                                            <button className=" pt-2 md:hidden">Search</button>
+                                        </div>
+                                        <div className="flex items-center">
+                                            <button className=" pt-2 md:hidden">Attachment</button>
+                                        </div>
+                                        <div className="">
+                                            <button className=" pt-2  ">View Contact</button>
+                                        </div>
+                                        <div className="">
+                                            <button className=" pt-2  ">Wallpaper</button>
+                                        </div>
+                                        <div className="">
+                                            <button className=" pt-2  ">Mute Notification</button>
+                                        </div>
+                                        <div className="">
+                                            <button className=" pt-2  ">Media,links</button>
+                                        </div>
+                                        <div className="">
+                                            <button className=" pt-2 ">More</button>
+                                        </div>
+
+                                    </div>
+                                )}
                             </div>
                         </div>
                     ) : null

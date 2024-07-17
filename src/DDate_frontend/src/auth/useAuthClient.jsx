@@ -49,7 +49,7 @@ export const useAuthClient = (options = defaultOptions) => {
   const [identity, setIdentity] = useState(null);
   const [principal, setPrincipal] = useState(null);
   const [backendActor, setBackendActor] = useState(null);
-
+  const [publicKey, setPublicKey] = useState(null);
   const backendCanisterId =
     process.env.CANISTER_ID_DDATE_BACKEND ||
     process.env.CANISTER_ID_DDATE_BACKEND;
@@ -123,6 +123,7 @@ export const useAuthClient = (options = defaultOptions) => {
     const isAuthenticated = await client.isAuthenticated();
     const identity = client.getIdentity();
     const principal = identity.getPrincipal();
+    const publicKey = identity._delegation.publicKey;
 
 
     // console.log("isAuthenticated",isAuthenticated,"principal",principal, "identity",identity );
@@ -130,6 +131,7 @@ export const useAuthClient = (options = defaultOptions) => {
     setIsAuthenticated(isAuthenticated);
     setIdentity(identity);
     setPrincipal(principal);
+    setPublicKey(publicKey);
     let principalText = principal.toText();
 
     // console.log("principalText???? ",principalText);
@@ -149,7 +151,7 @@ export const useAuthClient = (options = defaultOptions) => {
   }
 
   return {
-    login, logout, authClient, isAuthenticated, identity, principal, frontendCanisterId, backendCanisterId, backendActor, reloadLogin
+    login, logout, authClient, isAuthenticated, identity, principal, frontendCanisterId, backendCanisterId, backendActor, reloadLogin, publicKey
   };
 }
 

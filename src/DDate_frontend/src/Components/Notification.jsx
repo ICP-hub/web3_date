@@ -7,6 +7,7 @@ import back from "../../assets/Images/CreateAccount/back.svg";
 import Loader from "./Loader";
 import { useAuth } from "../auth/useAuthClient";
 import { useLocation } from "react-router-dom";
+import ChattingPageforNotification from "./Chatting/ChattingPageforNotification";
 
 const fetchedProfiles = [
   {
@@ -306,9 +307,10 @@ const Notification = () => {
                 </div>
               </div>
             </div>
-
+            <ChattingPageforNotification />
             {/* Messages Column */}
-            <div className="lg:col-span-3 px-6 lg:px-0 border-l-4 grow-1">
+            {/* <div className="lg:col-span-3 px-6 lg:px-0 border-l-4 grow-1">
+            
               <div className="">
                 <div className="flex items-center md:mt-10 mx-4 gap-2 mt-2 mb-4">
                   <div className="ml-7 text-lg font-medium">Your Messages</div>
@@ -366,15 +368,15 @@ const Notification = () => {
                         </div>
 
                         {/* Grey horizontal line */}
-                        {index !== fetchedProfiles.length - 1 && (
+            {/* {index !== fetchedProfiles.length - 1 && (
                           <div className="absolute bottom-0 px-8 w-[95%] border-t border-gray-300 "></div>
                         )}
                       </div>
                     ))}
                   </div>
                 </div>
-              </div>
-            </div>
+              </div> */}
+            {/* </div> */}
           </div>
         </div>
       )}

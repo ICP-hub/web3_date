@@ -37,7 +37,7 @@
     "@mui/material": "^5.14.14",
     "@react-spring/web": "^9.7.3",
     "autoprefixer": "^10.4.16",
-    "axios": "^1.6.2",
+    "axios": "^1.7.2",
     "browser-image-compression": "^2.0.2",
     "cargo": "^0.8.0",
     "compressorjs": "^1.2.1",

@@ -7,23 +7,13 @@ import { useParams } from 'react-router-dom';
 import backarrow from "../../../assets/Images/CreateAccount/backarrow.png";
 import { useNavigate } from "react-router-dom";
 import SidebarComponent from "../SidebarComponent";
+import { useAuth } from '../../auth/useAuthClient';
 
 const ChattingPageformessage = () => {
-    const { chatId } = useParams(); //toPrincipal
+    const { chatId } = useParams(); // toPrincipal
     const navigate = useNavigate();
     const location = useLocation();
     const { profile } = location.state || {};
-    const [selectedProfile, setSelectedProfile] = useState(null);
-    const [toggleBarVisible, setToggleBarVisible] = useState(false); // State for toggle bar visibility
-
-
-    const handleBackClick = () => {
-        navigate(-1);
-        // setSelectedProfile(null);
-    };
-
-    const today = new Date();
-    console.log(today);
 
     const dummySentMessages = [
         {
@@ -39,7 +29,6 @@ const ChattingPageformessage = () => {
             message: '2How are you?',
             privateToken: 'token1',
             dateTime: "5/8/2024, 10:30:45 AM"
-
         }
     ];
 
@@ -50,7 +39,6 @@ const ChattingPageformessage = () => {
             message: 'Hi! I am good, thank you. from user2 to user1',
             privateToken: 'token2',
             dateTime: "5/8/2024, 10:30:43 AM"
-
         },
         {
             fromPrincipal: 'user2',
@@ -58,7 +46,6 @@ const ChattingPageformessage = () => {
             message: '2Hi! I am good, thank you. from user2 to user1',
             privateToken: 'token2',
             dateTime: "5/8/2024, 10:30:46 AM"
-
         }
     ];
     const toggleBar = () => {
@@ -66,56 +53,41 @@ const ChattingPageformessage = () => {
     };
 
     const [sentMessages, setSentMessages] = useState(dummySentMessages);
-    //mera principal
-    //userToken
-
-    // let userToken = localStorage.getItem('userToken');
-    // let userPrincipal = localStorage.getItem('userPrincipal');
-
-
-    // if (!profile) {
-    //     // Handle the case where profile is not available
-    //     return <div>No profile data available.</div>;
-    // }
-
-    console.log("you will be chating with this id", chatId);
-
-
+    const { principal } = useAuth();
+    console.log("Principal: ", principal.toText())
     const [socket, setSocket] = useState(null);
     const [message, setMessage] = useState('');
-    //const [toPrincipal, setToPrincipal] = useState(''); // State for recipient's principal
     const [receivedMessages, setReceivedMessages] = useState(dummyReceivedMessages);
+    const [toggleBarVisible, setToggleBarVisible] = useState(false); // State for toggle bar visibility
 
+    useEffect(() => {
+        const newSocket = io('http://localhost:5000', {
+            query: { principal }
+        });
 
+        newSocket.on('connect', () => {
+            console.log("Connected to Socket", newSocket.id)
+        })
 
-    // useEffect(() => {
-    //     //const newSocket = io('http://localhost:3000');
+        newSocket.on('receiveMessage', (data) => {
+            setReceivedMessages((prevMessages) => [...prevMessages, data]);
+        });
 
-    //     const newSocket = io('https://ddate.kaifoundry.com', {
-    //         query: { principal: userPrincipal }
-    //     });
+        setSocket(newSocket);
 
-
-    //     setSocket(newSocket);
-
-    //     newSocket.on('receiveMessage', (data) => {
-    //         setReceivedMessages((prevMessages) => [...prevMessages, data]);
-    //     });
-
-    //     return () => newSocket.close();
-    // }, [userToken]);
-
-
+        return () => newSocket.close();
+    }, [principal]);
 
     const sendMessage = () => {
+        console.log('Sending messages ...')
         if (socket && chatId) {
             const newMessage = {
-                fromPrincipal: userPrincipal,
-                toPrincipal: chatId,
-                message: message,
-                privateToken: userToken
+                user_id: principal.toText(),
+                to_user_id: chatId,
+                message,
+                chat_id: principal.toText()
             };
-
+            console.log(newMessage);
             socket.emit('sendMessage', JSON.stringify(newMessage));
 
             // Add the new message to sent messages state
@@ -125,8 +97,8 @@ const ChattingPageformessage = () => {
         }
     };
 
-    // Function to determine if a message is sent or received
-    // const isMessageSent = (msg) => msg.fromPrincipal === userPrincipal;
+    // const isMessageSent = (msg) => msg.fromPrincipal === 'user1';
+    // const sortedMessages = [...receivedMessages, ...sentMessages].sort((a, b) => new Date(a.dateTime) - new Date(b.dateTime));
     const isMessageSent = (msg) => { if (msg.fromPrincipal === 'user1') return true; else return false };
     const sortedMessages = [...receivedMessages, ...sentMessages].sort((a, b) => new Date(a.dateTime) - new Date(b.dateTime));
 
@@ -311,4 +283,3 @@ const ChattingPageformessage = () => {
 }
 
 export default ChattingPageformessage;
-
