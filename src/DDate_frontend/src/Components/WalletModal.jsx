@@ -53,7 +53,6 @@ const WalletModal = ({ isOpen, onClose }) => {
     const userExistOrNot = async (caller) => {
       try {
         const result = await caller.get_user_id_by_principal();
-        console.log('result', result);
         if (isMounted) { 
           if(result){
           setUserExists(result?.Ok);
@@ -75,7 +74,6 @@ const WalletModal = ({ isOpen, onClose }) => {
       isMounted = false; // Set mounted flag to false on cleanup
     };
   }, [backendActor]);
-
   useEffect(() => {
     if (isAuthenticated && userExists !== null) { // Ensure userExists is not null before navigating
       if (userExists) {

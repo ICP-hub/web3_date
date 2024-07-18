@@ -34,10 +34,11 @@ const Notification = () => {
   const [loading, setLoading] = useState(false);
   const [profiles, setProfiles] = useState([]); // State to store fetched profiles
   const auth = useAuth();
-  console.log(auth);
+  // console.log(auth);
   const { backendActor } = useAuth();
   const location = useLocation();
   const userId = location.state;
+  // console.log("UserId",userId)
   const [page, setpage] = useState(1);
   const [size, setsize] = useState(10);
   useEffect(() => {
@@ -70,15 +71,15 @@ const Notification = () => {
   useEffect(() => {
     const fetchedprofiledata = async () => {
       try {
-        console.log("userid 76====>>>>> ", userId);
-        console.log("page number ", page);
-        console.log("size of content", size);
+        // console.log("userid 76====>>>>> ", userId);
+        // console.log("page number ", page);
+        // console.log("size of content", size);
         const result = await backendActor.get_rightswiped_matches(
           userId,
           page,
           size
         );
-        console.log("get_fetchedprofile", result);
+        // console.log("get_fetchedprofile", result);
       } catch (error) {
         console.error("Error getting data to the backend:", error);
       }
@@ -116,13 +117,13 @@ const Notification = () => {
   // }, [backendActor, userId, page, size]);
 
   const principalString = localStorage.getItem("id");
-  console.log("this is principal strinng", principalString);
+  // console.log("this is principal strinng", principalString);
 
   function convertStringToPrincipal(principalString) {
-    console.log("conversion principal is being called");
+    // console.log("conversion pr/incipal is being called");
     try {
       const principal = Principal.fromText(principalString);
-      console.log("Converted Principal: ", principal.toText());
+      // console.log("Converted Principal: ", principal.toText());
       return principal;
     } catch (error) {
       console.error("Error converting string to Principal: ", error);
@@ -152,13 +153,13 @@ const Notification = () => {
   // const principalString = "tc7cw-ilo2x-rwqep-gohde-puqog-soeyv-szxvv-ybcgw-lbrkl-sm7ab-wae";
 
   // const principalString = localStorage.getItem("id");
-  console.log("this is principal strinng", principalString);
+  // console.log("this is principal strinng", principalString);
 
   function convertStringToPrincipal(principalString) {
-    console.log("conversion principal is being called");
+    // console.log("conversion principal is being called");
     try {
       const principal = Principal.fromText(principalString);
-      console.log("Converted Principal: ", principal.toText());
+      // console.log("Converted Principal: ", principal.toText());
       return principal;
     } catch (error) {
       console.error("Error converting string to Principal: ", error);
@@ -185,19 +186,19 @@ const Notification = () => {
     fetchNotifications();
   }, []);
 
-  console.log(
-    "these are the notification Which I have got in the array",
-    notifications
-  );
-  console.log("profiles from where notifications are received!!!", profiles);
+  // console.log(
+  //   "these are the notification Which I have got in the array",
+  //   notifications
+  // );
+  // console.log("profiles from where notifications are received!!!", profiles);
 
   // Handler for when a notification is clicked
   const handleNotificationClick = (senderId) => {
-    console.log(
-      "sender id I am getting on click of your matches profile !@!",
-      senderId,
-      "we will navigate to this^^&&"
-    );
+    // console.log(
+    //   "sender id I am getting on click of your matches profile !@!",
+    //   senderId,
+    //   "we will navigate to this^^&&"
+    // );
 
     setSelectedUserPrincipal(senderId);
     // You can then pass 'selectedUserPrincipal' to the getProfileComponent or navigate to a route that handles it
@@ -217,7 +218,7 @@ const Notification = () => {
   ));
   return (
     <>
-      <SidebarComponent />
+      <SidebarComponent userId={userId} />
 
       {loading ? (
         <div className="sm:ml-64">
@@ -242,7 +243,7 @@ const Notification = () => {
                 <img
                   src={back}
                   alt="back"
-                  onClick={() => navigate("/Swipe")}
+                  onClick={() => navigate("/Swipe", { state: userId })}
                   className="w-4 h-4 cursor-pointer"
                 />
                 <div className="ml-2 text-lg font-medium">Your Matches</div>
