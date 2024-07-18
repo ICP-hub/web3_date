@@ -9,15 +9,14 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "../auth/useAuthClient";
 import Loader from "./Loader";
 import "./Swipe.css";
-import { useLocation } from 'react-router-dom';
+import { useLocation } from "react-router-dom";
 import { useForm } from "react-hook-form";
-
 
 const Profile = ({ userId }) => {
   const { backendActor } = useAuth();
   const [loader, setLoader] = useState(false);
   const [progress, setProgress] = useState(60);
-  const [result, SetResult] = useState('');
+  const [result, SetResult] = useState("");
   const [formData, setFormData] = useState({
     gender: "",
     email: "",
@@ -55,13 +54,12 @@ const Profile = ({ userId }) => {
   const [userProfile, setUserProfile] = useState(null);
   const [tempProfileImage, setTempProfileImage] = useState("");
 
-
   const navigate = useNavigate();
 
   function convertStringToPrincipal(principalString) {
     try {
       const principal = Principal.fromText(principalString);
-      console.log("Converted Principal: ", principal.toText());
+      // console.log("Converted Principal: ", principal.toText());
       return principal;
     } catch (error) {
       console.error("Error converting string to Principal: ", error);
@@ -76,7 +74,6 @@ const Profile = ({ userId }) => {
     }
   }, [userProfile]);
 
-
   const calculateProgressOffset = (progress) => {
     const radius = 47;
     const circumference = 2 * Math.PI * radius;
@@ -89,21 +86,21 @@ const Profile = ({ userId }) => {
 
   useEffect(() => {
     const getData = async () => {
-      console.log("Generated Id", id);
+      // console.log("Generated Id", id);
       try {
         await backendActor.get_an_account(id).then((userProfileData) => {
           if (userProfileData) {
             const myData = userProfileData?.Ok?.params;
-            console.log("My Data Abhishek ka hai ", myData);
+            // console.log("My Data Abhishek ka hai ", myData);
             const dateObj = new Date(myData?.dob);
 
-            const day = String(dateObj.getDate()).padStart(2, '0');
-            const month = String(dateObj.getMonth() + 1).padStart(2, '0');
+            const day = String(dateObj.getDate()).padStart(2, "0");
+            const month = String(dateObj.getMonth() + 1).padStart(2, "0");
             const year = dateObj.getFullYear();
 
-            const formattedDateStr = `${day}-${month}-${year}`
+            const formattedDateStr = `${day}-${month}-${year}`;
 
-            console.log(formattedDateStr);
+            // console.log(formattedDateStr);
             if (myData) {
               SetResult(myData);
               setFormData({
@@ -137,30 +134,24 @@ const Profile = ({ userId }) => {
                 religion: myData?.religion[0],
                 travels: myData?.travel,
                 zodiac: myData.zodiac[0],
-                mobile_number: myData.mobile_number[0]
-              })
+                mobile_number: myData.mobile_number[0],
+              });
+            } else {
             }
-            else {
-
-            }
-
-
           }
-        })
-
+        });
       } catch (error) {
         console.error("Error getting data to the backend:", error);
       }
-    }
+    };
     getData();
-  }, [id, backendActor])
+  }, [id, backendActor]);
 
-  console.log('user data', formData)
-
+  // console.log('user data', formData)
 
   return (
     <div>
-      <SidebarComponent />
+      <SidebarComponent userId={id} />
       {loader ? (
         <div className="sm:ml-64">
           <div className="container flex justify-center">
@@ -178,7 +169,7 @@ const Profile = ({ userId }) => {
               <img
                 src={back}
                 alt="back"
-                onClick={() => navigate("/Swipe")}
+                onClick={() => navigate("/Swipe", { state: id })}
                 className="w-4 h-4 cursor-pointer"
               />
               <div className=" ml-2 text-lg font-medium">My Profile</div>
@@ -202,7 +193,6 @@ const Profile = ({ userId }) => {
               </div>
               <div className="h-auto w-auto flex-col">
                 <div className="mb-4 flex justify-center relative">
-
                   <label
                     htmlFor="images"
                     className="h-[220px] w-[220px] rounded-full border-2 border-gray-300 cursor-pointer flex items-center justify-center"
@@ -282,7 +272,15 @@ const Profile = ({ userId }) => {
                   </label>
                 </div>
                 <div className="flex justify-center mb-[32px] items-center">
-                  <p className="text-[20px] font-viga mr-[10px] text-center font-[600]">{formData.name}</p><div onClick={() => navigate("/editProfile", { state: result })} div><CiEdit className="text-cursor" size={22} /></div>
+                  <p className="text-[20px] font-viga mr-[10px] text-center font-[600]">
+                    {formData.name}
+                  </p>
+                  <div
+                    onClick={() => navigate("/editProfile", { state: result })}
+                    div
+                  >
+                    <CiEdit className="text-cursor" size={22} />
+                  </div>
                 </div>
                 <div className="w-full font-viga p-4">
                   <div className="grid grid-cols-3 gap-y-2 gap-x-4 ">
@@ -306,10 +304,7 @@ const Profile = ({ userId }) => {
                     </div>
 
                     <div className="flex items-center">
-                      <label
-                        htmlFor="email"
-                        className="text-[18px] font-[600]"
-                      >
+                      <label htmlFor="email" className="text-[18px] font-[600]">
                         Email
                       </label>
                     </div>
@@ -369,155 +364,184 @@ const Profile = ({ userId }) => {
                     </div>
                   </div>
                   <div className="font-[600] text-[20px] font-viga">
-                    <p className="underline underline-offset-4 mb-[35px] font-[600]">About me</p>
+                    <p className="underline underline-offset-4 mb-[35px] font-[600]">
+                      About me
+                    </p>
                     <div className="grid text-[18px] grid-cols-3">
-                      <div className="flex   items-center">
-                        Religion
-                      </div>
-                      <p className="col-span-2 w-full px-12
-                       py-1.5">
+                      <div className="flex   items-center">Religion</div>
+                      <p
+                        className="col-span-2 w-full px-12
+                       py-1.5"
+                      >
                         {formData?.religion ?? ""}
                       </p>
-                      <div className="flex items-center">
-                        Height
-                      </div>
-                      <p className="col-span-2 w-full px-12
-                       py-1.5">
+                      <div className="flex items-center">Height</div>
+                      <p
+                        className="col-span-2 w-full px-12
+                       py-1.5"
+                      >
                         none
                       </p>
-                      <div className="flex items-center">
-                        Location
-                      </div>
-                      <p className="col-span-2 w-full px-12
-                       py-1.5">
+                      <div className="flex items-center">Location</div>
+                      <p
+                        className="col-span-2 w-full px-12
+                       py-1.5"
+                      >
                         {formData?.location ?? ""}
                       </p>
-                      <div className="flex items-center">
-                        Smoking
-                      </div>
-                      <p className="col-span-2 w-full px-12
-                       py-1.5">
+                      <div className="flex items-center">Smoking</div>
+                      <p
+                        className="col-span-2 w-full px-12
+                       py-1.5"
+                      >
                         {formData?.smoking ?? ""}
                       </p>
-                      <div className="flex items-center">
-                        Alcohol/Drink
-                      </div>
-                      <p className="col-span-2 w-full px-12
-                       py-1.5">
+                      <div className="flex items-center">Alcohol/Drink</div>
+                      <p
+                        className="col-span-2 w-full px-12
+                       py-1.5"
+                      >
                         {formData?.drinking ?? ""}
                       </p>
-                      <div className="flex items-center">
-                        Occupation
-                      </div>
-                      <p className="col-span-2 w-full px-12
-                       py-1.5">
+                      <div className="flex items-center">Occupation</div>
+                      <p
+                        className="col-span-2 w-full px-12
+                       py-1.5"
+                      >
                         {formData?.occupation ?? ""}
                       </p>
-                      <div className="flex items-center">
-                        Hobbies
-                      </div>
-                      <p className="col-span-2 w-full px-12
-                       flex flex-wrap gap-6 py-1.5">
+                      <div className="flex items-center">Hobbies</div>
+                      <p
+                        className="col-span-2 w-full px-12
+                       flex flex-wrap gap-6 py-1.5"
+                      >
                         {formData?.selected_hobbies?.map((hobby, index) => (
                           <div className="" key={index}>
-                            <p className="rounded-lg py-1.5">{hobby.join(", ")}</p>
-                          </div>))}
+                            <p className="rounded-lg py-1.5">
+                              {hobby.join(", ")}
+                            </p>
+                          </div>
+                        ))}
                       </p>
-                      <div className="flex items-center">
-                        Sports
-                      </div>
-                      <p className="col-span-2 w-full px-12
-                       flex flex-wrap gap-6 py-1.5">
+                      <div className="flex items-center">Sports</div>
+                      <p
+                        className="col-span-2 w-full px-12
+                       flex flex-wrap gap-6 py-1.5"
+                      >
                         {formData?.sports?.map((sport) => (
                           <div className="">
-                            <p className="rounded-lg py-1.5">{sport.join(", ")}</p>
-                          </div>))}
+                            <p className="rounded-lg py-1.5">
+                              {sport.join(", ")}
+                            </p>
+                          </div>
+                        ))}
                       </p>
                       <div className="flex items-center">
                         Outdoor Activities
                       </div>
-                      <p className="col-span-2 w-full px-12
-                       flex flex-wrap gap-6 py-1.5">
-                        {formData?.outdoor_activities?.map((activities, index) => (
-                          <div className="" key={index}>
-                            <p className="rounded-lg py-1.5">{activities.join(", ")}</p>
-                          </div>))}
+                      <p
+                        className="col-span-2 w-full px-12
+                       flex flex-wrap gap-6 py-1.5"
+                      >
+                        {formData?.outdoor_activities?.map(
+                          (activities, index) => (
+                            <div className="" key={index}>
+                              <p className="rounded-lg py-1.5">
+                                {activities.join(", ")}
+                              </p>
+                            </div>
+                          )
+                        )}
                       </p>
-                      <div className="flex items-center">
-                        Travel
-                      </div>
-                      <p className="col-span-2 w-full px-12
-                       flex flex-wrap gap-6 py-1.5">
+                      <div className="flex items-center">Travel</div>
+                      <p
+                        className="col-span-2 w-full px-12
+                       flex flex-wrap gap-6 py-1.5"
+                      >
                         {formData?.travels?.map((travel, index) => (
                           <div className="" key={index}>
-                            <p className="rounded-lg py-1.5">{travel.join(", ")} </p>
-                          </div>))}
+                            <p className="rounded-lg py-1.5">
+                              {travel.join(", ")}{" "}
+                            </p>
+                          </div>
+                        ))}
                       </p>
-                      <div className="flex items-center">
-                        Movies
-                      </div>
-                      <p className="col-span-2 w-full px-12
-                       flex flex-wrap gap-6 py-1.5">
+                      <div className="flex items-center">Movies</div>
+                      <p
+                        className="col-span-2 w-full px-12
+                       flex flex-wrap gap-6 py-1.5"
+                      >
                         {formData?.selected_movies?.map((movie, index) => (
                           <div className="" key={index}>
-                            <p className="rounded-lg py-1.5">{movie.join(", ")} </p>
-                          </div>))}
+                            <p className="rounded-lg py-1.5">
+                              {movie.join(", ")}{" "}
+                            </p>
+                          </div>
+                        ))}
                       </p>
-                      <div className="flex items-center">
-                        Zodiac Sign
-                      </div>
-                      <p className="col-span-2 w-full px-12
-                       py-1.5">
+                      <div className="flex items-center">Zodiac Sign</div>
+                      <p
+                        className="col-span-2 w-full px-12
+                       py-1.5"
+                      >
                         {formData?.zodiac ?? ""}
-                      </p><div className="flex items-center">
-                        Diet
-                      </div>
-                      <p className="col-span-2 w-full px-12
-                       py-1.5">
+                      </p>
+                      <div className="flex items-center">Diet</div>
+                      <p
+                        className="col-span-2 w-full px-12
+                       py-1.5"
+                      >
                         {formData?.diet ?? ""}
                       </p>
-                      <div className="flex items-center">
-                        General Habits
-                      </div>
-                      <p className="col-span-2 w-full px-12
-                       flex flex-wrap gap-6 py-1.5">
+                      <div className="flex items-center">General Habits</div>
+                      <p
+                        className="col-span-2 w-full px-12
+                       flex flex-wrap gap-6 py-1.5"
+                      >
                         {formData?.habbits?.map((habbit, index) => (
                           <div className="" key={index}>
-                            <p className="rounded-lg py-1.5">{habbit.join(", ")} </p>
-                          </div>))}
+                            <p className="rounded-lg py-1.5">
+                              {habbit.join(", ")}{" "}
+                            </p>
+                          </div>
+                        ))}
                       </p>
-                      <div className="flex items-center">
-                        Art & Culture
-                      </div>
-                      <p className="col-span-2 w-full px-12
-                       flex flex-wrap gap-6 py-1.5">
+                      <div className="flex items-center">Art & Culture</div>
+                      <p
+                        className="col-span-2 w-full px-12
+                       flex flex-wrap gap-6 py-1.5"
+                      >
                         {formData?.art_and_culture?.map((artAndCul, index) => (
                           <div className="" key={index}>
-                            <p className="rounded-lg py-1.5">{artAndCul.join(", ")} </p>
-                          </div>))}
+                            <p className="rounded-lg py-1.5">
+                              {artAndCul.join(", ")}{" "}
+                            </p>
+                          </div>
+                        ))}
                       </p>
-                      <div className="flex items-center">
-                        Pets
-                      </div>
-                      <p className="col-span-2 w-full px-12
-                       py-1.5">
+                      <div className="flex items-center">Pets</div>
+                      <p
+                        className="col-span-2 w-full px-12
+                       py-1.5"
+                      >
                         {formData?.pets ?? ""}
                       </p>
                       <div className="flex items-center">
                         What are you looking for
                       </div>
-                      <p className="col-span-2 w-full px-12
-                       py-1.5">
+                      <p
+                        className="col-span-2 w-full px-12
+                       py-1.5"
+                      >
                         {formData?.looking_for ?? ""}
                       </p>
-                      <div className="flex items-center">
-                        Your interests in
-                      </div>
-                      <p className="col-span-2 w-full px-12
-                       py-1.5">
+                      <div className="flex items-center">Your interests in</div>
+                      <p
+                        className="col-span-2 w-full px-12
+                       py-1.5"
+                      >
                         {formData?.interests_in ?? ""}
                       </p>
-
                     </div>
                   </div>
                 </div>

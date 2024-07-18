@@ -133,11 +133,11 @@ const ProfileViewer = ({ setFinalMatch, finalMatch }) => {
   const [error, setError] = useState(null);
   const [somebodyLiked, setSomebodyLiked] = useState(false);
 
-  console.log("senderId is this______", senderId);
+  // console.log("senderId is this______", senderId);
 
   // const principalString = localStorage.getItem("id");
 
-  console.log("its mine only principaaaaaaaaaaaaaaaaal", principalString);
+  // console.log("its mine only principaaaaaaaaaaaaaaaaal", principalString);
 
 
   // const [finalMatch, setFinalMatch]= useState([]);
@@ -252,10 +252,10 @@ const ProfileViewer = ({ setFinalMatch, finalMatch }) => {
   // };
 
   const swipe = async (dir) => {
-    console.log("Attempting to swipe:", dir);
+    // console.log("Attempting to swipe:", dir);
 
     if (dir === "right") {
-      console.log("Like button clicked");
+      // console.log("Like button clicked");
       setSomebodyLiked(true);
 
       // Assuming 'principalString' is the current user's ID
@@ -268,8 +268,8 @@ const ProfileViewer = ({ setFinalMatch, finalMatch }) => {
         // Fetch the current user's profile to get existing data
         const currentProfileData = await DDate_backend.get_profile(currentUser);
         const likedUserData = await DDate_backend.get_profile(likedUser);
-        console.log("mere profile da dataaaaaaa", currentProfileData);
-        console.log("liked user data", likedUserData);
+        // console.log("mere profile da dataaaaaaa", currentProfileData);
+        // console.log("liked user data", likedUserData);
 
 
         // Update the matches array with the new liked user
@@ -318,7 +318,7 @@ const ProfileViewer = ({ setFinalMatch, finalMatch }) => {
         // }
 
         let arr = [...currentProfileData.matches, likedUser]
-        console.log("arr",arr)
+        // console.log("arr",arr)
 
         let arrLiked = [...likedUserData.matches, currentUser]
 
@@ -362,14 +362,14 @@ const ProfileViewer = ({ setFinalMatch, finalMatch }) => {
 
 
 
-        console.log("data aaf updated profile 1", updateParams);
+        // console.log("data aaf updated profile 1", updateParams);
 
 
 
 
         // Update profile in the backend with the complete profile object
         await DDate_backend.update_profile(updateParams);
-        console.log("Profile1 updated with new match");
+        // console.log("Profile1 updated with new match");
 
         const updateParamsLiked = {
           id: likedUserData.id,
@@ -411,7 +411,7 @@ const ProfileViewer = ({ setFinalMatch, finalMatch }) => {
 
         await DDate_backend.update_profile(updateParamsLiked);
 
-        console.log("like krn wale de profile update ho gyi");
+        // console.log("like krn wale de profile update ho gyi");
 
 
 
@@ -544,164 +544,6 @@ const ProfileViewer = ({ setFinalMatch, finalMatch }) => {
   // };
 
   return (
-    // <div className="h-screen grid grid-cols-12">
-    //   {/* Sidebar */}
-    //   <div className="md:col-span-3 absolute md:relative">
-    //     <SidebarComponent />
-    //   </div>
-
-    //   {!profile &&
-
-    //     // <div style={profileStyle}>
-    //     //   <div>{console.log("No profile found")}</div>
-    //     // </div>
-    //     console.log("No profile found")
-    //   }
-
-    //   {loading &&
-    //     console.log("wait a bit.. Let us show you the profile you are looking for")
-    //     // <div style={profileStyle}>
-    //     //   <div>{console.log("wait a bit.. Let us show you the profile you are looking for")}</div>
-    //     //   <div style={loadingStyle}>Loading...</div>
-    //     // </div>
-    //   }
-
-    //   {profile ?
-
-    //     //   <div className="col-span-9 flex flex-col items-center">
-    //     //   {/* Title */}
-    //     //   {/* <h1>React Tinder Card</h1> */}
-
-    //     //   {/* Card Container */}
-    //     //   <div className="cardContainer">
-    //     //     {/* {db.map((profile, index) => ( */}
-    //     //     {/* <TinderCard
-    //     //       //ref={childRefs[index]}
-    //     //       className="swipe"
-    //     //       key={profile.location}
-    //     //     // onSwipe={(dir) =>   swiped(dir, profile.name, index)}
-    //     //     // onCardLeftScreen={() => outOfFrame(profile.name, index)}
-    //     //     > */}
-
-    //     //       <div
-    //     //         style={{ backgroundImage: "url(" + profile.images[0] + ")" }}
-    //     //         className="card"
-    //     //       >
-
-    //     //         {/* <img src={profile.images[0]}></img> */}
-    //     //         <h3>{profile.name}</h3>
-    //     //         <h4>{profile.location}</h4>
-    //     //         {/* <h4>{profile.id}</h4> */}
-    //     //         {console.log(profile.id)}
-    //     //         {console.log(profile.location)}
-    //     //         {console.log(profile.images[0])}
-    //     //         <h5>{profile.introduction}</h5>
-    //     //         {/* {setPToLike(profile.id)} */}
-
-    //     //         <div className="buttons">
-    //     //           <button onClick={() => swipe("left")}>X</button>
-    //     //           <button onClick={() => swipe("right")}>✔</button>
-    //     //         </div>
-    //     //       </div>
-    //     //       {
-    //     //         somebodyLiked &&
-    //     //         <>
-    //     //           {console.log("somebodyLiked", somebodyLiked)}
-    //     //           <ProfileModal2 profile={profile} onClose={handleCloseModal} />
-    //     //         </>
-    //     //       }
-
-    //     //     {/* </TinderCard> */}
-
-    //     //     {/* ))} */}
-    //     //   </div>
-    //     // </div>
-
-    //     <div className="md:col-span-9 col-span-12 flex flex-col justify-start">
-    //       {profile && (
-    //         <div className="flex justify-center items-center md:relative  w-full top-0 h-full my-10 md:my-0" >
-    //           <div
-    //             className="flex p-5 rounded-[10px] shadow-[0px 0px 10px rgba(0, 0, 0, 0.5)] m-5 flex-col justify-between bg-cover h-full w-full md:w-[50%] my-10"
-    //             style={{
-    //               backgroundImage: `url(${profile.images[0]})`,
-
-    //             }}
-    //           >
-    //             {/* <h3>{profile.name}</h3>
-    //             <h4>{profile.location}</h4>
-    //             <h5>{profile.introduction}</h5> */}
-
-    //             <div
-    //               className="pl-4 bottom-16 absolute z-21"
-    //             // style={{ marginBottom: "-7px", lineHeight: "4px" }}
-    //             >
-
-    //               <h2 className="text-4xl font-bold text-gradient-to-b from-[#DB7D11] to-[#6B3018] z-10 relative">
-    //                 {profile.name}
-    //               </h2>
-    //               <p className="text-lg text-gray-700 font-bold z-10 relative">
-    //                 {profile.location}
-    //               </p>
-
-    //             </div>
-
-    //             <div
-    //               className="px-0 flex absolute gap-4 pl-4 pt-2 py-6 m-0 z-30"
-    //             // style={{ paddingTop: "65px" }}
-    //             >
-    //               <button
-    //                 className="rounded-full  h-12 w-12 bg-transparent shadow-md text-3xl border border-pink-700 font-bold text-gray-800"
-    //                 onClick={() => swipe("left")}
-    //               >
-    //                 <FontAwesomeIcon
-    //                   icon={faClose}
-    //                   style={{ color: "#fd5068" }}
-    //                 />
-    //               </button>
-    //               <button
-    //                 className="rounded-full  h-12 w-12 bg-transparent shadow-md text-3xl border border-green-700 font-bold text-gray-800"
-    //                 onClick={() => swipe("right")}
-    //               >
-    //                 <FontAwesomeIcon
-    //                   icon={faHeart}
-    //                   style={{ color: "#1be4a1" }}
-    //                 />
-    //               </button>
-    //             </div>
-
-    //             {/* <div className="buttons">
-    //               <button
-    //               className="rounded-full  h-12 w-12 bg-transparent shadow-md text-3xl border border-pink-700 font-bold text-gray-800"
-    //               onClick={() => swipe("left")}>
-    //                 <FontAwesomeIcon
-    //                   icon={faClose}
-    //                   style={{ color: "#fd5068" }}
-    //                 />
-    //               </button>
-    //               <button
-    //               className="rounded-full  h-12 w-12 bg-transparent shadow-md text-3xl border border-green-700 font-bold text-gray-800"
-    //               onClick={() => swipe("right")}>
-    //                 <FontAwesomeIcon
-    //                   icon={faHeart}
-
-    //                   style={{ color: "#1be4a1" }}
-    //                 />
-    //               </button>
-    //             </div> */}
-    //           </div>
-    //           {somebodyLiked && (
-    //             <ProfileModal2 profile={profile} onClose={() => setSomebodyLiked(false)} />
-    //           )}
-    //         </div>
-    //       )}
-    //     </div>
-
-    //     : "No profile found"
-    //   }
-
-    //   {/* Main Content */}
-
-    // </div>
     <>
       <SidebarComponent />
 

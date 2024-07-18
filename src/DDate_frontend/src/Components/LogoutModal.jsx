@@ -6,7 +6,7 @@ const LogoutModal = ({ isOpen, onClose }) => {
   if (!isOpen) return null;
   const { logout, principal } = useAuth();
 
-  console.log("principal in logoutmodal => ", principal);
+  // console.log("principal in logoutmodal => ", principal);
   const logoutHandler = async () => {
     // localStorage.removeItem("id");
     // localStorage.removeItem("identity");
