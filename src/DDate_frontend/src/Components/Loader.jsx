@@ -3,7 +3,7 @@ import "./Loader.css";
 
 function Loader() {
   return (
-    <div className="load">
+    <div className="load ipad:top-[25%] left-2/5 ">
       <div className=" rounded-full flex justify-center items-center">
         <svg
           xmlns="http://www.w3.org/2000/svg"

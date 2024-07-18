@@ -390,7 +390,7 @@ import Nodatacard from "../Components/Nodatacard";
 const itemPerPages = 10;
 
 function Swipe() {
-  const { backendActor } = useAuth();
+  const { backendActor, principal } = useAuth();
   const location = useLocation();
   const userId = location.state;
 
@@ -407,7 +407,7 @@ function Swipe() {
     getData();
   }, [backendActor, userId]);
 
-  const principalString = localStorage.getItem("id");
+  const principalString = principal;
   const [matchedProfiles, setMatchedProfiles] = useState([]);
   const [db, setSwipeProfiles] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(db.length - 1);
@@ -459,40 +459,64 @@ function Swipe() {
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
+  // console.log('without converting principalstring:', principalString)
+  // async function convertStringToPrincipal(principalString) {
+  //   console.log('principalString', principalString);
+  //   try {
+  //     return await Principal.fromText(principalString);
+  //   } catch (error) {
+  //     console.error("Error converting string to Principal: ", error);
+  //     return null;
+  //   }
+  // }
+  async function convertStringToPrincipal(principalString) {
+    console.log('Original principalString:', principalString);
+    console.log('Type of principalString:', typeof principalString);
 
-  function convertStringToPrincipal(principalString) {
-    try {
-      return Principal.fromText(principalString);
-    } catch (error) {
-      console.error("Error converting string to Principal: ", error);
+    if (principalString instanceof Principal) {
+      console.log('principalString is already a Principal object:', principalString);
+      // If you need the string representation of the Principal object
+      principalString = principalString.toText();
+      console.log('principalString Converted to text:', principalString);
+    } else if (typeof principalString !== 'string') {
+      console.error('Error: principalString is not a string');
       return null;
     }
+
+    // try {
+    //   const principal = await Principal.fromText(principalString);
+    //   console.log('Converted Principal:', principal);
+    //   return principal;
+    // } catch (error) {
+    //   console.error("Error converting string to Principal: ", error.message);
+    //   console.error("Full error details: ", error);
+    //   return null;
+    // }
   }
+  const principalID = convertStringToPrincipal(principalString);
 
-  const principal = convertStringToPrincipal(principalString);
-
-  const findMatchesForMe = async (principal) => {
+  const findMatchesForMe = async (principalID) => {
     try {
-      await DDate_backend.find_matches_for_me(principal);
+      await DDate_backend.find_matches_for_me(principalID);
       console.log("find_matches_for_me called successfully");
-      getMatchedProfiles(principal);
+      getMatchedProfiles(principalID);
     } catch (error) {
       console.error("Error calling find_matches_for_me:", error);
     }
   };
 
   useEffect(() => {
-    if (principal) {
+    if (principalID) {
       setStartLoader(true);
-      findMatchesForMe(principal);
+      findMatchesForMe(principalID);
     }
-  }, [principal]);
+  }, [principalID]);
 
-  const fetchUserProfile = async (principal) => {
+  const fetchUserProfile = async (principalID) => {
     try {
-      return await DDate_backend.get_profile(principal);
+      return await DDate_backend.get_profile(principalID);
     } catch (error) {
-      console.error("Error fetching user profile for principal:", principal, error);
+      console.error("Error fetching user profile for principal:", principalID, error);
       return null;
     }
   };
@@ -539,9 +563,9 @@ function Swipe() {
     setNoMatch(false);
   };
 
-  const getMatchedProfiles = async (principal) => {
+  const getMatchedProfiles = async (principalID) => {
     try {
-      const matchedProfiles = await DDate_backend.get_matched_profiles(principal);
+      const matchedProfiles = await DDate_backend.get_matched_profiles(principalID);
       if (matchedProfiles.length === 0) {
         setNoMatch(true);
       } else {
@@ -585,7 +609,7 @@ function Swipe() {
 
   const checkMatch = async (id) => {
     try {
-      const isMatch = await DDate_backend.check_user_match(principal, id);
+      const isMatch = await DDate_backend.check_user_match(principalID, id);
       if (isMatch) {
         setMatch(true);
       }
