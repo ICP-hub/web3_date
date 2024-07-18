@@ -7,12 +7,11 @@ const Form1 = () => {
 
     console.log(errors)
     // Set the default value
-    useEffect(() => {
-        // setValue('usergender', 'Male');
-    }, [])
+    // useEffect(() => {
+    // setValue('usergender', 'Male');
+    // }, [])
 
 
-    console.log(selectedGender)
     return (
         <div className="w-full rounded-lg p-6 shadow-md md:bg-transparent md:shadow-none">
             {/* Gender Selection */}

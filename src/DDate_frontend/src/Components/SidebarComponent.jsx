@@ -103,13 +103,27 @@ const SidebarComponent = ({ userId }) => {
     }
   }, []);
 
-  function convertStringToPrincipal(principalString) {
-    try {
-      const principal = Principal.fromText(principalString);
-      console.log("Converted Principal: ", principal.toText());
-      return principal;
-    } catch (error) {
-      console.error("Error converting string to Principal: ", error);
+  // function convertStringToPrincipal(principalString) {
+  //   try {
+  //     const principal = Principal.fromText(principalString);
+  //     console.log("Converted Principal: ", principal.toText());
+  //     return principal;
+  //   } catch (error) {
+  //     console.error("Error converting string to Principal: ", error);
+  //     return null;
+  //   }
+  // }
+  async function convertStringToPrincipal(principalString) {
+    console.log('Original principalString:', principalString);
+    console.log('Type of principalString:', typeof principalString);
+
+    if (principalString instanceof Principal) {
+      console.log('principalString is already a Principal object:', principalString);
+      // If you need the string representation of the Principal object
+      principalString = principalString.toText();
+      console.log('principalString Converted to text:', principalString);
+    } else if (typeof principalString !== 'string') {
+      console.error('Error: principalString is not a string');
       return null;
     }
   }
@@ -261,9 +275,8 @@ const SidebarComponent = ({ userId }) => {
         </div>
       ) : (
         <aside
-          className={`fixed top-0 w-64  md:w-[20%] h-screen z-50  transition-transform ${
-            isSidebarOpen || !isMobileOrTablet ? "" : "-translate-x-full"
-          }`}
+          className={`fixed top-0 w-64  md:w-[20%] h-screen z-50  transition-transform ${isSidebarOpen || !isMobileOrTablet ? "" : "-translate-x-full"
+            }`}
           aria-label="Sidebar"
         >
           {/* <div className="h-full px-3 py-4 overflow-y-auto bg-gradient-to-r from-[#26011C] via-[#9E5500] to-[#26011C]"> */}
@@ -289,7 +302,7 @@ const SidebarComponent = ({ userId }) => {
             </div>
             <div
               className="mb-6 flex ml-2"
-              // style={{ marginTop: "-36.5px" }}
+            // style={{ marginTop: "-36.5px" }}
             >
               <img className="h-20 w-20 " src={logo} alt="Ddate logo" />
             </div>
