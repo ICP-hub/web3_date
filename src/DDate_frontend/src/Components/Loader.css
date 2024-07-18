@@ -231,8 +231,11 @@
 @media (max-width: 768px) {
   .load {
     margin: 0; /* Remove margin for mobile */
-    top: 30%;
-    left: 10%;
+    top: 40%;
+    /* top: 37%; */
+    /* left: 10%; */
+    left: 35%;
+
     transform: translate(-50%, -50%);
   }
 }
