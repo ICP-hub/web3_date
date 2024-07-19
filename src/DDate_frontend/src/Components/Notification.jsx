@@ -231,15 +231,15 @@ const Notification = () => {
           </div>
         </div>
       ) : (
-        <div className="h-screen grid grid-cols-12">
+        <div className="h-screen grid grid-cols-10">
           {/* Sidebar - hidden on smaller screens */}
           <div className="hidden md:block md:col-span-2"></div>
 
           {/* Main content area */}
-          <div className="col-span-12 md:col-span-10 grid grid-cols-1 lg:grid-cols-5">
+          <div className="col-span-12 md:col-span-8 grid grid-cols-1 lg:grid-cols-5">
             {/* Matches Column */}
-            <div className="px-6 lg:px-10 xl:px-12 lg:col-span-2">
-              <div className="flex items-center md:mt-10 ml-12 gap-2 mb-4">
+            <div className=" lg:col-span-2 max-h-[100vh] overflow-y-auto">
+              <div className="flex items-center md:mt-10 ml-8 gap-2 mb-4  ">
                 <img
                   src={back}
                   alt="back"
@@ -309,75 +309,6 @@ const Notification = () => {
               </div>
             </div>
             <ChattingPageforNotification />
-            {/* Messages Column */}
-            {/* <div className="lg:col-span-3 px-6 lg:px-0 border-l-4 grow-1">
-            
-              <div className="">
-                <div className="flex items-center md:mt-10 mx-4 gap-2 mt-2 mb-4">
-                  <div className="ml-7 text-lg font-medium">Your Messages</div>
-                </div>
-
-                <div className="px-6 md:px-8 lg:px-10 xl:px-12">
-                  <div className="relative flex justify-center items-center w-full mb-8 mt-8">
-                    <p className="border-t border-black w-full"></p>
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="14"
-                      height="14"
-                      viewBox="0 0 20 19"
-                      fill="none"
-                      className="absolute text-black z-10"
-                    >
-                      <path
-                        d="M10 18.35L8.55 17.03C3.4 12.36 0 9.27 0 5.5C0 2.41 2.42 0 5.5 0C7.24 0 8.91 0.81 10 2.08C11.09 0.81 12.76 0 14.5 0C17.58 0 20 2.41 20 5.5C20 9.27 16.6 12.36 11.45 17.03L10 18.35Z"
-                        fill="currentColor"
-                      />
-                    </svg>
-                  </div>
-                </div>
-
-                <div className="">
-                  <div className="flex items-center ss4:px-12 bg-white">
-                    <input
-                      className="flex-grow py-2 px-4 border bg-gray-200 rounded-full"
-                      type="text"
-                      placeholder="Search by name"
-                    />
-                  </div>
-
-                  <div className="bg-white ss4:px-8">
-                    {fetchedProfiles.map((pro, index) => (
-                      <div
-                        key={pro.id}
-                        className="flex items-center p-3 md:p-4 hover:bg-gray-100 cursor-pointer relative"
-                        onClick={() =>
-                          navigate(`/ChattingSinglePage/${pro.id}`, {
-                            state: { profile: pro },
-                          })
-                        }
-                      >
-                        <img
-                          src={pro.images[0]}
-                          alt={pro.name}
-                          className="w-10 h-10 md:w-10 md:h-10 rounded-full mr-3 md:mr-4"
-                        />
-                        <div className="flex flex-col">
-                          <span className="font-medium">{pro.name}</span>
-                          <span className="text-gray-600 text-ellipsis">
-                            write your message
-                          </span>
-                        </div>
-
-                        {/* Grey horizontal line */}
-            {/* {index !== fetchedProfiles.length - 1 && (
-                          <div className="absolute bottom-0 px-8 w-[95%] border-t border-gray-300 "></div>
-                        )}
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </div> */}
-            {/* </div> */}
           </div>
         </div>
       )}

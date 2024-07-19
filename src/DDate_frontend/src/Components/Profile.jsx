@@ -153,7 +153,7 @@ const Profile = ({ userId }) => {
     <div>
       <SidebarComponent userId={id} />
       {loader ? (
-        <div className="sm:ml-64">
+        <div className="sm:ml-64 ">
           <div className="container flex justify-center">
             <div className="max-w-xs md:max-w-md lg:max-w-lg xl:max-w-xl bg-white  h-screen ">
               <div className="h-screen">
