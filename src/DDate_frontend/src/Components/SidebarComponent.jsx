@@ -240,7 +240,7 @@ const SidebarComponent = ({ userId }) => {
   };
 
   return (
-    <div className="z-40">
+    <div className="z-40 container">
       <button
         aria-controls="sidebar-multi-level-sidebar"
         type="button"

@@ -39,7 +39,7 @@ const Form3 = (props) => {
   };
 
   return (
-    <div className="w-full rounded-lg p-6 shadow-md md:bg-transparent md:shadow-none">
+    <div className="w-full rounded-lg p-6 shadow-md md:bg-transparent md:shadow-none ">
       {/* Smoking Selection */}
       <fieldset className="mb-4">
         <legend className="block text-lg font-semibold text-black">

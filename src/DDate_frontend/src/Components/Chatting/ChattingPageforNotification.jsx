@@ -85,13 +85,13 @@ const ChattingPageforNotification = () => {
     return (
         <>
 
-            <div className="lg:col-span-3 px-6 lg:px-0 border-l-4 grow-1">
+            <div className="lg:col-span-3 px-6 lg:px-0 border-l-4 grow-1 max-h-[100vh] overflow-y-auto">
                 {/* Sidebar - hidden on smaller screens */}
                 <div className="hidden md:block md:col-span-2"></div>
 
                 {/* Left side - takes 40% of the width */}
                 <div className={`col-span-12 ${selectedProfile ? 'md:col-span-4' : 'md:col-span-10'} px-6 lg:px-10  ${selectedProfile ? 'hidden md:block' : ''}`}>
-                    <div className="flex items-center md:mt-10 ml-12 gap-2 mb-4">
+                    <div className="flex items-center md:mt-10  gap-2 mb-4">
                         <img
                             src={back}
                             alt="back"
@@ -101,7 +101,7 @@ const ChattingPageforNotification = () => {
                         <div className="ml-2 text-lg font-medium">Your Messages</div>
                     </div>
 
-                    <div className="lg:pl-10 xl:pl-12">
+                    <div className="">
                         <div className="relative flex justify-center items-center w-full mb-8 mt-8">
                             <p className="border-t border-black w-full md:w-3/4 lg:w-2/3"></p>
                             <svg

@@ -9,11 +9,11 @@ const Form1 = ({ index, setIndex, updateFormData, AllformData }) => {
     const selectedGender = watch('usergender');
 
     console.log("updataed data: ", updateFormData);
-    // useEffect(() => {
-    //     if (updateFormData) {
+    useEffect(() => {
+        if (updateFormData) {
 
-    //     }
-    // }, []);
+        }
+    }, []);
 
     const calculateAge = (dobString) => {
         const dob = new Date(dobString);
@@ -184,7 +184,7 @@ const Form1 = ({ index, setIndex, updateFormData, AllformData }) => {
                     id="selectedIntro"
                     {...register('selectedIntro')}
                     placeholder="Let us know something about you"
-                    className="w-full px-4 py-1.5 rounded-lg border border-white bg-transparent"
+                    className="w-full px-4 py-1.5 rounded-lg border-2 border-gray-300 bg-transparent"
                 />
                 {errors.selectedIntro && <p className="text-red-500">{errors.selectedIntro.message}</p>}
             </form>
