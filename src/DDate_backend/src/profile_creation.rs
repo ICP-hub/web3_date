@@ -64,6 +64,7 @@ pub struct UserInputParams {
     pub preferred_location: Option<String>,
     pub introduction: Option<String>,
     pub images: Option<Vec<String>>,
+    pub lifepath_number: Option<u64>,
 }
 
 #[derive(Clone, Deserialize, CandidType, Debug, Serialize)]
@@ -134,6 +135,7 @@ pub struct UserProfileParams {
     pub matched_profiles: Option<Vec<String>>,
     pub leftswipes: Option<HashSet<String>>,
     pub rightswipes: Option<HashSet<String>>,
+    pub lifepath_number: Option<u64>
 }
 
 #[derive(Clone, Deserialize, CandidType, Debug, Serialize)]
@@ -171,7 +173,9 @@ fn init() {
 }
 
 impl State {
-    
+   
+
+
     pub fn create_account(&mut self, user_id: String, mut params: UserProfileCreationInfo) -> Result<String, String> {
         // Validation
         if params.params.name.is_none() || params.params.name.as_ref().unwrap().trim().is_empty() {
@@ -567,6 +571,7 @@ impl From<UserInputParams> for UserProfileParams {
             preferred_location: input.preferred_location,
             introduction: input.introduction,
             images: input.images,
+            lifepath_number: input.lifepath_number,
             likes: None,
             matches: None,
             notifications: None,
@@ -574,6 +579,7 @@ impl From<UserInputParams> for UserProfileParams {
             user_id: None,
             leftswipes: None,
             rightswipes: None,
+            
         }
     }
 }
@@ -652,6 +658,9 @@ impl UserProfileParams {
         if let Some(age) = other.age {
             self.age = Some(age);
         }
+        if let Some(lifepath_number) = other.lifepath_number {
+            self.lifepath_number = Some(lifepath_number);
+        }
         if let Some(location) = other.location {
             self.location = Some(location);
         }
@@ -710,6 +719,7 @@ pub async fn create_an_account(params: UserInputParams) -> Result<String, String
     ic_cdk::println!("Creating account with user_id: {}", unique_user_id);
     mutate_state(|state| state.create_account(unique_user_id, profile_info))
 }
+
 
 
 // #[update(guard = "is_anonymous")]

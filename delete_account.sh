@@ -2,7 +2,7 @@
 set -e
 
 # Number of users you want to delete
-NUM_USERS=5
+NUM_USERS=1
 START_NUM=1
 ANONYMOUS_IDENTITY="anonymous"
 CONTROLLER_IDENTITY="controller"

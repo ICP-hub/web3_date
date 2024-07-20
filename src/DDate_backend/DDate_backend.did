@@ -58,6 +58,7 @@ type UserInputParams = record {
   smoking : opt text;
   drinking : opt text;
   introduction : opt text;
+  lifepath_number : opt nat64;
   art_and_culture : opt vec text;
   preferred_location : opt text;
   gender : opt text;
@@ -106,6 +107,7 @@ type UserProfileParams = record {
   likes : opt vec text;
   introduction : opt text;
   matches : opt vec text;
+  lifepath_number : opt nat64;
   art_and_culture : opt vec text;
   preferred_location : opt text;
   gender : opt text;

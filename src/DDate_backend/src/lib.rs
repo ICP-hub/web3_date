@@ -30,10 +30,8 @@ use crate::profile_creation::PaginatedProfiles;
 // }
 
 // #[query(guard = "is_anonymous")]
-
-
-
 // #[update(guard = "is_anonymous")]
+
 #[update]
 pub fn add_user_to_chatlist(user_id: String) -> Result<Vec<ChatListItem>, String> {
     ic_cdk::println!("Adding user to chatlist with user_id: {}", user_id);
