@@ -1,88 +1,130 @@
-import * as React from "react";
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../auth/useAuthClient";
 import InternetIdentity from "../../assets/Images/WalletLogos/InternetIdentity.png";
 import NFID from "../../assets/Images/WalletLogos/NFID.png";
-import { DDate_backend } from "../../../declarations/DDate_backend/index";
+import { Principal } from "@dfinity/principal";
+
+const WalletButton = ({ wallet, loginHandler }) => (
+  <li
+    className="border border-gray-300 rounded-3xl flex items-center p-2 cursor-pointer transition-colors duration-300 ease-in-out hover:bg-yellow-900 hover:border-yellow-500 active:bg-yellow-700 active:border-yellow-600"
+    onClick={() => loginHandler(wallet.id)}
+  >
+    <img
+      src={wallet.imgSrc}
+      alt={wallet.alt}
+      className="rounded-full h-8 w-8 flex items-center justify-center text-white mr-2"
+    />
+    <span className="text-center flex-grow">{wallet.name}</span>
+  </li>
+);
 
 const WalletModal = ({ isOpen, onClose }) => {
   const navigate = useNavigate();
-  const { login, isAuthenticated, backendActor } = useAuth();
-
-  const walletModalSvg = [
+  const { login, isAuthenticated, backendActor, principal, publicKey } =
+    useAuth();
+  const [userExists, setUserExists] = useState(null);
+  console.log("isAuthenticated", isAuthenticated);
+  console.log("backendActor", backendActor);
+  const walletOptions = [
     {
       id: "ii",
-      content: (
-        <li
-          className="border border-gray-300 rounded-3xl flex items-center p-2 cursor-pointer transition-colors duration-300 ease-in-out hover:bg-yellow-900 hover:border-yellow-500 active:bg-yellow-700 active:border-yellow-600"
-          onClick={() => loginHandler("ii")}
-        >
-          <img
-            src={InternetIdentity}
-            alt="InternetIdentity"
-            className="rounded-full h-8 w-8 flex items-center justify-center text-white mr-2"
-          />
-          <span className="text-center flex-grow">Internet Identity</span>
-        </li>
-      ),
+      imgSrc: InternetIdentity,
+      alt: "InternetIdentity",
+      name: "Internet Identity",
     },
-    {
-      id: "nfid",
-      content: (
-        <li
-          className="border border-gray-300 rounded-3xl flex items-center p-2 cursor-pointer transition-colors duration-300 ease-in-out hover:bg-yellow-900 hover:border-yellow-500 active:bg-yellow-700 active:border-yellow-600"
-          onClick={() => loginHandler("nfid")}
-        >
-          <img
-            src={NFID}
-            alt="NFID"
-            className="rounded-full h-8 w-8 flex items-center justify-center text-white mr-2"
-          />
-          <span className="text-center flex-grow">NFID</span>
-        </li>
-      ),
-    },
+    { id: "nfid", imgSrc: NFID, alt: "NFID", name: "NFID" },
   ];
 
-  const [userExists, setUserExists] = useState(null);
+  const arrayBufferToBase64 = (buffer) => {
+    return window.btoa(String.fromCharCode(...new Uint8Array(buffer)));
+  };
 
-  useEffect(() => {
-    let isMounted = true; // Flag to track mounted state
+  const base64String = arrayBufferToBase64(publicKey);
+  const saveToken = (token) => {
+    localStorage.setItem("privateToken", token);
+  };
+  const registerUser = async (userId) => {
+    const principalString = principal.toText();
+    const raw = JSON.stringify({
+      principal: principalString,
+      publicKey: base64String,
+      user_id: userId,
+    });
 
-    const userExistOrNot = async (caller) => {
-      try {
-        const result = await caller.get_user_id_by_principal();
-        if (isMounted) { 
-          if(result){
-          setUserExists(result?.Ok);
-          }
-          else{
-            setUserExists('')
-          }
+    try {
+      const response = await fetch(
+        "https://ddate.kaifoundry.com/api/v1/register/user",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: raw,
         }
-      } catch (error) {
-        console.error("Error sending data to the backend:", error);
-      }
-    };
-
-    if (backendActor) {
-      userExistOrNot(backendActor); // Pass backendActor to the async function
+      );
+      const result = await response.json();
+      // console.log("registerUser", result);
+      return result;
+    } catch (error) {
+      console.error("Error registering user:", error);
     }
+  };
 
-    return () => {
-      isMounted = false; // Set mounted flag to false on cleanup
-    };
-  }, [backendActor]);
-  useEffect(() => {
-    if (isAuthenticated && userExists !== null) { // Ensure userExists is not null before navigating
-      if (userExists) {
-        navigate("/Swipe", { state: userExists });
+  const loginUser = async (userId) => {
+    const principalString = principal.toText();
+    const raw = JSON.stringify({
+      principal: principalString,
+      publicKey: base64String,
+      user_id: userId,
+    });
+
+    try {
+      const response = await fetch(
+        "https://ddate.kaifoundry.com/api/v1/login/user",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: raw,
+        }
+      );
+      const result = await response.json();
+      // console.log("loginUser", result);
+      if (result?.privateToken) {
+        saveToken(result.privateToken);
+      }
+    } catch (error) {
+      console.error("Error logging in user:", error);
+    }
+  };
+
+  const checkUserExists = async () => {
+    try {
+      const result = await backendActor.get_user_id_by_principal();
+      if (result?.Ok) {
+        const userId = result.Ok;
+        setUserExists(userId);
+        await registerUser(userId);
+        await loginUser(userId);
       } else {
-        navigate("/CreateAccount1");
+        setUserExists(null);
       }
+    } catch (error) {
+      console.error("Error checking if user exists:", error);
     }
-  }, [isAuthenticated, userExists]);
+  };
+
+  useEffect(() => {
+    if (backendActor) {
+      checkUserExists();
+    }
+  }, [backendActor, principal, publicKey]);
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigate(userExists ? "/Swipe" : "/CreateAccount1", {
+        state: userExists,
+      });
+    }
+  }, [isAuthenticated, userExists, navigate]);
 
   const loginHandler = async (walletId) => {
     await login(walletId);
@@ -102,10 +144,12 @@ const WalletModal = ({ isOpen, onClose }) => {
         <h3 className="text-lg font-lg mb-4 text-center">Connect With</h3>
         <p className="border-t border-white w-full md:w-3/4 lg:w-2/3 mx-auto mb-4"></p>
         <ul className="space-y-3">
-          {walletModalSvg.map((wallet, index) => (
-            <div key={index}>
-              {wallet.content}
-            </div>
+          {walletOptions.map((wallet) => (
+            <WalletButton
+              key={wallet.id}
+              wallet={wallet}
+              loginHandler={loginHandler}
+            />
           ))}
         </ul>
       </div>

@@ -24,71 +24,76 @@ const defaultOptions = {
   },
 };
 
-export const useAuthClient = (options = defaultOptions) => {
+const useAuthClient = (options = defaultOptions) => {
   const [authClient, setAuthClient] = useState(null);
-  const [isAuthenticated, setIsAuthenticated] = useState(null);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [identity, setIdentity] = useState(null);
   const [principal, setPrincipal] = useState(null);
   const [backendActor, setBackendActor] = useState(null);
   const [publicKey, setPublicKey] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   const backendCanisterId = process.env.CANISTER_ID_DDATE_BACKEND;
   const frontendCanisterId = process.env.CANISTER_ID_DDATE_FRONTEND;
 
   useEffect(() => {
-    AuthClient.create(options.createOptions).then((client) => {
-      setAuthClient(client);
-      reloadLogin(client); // Call reloadLogin here
-    });
+    const initializeAuthClient = async () => {
+      try {
+        const client = await AuthClient.create(options.createOptions);
+        setAuthClient(client);
+        await reloadLogin(client);
+      } catch (error) {
+        console.error("Failed to create AuthClient:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    initializeAuthClient();
   }, []);
 
-  const login = async (val) => {
-    return new Promise(async (resolve, reject) => {
-      try {
-        if (
-          authClient.isAuthenticated() &&
-          !(await authClient.getIdentity().getPrincipal().isAnonymous())
-        ) {
-          clientInfo(authClient);
-          resolve(authClient);
-        } else {
-          const opt = val === "ii" ? "loginOptionsii" : "loginOptionsnfid";
-          authClient.login({
-            ...options[opt],
-            onError: reject,
-            onSuccess: () => {
-              clientInfo(authClient);
-              resolve(authClient);
-            },
-          });
-        }
-      } catch (error) {
-        reject(error);
+  const login = async (provider) => {
+    try {
+      if (
+        authClient.isAuthenticated() &&
+        !(await authClient.getIdentity().getPrincipal().isAnonymous())
+      ) {
+        await clientInfo(authClient);
+      } else {
+        const opt = provider === "ii" ? "loginOptionsii" : "loginOptionsnfid";
+        await authClient.login({
+          ...options[opt],
+          onError: (error) => {
+            throw new Error(error);
+          },
+          onSuccess: () => {
+            clientInfo(authClient);
+          },
+        });
       }
-    });
+    } catch (error) {
+      console.error("Login failed:", error);
+      throw error;
+    }
   };
 
-  const reloadLogin = (client = authClient) => {
-    return new Promise(async (resolve, reject) => {
-      try {
-        if (
-          client.isAuthenticated() &&
-          !(await client.getIdentity().getPrincipal().isAnonymous())
-        ) {
-          clientInfo(client);
-          resolve(client);
-        }
-      } catch (error) {
-        reject(error);
+  const reloadLogin = async (client = authClient) => {
+    try {
+      if (
+        (await client.isAuthenticated()) &&
+        !client.getIdentity().getPrincipal().isAnonymous()
+      ) {
+        await clientInfo(client);
       }
-    });
+    } catch (error) {
+      console.error("Failed to reload login:", error);
+    }
   };
 
   const clientInfo = async (client) => {
     const isAuthenticated = await client.isAuthenticated();
     const identity = client.getIdentity();
     const principal = identity.getPrincipal();
-    const publicKey = identity._delegation.publicKey;
+    const publicKey = identity._delegation?.publicKey;
 
     setAuthClient(client);
     setIsAuthenticated(isAuthenticated);
@@ -107,7 +112,16 @@ export const useAuthClient = (options = defaultOptions) => {
   };
 
   const logout = async () => {
-    await authClient?.logout();
+    try {
+      await authClient?.logout();
+      setIsAuthenticated(false);
+      setIdentity(null);
+      setPrincipal(null);
+      setBackendActor(null);
+      setPublicKey(null);
+    } catch (error) {
+      console.error("Logout failed:", error);
+    }
   };
 
   return {
@@ -122,11 +136,16 @@ export const useAuthClient = (options = defaultOptions) => {
     backendActor,
     reloadLogin,
     publicKey,
+    loading,
   };
 };
 
 export const AuthProvider = ({ children }) => {
   const auth = useAuthClient();
+
+  if (auth.loading) {
+    return <div>Loading...</div>; // Show a loading indicator while checking authentication status
+  }
 
   if (!auth.isAuthenticated || !auth.backendActor) {
     return (

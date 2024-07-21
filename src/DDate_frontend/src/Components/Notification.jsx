@@ -9,190 +9,81 @@ import { useAuth } from "../auth/useAuthClient";
 import { useLocation } from "react-router-dom";
 import ChattingPageforNotification from "./Chatting/ChattingPageforNotification";
 
-const fetchedProfiles = [
-  {
-    id: 1,
-    name: "John Doe",
-    images: ["https://via.placeholder.com/150"],
-  },
-  {
-    id: 2,
-    name: "Jane Smith",
-    images: ["https://via.placeholder.com/150"],
-  },
-  {
-    id: 3,
-    name: "Alice Johnson",
-    images: ["https://via.placeholder.com/150"],
-  },
-];
-
 const Notification = () => {
   const navigate = useNavigate();
   const [notifications, setNotifications] = useState([]);
   const [selectedUserPrincipal, setSelectedUserPrincipal] = useState(null);
+  const [noData, setNoData] = useState(false);
   const [loading, setLoading] = useState(false);
   const [profiles, setProfiles] = useState([]); // State to store fetched profiles
-  const auth = useAuth();
-  // console.log(auth);
-  const { backendActor } = useAuth();
+  const [chatList, setChatList] = useState([]);
   const location = useLocation();
   const userId = location.state;
   // console.log("UserId",userId)
   const [page, setpage] = useState(1);
   const [size, setsize] = useState(10);
-  useEffect(() => {
-    const fetchProfiles = async () => {
-      const fetchedProfiles = [];
-
-      for (const notification of notifications) {
-        try {
-          setLoading(true);
-          // Fetch the profile using the sender_id from the notification
-          const profile = await DDate_backend.get_profile(
-            notification.sender_id
-          );
-          fetchedProfiles.push(profile);
-          setLoading(false);
-        } catch (error) {
-          console.error("Failed to fetch profile:", error);
-          setLoading(false);
-        }
-      }
-
-      setProfiles(fetchedProfiles);
-    };
-
-    if (notifications.length > 0) {
-      fetchProfiles();
-    }
-  }, [notifications]);
 
   useEffect(() => {
     const fetchedprofiledata = async () => {
+      setLoading(true);
       try {
         // console.log("userid 76====>>>>> ", userId);
         // console.log("page number ", page);
         // console.log("size of content", size);
-        const result = await backendActor.get_rightswiped_matches(
+        const result = await DDate_backend.get_rightswiped_matches(
           userId,
           page,
           size
         );
-        // console.log("get_fetchedprofile", result);
+        // console.log("get_fetchedprofile", result?.Ok?.paginated_profiles);
+        // console.log("get_fetchedprofile", result?.Ok?.total_matches);
+        if (result && result?.Ok) {
+          setProfiles(result?.Ok?.paginated_profiles);
+          setLoading(false);
+          setNoData(false);
+        } else {
+          setNoData(true);
+          setLoading(false);
+        }
       } catch (error) {
         console.error("Error getting data to the backend:", error);
       }
     };
     fetchedprofiledata();
-  }, [backendActor, userId, page, size]);
+  }, [DDate_backend, userId, page, size]);
+  const addChatList = async (user_id) => {
+    try {
+      const result = await DDate_backend.add_user_to_chatlist(user_id);
+      console.log("add_user_to_chatlist", result);
+      if (result && result?.Ok) {
+        setChatList(result?.Ok);
+      } else {
+        console.log(result?.Err);
+      }
+    } catch (error) {
+      console.error("Error getting data to the backend:", error);
+    }
+  };
+
+  // ------retrieve_notifications_for_user------
   // useEffect(() => {
-  //   const fetchProfileData = async () => {
+  //   const fetchNotifications = async () => {
+  //     setLoading(true);
   //     try {
-  //       console.log("User ID: ", userId);
-  //       console.log("Page number: ", page);
-  //       console.log("Size of content: ", size);
-
-  //       const result = await backendActor.get_rightswiped_matches(userId, page, size);
-
-  //       if (result && result.Ok && result.Ok.profiles) {
-  //         setMyPageData(prevData => [...prevData, ...result.Ok.profiles]);
-  //       } else if (result && result.Err) {
-  //         console.error("Error from backend: ", result.Err);
-  //         setError(result.Err);
-  //       } else {
-  //         console.error("Unknown error from backend");
-
-  //       }
+  //       const notificationData =
+  //         await backendActor.retrieve_notifications_for_user(userId);
+  //       setNotifications(notificationData);
+  //       console.log("notificationData", notificationData);
+  //       setLoading(false);
   //     } catch (error) {
-  //       console.error("Error getting data from the backend: ", error);
-
-  //     } finally {
+  //       console.error("Failed to fetch notifications:", error);
   //       setLoading(false);
   //     }
   //   };
 
-  //   setLoading(true);
-  //   fetchProfileData();
-  // }, [backendActor, userId, page, size]);
+  //   fetchNotifications();
+  // }, [backendActor]);
 
-  const principalString = localStorage.getItem("id");
-  // console.log("this is principal strinng", principalString);
-
-  function convertStringToPrincipal(principalString) {
-    // console.log("conversion pr/incipal is being called");
-    try {
-      const principal = Principal.fromText(principalString);
-      // console.log("Converted Principal: ", principal.toText());
-      return principal;
-    } catch (error) {
-      console.error("Error converting string to Principal: ", error);
-      return null;
-    }
-  }
-
-  // const principal = convertStringToPrincipal(principalString); //principal
-
-  useEffect(() => {
-    const fetchNotifications = async () => {
-      setLoading(true);
-      try {
-        const notificationData =
-          await backendActor.retrieve_notifications_for_user(principal);
-        setNotifications(notificationData);
-        setLoading(false);
-      } catch (error) {
-        console.error("Failed to fetch notifications:", error);
-        setLoading(false);
-      }
-    };
-
-    fetchNotifications();
-  }, [backendActor]);
-
-  // const principalString = "tc7cw-ilo2x-rwqep-gohde-puqog-soeyv-szxvv-ybcgw-lbrkl-sm7ab-wae";
-
-  // const principalString = localStorage.getItem("id");
-  // console.log("this is principal strinng", principalString);
-
-  function convertStringToPrincipal(principalString) {
-    // console.log("conversion principal is being called");
-    try {
-      const principal = Principal.fromText(principalString);
-      // console.log("Converted Principal: ", principal.toText());
-      return principal;
-    } catch (error) {
-      console.error("Error converting string to Principal: ", error);
-      return null;
-    }
-  }
-
-  const principal = convertStringToPrincipal(principalString); //principal
-
-  useEffect(() => {
-    const fetchNotifications = async () => {
-      setLoading(true);
-      try {
-        const notificationData =
-          await DDate_backend.retrieve_notifications_for_user(principal);
-        setNotifications(notificationData);
-        setLoading(false);
-      } catch (error) {
-        console.error("Failed to fetch notifications:", error);
-        setLoading(false);
-      }
-    };
-
-    fetchNotifications();
-  }, []);
-
-  // console.log(
-  //   "these are the notification Which I have got in the array",
-  //   notifications
-  // );
-  // console.log("profiles from where notifications are received!!!", profiles);
-
-  // Handler for when a notification is clicked
   const handleNotificationClick = (senderId) => {
     // console.log(
     //   "sender id I am getting on click of your matches profile !@!",
@@ -201,21 +92,21 @@ const Notification = () => {
     // );
 
     setSelectedUserPrincipal(senderId);
-    // You can then pass 'selectedUserPrincipal' to the getProfileComponent or navigate to a route that handles it
-    navigate(`/profile/${senderId}`); // This is just an example. Replace with your actual routing logic.
+    navigate(`/profile/${senderId}`);
   };
 
-  const notificationElements = notifications.map((notification, index) => (
-    <div
-      key={index}
-      className="notification-item"
-      onClick={() => handleNotificationClick(notification.sender_id)}
-    >
-      {/* Uncomment and use an actual image source for the profile picture */}
-      {/* <img src={profilePicUrl} alt={`User ${notification.sender_id}`} className="notification-profile-pic" /> */}
-      <p className="notification-text">Someone liked your profile</p>
-    </div>
-  ));
+  // const notificationElements = notifications.map((notification, index) => (
+  //   <div
+  //     key={index}
+  //     className="notification-item"
+  //     onClick={() => handleNotificationClick(notification.sender_id)}
+  //   >
+  //     {/* Uncomment and use an actual image source for the profile picture */}
+  //     {/* <img src={profilePicUrl} alt={`User ${notification.sender_id}`} className="notification-profile-pic" /> */}
+  //     <p className="notification-text">Someone liked your profile</p>
+  //   </div>
+  // ));
+
   return (
     <>
       <SidebarComponent userId={userId} />
@@ -266,49 +157,59 @@ const Notification = () => {
                   </svg>
                 </div>
                 <div>
-                  <div className="grid grid-cols-1 sm3:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2 xl4:grid-cols-3 gap-4">
-                    {fetchedProfiles.map((profile, index) => (
-                      <div
-                        key={index}
-                        className="relative w -[230px] h-[280px] "
-                      >
-                        <img
-                          className="rounded-[20px] w-full h-full"
-                          src="https://cdn.pixabay.com/photo/2022/01/17/22/20/add-6945894_640.png" // {profile.images[0]}
-                          alt={
-                            // "chirag photo"
-                            profile.name
+                  {noData ? (
+                    <div className="flex justify-center h-[280px] items-center text-center">
+                      No Data
+                    </div>
+                  ) : (
+                    <div className="grid grid-cols-1 sm3:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2 xl4:grid-cols-3 gap-4">
+                      {profiles.map((profile, index) => (
+                        <div
+                          key={index}
+                          className="relative w -[230px] h-[280px] "
+                          onClick={() =>
+                            addChatList(profile?.matched_profiles?.[0])
                           }
-                        />
-                        <div className="flex items-center justify-between">
-                          <div className="absolute bg-yellow-400 m-3 bottom-0 flex h-[41px] items-center justify-center right-0 rounded-full w-[41px]">
-                            <svg
-                              xmlns="http://www.w3.org/2000/svg"
-                              height="20"
-                              width="20"
-                              viewBox="0 0 512 512"
-                            >
-                              <path d="M47.6 300.4L228.3 469.1c7.5 7 17.4 10.9 27.7 10.9s20.2-3.9 27.7-10.9L464.4 300.4c30.4-28.3 47.6-68 47.6-109.5v-5.8c0-69.9-50.5-129.5-119.4-141C347 36.5 300.6 51.4 268 84L256 96 244 84c-32.6-32.6-79-47.5-124.6-39.9C50.5 55.6 0 115.2 0 185.1v5.8c0 41.5 17.2 81.2 47.6 109.5z" />
-                            </svg>
-                          </div>
-                          <div className="absolute bottom-0 p-2 w-9/12 font-medium text-black text-center text-lg">
-                            <span className="line-clamp-1 hover:line-clamp-none hover:block text-left w-full">
-                              {profile.name}
-                              {/* chirag sangwan */}
-                            </span>
-                            <span className="flex justify-start">
-                              {/* {profile.age} */}
-                              22
-                            </span>
+                        >
+                          {console.log(profile)}
+                          <img
+                            className="rounded-[20px] w-full h-full"
+                            src="https://cdn.pixabay.com/photo/2022/01/17/22/20/add-6945894_640.png" // {profile.images[0]}
+                            alt={
+                              // "chirag photo"
+                              profile?.params?.name
+                            }
+                          />
+                          <div className="flex items-center justify-between">
+                            <div className="absolute bg-yellow-400 m-3 bottom-0 flex h-[41px] items-center justify-center right-0 rounded-full w-[41px]">
+                              <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                height="20"
+                                width="20"
+                                viewBox="0 0 512 512"
+                              >
+                                <path d="M47.6 300.4L228.3 469.1c7.5 7 17.4 10.9 27.7 10.9s20.2-3.9 27.7-10.9L464.4 300.4c30.4-28.3 47.6-68 47.6-109.5v-5.8c0-69.9-50.5-129.5-119.4-141C347 36.5 300.6 51.4 268 84L256 96 244 84c-32.6-32.6-79-47.5-124.6-39.9C50.5 55.6 0 115.2 0 185.1v5.8c0 41.5 17.2 81.2 47.6 109.5z" />
+                              </svg>
+                            </div>
+                            <div className="absolute bottom-0 p-2 w-9/12 font-medium text-black text-center text-lg">
+                              <span className="line-clamp-1 hover:line-clamp-none hover:block text-left w-full">
+                                {profile?.params?.name}
+                                {/* chirag sangwan */}
+                              </span>
+                              <span className="flex justify-start">
+                                {Number(profile?.params?.age)}
+                                {/* 22 */}
+                              </span>
+                            </div>
                           </div>
                         </div>
-                      </div>
-                    ))}
-                  </div>
+                      ))}
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
-            <ChattingPageforNotification />
+            <ChattingPageforNotification userId={userId} chatList={chatList} />
           </div>
         </div>
       )}
