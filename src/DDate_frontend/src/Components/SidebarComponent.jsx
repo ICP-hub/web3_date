@@ -103,30 +103,20 @@ const SidebarComponent = ({ userId }) => {
     }
   }, []);
 
-  // function convertStringToPrincipal(principalString) {
-  //   try {
-  //     const principal = Principal.fromText(principalString);
-  //     console.log("Converted Principal: ", principal.toText());
-  //     return principal;
-  //   } catch (error) {
-  //     console.error("Error converting string to Principal: ", error);
+  // async function convertStringToPrincipal(principalString) {
+  //   console.log('Original principalString:', principalString);
+  //   console.log('Type of principalString:', typeof principalString);
+
+  //   if (principalString instanceof Principal) {
+  //     console.log('principalString is already a Principal object:', principalString);
+  //     // If you need the string representation of the Principal object
+  //     principalString = principalString.toText();
+  //     console.log('principalString Converted to text:', principalString);
+  //   } else if (typeof principalString !== 'string') {
+  //     console.error('Error: principalString is not a string');
   //     return null;
   //   }
   // }
-  async function convertStringToPrincipal(principalString) {
-    console.log('Original principalString:', principalString);
-    console.log('Type of principalString:', typeof principalString);
-
-    if (principalString instanceof Principal) {
-      console.log('principalString is already a Principal object:', principalString);
-      // If you need the string representation of the Principal object
-      principalString = principalString.toText();
-      console.log('principalString Converted to text:', principalString);
-    } else if (typeof principalString !== 'string') {
-      console.error('Error: principalString is not a string');
-      return null;
-    }
-  }
 
   const handleFormChange = (e) => {
     const { name, value } = e.target;
