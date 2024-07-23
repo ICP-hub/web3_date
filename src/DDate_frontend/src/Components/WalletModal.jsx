@@ -101,6 +101,7 @@ const WalletModal = ({ isOpen, onClose }) => {
       const result = await backendActor.get_user_id_by_principal();
       if (result?.Ok) {
         const userId = result.Ok;
+        console.log("userId line 104 ===>>> : ", userId);
         setUserExists(userId);
         await registerUser(userId);
         await loginUser(userId);
@@ -119,12 +120,15 @@ const WalletModal = ({ isOpen, onClose }) => {
   }, [backendActor, principal, publicKey]);
 
   useEffect(() => {
-    if (isAuthenticated) {
-      navigate(userExists ? "/Swipe" : "/CreateAccount1", {
-        state: userExists,
-      });
+    if (isAuthenticated && userExists !== null) {
+      // Ensure userExists is not null before navigating
+      if (userExists) {
+        navigate("/Swipe", { state: userExists });
+      } else {
+        navigate("/CreateAccount1");
+      }
     }
-  }, [isAuthenticated, userExists, navigate]);
+  }, [isAuthenticated, userExists]);
 
   const loginHandler = async (walletId) => {
     await login(walletId);
