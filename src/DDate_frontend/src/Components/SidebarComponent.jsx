@@ -2,7 +2,6 @@ import React from "react";
 // import userpic from "../../assets/Images/UserProfiles/userpic.svg";
 import logo from "../../assets/Images/CreateAccount/logo.png";
 import { useState, useEffect } from "react";
-import { DDate_backend } from "../../../declarations/DDate_backend/index";
 import { useNavigate } from "react-router-dom";
 import { Principal } from "@dfinity/principal";
 import { IoLogOut } from "react-icons/io5";
@@ -67,41 +66,41 @@ const SidebarComponent = ({ userId }) => {
 
   const isMobileOrTablet = windowWidth <= 870;
 
-  useEffect(() => {
-    const principalString = localStorage.getItem("id");
-    console.log(principalString);
+  // useEffect(() => {
+  //   const principalString = localStorage.getItem("id");
+  //   console.log(principalString);
 
-    if (principalString) {
-      const newPrincipal = convertStringToPrincipal(principalString);
-      setPrincipal(newPrincipal);
+  //   if (principalString) {
+  //     const newPrincipal = convertStringToPrincipal(principalString);
+  //     setPrincipal(newPrincipal);
 
-      const fetchUserProfile = async () => {
-        try {
-          const userProfileData = await DDate_backend.get_profile(newPrincipal);
-          console.log("userProfileData ==>>>> ", userProfileData);
-          setFormData({
-            preferred_location: userProfileData.preferred_location || "",
-            interests_in: userProfileData.interests_in || "",
-            location: userProfileData.location || "",
-            max_preferred_age: userProfileData.max_preferred_age || "",
-            min_preferred_age: userProfileData.min_preferred_age || "",
-            combinedAge:
-              userProfileData.min_preferred_age +
-              "-" +
-              userProfileData.max_preferred_age,
-            images: userProfileData.images || null,
-            // gender_pronouns: userProfileData.gender_pronouns || "",
-          });
-        } catch (error) {
-          console.error("Error fetching user profile: ", error);
-        }
-      };
+  //     const fetchUserProfile = async () => {
+  //       try {
+  //         const userProfileData = await backendActor.get_profile(newPrincipal);
+  //         console.log("userProfileData ==>>>> ", userProfileData);
+  //         setFormData({
+  //           preferred_location: userProfileData.preferred_location || "",
+  //           interests_in: userProfileData.interests_in || "",
+  //           location: userProfileData.location || "",
+  //           max_preferred_age: userProfileData.max_preferred_age || "",
+  //           min_preferred_age: userProfileData.min_preferred_age || "",
+  //           combinedAge:
+  //             userProfileData.min_preferred_age +
+  //             "-" +
+  //             userProfileData.max_preferred_age,
+  //           images: userProfileData.images || null,
+  //           // gender_pronouns: userProfileData.gender_pronouns || "",
+  //         });
+  //       } catch (error) {
+  //         console.error("Error fetching user profile: ", error);
+  //       }
+  //     };
 
-      fetchUserProfile();
-    } else {
-      console.warn("Principal string is null or empty.");
-    }
-  }, []);
+  //     fetchUserProfile();
+  //   } else {
+  //     console.warn("Principal string is null or empty.");
+  //   }
+  // }, []);
 
   // async function convertStringToPrincipal(principalString) {
   //   console.log('Original principalString:', principalString);
@@ -220,7 +219,7 @@ const SidebarComponent = ({ userId }) => {
 
     console.log("updatedFilterData =>", updatedFilterData);
     try {
-      await DDate_backend.update_profile(updatedFilterData);
+      await backendActor.update_profile(updatedFilterData);
       navigate("/Swipe");
       setStartLoader(false);
     } catch (error) {

@@ -117,9 +117,8 @@ const ChattingPageforNotification = ({ userId, chatList }) => {
 
         {/* Left side - takes 40% of the width */}
         <div
-          className={`col-span-12 ${
-            selectedProfile ? "md:col-span-4" : "md:col-span-10"
-          } px-6 lg:px-10  ${selectedProfile ? "hidden md:block" : ""}`}
+          className={`col-span-12 ${selectedProfile ? "md:col-span-4" : "md:col-span-10"
+            } px-6 lg:px-10  ${selectedProfile ? "hidden " : ""}`}
         >
           <div className="flex items-center md:mt-10  gap-2 mb-4">
             <img

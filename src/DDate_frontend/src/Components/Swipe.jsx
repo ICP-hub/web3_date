@@ -123,6 +123,7 @@ const Swipe = () => {
       setSelectedId(db[index].id);
       console.log("sender_id", userId);
       console.log("receiver_id", receiver_id);
+      console.log("Right swipe successfully")
       try {
         const right = await backendActor.rightswipe({
           receiver_id: receiver_id,
@@ -185,7 +186,7 @@ const Swipe = () => {
 
   return (
     <div className="flex flex-col grid-cols-9 h-screen z-10">
-      <SidebarComponent userId={userId} className="hidden md:block" />
+      <SidebarComponent userId={userId} className="hidden " />
       {startLoader ? (
         <Loader />
       ) : (
@@ -224,11 +225,11 @@ const Swipe = () => {
                         "linear-gradient(to top, rgb(0, 0, 0) 50%, rgba(255, 255, 255, 0) 100%)",
                     }}
                   ></div>
-                  <div className="z-20 px-10 md:bottom-16 bottom-[4rem] absolute">
+                  <div className="z-20 px-10 md:bottom-16 bottom-[4rem] absolute left-0">
                     <h2 className="text-4xl font-bold text-white mb-2">
                       {character.params.name[0]}
                     </h2>
-                    <p className="text-lg text-gray-700 font-bold">
+                    <p className="text-lg text-gray-900 font-bold">
                       {character.params.location[0]}
                     </p>
                     <p className="mt-2 font-bold text-white line-clamp-1 hover:line-clamp-none mb-6">
@@ -270,18 +271,16 @@ const Swipe = () => {
           </div>
           {swipeStatus === "Nope" && (
             <div
-              className={`status-text text-white font-bold text-3xl z-10 absolute top-4 p-3 bg-red-500 rounded-full shadow-lg popup-content status-text-container ${
-                animate ? "zoom-out" : ""
-              }`}
+              className={`status-text text-white font-bold text-3xl z-10 absolute top-4 p-3 bg-red-500 rounded-full shadow-lg popup-content status-text-container ${animate ? "zoom-out" : ""
+                }`}
             >
               {swipeStatus}
             </div>
           )}
           {swipeStatus === "Liked" && (
             <div
-              className={`status-text text-white font-bold text-3xl z-10 absolute top-4 p-3 bg-green-500 rounded-full shadow-lg popup-content status-text-container ${
-                animate ? "zoom-out" : ""
-              }`}
+              className={`status-text text-white font-bold text-3xl z-10 absolute top-4 p-3 bg-green-500 rounded-full shadow-lg popup-content status-text-container ${animate ? "zoom-out" : ""
+                }`}
             >
               {swipeStatus}
             </div>

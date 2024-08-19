@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import SidebarComponent from "./SidebarComponent";
 import { useNavigate } from "react-router-dom";
-import { DDate_backend } from "../../../declarations/DDate_backend/index";
 import { Principal } from "@dfinity/principal";
 import back from "../../assets/Images/CreateAccount/back.svg";
 import Loader from "./Loader";
@@ -19,6 +18,7 @@ const Notification = () => {
   const [chatList, setChatList] = useState([]);
   const location = useLocation();
   const userId = location.state;
+  const { backendActor } = useAuth();
   // console.log("UserId",userId)
   const [page, setpage] = useState(1);
   const [size, setsize] = useState(10);
@@ -30,7 +30,7 @@ const Notification = () => {
         // console.log("userid 76====>>>>> ", userId);
         // console.log("page number ", page);
         // console.log("size of content", size);
-        const result = await DDate_backend.get_rightswiped_matches(
+        const result = await backendActor.get_rightswiped_matches(
           userId,
           page,
           size
@@ -50,10 +50,10 @@ const Notification = () => {
       }
     };
     fetchedprofiledata();
-  }, [DDate_backend, userId, page, size]);
+  }, [backendActor, userId, page, size]);
   const addChatList = async (user_id) => {
     try {
-      const result = await DDate_backend.add_user_to_chatlist(user_id);
+      const result = await backendActor.add_user_to_chatlist(user_id);
       console.log("add_user_to_chatlist", result);
       if (result && result?.Ok) {
         setChatList(result?.Ok);

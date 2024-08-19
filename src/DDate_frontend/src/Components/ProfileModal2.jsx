@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { DDate_backend } from "../../../declarations/DDate_backend/index";
 import { Principal } from "@dfinity/principal";
 
 function ProfileModal2({ profile, onClose }) {
   const navigate = useNavigate();
 
-  const [formData, setFormData] = useState({ images: null});
+  const [formData, setFormData] = useState({ images: null });
   const [principal, setPrincipal] = useState(null);
 
 
@@ -24,7 +23,7 @@ function ProfileModal2({ profile, onClose }) {
 
       const fetchUserProfile = async () => {
         try {
-          const userProfileData = await DDate_backend.get_profile(principal);
+          const userProfileData = await backendActor.get_profile(principal);
           setFormData({ images: userProfileData.images || [] });
         } catch (error) {
           console.error("Error fetching user profile: ", error);
@@ -43,7 +42,7 @@ function ProfileModal2({ profile, onClose }) {
         <div className="text-white text-[30px] font-dynalight mb-10">
           It's a Match!
         </div>
-         <div className="flex">
+        <div className="flex">
           {formData.images && formData.images.length > 0 && (
             <div className="bg-white w-[150px] h-[150px] overflow-hidden rounded-full">
               <img

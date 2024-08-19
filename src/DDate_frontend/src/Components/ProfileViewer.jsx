@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import { DDate_backend } from "../../../declarations/DDate_backend/index";
 import { Principal } from "@dfinity/principal";
 import TinderCard from "react-tinder-card";
 import SidebarComponent from "./SidebarComponent";
@@ -24,123 +23,6 @@ const ProfileViewer = ({ setFinalMatch, finalMatch }) => {
   const [error, setError] = useState(null);
   const [somebodyLiked, setSomebodyLiked] = useState(false);
 
-  // console.log("senderId is this______", senderId);
-
-  // const principalString = localStorage.getItem("id");
-
-  // console.log("its mine only principaaaaaaaaaaaaaaaaal", principalString);
-
-
-  // const [finalMatch, setFinalMatch]= useState([]);
-
-  // const swipe = async (dir) => {
-  //   console.log("Attempting to swipe:", dir);
-
-  //   //if (canSwipe && currentIndex >= 0 && currentIndex < db.length) {
-  //   // const cardRef = childRefs[currentIndex];
-  //   // if (cardRef && cardRef.current) {
-  //   //   console.log("Swiping card with index:", currentIndex);
-  //   //   await cardRef.current.swipe(dir); // Swipe the card!
-  //   // } else {
-  //   //   console.error("Invalid card reference at index:", currentIndex);
-  //   // }
-  //   // } else {
-  //   //   console.error("Cannot swipe. Index or db length issue.");
-  //   // }
-
-  //   if (dir == "right") {
-  //     console.log("like button hoya clicked##");
-  //     setSomebodyLiked(true);
-
-  //     console.log(
-  //       "aha profile jehre array chh pai rhi hai",
-  //       profile.id.toText()
-  //     );
-
-
-
-  //     setFinalMatch((currentMatches) => [...currentMatches, profile.id]);
-
-
-  //   } else {
-  //     console.log("Dislike button ho clicked##");
-  //   }
-  // };
-
-
-  // const swipe = async (dir) => {
-  //   console.log("Attempting to swipe:", dir);
-
-  //   if (dir === "right") {
-  //     console.log("Like button clicked");
-  //     setSomebodyLiked(true);
-
-  //     // Assuming 'principalString' is the current user's ID
-  //     const currentUserPrincipal = localStorage.getItem("id");
-
-  //     // Convert string to Principal
-  //     const currentUser = Principal.fromText(currentUserPrincipal);
-  //     const likedUser = Principal.fromText(profile.id.toText());
-
-  //     // Prepare updated profile data
-  //     const updatedProfileData = {
-  //       id: currentUser,
-  //       matches: [likedUser], // Add more fields as necessary
-  //     };
-
-  //     // Update profile in the backend
-  //     try {
-  //       await DDate_backend.update_profile(updatedProfileData);
-  //       console.log("Profile updated with new match");
-  //     } catch (error) {
-  //       console.error("Error updating profile:", error);
-  //     }
-
-  //     // Update final match state
-  //     setFinalMatch((currentMatches) => [...currentMatches, likedUser]);
-  //   } else {
-  //     console.log("Dislike button clicked");
-  //   }
-  // };
-  // const swipe = async (dir) => {
-  //   console.log("Attempting to swipe:", dir);
-
-  //   if (dir === "right") {
-  //     console.log("Like button clicked");
-  //     setSomebodyLiked(true);
-
-  //     // Assuming 'principalString' is the current user's ID
-  //     const currentUserPrincipal = localStorage.getItem("id");
-  //     const currentUser = Principal.fromText(currentUserPrincipal);
-  //     const likedUser = Principal.fromText(profile.id.toText());
-
-  //     try {
-  //       // Fetch the current user's profile to get existing matches
-  //       const currentProfileData = await DDate_backend.get_profile(currentUser);
-  //       const currentMatches = currentProfileData.matches || [];
-
-  //       // Append the likedUser to the existing matches
-  //       const updatedMatches = [...currentMatches, likedUser];
-
-  //       // Prepare updated profile data with the new matches array
-  //       const updatedProfileData = {
-  //         id: currentUser,
-  //         matches: updatedMatches,
-  //       };
-
-  //       // Update profile in the backend
-  //       await DDate_backend.update_profile(updatedProfileData);
-  //       console.log("Profile updated with new match");
-
-  //       // Update final match state
-  //       setFinalMatch((currentMatches) => [...currentMatches, likedUser]);
-  //     } catch (error) {
-  //       console.error("Error updating profile:", error);
-  //     }
-  //   } else {
-  //     console.log("Dislike button clicked");
-  //   }
-  // };
 
   const swipe = async (dir) => {
     // console.log("Attempting to swipe:", dir);
@@ -157,8 +39,8 @@ const ProfileViewer = ({ setFinalMatch, finalMatch }) => {
 
       try {
         // Fetch the current user's profile to get existing data
-        const currentProfileData = await DDate_backend.get_profile(currentUser);
-        const likedUserData = await DDate_backend.get_profile(likedUser);
+        const currentProfileData = await backendActor.get_profile(currentUser);
+        const likedUserData = await backendActor.get_profile(likedUser);
         // console.log("mere profile da dataaaaaaa", currentProfileData);
         // console.log("liked user data", likedUserData);
 
@@ -247,8 +129,8 @@ const ProfileViewer = ({ setFinalMatch, finalMatch }) => {
           new_introduction: [currentProfileData.introduction], // Set the 'new_introduction' based on 'currentProfileData'
           images: [currentProfileData.images], // Set the 'images' based on 'currentProfileData'
           new_gender: [currentProfileData.gender], // Set the 'new_gender' based on 'currentProfileData'
-         matches: [arr], // Update the 'matches' field
-         // matches: [likedUser],
+          matches: [arr], // Update the 'matches' field
+          // matches: [likedUser],
         };
 
 
@@ -259,7 +141,7 @@ const ProfileViewer = ({ setFinalMatch, finalMatch }) => {
 
 
         // Update profile in the backend with the complete profile object
-        await DDate_backend.update_profile(updateParams);
+        await backendActor.update_profile(updateParams);
         // console.log("Profile1 updated with new match");
 
         const updateParamsLiked = {
@@ -298,9 +180,9 @@ const ProfileViewer = ({ setFinalMatch, finalMatch }) => {
           new_gender: [likedUserData.gender], // Set based on 'likedUserData'
           matches: [arrLiked], // Update the 'matches' field
         };
-        
 
-        await DDate_backend.update_profile(updateParamsLiked);
+
+        await backendActor.update_profile(updateParamsLiked);
 
         // console.log("like krn wale de profile update ho gyi");
 
@@ -343,7 +225,7 @@ const ProfileViewer = ({ setFinalMatch, finalMatch }) => {
         const principal = Principal.fromText(senderId);
 
         console.log("jehre get principal de vich jau ge", principal);
-        const profileData = await DDate_backend.get_profile(principal);
+        const profileData = await backendActor.get_profile(principal);
 
         console.log("jehre backend ton aae aa profile", profileData);
 
