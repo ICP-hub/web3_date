@@ -97,8 +97,10 @@ const WalletModal = ({ isOpen, onClose }) => {
   };
 
   const checkUserExists = async () => {
+    console.log("principal", principal)
     try {
       const result = await backendActor.get_user_id_by_principal();
+      console.log("get_user_id_by_principal", result)
       if (result?.Ok) {
         const userId = result.Ok;
         console.log("userId line 104 ===>>> : ", userId);
@@ -120,12 +122,17 @@ const WalletModal = ({ isOpen, onClose }) => {
   }, [backendActor, principal, publicKey]);
 
   useEffect(() => {
-    if (isAuthenticated && userExists !== null) {
+
+    console.log("isAuthenticated && userExists !== null   hfgjkhgf", isAuthenticated && userExists !== null)
+    if (isAuthenticated) {    //&& userExists !== null
       // Ensure userExists is not null before navigating
+      console.log("isAuthenticated && userExists !== null", isAuthenticated && userExists !== null)
       if (userExists) {
         navigate("/Swipe", { state: userExists });
+        console.log("swipe vala");
       } else {
         navigate("/CreateAccount1");
+        console.log('createaccount vala')
       }
     }
   }, [isAuthenticated, userExists]);

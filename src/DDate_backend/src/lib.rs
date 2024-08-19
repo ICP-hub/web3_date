@@ -117,6 +117,7 @@ pub struct ChatListItem {
 #[query]
 fn get_user_id_by_principal() -> Result<String, String> {
     let principal = caller();
+    ic_cdk::println!("principal: {}",principal);
 
     let user_id = read_state(|state| {
         state.user_profiles.iter().find(|(_, profile)| {
