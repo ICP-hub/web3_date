@@ -174,7 +174,7 @@ const Form2 = ({ setIndex }) => {
       {/* Fooding Selection */}
       <fieldset className="mb-4">
         <legend className="block text-lg font-semibold  text-black">
-          Fooding {errors.selectedFooding && <span className="text-red-500">*</span>}
+        Dietary Preferences {errors.selectedFooding && <span className="text-red-500">*</span>}
         </legend>
         <div className="flex flex-wrap gap-2 md:gap-2 py-2 rounded-3xl">
           {[

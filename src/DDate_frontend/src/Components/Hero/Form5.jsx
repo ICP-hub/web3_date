@@ -130,9 +130,10 @@ const Form5 = () => {
           <textarea
             id="selectedIntro"
             name="selectedIntro"
+            rows={5}
             placeholder="Let us know something about you"
             {...register("selectedIntro")}
-            className="w-full px-4 py-2 rounded-lg border border-white md:border-black bg-transparent text-white md:text-black"
+            className="bg-gray-100 w-full px-4 py-2 rounded-lg  border-white md:border-black  text-white md:text-black"
           />
           {errors.selectedIntro && <p className="text-red-500">{errors.selectedIntro.message}</p>}
         </div>

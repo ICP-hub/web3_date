@@ -13,7 +13,7 @@ const WalletButton = ({ wallet, loginHandler }) => (
     <img
       src={wallet.imgSrc}
       alt={wallet.alt}
-      className="rounded-full h-8 w-8 flex items-center justify-center text-white mr-2"
+      className="rounded-full h-8 w-8 flex items-center justify-center bg-white text-white mr-2"
     />
     <span className="text-center flex-grow">{wallet.name}</span>
   </li>
@@ -145,11 +145,11 @@ const WalletModal = ({ isOpen, onClose }) => {
 
   return (
     <div
-      className="fixed inset-0 bg-black bg-opacity-75 flex justify-center items-start z-50 pt-20"
+      className="fixed inset-0 bg-black bg-opacity-75 flex justify-center items-center z-50"
       onClick={onClose}
     >
       <div
-        className="relative w-full max-w-md p-5 m-3 rounded-lg shadow-lg bg-walletColor text-white"
+        className="relative w-full h-fit max-w-md p-5 m-3 rounded-lg shadow-lg bg-walletColor text-white"
         onClick={(e) => e.stopPropagation()}
       >
         <h3 className="text-lg font-lg mb-4 text-center">Connect With</h3>

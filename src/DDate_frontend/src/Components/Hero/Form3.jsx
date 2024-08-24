@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { SlArrowUp, SlArrowDown } from "react-icons/sl";
 import { useFormContext } from "react-hook-form";
 
+
 const Form3 = () => {
   const {
     register,
@@ -13,12 +14,12 @@ const Form3 = () => {
   const [showSports, setShowSports] = useState(false);
   const selectedsmoking = watch("selectedsmoking");
   const selecteddrink = watch("selecteddrink");
-  const selectedhobbies = watch("selectedhobbies", []);
-  const selectedsports = watch("selectedsports", []);
+  const selectedhobbies = watch("selectedhobbies");
+  const selectedsports = watch("selectedsports");
 
   console.log(errors);
   useEffect(() => {
-    setValue("selectedhobbies", []);
+    setValue("selectedhobbies",[]);
     setValue("selectedsports", []);
   }, [setValue]);
 
@@ -87,6 +88,8 @@ const Form3 = () => {
         </div>
         {errors.selecteddrink && <p className="text-red-500">{errors.selecteddrink.message}</p>}
       </fieldset>
+
+      {/* Hobbies */}
       <fieldset className="mb-4">
         <legend className="block text-lg font-semibold mb-2 text-white md:text-black">
           Hobbies <span className="text-gray-400 text-sm">(select any 2)</span>
@@ -118,6 +121,7 @@ const Form3 = () => {
                     : "bg-transparent hover:bg-yellow-500 hover:text-black text-white md:text-black border border-white md:border-black"
                   }`}
               >
+
                 <input
                   type="checkbox"
                   value={hobby}
@@ -150,6 +154,7 @@ const Form3 = () => {
         </div>
         {errors.selectedhobbies && <p className="text-red-500">{errors.selectedhobbies.message}</p>}
       </fieldset>
+
       <fieldset className="mb-4">
         <legend className="block text-lg font-semibold mb-1 text-white md:text-black">
           Sports <span className="text-gray-400 text-sm">(select any 2)</span>
@@ -188,8 +193,8 @@ const Form3 = () => {
               <label
                 key={sport}
                 className={`inline-block px-3 py-2 rounded-full text-sm focus:outline-none transition duration-300 ${selectedsports?.includes(sport)
-                    ? "bg-yellow-500 text-black"
-                    : "bg-transparent hover:bg-yellow-500 hover:text-black text-white md:text-black border border-white md:border-black"
+                  ? "bg-yellow-500 text-black"
+                  : "bg-transparent hover:bg-yellow-500 hover:text-black text-white md:text-black border border-white md:border-black"
                   }`}
               >
                 <input

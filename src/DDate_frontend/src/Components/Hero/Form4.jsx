@@ -97,7 +97,7 @@ const Form4 = () => {
             ))}
           <button
             onClick={() => setShowArt(!showArt)}
-            className="text-black text-[12px] md:text-[16px] font-semibold"
+            className="flex items-center text-black text-[12px] md:text-[16px] font-semibold"
             type="button"
           >
             {showArt ? "see less" : "see more"}

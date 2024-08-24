@@ -8,7 +8,7 @@ import Form1 from "./Form1";
 import ImageContainer from "./ImageContainer";
 import Form2 from "./Form2";
 import Form3 from "./Form3";
-import Form4 from "./Form4";
+// import Form4 from "./Form4";
 import Form5 from "./Form5";
 import Form6 from "./Form6";
 import { useAuth } from "../../auth/useAuthClient";
@@ -265,6 +265,11 @@ const CreateAccount1 = () => {
     }
   };
 
+  // function to skip
+  const handleSkip = () =>{
+    setIndex((prevIndex) => prevIndex + 1);
+  }
+
   const onErrorHandler = (val) => {
     console.log("error", val);
   };
@@ -283,7 +288,8 @@ const CreateAccount1 = () => {
                 <div className="flex items-center">
                   <svg
                     className="flex-shrink-0 ml-5 cursor-pointer"
-                    onClick={() => navigate("/")}
+                    // onClick={() => navigate("/")}
+                    onClick={handleBack}
                     width="20"
                     height="12"
                     viewBox="0 0 12 12"
@@ -315,18 +321,19 @@ const CreateAccount1 = () => {
                 {index === 0 && <Form1 />}
                 {index === 1 && <Form2 />}
                 {index === 2 && <Form3 />}
-                {index === 3 && <Form4 />}
-                {index === 4 && <Form5 />}
-                {index === 5 && <Form6 />}
+                {/* {index === 3 && <Form4 />} */}
+                {index === 3 && <Form5 />}
+                {index === 4 && <Form6 />}
 
                 <div className="flex justify-between">
                   <button
                     type="button"
-                    className="bg-yellow-500 font-semibold py-2 px-6 rounded-full hover:bg-yellow-600 text-white md:text-black md:hover:text-black"
-                    onClick={handleBack}
-                    disabled={index === 0}
+                    className={`${index === 0 && "visible"} ${index === 4 && "collapse"} font-semibold py-2 px-6 rounded-full text-b md:text-black md:hover:text-black`}
+                    onClick={handleSkip}
+                    // disabled={index === 0}
                   >
-                    Back
+                    {/* Back */}
+                    Skip
                   </button>
                   {index === 5 ? (
                     <>

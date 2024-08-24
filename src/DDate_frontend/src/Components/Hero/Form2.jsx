@@ -187,7 +187,7 @@ const Form2 = ({ setIndex }) => {
       {/* Fooding Selection */}
       <fieldset className="mb-4">
         <legend className="block text-lg font-semibold mb-2 text-white md:text-black">
-          Fooding {errors.selectedFooding && <span className="text-red-500">*</span>}
+        Dietary Preferences {errors.selectedFooding && <span className="text-red-500">*</span>}
         </legend>
         <div className="flex flex-wrap gap-2 md:gap-2 py-2 rounded-3xl">
           {[
@@ -223,7 +223,7 @@ const Form2 = ({ setIndex }) => {
         </div>
         {errors.selectedFooding && <p className="text-red-500">{errors.selectedFooding.message}</p>}
       </fieldset>
-      <fieldset className="mb-4">
+      {/* <fieldset className="mb-4">
         <legend className="block text-lg font-semibold mb-1 text-white md:text-black">
           What You Do {errors.selectedWhatYouDo && <span className="text-red-500">*</span>}
         </legend>
@@ -253,8 +253,8 @@ const Form2 = ({ setIndex }) => {
           )}
         </div>
         {errors.selectedWhatYouDo && <p className="text-red-500">{errors.selectedWhatYouDo.message}</p>}
-      </fieldset>
-      <fieldset className="mb-4">
+      </fieldset> */}
+      {/* <fieldset className="mb-4">
         <legend className="block text-lg font-semibold mb-1 text-white md:text-black">
           What are you looking for? {errors.selectedLookingFor && <span className="text-red-500">*</span>}
         </legend>
@@ -288,7 +288,7 @@ const Form2 = ({ setIndex }) => {
           ))}
         </div>
         {errors.selectedLookingFor && <p className="text-red-500">{errors.selectedLookingFor.message}</p>}
-      </fieldset>
+      </fieldset> */}
     </div>
   );
 };

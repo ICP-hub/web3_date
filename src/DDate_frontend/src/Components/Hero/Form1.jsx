@@ -91,7 +91,8 @@ const Form1 = () => {
                     id="dob"
                     type="date"
                     name="dob"
-                    {...register('dob', { required: "Date of birth is required" })}
+                    // {...register('dob', { required: "Date of birth is required" })}
+                    {...register('dob')}
                     className="form-input bg-transparent text-sm w-full border-2 px-2 border-gray-300 py-1.5 rounded-3xl text-white md:text-black"
                 />
                 {errors.dob && <p className="text-red-500">{errors.dob.message}</p>}
