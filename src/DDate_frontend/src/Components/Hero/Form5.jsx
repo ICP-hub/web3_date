@@ -43,7 +43,9 @@ const Form5 = () => {
               <input
                 type="checkbox"
                 value={interest}
-                {...register("selectedInterests")}
+                {...register("selectedInterests",{
+                  required: "Selecting a Interest is required",
+                })}
                 // checked={selectedInterests?.includes(interest)}
                 hecked={selectedInterests === interest}
                 className="hidden"
@@ -70,7 +72,9 @@ const Form5 = () => {
                 type="radio"
                 name="selectedPreferAge"
                 value={preferAge}
-                {...register("selectedPreferAge")}
+                {...register("selectedPreferAge",{
+                  required: "Selecting a age preferance is required",
+                })}
                 checked={selectedPreferAge === preferAge}
                 className="hidden"
               />
@@ -94,7 +98,9 @@ const Form5 = () => {
             id="selectedLocation"
             name="selectedLocation"
             placeholder="Your Location"
-            {...register("selectedLocation")}
+            {...register("selectedLocation",{
+              required: "Selecting a location is required",
+            })}
             className="w-full px-4 py-2 rounded-full border border-white md:border-black bg-transparent text-white md:text-black focus:ring-yellow-500 focus:border-yellow-500"
           />
           {errors.selectedLocation && <p className="text-red-500">{errors.selectedLocation.message}</p>}
@@ -112,7 +118,9 @@ const Form5 = () => {
             id="selectedPreferLocation"
             name="selectedPreferLocation"
             placeholder="Your Preferred Location"
-            {...register("selectedPreferLocation")}
+            {...register("selectedPreferLocation",{
+              required: "Selecting a location preferance is required",
+            })}
             className="w-full px-4 py-2 rounded-full border border-white md:border-black bg-transparent text-white md:text-black focus:ring-yellow-500 focus:border-yellow-500"
           />
           {errors.selectedPreferLocation && <p className="text-red-500">{errors.selectedPreferLocation.message}</p>}

@@ -38,7 +38,8 @@ const Form2 = ({ setIndex }) => {
       {/* Gender Pronouns Selection */}
       <fieldset className="mb-4">
         <legend className="block text-lg font-semibold mb-1 text-white md:text-black">
-          Gender Pronouns {errors.genderPronouns && <span className="text-red-500">*</span>}
+          Gender Pronouns 
+          {errors.genderPronouns && <span className="text-red-500">*</span>}
         </legend>
         <div className="flex flex-wrap gap-2 md:gap-2 py-2 px-0 rounded-3xl">
           {["He/Him", "She/Her", "They/Them"].map((genPro) => (
@@ -53,9 +54,8 @@ const Form2 = ({ setIndex }) => {
               <input
                 type="radio"
                 value={genPro}
-                {...register("genderPronouns", {
-                  required: "Gender pronoun is required",
-                })}
+                {...register("genderPronouns", {required: "Gender pronoun is required"})}
+                // {...register("genderPronouns")}
                 className="hidden"
               />
               {genPro}
@@ -69,7 +69,8 @@ const Form2 = ({ setIndex }) => {
       {/* Life Path Number Selection */}
       <fieldset className="mb-4">
         <legend className="block text-lg font-semibold mb-2 text-white md:text-black">
-          Life-Path Number {errors.selectedLifePathNumber && <span className="text-red-500">*</span>}
+          Life-Path Number 
+          {errors.selectedLifePathNumber && <span className="text-red-500">*</span>}
         </legend>
         <div className="flex flex-wrap gap-2 md:gap-2 py-2 rounded-3xl">
           {["1", "2", "3", "4", "5", "6", "7", "8", "9", "11", "22", "33"].map(
@@ -85,9 +86,8 @@ const Form2 = ({ setIndex }) => {
                 <input
                   type="radio"
                   value={lifePathNumber}
-                  {...register("selectedLifePathNumber", {
-                    required: "Life-path number is required",
-                  })}
+                  {...register("selectedLifePathNumber", {required: "Life-path number is required"})}
+                  // {...register("selectedLifePathNumber")}
                   className="hidden"
                 />
                 {lifePathNumber}
@@ -101,7 +101,8 @@ const Form2 = ({ setIndex }) => {
       {/* Religion Selection */}
       <fieldset className="mb-4">
         <legend className="block text-lg font-semibold mb-1 text-white md:text-black">
-          Religion {errors.selectedReligion && <span className="text-red-500">*</span>}
+          Religion 
+          {errors.selectedReligion && <span className="text-red-500">*</span>}
         </legend>
         <div className="flex flex-wrap gap-2 md:gap-2 px-0 rounded-3xl">
           {[
@@ -128,9 +129,8 @@ const Form2 = ({ setIndex }) => {
               <input
                 type="radio"
                 value={religion}
-                {...register("selectedReligion", {
-                  required: "Religion is required",
-                })}
+                {...register("selectedReligion", {required: "Religion is required"})}
+                // {...register("selectedReligion")}
                 className="hidden"
               />
               {religion}
@@ -144,7 +144,8 @@ const Form2 = ({ setIndex }) => {
       {/* Zodiac Sign Selection */}
       <fieldset className="mb-4">
         <legend className="block text-lg font-semibold mb-2 text-white md:text-black">
-          Animal Zodiac Sign {errors.selectedZodiac && <span className="text-red-500">*</span>}
+          Animal Zodiac Sign 
+          {errors.selectedZodiac && <span className="text-red-500">*</span>}
         </legend>
         <div className="flex flex-wrap gap-2 md:gap-2 py-2 rounded-3xl">
           {[
@@ -172,9 +173,8 @@ const Form2 = ({ setIndex }) => {
               <input
                 type="radio"
                 value={zodiac}
-                {...register("selectedZodiac", {
-                  required: "Zodiac sign is required",
-                })}
+                {...register("selectedZodiac", {required: "Zodiac sign is required"})}
+                // {...register("selectdZodiac")}
                 className="hidden"
               />
               {zodiac}
@@ -212,9 +212,8 @@ const Form2 = ({ setIndex }) => {
               <input
                 type="radio"
                 value={fooding}
-                {...register("selectedFooding", {
-                  required: "Fooding preference is required",
-                })}
+                {...register("selectedFooding", {required: "Fooding preference is required"})}
+                // {...register("selectedFooding")}
                 className="hidden"
               />
               {fooding}
@@ -225,7 +224,8 @@ const Form2 = ({ setIndex }) => {
       </fieldset>
       {/* <fieldset className="mb-4">
         <legend className="block text-lg font-semibold mb-1 text-white md:text-black">
-          What You Do {errors.selectedWhatYouDo && <span className="text-red-500">*</span>}
+          What You Do 
+          {errors.selectedWhatYouDo && <span className="text-red-500">*</span>}
         </legend>
         <div className="flex flex-wrap gap-2 md:gap-2 py-2 px-0 rounded-3xl">
           {["In School", "In College", "Employed", "Unemployed"].map(
@@ -242,9 +242,8 @@ const Form2 = ({ setIndex }) => {
                   type="radio"
                   name="selectedWhatYouDo"
                   value={option}
-                  {...register("selectedWhatYouDo", {
-                    required: "You must select an option.",
-                  })}
+                  {...register("selectedWhatYouDo", {required: "You must select an option."})}
+                  // {...register("selectedWhatYouDo")}
                   className="hidden"
                 />
                 {option}
@@ -256,7 +255,8 @@ const Form2 = ({ setIndex }) => {
       </fieldset> */}
       {/* <fieldset className="mb-4">
         <legend className="block text-lg font-semibold mb-1 text-white md:text-black">
-          What are you looking for? {errors.selectedLookingFor && <span className="text-red-500">*</span>}
+          What are you looking for? 
+          {errors.selectedLookingFor && <span className="text-red-500">*</span>}
         </legend>
         <div className="flex flex-wrap gap-2 md:gap-2 py-2 px-0 rounded-3xl">
           {[
@@ -278,9 +278,8 @@ const Form2 = ({ setIndex }) => {
                 type="radio"
                 name="selectedLookingFor"
                 value={lookingFor}
-                {...register("selectedLookingFor", {
-                  required: "Please select an option.",
-                })}
+                {...register("selectedLookingFor", {required: "Please select an option."})}
+                // {...register("selectedLookingFor")}
                 className="hidden"
               />
               {lookingFor}

@@ -23,6 +23,7 @@ function getMinDate() {
   );
   return minDate;
 }
+
 const schema = yup
   .object({
     usergender: yup.string().required("Gender is required"),
@@ -44,68 +45,69 @@ const schema = yup
       .date()
       .required("Date of birth is required")
       .max(getMinDate(), "You must be at least 18 years old"),
-    genderPronouns: yup.string().required("Gender pronouns are required"),
-    selectedReligion: yup.string().required("A religion selection is required"),
-    selectedLifePathNumber: yup
-      .number()
-      .positive("Life-path number must be greater than 0")
-      .integer("Life-path number must be an integer")
-      .required("Life-path number is required"),
-    selectedZodiac: yup.string().required("Zodiac sign is required"),
-    selectedFooding: yup.string().required("Fooding preference is required"),
-    selectedWhatYouDo: yup.string().required("Occupation is required"),
-    selectedLookingFor: yup
-      .string()
-      .required("Relationship preference is required"),
-    selectedsmoking: yup.string().required("Smoking preference is required"),
-    selecteddrink: yup.string().required("Drinking preference is required"),
-    selectedhobbies: yup
-      .array()
-      .of(yup.string())
-      .min(2, "At least 2 hobbies must be selected")
-      .required(),
-    selectedsports: yup
-      .array()
-      .of(yup.string())
-      .min(2, "At least 2 sports must be selected")
-      .required(),
-    selectedArt: yup
-      .array()
-      .of(yup.string())
-      .min(2, "Select up to 2 arts only")
-      .required(),
-    selectedPets: yup.string().required("Pet selection is required"),
-    selectedHabits: yup
-      .array()
-      .of(yup.string())
-      .min(2, "Select up to 2 habits only")
-      .required(),
-    selectedActivities: yup
-      .array()
-      .of(yup.string())
-      .min(2, "Select up to 2 activities only")
-      .required(),
-    selectedMovies: yup
-      .array()
-      .of(yup.string())
-      .min(2, "Select up to 2 movies only")
-      .required(),
-    selectedTravel: yup
-      .array()
-      .of(yup.string())
-      .min(2, "Select up to 2 travel options only")
-      .required(),
-    selectedInterests: yup
-      .array()
-      .of(yup.string())
-      .min(1, "Select at least one interest")
-      .required("Interests are required"),
-    selectedPreferAge: yup.string().required("Preferred age is required"),
-    selectedLocation: yup.string().required("Location is required"),
-    selectedPreferLocation: yup
-      .string()
-      .required("Preferred location is required"),
-    selectedIntro: yup.string().required("Introduction is required"),
+
+    // genderPronouns: yup.string().required("Gender pronouns are required"),
+    // selectedReligion: yup.string().required("A religion selection is required"),
+    // selectedLifePathNumber: yup
+    //   .number()
+    //   .positive("Life-path number must be greater than 0")
+    //   .integer("Life-path number must be an integer")
+    //   .required("Life-path number is required"),
+    // selectedZodiac: yup.string().required("Zodiac sign is required"),
+    // selectedFooding: yup.string().required("Fooding preference is required"),
+    // selectedWhatYouDo: yup.string().required("Occupation is required"),
+    // selectedLookingFor: yup
+    //   .string()
+    //   .required("Relationship preference is required"),
+    // selectedsmoking: yup.string().required("Smoking preference is required"),
+    // selecteddrink: yup.string().required("Drinking preference is required"),
+    // selectedhobbies: yup
+    //   .array()
+    //   .of(yup.string())
+    //   .min(2, "At least 2 hobbies must be selected")
+    //   .required(),
+    // selectedsports: yup
+    //   .array()
+    //   .of(yup.string())
+    //   .min(2, "At least 2 sports must be selected")
+    //   .required(),
+    // selectedArt: yup
+    //   .array()
+    //   .of(yup.string())
+    //   .min(2, "Select up to 2 arts only")
+    //   .required(),
+    // selectedPets: yup.string().required("Pet selection is required"),
+    // selectedHabits: yup
+    //   .array()
+    //   .of(yup.string())
+    //   .min(2, "Select up to 2 habits only")
+    //   .required(),
+    // selectedActivities: yup
+    //   .array()
+    //   .of(yup.string())
+    //   .min(2, "Select up to 2 activities only")
+    //   .required(),
+    // selectedMovies: yup
+    //   .array()
+    //   .of(yup.string())
+    //   .min(2, "Select up to 2 movies only")
+    //   .required(),
+    // selectedTravel: yup
+    //   .array()
+    //   .of(yup.string())
+    //   .min(2, "Select up to 2 travel options only")
+    //   .required(),
+    // selectedInterests: yup
+    //   .array()
+    //   .of(yup.string())
+    //   .min(1, "Select at least one interest")
+    //   .required("Interests are required"),
+    // selectedPreferAge: yup.string().required("Preferred age is required"),
+    // selectedLocation: yup.string().required("Location is required"),
+    // selectedPreferLocation: yup
+    //   .string()
+    //   .required("Preferred location is required"),
+    // selectedIntro: yup.string().required("Introduction is required"),
   })
   .required();
 
@@ -156,10 +158,37 @@ const CreateAccount1 = () => {
     ],
   };
 
+  // const methods = useForm({
+  //   resolver: yupResolver(schema),
+  //   mode: "all",
+  // });
   const methods = useForm({
-    resolver: yupResolver(schema),
-    mode: "all",
-  });
+    defaultValues: {
+        usergender: '',
+        genderPronouns: '',
+        selectedLifePathNumber:'',
+        selectedReligion:'',
+        selectedZodiac:'',
+        selectedFooding:'',
+        selectedWhatYouDo:'',
+        selectedLookingFor:'',
+        selectedsmoking:'',
+        selecteddrink:'',
+        selectedhobbies:[],
+        selectedsports:[],
+        selectedArt:[],
+        selectedPets:'',
+        selectedHabits:[],
+        selectedActivities:[],
+        selectedMovies:[],
+        selectedTravel:[],
+        selectedInterests:"",
+        selectedPreferAge:"",
+        selectedLocation:"",
+        selectedPreferLocation:"",
+        selectedIntro:"",
+    }
+});
   const {
     handleSubmit,
     setValue,

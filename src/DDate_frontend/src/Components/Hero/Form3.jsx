@@ -14,14 +14,14 @@ const Form3 = () => {
   const [showSports, setShowSports] = useState(false);
   const selectedsmoking = watch("selectedsmoking");
   const selecteddrink = watch("selecteddrink");
-  const selectedhobbies = watch("selectedhobbies");
-  const selectedsports = watch("selectedsports");
+  const selectedhobbies = watch("selectedhobbies",[]);
+  const selectedsports = watch("selectedsports",[]);
 
   console.log(errors);
-  useEffect(() => {
-    setValue("selectedhobbies",[]);
-    setValue("selectedsports", []);
-  }, [setValue]);
+  // useEffect(() => {
+  //   setValue("selectedhobbies", []);
+  //   setValue("selectedsports", []);
+  // }, [setValue]);
 
   return (
     <div className="w-full  rounded-lg p-6 shadow-md md:bg-transparent md:shadow-none">
@@ -92,7 +92,7 @@ const Form3 = () => {
       {/* Hobbies */}
       <fieldset className="mb-4">
         <legend className="block text-lg font-semibold mb-2 text-white md:text-black">
-          Hobbies <span className="text-gray-400 text-sm">(select any 2)</span>
+          Hobbies <span className="text-gray-400 text-sm">(select up to 2)</span>
         </legend>
         <div className="flex flex-wrap gap-2 md:gap-2 py-2 rounded-3xl">
           {[
@@ -126,8 +126,14 @@ const Form3 = () => {
                   type="checkbox"
                   value={hobby}
                   {...register("selectedhobbies", {
-                    validate: (value) =>
-                      value.length <= 2 || "Select up to 2 hobbies only",
+                    // validate: (value) =>
+                    //   value.length <= 2 || "Select up to 2 hobbies only",
+                    validate: {
+                      notEmpty: (value) =>
+                        value.length > 0 || "Please select at least one hobby.",
+                      maxTwo: (value) =>
+                        value.length <= 2 || "Select up to 2 hobbies only",
+                    },
                   })}
                   checked={selectedhobbies?.includes(hobby)}
                   className="hidden"
@@ -157,7 +163,7 @@ const Form3 = () => {
 
       <fieldset className="mb-4">
         <legend className="block text-lg font-semibold mb-1 text-white md:text-black">
-          Sports <span className="text-gray-400 text-sm">(select any 2)</span>
+          Sports <span className="text-gray-400 text-sm">(select up to 2)</span>
         </legend>
         <div className="flex flex-wrap gap-2 md:gap-2 py-2 rounded-3xl">
           {[
@@ -201,8 +207,14 @@ const Form3 = () => {
                   type="checkbox"
                   value={sport}
                   {...register("selectedsports", {
-                    validate: (value) =>
-                      value.length <= 2 || "Select up to 2 sports only",
+                    // validate: (value) =>
+                    //   value.length <= 2 || "Select up to 2 sports only",
+                    validate: {
+                      notEmpty: (value) =>
+                        value.length > 0 || "Please select at least one sports.",
+                      maxTwo: (value) =>
+                        value.length <= 2 || "Select up to 2 sports only",
+                    },
                   })}
                   checked={selectedsports?.includes(sport)}
                   className="hidden"

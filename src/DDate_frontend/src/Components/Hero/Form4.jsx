@@ -15,6 +15,9 @@ const Form4 = () => {
   const [showActivities, setShowActivities] = useState(false);
   const [showTravel, setShowTravel] = useState(false);
 
+  const selectedhobbies = watch("selectedhobbies");
+  console.log("checllskhs :: ", selectedhobbies)
+
   const selectedArt = watch("selectedArt", []);
   const selectedPets = watch("selectedPets");
   const selectedHabits = watch("selectedHabits", []);
@@ -23,29 +26,29 @@ const Form4 = () => {
   const selectedTravel = watch("selectedTravel", []);
 
   // Optionally set default values on mount using setValue
-  useEffect(() => {
-    setValue("selectedArt", []);
-    setValue("selectedPets", "");
-    setValue("selectedHabits", []);
-    setValue("selectedActivities", []);
-    setValue("selectedMovies", []);
-    setValue("selectedTravel", []);
-  }, [setValue]);
+  // useEffect(() => {
+  //   setValue("selectedArt", []);
+  //   // setValue("selectedPets", "");
+  //   setValue("selectedHabits", []);
+  //   setValue("selectedActivities", []);
+  //   setValue("selectedMovies", []);
+  //   setValue("selectedTravel", []);
+  // }, [setValue]);
 
-  const handleCheckboxChange = (name, value) => {
-    const selectedValues = watch(name, []);
-    const updatedValues = selectedValues.includes(value)
-      ? selectedValues.filter((v) => v !== value)
-      : [...selectedValues, value];
+  // const handleCheckboxChange = (name, value) => {
+  //   const selectedValues = watch(name, []);
+  //   const updatedValues = selectedValues.includes(value)
+  //     ? selectedValues.filter((v) => v !== value)
+  //     : [...selectedValues, value];
 
-    // Limit the number of selections to 2
-    if (updatedValues.length <= 2) {
-      setValue(name, updatedValues);
-    }
+  //   // Limit the number of selections to 2
+  //   if (updatedValues.length <= 2) {
+  //     setValue(name, updatedValues);
+  //   }
 
-    // Manually trigger validation
-    trigger(name);
-  };
+  //   // Manually trigger validation
+  //   trigger(name);
+  // };
 
   return (
     <div className="w-full rounded-lg p-6 shadow-md md:bg-transparent md:shadow-none">
@@ -85,11 +88,17 @@ const Form4 = () => {
                   type="checkbox"
                   value={art}
                   {...register("selectedArt", {
-                    validate: (value) =>
-                      value.length === 0 || value.length === 2 || "Select either 0 or 2 arts",
+                    // validate: (value) =>
+                    //   value.length === 0 || value.length === 2 || "Select either 0 or 2 arts",
+                    validate: {
+                      notEmpty: (value) =>
+                        value.length > 0 || "Please select at least one art.",
+                      maxTwo: (value) =>
+                        value.length <= 2 || "Select up to 2 arts only",
+                    },
                   })}
                   checked={selectedArt?.includes(art)}
-                  onChange={() => handleCheckboxChange("selectedArt", art)}
+                  // onChange={() => handleCheckboxChange("selectedArt", art)}
                   className="hidden"
                 />
                 {art}
@@ -162,11 +171,17 @@ const Form4 = () => {
                 type="checkbox"
                 value={habit}
                 {...register("selectedHabits", {
-                  validate: (value) =>
-                    value.length === 0 || value.length === 2 || "Select either 0 or 2 habits",
+                  // validate: (value) =>
+                  //   value.length === 0 || value.length === 2 || "Select either 0 or 2 habits",
+                  validate: {
+                    notEmpty: (value) =>
+                      value.length > 0 || "Please select at least one habit.",
+                    maxTwo: (value) =>
+                      value.length <= 2 || "Select up to 2 habits only",
+                  },
                 })}
                 checked={selectedHabits?.includes(habit)}
-                onChange={() => handleCheckboxChange("selectedHabits", habit)}
+                // onChange={() => handleCheckboxChange("selectedHabits", habit)}
                 style={{ display: "none" }} // Hide the checkbox but keep it functional
               />
               {habit}
@@ -178,7 +193,7 @@ const Form4 = () => {
       <fieldset className="mb-4">
         <legend className="block text-lg font-semibold mb-1 text-white md:text-black">
           Outdoor Activities{" "}
-          <span className="text-gray-400 text-sm">(select any 2)</span>
+          <span className="text-gray-400 text-sm">(select up to 2)</span>
         </legend>
         <div className="flex flex-wrap gap-2 md:gap-2 py-2 rounded-3xl">
           {[
@@ -210,11 +225,18 @@ const Form4 = () => {
                   type="checkbox"
                   value={activity}
                   {...register("selectedActivities", {
-                    validate: (value) =>
-                      value.length === 0 || value.length === 2 || "Select either 0 or 2 activities",
+                    // validate: (value) =>
+                    //   value.length === 0 || value.length === 2 || "Select either 0 or 2 activities",
+                    validate: {
+                      notEmpty: (value) =>
+                        value.length > 0 || "Please select at least one activity.",
+                      maxTwo: (value) =>
+                        value.length <= 2 || "Select up to 2 activities only",
+                    },
+                    
                   })}
                   checked={selectedActivities?.includes(activity)}
-                  onChange={() => handleCheckboxChange("selectedActivities", activity)}
+                  // onChange={() => handleCheckboxChange("selectedActivities", activity)}
                   style={{ display: "none" }}
                 />
                 {activity}
@@ -241,7 +263,7 @@ const Form4 = () => {
       </fieldset>
       <fieldset className="mb-4">
         <legend className="block text-lg font-semibold mb-1 text-white md:text-black">
-          Movies <span className="text-gray-400 text-sm">(select any 2)</span>
+          Movies <span className="text-gray-400 text-sm">(select up to 2)</span>
         </legend>
         <div className="flex flex-wrap gap-2 md:gap-2 py-2 rounded-3xl">
           {[
@@ -265,11 +287,17 @@ const Form4 = () => {
                 type="checkbox"
                 value={movie}
                 {...register("selectedMovies", {
-                  validate: (value) =>
-                    value.length === 0 || value.length === 2 || "Select either 0 or 2 movies",
+                  // validate: (value) =>
+                  //   value.length === 0 || value.length === 2 || "Select either 0 or 2 movies",
+                  validate: {
+                    notEmpty: (value) =>
+                      value.length > 0 || "Please select at least one movie.",
+                    maxTwo: (value) =>
+                      value.length <= 2 || "Select up to 2 movies only",
+                  },
                 })}
                 checked={selectedMovies?.includes(movie)}
-                onChange={() => handleCheckboxChange("selectedMovies", movie)}
+                // onChange={() => handleCheckboxChange("selectedMovies", movie)}
                 style={{ display: "none" }} // Hide the checkbox but keep it functional
               />
               {movie}
@@ -280,7 +308,7 @@ const Form4 = () => {
       </fieldset>
       <fieldset className="mb-2">
         <legend className="block text-lg font-semibold mb-1 text-white md:text-black">
-          Travel <span className="text-gray-400 text-sm">(select any 2)</span>
+          Travel <span className="text-gray-400 text-sm">(select up to 2)</span>
         </legend>
         <div className="flex flex-wrap gap-2 md:gap-2 mb-2 py-2 rounded-3xl">
           {[
@@ -312,11 +340,17 @@ const Form4 = () => {
                   type="checkbox"
                   value={travel}
                   {...register("selectedTravel", {
-                    validate: (value) =>
-                      value.length === 0 || value.length === 2 || "Select either 0 or 2 travel options",
+                    // validate: (value) =>
+                    //   value.length === 0 || value.length === 2 || "Select either 0 or 2 travel options",
+                    validate: {
+                      notEmpty: (value) =>
+                        value.length > 0 || "Please select at least one travel option.",
+                      maxTwo: (value) =>
+                        value.length <= 2 || "Select up to 2 travel options only",
+                    },
                   })}
                   checked={selectedTravel?.includes(travel)}
-                  onChange={() => handleCheckboxChange("selectedTravel", travel)}
+                  // onChange={() => handleCheckboxChange("selectedTravel", travel)}
                   style={{ display: "none" }}
                 />
                 {travel}

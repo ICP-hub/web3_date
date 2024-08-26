@@ -174,33 +174,33 @@ impl State {
     
     pub fn create_account(&mut self, user_id: String, mut params: UserProfileCreationInfo) -> Result<String, String> {
         // Validation
-        if params.params.name.is_none() || params.params.name.as_ref().unwrap().trim().is_empty() {
-            return Err("Name is required".to_string());
-        }
-        if params.params.email.is_none() || params.params.email.as_ref().unwrap().trim().is_empty() {
-            return Err("Email is required".to_string());
-        }
-        if params.params.age.is_none() {
-            return Err("Age is required".to_string());
-        }
-        if params.params.min_preferred_age.is_none() {
-            return Err("Minimum preferred age is required".to_string());
-        }
-        if params.params.max_preferred_age.is_none() {
-            return Err("Maximum preferred age is required".to_string());
-        }
-        if params.params.location.is_none() || params.params.location.as_ref().unwrap().trim().is_empty() {
-            return Err("Location is required".to_string());
-        }
-        if params.params.preferred_location.is_none() || params.params.preferred_location.as_ref().unwrap().trim().is_empty() {
-            return Err("Preferred location is required".to_string());
-        }
-        if params.params.gender.is_none() || params.params.gender.as_ref().unwrap().trim().is_empty() {
-            return Err("Gender is required".to_string());
-        }
-        if params.params.preferred_gender.is_none() || params.params.preferred_gender.as_ref().unwrap().trim().is_empty() {
-            return Err("Preferred gender is required".to_string());
-        }
+        // if params.params.name.is_none() || params.params.name.as_ref().unwrap().trim().is_empty() {
+        //     return Err("Name is required".to_string());
+        // }
+        // if params.params.email.is_none() || params.params.email.as_ref().unwrap().trim().is_empty() {
+        //     return Err("Email is required".to_string());
+        // }
+        // if params.params.age.is_none() {
+        //     return Err("Age is required".to_string());
+        // }
+        // if params.params.min_preferred_age.is_none() {
+        //     return Err("Minimum preferred age is required".to_string());
+        // }
+        // if params.params.max_preferred_age.is_none() {
+        //     return Err("Maximum preferred age is required".to_string());
+        // }
+        // if params.params.location.is_none() || params.params.location.as_ref().unwrap().trim().is_empty() {
+        //     return Err("Location is required".to_string());
+        // }
+        // if params.params.preferred_location.is_none() || params.params.preferred_location.as_ref().unwrap().trim().is_empty() {
+        //     return Err("Preferred location is required".to_string());
+        // }
+        // if params.params.gender.is_none() || params.params.gender.as_ref().unwrap().trim().is_empty() {
+        //     return Err("Gender is required".to_string());
+        // }
+        // if params.params.preferred_gender.is_none() || params.params.preferred_gender.as_ref().unwrap().trim().is_empty() {
+        //     return Err("Preferred gender is required".to_string());
+        // }
     
         // Initialize expired to false
         params.expired =false ;
