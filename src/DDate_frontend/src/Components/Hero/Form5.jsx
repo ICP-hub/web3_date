@@ -85,46 +85,139 @@ const Form5 = () => {
         </div>
       </fieldset>
 
-      <div className="flex flex-col md:flex-row md:space-x-4 mb-6">
-        <div className="flex-1 mb-4 md:mb-0">
-          <label
-            htmlFor="selectedLocation"
-            className="block text-lg font-semibold mb-1 text-white md:text-black"
-          >
-            Location
-          </label>
-          <input
-            type="text"
-            id="selectedLocation"
-            name="selectedLocation"
-            placeholder="Your Location"
-            {...register("selectedLocation",{
-              required: "Selecting a location is required",
-            })}
-            className="w-full px-4 py-2 rounded-full border border-white md:border-black bg-transparent text-white md:text-black focus:ring-yellow-500 focus:border-yellow-500"
-          />
-          {errors.selectedLocation && <p className="text-red-500">{errors.selectedLocation.message}</p>}
-        </div>
+      {/* user location */}
+      <div className='flex-col'>
+        <h1 className="block text-lg font-semibold mb-1 text-white md:text-black">Location</h1>
+        <div className="flex flex-col md:flex-row md:space-x-4 mb-6">
+          {/* City Dropdown */}
+          <div className="relative mb-4 md:mb-0">
+            <label
+              htmlFor="selectedCity"
+            >
+            </label>
+            <div>
+              <select
+                id="selectedCity"
+                name="selectedCity"
+                {...register("selectedCity")}
+                className="w-full px-4 py-2 font-bold rounded-full border border-white md:border-black bg-transparent text-white md:text-gray-400 focus:ring-yellow-500 focus:border-yellow-500 appearance-none"
+              >
+                <option value="" disabled>Select your city</option>
+                <option value="delhi">Delhi</option>
+                <option value="bombay">Bombay</option>
+                <option value="chennai">Chennai</option>
+                {/* Add more options as needed */}
+              </select>
+              {errors.selectedCity && <p className="text-red-500">{errors.selectedCity.message}</p>}
+              <svg
+                className="absolute top-[20px] right-4 transform -translate-y-1/2 w-8 h-8 font-semibold text-white md:text-gray-400 pointer-events-none"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M19 9l-7 7-7-7"
+                />
+              </svg>
+            </div>
+          </div>
 
-        <div className="flex-1">
-          <label
-            htmlFor="selectedPreferLocation"
-            className="block text-lg font-semibold mb-1 text-white md:text-black"
-          >
-            Preferred Location
-          </label>
-          <input
-            type="text"
-            id="selectedPreferLocation"
-            name="selectedPreferLocation"
-            placeholder="Your Preferred Location"
-            {...register("selectedPreferLocation",{
-              required: "Selecting a location preferance is required",
-            })}
-            className="w-full px-4 py-2 rounded-full border border-white md:border-black bg-transparent text-white md:text-black focus:ring-yellow-500 focus:border-yellow-500"
-          />
-          {errors.selectedPreferLocation && <p className="text-red-500">{errors.selectedPreferLocation.message}</p>}
+          {/* State Dropdown */}
+          <div className="relative mb-4 md:mb-0">
+            <label
+              htmlFor="selectedState"
+            >
+            </label>
+            <div>
+              <select
+                id="selectedState"
+                name="selectedState"
+                {...register("selectedState")}
+                className="w-full px-4 py-2 rounded-full border border-white md:border-black bg-transparent text-white md:text-black focus:ring-yellow-500 focus:border-yellow-500 appearance-none"
+              >
+                <option value="" disabled>Select your state</option>
+                <option value="state1">State 1</option>
+                <option value="state2">State 2</option>
+                <option value="state3">State 3</option>
+                {/* Add more options as needed */}
+              </select>
+              {errors.selectedState && <p className="text-red-500">{errors.selectedState.message}</p>}
+              <svg
+                className="absolute top-[52px] right-4 transform -translate-y-1/2 w-8 h-8 font-semibold text-white md:text-black pointer-events-none"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M19 9l-7 7-7-7"
+                />
+              </svg>
+            </div>
+          </div>
+
+          {/* Country Dropdown */}
+          <div className="relative mb-4 md:mb-0">
+            <label
+              htmlFor="selectedCountry"
+            >
+            </label>
+            <div>
+              <select
+                id="selectedCountry"
+                name="selectedCountry"
+                {...register("selectedCountry")}
+                className="w-full px-4 py-2 font-bold rounded-full border border-white md:border-black bg-transparent text-gray-400 md:text-black focus:ring-yellow-500 focus:border-yellow-500 appearance-none"
+              >
+                <option value="" disabled>Select your country</option>
+                <option value="india">India</option>
+                <option value="usa">USA</option>
+                <option value="uk">UK</option>
+                {/* Add more options as needed */}
+              </select>
+              {errors.selectedCountry && <p className="text-red-500">{errors.selectedCountry.message}</p>}
+              <svg
+                className="absolute top-[52px] right-4 transform -translate-y-1/2 w-8 h-8 font-semibold text-white md:text-black pointer-events-none"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M19 9l-7 7-7-7"
+                />
+              </svg>
+            </div>
+          </div>
         </div>
+      </div>
+
+      <div className="flex-1">
+        <label
+          htmlFor="selectedPreferLocation"
+          className="block text-lg font-semibold mb-1 text-white md:text-black"
+        >
+          Preferred Location
+        </label>
+        <input
+          type="text"
+          id="selectedPreferLocation"
+          name="selectedPreferLocation"
+          placeholder="Your Preferred Location"
+          {...register("selectedPreferLocation")}
+          className="w-full px-4 py-2 rounded-full border border-white md:border-black bg-transparent text-white md:text-black focus:ring-yellow-500 focus:border-yellow-500"
+        />
+        {errors.selectedPreferLocation && <p className="text-red-500">{errors.selectedPreferLocation.message}</p>}
       </div>
 
       <div className="flex flex-col mb-6">
@@ -141,7 +234,7 @@ const Form5 = () => {
             rows={5}
             placeholder="Let us know something about you"
             {...register("selectedIntro")}
-            className="bg-gray-100 w-full px-4 py-2 rounded-lg  border-white md:border-black  text-white md:text-black"
+            className="bg-gray-100 w-full px-4 py-2 rounded-lg  border-none text-black"
           />
           {errors.selectedIntro && <p className="text-red-500">{errors.selectedIntro.message}</p>}
         </div>
