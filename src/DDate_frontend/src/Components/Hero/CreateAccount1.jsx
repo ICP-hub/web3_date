@@ -316,7 +316,7 @@ const CreateAccount1 = () => {
               <h2 className="text-3xl md:text-4xl font-bold mb-4 text-white md:text-black text-center">
                 <div className="flex items-center">
                   <svg
-                    className="flex-shrink-0 ml-5 cursor-pointer"
+                    className={`${index === 0 && "collapse"} flex-shrink-0 ml-5 cursor-pointer`}
                     // onClick={() => navigate("/")}
                     onClick={handleBack}
                     width="20"
@@ -357,7 +357,7 @@ const CreateAccount1 = () => {
                 <div className="flex justify-between">
                   <button
                     type="button"
-                    className={`${index === 0 && "visible"} ${index === 4 && "collapse"} font-semibold py-2 px-6 rounded-full text-b md:text-black md:hover:text-black`}
+                    className={`${index === 0 && "visited"} ${index === 4 && "collapse"}  font-semibold py-2 px-6 rounded-full text-b md:text-black md:hover:text-black`}
                     onClick={handleSkip}
                     // disabled={index === 0}
                   >
@@ -392,7 +392,7 @@ const CreateAccount1 = () => {
                       className="bg-yellow-500 font-semibold py-2 px-6 rounded-full hover:bg-yellow-600 text-white md:text-black md:hover:text-black"
                       onClick={handleNext}
                     >
-                      Next
+                      {index === 4 ? "Save and start"  : "Next"}
                     </button>
                   )}
                 </div>
