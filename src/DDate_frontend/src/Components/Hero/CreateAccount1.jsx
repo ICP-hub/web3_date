@@ -242,7 +242,7 @@ const CreateAccount1 = () => {
         art_and_culture: [data?.selectedArt],
         general_habits: [data?.selectedHabits],
         movies: [data?.selectedMovies],
-        interests_in: data?.selectedInterests,
+        interests_in: [data?.selectedInterests],
         location: [data?.selectedLocation],
         preferred_location: [data?.selectedPreferLocation],
         introduction: [data?.selectedIntro],

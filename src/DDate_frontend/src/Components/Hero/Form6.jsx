@@ -153,7 +153,7 @@ const Form6 = () => {
                 </button>
             )} */}
             <div>
-                {!err && <p className="text-red-500 text-sm">At least one image is required</p>}
+                {err && <p className="text-red-500 text-sm">At least one image is required</p>}
             </div>
 
             {popUp && (
