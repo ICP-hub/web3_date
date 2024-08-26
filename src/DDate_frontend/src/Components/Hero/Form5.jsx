@@ -37,17 +37,20 @@ const Form5 = () => {
           {["Male", "Female", "All"].map((interest) => (
             <label
               key={interest}
-              className={`inline-block px-3 py-2 rounded-full text-sm focus:outline-none transition duration-300 ${selectedInterests?.includes(interest) ? "bg-yellow-500 text-black" : "bg-transparent hover:bg-yellow-500 hover:text-black text-white md:text-black border border-white md:border-black"
+              className={`inline-block px-3 py-2 rounded-full text-sm focus:outline-none transition duration-300 
+                ${selectedInterests === interest
+                  ? "bg-yellow-500 text-black"
+                  : "bg-transparent hover:bg-yellow-500 hover:text-black text-white md:text-black border border-white md:border-black"
                 }`}
             >
               <input
-                type="checkbox"
+                type="radio"
                 value={interest}
                 {...register("selectedInterests", {
                   required: "Selecting a Interest is required",
                 })}
                 // checked={selectedInterests?.includes(interest)}
-                hecked={selectedInterests === interest}
+                // checked={selectedInterests === interest}
                 className="hidden"
               />
               {interest}
@@ -57,6 +60,7 @@ const Form5 = () => {
         </div>
       </fieldset>
 
+      {/* Age selection */}
       <fieldset className="mb-2">
         <legend className="block text-lg font-semibold mb-1 text-white md:text-black">
           Preferred Age

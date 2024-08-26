@@ -3,7 +3,7 @@ import { useFormContext } from 'react-hook-form';
 import compressImage from '../ImageCompressFolder/CompressImage';
 
 const Form6 = () => {
-    const { register, setValue, formState: { errors }, unregister, trigger } = useFormContext();
+    const { register, setValue, formState: { errors }, unregister, trigger, watch } = useFormContext();
     // const { register, setValue, formState: { errors }, unregister, trigger, setError } = useFormContext();
     const [imageFields, setImageFields] = useState([]);
     const [err, setErr] = useState(false);
@@ -11,6 +11,11 @@ const Form6 = () => {
     const [currentIndex, setCurrentIndex] = useState(null);
     const modalRef = useRef(null);  // Reference for the modal
     const fileInputRef = useRef(null)
+
+    const selectedInterests = watch("selectedInterests");
+  const selectedPreferAge = watch("selectedPreferAge");
+
+  console.log(selectedInterests,":::",selectedPreferAge)
 
     function handleError() {
         setErr(true);

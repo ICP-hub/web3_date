@@ -182,11 +182,11 @@ const CreateAccount1 = () => {
         selectedActivities:[],
         selectedMovies:[],
         selectedTravel:[],
-        selectedInterests:"",
-        selectedPreferAge:"",
-        selectedLocation:"",
-        selectedPreferLocation:"",
-        selectedIntro:"",
+        selectedInterests:'',
+        selectedPreferAge:'',
+        selectedLocation:'',
+        selectedPreferLocation:'',
+        selectedIntro:'',
     }
 });
   const {
