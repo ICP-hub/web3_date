@@ -113,6 +113,8 @@ const schema = yup
 
 const CreateAccount1 = () => {
   const { backendActor } = useAuth();
+  const [imageFields, setImageFields] = useState([{},{},{},{},{}]);
+  const [imageError, setImageError] = useState(false)
 
   const navigate = useNavigate();
 
@@ -134,27 +136,34 @@ const CreateAccount1 = () => {
       "selectedhobbies",
       "selectedsports",
     ],
+    // 3: [
+    //   "selectedArt",
+    //   "selectedPets",
+    //   "selectedHabits",
+    //   "selectedActivities",
+    //   "selectedMovies",
+    //   "selectedTravel",
+    // ],
     3: [
-      "selectedArt",
-      "selectedPets",
-      "selectedHabits",
-      "selectedActivities",
-      "selectedMovies",
-      "selectedTravel",
-    ],
-    4: [
       "selectedInterests",
       "selectedPreferAge",
-      "selectedLocation",
-      "selectedPreferLocation",
+      "selectedCity",
+      "selectedState",
+      "selectedCountry",
+      "preferredCity",
+      "preferredState",
+      "preferredCountry",
+      // "selectedLocation",
+      // "selectedPreferLocation",
       "selectedIntro",
     ],
-    5: [
-      "firstImage0",
-      "firstImage1",
-      "firstImage2",
-      "firstImage3",
-      "firstImage4",
+    4: [
+      // "firstImage0",
+      // "firstImage1",
+      // "firstImage2",
+      // "firstImage3",
+      // "firstImage4",
+      "images"
     ],
   };
 
@@ -164,31 +173,38 @@ const CreateAccount1 = () => {
   // });
   const methods = useForm({
     defaultValues: {
-        usergender: '',
-        genderPronouns: '',
-        selectedLifePathNumber:'',
-        selectedReligion:'',
-        selectedZodiac:'',
-        selectedFooding:'',
-        selectedWhatYouDo:'',
-        selectedLookingFor:'',
-        selectedsmoking:'',
-        selecteddrink:'',
-        selectedhobbies:[],
-        selectedsports:[],
-        selectedArt:[],
-        selectedPets:'',
-        selectedHabits:[],
-        selectedActivities:[],
-        selectedMovies:[],
-        selectedTravel:[],
-        selectedInterests:'',
-        selectedPreferAge:'',
-        selectedLocation:'',
-        selectedPreferLocation:'',
-        selectedIntro:'',
+      usergender: '',
+      genderPronouns: '',
+      selectedLifePathNumber: '',
+      selectedReligion: '',
+      selectedZodiac: '',
+      selectedFooding: '',
+      selectedWhatYouDo: '',
+      selectedLookingFor: '',
+      selectedsmoking: '',
+      selecteddrink: '',
+      selectedhobbies: [],
+      selectedsports: [],
+      selectedArt: [],
+      selectedPets: '',
+      selectedHabits: [],
+      selectedActivities: [],
+      selectedMovies: [],
+      selectedTravel: [],
+      selectedInterests: '',
+      selectedPreferAge: '',
+      selectedCity: '',
+      selectedState: '',
+      selectedCountry: '',
+      preferredCity: '',
+      preferredState: '',
+      preferredCountry: '',
+      // selectedLocation: '',
+      // selectedPreferLocation: '',
+      selectedIntro: '',
+      images: [],
     }
-});
+  });
   const {
     handleSubmit,
     setValue,
@@ -245,7 +261,7 @@ const CreateAccount1 = () => {
         interests_in: [data?.selectedInterests],
         location: [data?.selectedLocation],
         preferred_location: [data?.selectedPreferLocation],
-        introduction: [data?.selectedIntro],
+        selectedIntro: [data?.selectedIntro],
         occupation: [data?.selectedWhatYouDo],
         height: [],
         diet: [data?.selectedFooding],
@@ -258,7 +274,13 @@ const CreateAccount1 = () => {
         looking_for: [data?.selectedLookingFor],
         max_preferred_age: [Number((data?.selectedPreferAge).slice(3, 5))],
         // images: imageArray ? [imageArray] : [],
-        images: [],
+        selectedCity: [data?.selectedCity || ""],
+        selectedState: [data?.selectedState || ""],
+        selectedCountry: [data?.selectedCountry || ""],
+        preferredCity: [data?.preferredCity || ""],
+        preferredState: [data?.preferredState || ""],
+        preferredCountry: [data?.preferredCountry || ""],
+        images: data?.images || [],
         zodiac: [data?.selectedZodiac],
       };
       console.log("Ddatedata ", DdateData);
@@ -295,13 +317,23 @@ const CreateAccount1 = () => {
   };
 
   // function to skip
-  const handleSkip = () =>{
+  const handleSkip = () => {
     setIndex((prevIndex) => prevIndex + 1);
   }
 
   const onErrorHandler = (val) => {
     console.log("error", val);
   };
+
+  function handleSaveSubmit() {
+    // Check if any image field is not empty
+    const hasValidImages = imageFields.some(image => Object.values(image).length !== 0);
+
+    // Only update the state if the value is different to prevent unnecessary re-renders
+    if (imageError !== !hasValidImages) {
+      setImageError(!hasValidImages);
+    }
+  }
 
   return (
     <div className="container">
@@ -352,19 +384,18 @@ const CreateAccount1 = () => {
                 {index === 2 && <Form3 />}
                 {/* {index === 3 && <Form4 />} */}
                 {index === 3 && <Form5 />}
-                {index === 4 && <Form6 />}
-
+                {index === 4 && <Form6 imageFields={imageFields} setImageFields={setImageFields} imageError={imageError} />}
                 <div className="flex justify-between">
                   <button
                     type="button"
-                    className={`${index === 0 && "visited"} ${index === 4 && "collapse"}  font-semibold py-2 px-6 rounded-full text-b md:text-black md:hover:text-black`}
+                    className={`${index === 0 && "visited"} ${index === 4 && "collapse"} text-white  font-semibold py-2 px-6 rounded-full text-b md:text-black md:hover:text-black`}
                     onClick={handleSkip}
-                    // disabled={index === 0}
+                  // disabled={index === 0}
                   >
                     {/* Back */}
                     Skip
                   </button>
-                  {index === 5 ? (
+                  {index === 4 ? (
                     <>
                       <button
                         type="submit"
@@ -380,9 +411,10 @@ const CreateAccount1 = () => {
                             ariaLabel="three-dots-loading"
                             wrapperStyle={{}}
                             wrapperclassName=""
+                            onClick={handleSaveSubmit()}
                           />
                         ) : (
-                          "Submit"
+                          "Save and submit"
                         )}
                       </button>
                     </>
@@ -392,7 +424,7 @@ const CreateAccount1 = () => {
                       className="bg-yellow-500 font-semibold py-2 px-6 rounded-full hover:bg-yellow-600 text-white md:text-black md:hover:text-black"
                       onClick={handleNext}
                     >
-                      {index === 4 ? "Save and start"  : "Next"}
+                      Next
                     </button>
                   )}
                 </div>

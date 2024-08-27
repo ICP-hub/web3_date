@@ -2,29 +2,28 @@ import React, { useEffect, useState, useRef } from 'react';
 import { useFormContext } from 'react-hook-form';
 import compressImage from '../ImageCompressFolder/CompressImage';
 
-const Form6 = () => {
+const Form6 = ({imageFields, setImageFields, imageError}) => {
     const { register, setValue, formState: { errors }, unregister, trigger, watch } = useFormContext();
     // const { register, setValue, formState: { errors }, unregister, trigger, setError } = useFormContext();
-    const [imageFields, setImageFields] = useState([]);
-    const [err, setErr] = useState(false);
+    // const [imageFields, setImageFields] = useState([{},{},{},{},{}]);
+    // const [err, setErr] = useState(false);
     const [popUp, setPopUp] = useState(false)
     const [currentIndex, setCurrentIndex] = useState(null);
     const modalRef = useRef(null);  // Reference for the modal
     const fileInputRef = useRef(null)
 
-    const selectedInterests = watch("selectedInterests");
-  const selectedPreferAge = watch("selectedPreferAge");
+    // const selectedInterests = watch("selectedInterests");
+    // const selectedPreferAge = watch("selectedPreferAge");
 
-  console.log(selectedInterests,":::",selectedPreferAge)
 
-    function handleError() {
-        setErr(true);
-    }
+    // function handleError() {
+    //     setErr(true);
+    // }
 
-    useEffect(() => {
-        // to create five empty object for images.
-        setImageFields(Array.from({ length: 5 }, () => ({})))
-    }, [])
+    // useEffect(() => {
+    //     // to create five empty object for images.
+    //     setImageFields(Array.from({ length: 5 }, () => ({})))
+    // }, [])
 
     // Handle click outside of the modal
     useEffect(() => {
@@ -91,8 +90,6 @@ const Form6 = () => {
         unregister(`firstImage${index}`);
     };
 
-    console.log('imageFields', imageFields)
-
     const renderImagePreviews = () => {
         return imageFields.map((field, index) => (
             <div key={index} className="relative group mb-4">
@@ -102,7 +99,7 @@ const Form6 = () => {
                         <button
                             type="button"
                             onClick={() => handleRemoveField(index)}
-                            className="absolute top-1 right-1 bg-red-900 text-white p-1 rounded-md opacity-75 group-hover:opacity-100 text-xs"
+                            className="absolute top-1 right-1 bg-red-900 text-white p-1.5 rounded-md opacity-75 group-hover:opacity-100 text-xs"
                         >
                             X
                         </button>
@@ -158,12 +155,12 @@ const Form6 = () => {
                 </button>
             )} */}
             <div>
-                {err && <p className="text-red-500 text-sm">At least one image is required</p>}
+                {imageError && <p className="text-red-500 text-sm">At least one image is required</p>}
             </div>
 
             {popUp && (
                 <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
-                    <div className="mx-60 flex items-center justify-center w-full">
+                    <div className="mx-16 lg:mx-32 md:mx-24 flex items-center justify-center w-full">
                         <label
                             ref={modalRef}  // Attach the modal reference here
                             htmlFor="dropzone-file"
@@ -188,7 +185,7 @@ const Form6 = () => {
                                     accept="image/*"
                                     className="hidden"
                                     ref={fileInputRef}
-                                    onChange={(e) => { handleImageUpload(e, currentIndex); handleError(); }}
+                                    onChange={(e) => { handleImageUpload(e, currentIndex) }}
                                 />
                             </div>
                         </label>
