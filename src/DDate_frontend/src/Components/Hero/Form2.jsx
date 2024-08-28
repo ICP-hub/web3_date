@@ -212,7 +212,7 @@ const Form2 = ({ setIndex }) => {
               <input
                 type="radio"
                 value={fooding}
-                {...register("selectedFooding", {required: "Fooding preference is required"})}
+                {...register("selectedFooding", {required: "Dietary Preferences is required"})}
                 // {...register("selectedFooding")}
                 className="hidden"
               />

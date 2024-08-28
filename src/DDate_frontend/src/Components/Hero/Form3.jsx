@@ -92,7 +92,7 @@ const Form3 = () => {
       {/* Hobbies */}
       <fieldset className="mb-4">
         <legend className="block text-lg font-semibold mb-2 text-white md:text-black">
-          Hobbies <span className="text-gray-400 text-sm">(select up to 2)</span>
+          Hobbies <span className="text-gray-400 text-sm">(select any 2)</span>
         </legend>
         <div className="flex flex-wrap gap-2 md:gap-2 py-2 rounded-3xl">
           {[
@@ -129,10 +129,12 @@ const Form3 = () => {
                     // validate: (value) =>
                     //   value.length <= 2 || "Select up to 2 hobbies only",
                     validate: {
-                      notEmpty: (value) =>
-                        value.length > 0 || "Please select at least one hobby.",
-                      maxTwo: (value) =>
-                        value.length <= 2 || "Select up to 2 hobbies only",
+                      // notEmpty: (value) =>
+                      //   value.length > 0 || "Please select at least one hobby.",
+                      // maxTwo: (value) =>
+                      //   value.length <= 2 || "Select up to 2 hobbies only",
+                      minTwo: (value) =>
+                        value.length >= 2 || "Please select at least 2 hobbies.",
                     },
                   })}
                   checked={selectedhobbies?.includes(hobby)}
@@ -163,7 +165,7 @@ const Form3 = () => {
 
       <fieldset className="mb-4">
         <legend className="block text-lg font-semibold mb-1 text-white md:text-black">
-          Sports <span className="text-gray-400 text-sm">(select up to 2)</span>
+          Sports <span className="text-gray-400 text-sm">(select any 2)</span>
         </legend>
         <div className="flex flex-wrap gap-2 md:gap-2 py-2 rounded-3xl">
           {[
@@ -210,10 +212,12 @@ const Form3 = () => {
                     // validate: (value) =>
                     //   value.length <= 2 || "Select up to 2 sports only",
                     validate: {
-                      notEmpty: (value) =>
-                        value.length > 0 || "Please select at least one sports.",
-                      maxTwo: (value) =>
-                        value.length <= 2 || "Select up to 2 sports only",
+                      // notEmpty: (value) =>
+                      //   value.length > 0 || "Please select at least one sports.",
+                      // maxTwo: (value) =>
+                      //   value.length <= 2 || "Select up to 2 sports only",
+                      minTwo: (value) =>
+                        value.length >= 2 || "Please select at least 2 sports.",
                     },
                   })}
                   checked={selectedsports?.includes(sport)}
