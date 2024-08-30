@@ -150,10 +150,10 @@ const Form5 = () => {
     <div className="w-full space-y-2 rounded-lg p-6 shadow-md md:bg-transparent md:shadow-none">
       <fieldset className="mb-4">
         <legend className="block text-lg font-semibold mb-1 text-white md:text-black">
-          Interests
+        Looking for
         </legend>
         <div className="flex flex-wrap gap-2 md:gap-2 mb-4 py-2 rounded-3xl">
-          {["Male", "Female", "All"].map((interest) => (
+          {["Male", "Female", "Network", "Friends", "Business partner"].map((interest) => (
             <label
               key={interest}
               className={`inline-block px-3 py-2 rounded-full text-sm focus:outline-none transition duration-300 
@@ -493,7 +493,7 @@ const Form5 = () => {
             htmlFor="selectedIntro"
             className="block text-lg font-semibold mb-1 text-white md:text-black"
           >
-            Introduce Yourself
+           Bio
           </label>
           <textarea
             id="selectedIntro"

@@ -14,8 +14,8 @@ const Form3 = () => {
   const [showSports, setShowSports] = useState(false);
   const selectedsmoking = watch("selectedsmoking");
   const selecteddrink = watch("selecteddrink");
-  const selectedhobbies = watch("selectedhobbies",[]);
-  const selectedsports = watch("selectedsports",[]);
+  const selectedhobbies = watch("selectedhobbies", []);
+  const selectedsports = watch("selectedsports", []);
 
   console.log(errors);
   // useEffect(() => {
@@ -28,10 +28,10 @@ const Form3 = () => {
       {/* Smoking Selection */}
       <fieldset className="mb-4">
         <legend className="block text-lg font-semibold mb-1 text-white md:text-black">
-          Smoking
+          Smoking habits
         </legend>
         <div className="flex flex-wrap gap-2 md:gap-2 py-2 rounded-3xl">
-          {["Regular", "Sometimes", "Never"].map((smoking) => (
+          {["Social smoker", "Smoker", "Vaper", "Non-smoker"].map((smoking) => (
             <label
               key={smoking}
               className={`inline-block px-3 py-2 rounded-full text-sm focus:outline-none transition duration-300
@@ -97,19 +97,23 @@ const Form3 = () => {
         <div className="flex flex-wrap gap-2 md:gap-2 py-2 rounded-3xl">
           {[
             "Reading",
-            "Dancing",
-            "Astronomy",
             "DIY",
+            "Painting",
             "Gaming",
+            "Astronomy",
             "Numerology",
             "Amateur Cook",
+            "BBQ",
             "Formula One",
-            "Painting",
-            "Pottery",
-            "Camping",
-            "Singing",
-            "Photography",
-            "Others",
+            "Cars",
+            "Motor Cycles",
+            "Movies",
+            "Netflix",
+            "Fashion",
+            "Musical Instrument",
+            "Trying New Things",
+            "Working Out"
+
           ]
             .slice(0, showHobbies ? undefined : 8)
             .map((hobby) => (
@@ -169,32 +173,35 @@ const Form3 = () => {
         </legend>
         <div className="flex flex-wrap gap-2 md:gap-2 py-2 rounded-3xl">
           {[
-            "Cricket",
-            "Football",
-            "Basketball",
-            "Tennis",
-            "Badminton",
-            "Boxing",
-            "Gym",
-            "Yoga",
-            "Volleyball",
-            "Chess",
-            "Carrom",
             "Golf",
-            "Table-Tennis",
-            "Weightlifting",
-            "Polo",
+            "CrossFit",
+            "Hot yoga",
+            "Pilates",
+            "Soccer",
+            "Martial Arts",
+            "Surf",
+            "Paddle",
             "Rugby",
-            "Cycling",
-            "Wrestling",
+            "Boxing",
+            "BJJ",
+            "Hockey",
+            "Cricket",
+            "Polo",
+            "Bicycle Racing",
+            "Fencing",
+            "Table Tennis",
+            "Paddle",
+            "Tennis",
+            "Triathlon",
             "Swimming",
-            "Snooker",
-            "Sumo Wrestling",
-            "Aerobics",
-            "Skydiving",
-            "Karate",
-            "Judo",
-            "Others",
+            "Gymnastics",
+            "Beach Tennis",
+            "Weight Lifting",
+            "Equestrian",
+            "Pole Dancing",
+            "Rock Climbing",
+            "Wrestling",
+            "Acrobatic Yoga"
           ]
             .slice(0, showSports ? undefined : 10)
             .map((sport) => (
