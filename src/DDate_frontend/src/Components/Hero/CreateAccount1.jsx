@@ -112,9 +112,17 @@ function getMinDate() {
 //   .required();
 
 const CreateAccount1 = () => {
-  const { backendActor } = useAuth();
+  // const { backendActor } = useAuth();
   const [imageFields, setImageFields] = useState([{}, {}, {}, {}, {}]);
   const [imageError, setImageError] = useState(false)
+
+  const { login, isAuthenticated, backendActor, principal, publicKey } =useAuth();
+
+  const arrayBufferToBase64 = (buffer) => {
+    return window.btoa(String.fromCharCode(...new Uint8Array(buffer)));
+  };
+
+  const base64String = arrayBufferToBase64(publicKey);
 
   const navigate = useNavigate();
 
@@ -222,6 +230,36 @@ const CreateAccount1 = () => {
   //     }
   //     return btoa(binary);
   // }
+
+
+  const registerUser = async (userId) => {
+    const principalString = principal.toText();
+    const raw = JSON.stringify({
+      principal: principalString,
+      publicKey: base64String,
+      user_id: userId,
+    });
+
+    try {
+      const response = await fetch(
+        // "https://ddate.kaifoundry.com/api/v1/register/user",
+        "http://localhost:5000/api/v1/register/user",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: raw,
+        }
+      );
+      const result = await response.json();
+      console.log("registerUser", result);
+      return result;
+    } catch (error) {
+      console.error("Error registering user:", error);
+    }
+  };
+
+
+
   const onSubmit = async (data) => {
     console.log("Final Form Data", data);
     if (backendActor) {
@@ -273,7 +311,7 @@ const CreateAccount1 = () => {
         preferred_gender: [data?.usergender],
         looking_for: [data?.selectedLookingFor],
         max_preferred_age: [Number((data?.selectedPreferAge).slice(3, 5))],
-        // images: imageArray ? [imageArray] : [],
+        // images: imageArray ? [imageArray] : [],S
         selectedCity: [data?.selectedCity || ""],
         selectedState: [data?.selectedState || ""],
         selectedCountry: [data?.selectedCountry || ""],
@@ -286,12 +324,13 @@ const CreateAccount1 = () => {
       console.log("Ddatedata ", DdateData);
 
       try {
-        await backendActor.create_an_account(DdateData).then((result) => {
+        await backendActor.create_an_account(DdateData).then(async(result) => {
           if (result) {
             const API = result?.Ok;
             console.log("Api is generated", API);
             const trimedId = API.split(":")[1].trim();
             setId(trimedId);
+            await registerUser(trimedId)
             navigate("/Swipe", { state: trimedId });
           } else {
             setId("");

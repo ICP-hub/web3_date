@@ -54,7 +54,8 @@ const WalletModal = ({ isOpen, onClose }) => {
 
     try {
       const response = await fetch(
-        "https://ddate.kaifoundry.com/api/v1/register/user",
+        // "https://ddate.kaifoundry.com/api/v1/register/user",
+        "http://localhost:5000/api/v1/register/user",
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -62,7 +63,7 @@ const WalletModal = ({ isOpen, onClose }) => {
         }
       );
       const result = await response.json();
-      // console.log("registerUser", result);
+      console.log("registerUser", result);
       return result;
     } catch (error) {
       console.error("Error registering user:", error);
@@ -79,7 +80,8 @@ const WalletModal = ({ isOpen, onClose }) => {
 
     try {
       const response = await fetch(
-        "https://ddate.kaifoundry.com/api/v1/login/user",
+        // "https://ddate.kaifoundry.com/api/v1/login/user",
+        "http://localhost:5000/api/v1/login/user",
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -87,7 +89,7 @@ const WalletModal = ({ isOpen, onClose }) => {
         }
       );
       const result = await response.json();
-      // console.log("loginUser", result);
+      console.log("loginUser", result);
       if (result?.privateToken) {
         saveToken(result.privateToken);
       }
@@ -104,11 +106,17 @@ const WalletModal = ({ isOpen, onClose }) => {
       if (result?.Ok) {
         const userId = result.Ok;
         console.log("userId line 104 ===>>> : ", userId);
+        navigate("/Swipe", { state: userId });
+
         setUserExists(userId);
         await registerUser(userId);
         await loginUser(userId);
       } else {
+         
+        // await registerUser(userId);
         setUserExists(null);
+        navigate("/CreateAccount1");
+        console.log('createaccount vala')
       }
     } catch (error) {
       console.error("Error checking if user exists:", error);
@@ -121,21 +129,21 @@ const WalletModal = ({ isOpen, onClose }) => {
     }
   }, [backendActor, principal, publicKey]);
 
-  useEffect(() => {
+  // useEffect(() => {
 
-    console.log("isAuthenticated && userExists !== null   hfgjkhgf", isAuthenticated && userExists !== null)
-    if (isAuthenticated) {    //&& userExists !== null
-      // Ensure userExists is not null before navigating
-      console.log("isAuthenticated && userExists !== null", isAuthenticated && userExists !== null)
-      if (userExists) {
-        navigate("/Swipe", { state: userExists });
-        console.log("swipe vala");
-      } else {
-        navigate("/CreateAccount1");
-        console.log('createaccount vala')
-      }
-    }
-  }, [isAuthenticated, userExists]);
+  //   console.log("isAuthenticated && userExists !== null   hfgjkhgf", isAuthenticated)
+  //   if (isAuthenticated) {    //&& userExists !== null
+  //     // Ensure userExists is not null before navigating
+  //     console.log("isAuthenticated && userExists !== null",  userExists )
+  //     if (userExists) {
+  //       navigate("/Swipe", { state: userExists });
+  //       console.log("swipe vala");
+  //     } else {
+  //       // navigate("/CreateAccount1");
+  //       // console.log('createaccount vala')
+  //     }
+  //   }
+  // }, [isAuthenticated, userExists]);
 
   const loginHandler = async (walletId) => {
     await login(walletId);
