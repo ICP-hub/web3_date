@@ -12,6 +12,8 @@ import Form3 from "./Form3";
 import Form5 from "./Form5";
 import Form6 from "./Form6";
 import { useAuth } from "../../auth/useAuthClient";
+import { storage } from '../../firebase';
+import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 // Define Yup schema for the entire form including the image validation
 
 function getMinDate() {
@@ -113,10 +115,14 @@ function getMinDate() {
 
 const CreateAccount1 = () => {
   // const { backendActor } = useAuth();
-  const [imageFields, setImageFields] = useState([{}, {}, {}, {}, {}]);
+  // const [imageFields, setImageFields] = useState([{}, {}, {}, {}, {}]);
+  const [imageFields, setImageFields] = useState([[], [], [], [], []]);
   const [imageError, setImageError] = useState(false)
+  const [btnDisable, setBtnDisable] = useState(false)
+  // image array to store image url of the users.
+  let imageArray = [];
 
-  const { login, isAuthenticated, backendActor, principal, publicKey } =useAuth();
+  const { login, isAuthenticated, backendActor, principal, publicKey } = useAuth();
 
   const arrayBufferToBase64 = (buffer) => {
     return window.btoa(String.fromCharCode(...new Uint8Array(buffer)));
@@ -261,15 +267,17 @@ const CreateAccount1 = () => {
 
 
   const onSubmit = async (data) => {
+    setBtnDisable(true)
+    await handleImageToFirebase();
     console.log("Final Form Data", data);
     if (backendActor) {
-      const imagesBase64 = [
-        data?.firstImage0,
-        data?.firstImage1,
-        data?.firstImage2,
-        data?.firstImage3,
-        data?.firstImage4,
-      ];
+      // const imagesBase64 = [
+      //   data?.firstImage0,
+      //   data?.firstImage1,
+      //   data?.firstImage2,
+      //   data?.firstImage3,
+      //   data?.firstImage4,
+      // ];
 
       // const imageArray = await Promise.all(imagesBase64.map(async (image) => {
       //   const base64String = btoa(String.fromCharCode(...image));
@@ -311,33 +319,38 @@ const CreateAccount1 = () => {
         preferred_gender: [data?.usergender],
         looking_for: [data?.selectedLookingFor],
         max_preferred_age: [Number((data?.selectedPreferAge).slice(3, 5))],
-        // images: imageArray ? [imageArray] : [],S
+        // images: imageArray ? [imageArray] : [],
         selectedCity: [data?.selectedCity || ""],
         selectedState: [data?.selectedState || ""],
         selectedCountry: [data?.selectedCountry || ""],
         preferredCity: [data?.preferredCity || ""],
         preferredState: [data?.preferredState || ""],
         preferredCountry: [data?.preferredCountry || ""],
-        images: data?.images || [],
+        images: [imageArray || []],
         zodiac: [data?.selectedZodiac],
       };
-      console.log("Ddatedata ", DdateData);
+      console.log("Ddatedata ", imageArray);
 
-      try {
-        await backendActor.create_an_account(DdateData).then(async(result) => {
-          if (result) {
-            const API = result?.Ok;
-            console.log("Api is generated", API);
-            const trimedId = API.split(":")[1].trim();
-            setId(trimedId);
-            await registerUser(trimedId)
-            navigate("/Swipe", { state: trimedId });
-          } else {
-            setId("");
-          }
-        });
-      } catch (error) {
-        console.error("Error sending data to the backend:", error);
+      if (handleSaveSubmit()) {
+
+        try {
+          await backendActor.create_an_account(DdateData).then(async (result) => {
+            if (result) {
+              const API = result?.Ok;
+              console.log("Api is generated", API);
+              const trimedId = API.split(":")[1].trim();
+              setId(trimedId);
+              // setBtnDisable(false)
+              await registerUser(trimedId)
+              navigate("/Swipe", { state: trimedId });
+            } else {
+              setId("");
+            }
+          });
+        } catch (error) {
+          console.error("Error sending data to the backend:", error);
+        }
+
       }
     }
   };
@@ -364,15 +377,94 @@ const CreateAccount1 = () => {
     console.log("error", val);
   };
 
-  function handleSaveSubmit() {
-    // Check if any image field is not empty
-    const hasValidImages = imageFields.some(image => Object.values(image).length !== 0);
+  // function handleSaveSubmit() {
+  //   // Check if any image field is not empty
+  //   const hasValidImages = imageFields.some(image => Object.values(image).length !== 0);
 
-    // Only update the state if the value is different to prevent unnecessary re-renders
-    if (imageError !== !hasValidImages) {
-      setImageError(!hasValidImages);
+  //   // Only update the state if the value is different to prevent unnecessary re-renders
+  //   if (imageError !== !hasValidImages) {
+  //     setImageError(!hasValidImages);
+  //   }
+  // }
+
+  function handleSaveSubmit() {
+    if (imageArray.length == 0) {
+      setImageError(true)
+      setBtnDisable(false)
+      return false
+    }
+    else {
+      setImageError(false)
+      setBtnDisable(true)
+      return true
     }
   }
+
+  function handleImageToFirebase() {
+    // Helper function to upload a single image
+    const uploadImage = (image) => {
+      return new Promise((resolve, reject) => {
+        if (image.length === 0) {
+          resolve(); // Resolve immediately if no image
+          return;
+        }
+
+        const dateTime = giveCurrentDateTime();
+        const storageRef = ref(storage, `files/${image.name + " " + dateTime}`);
+        const metadata = {
+          contentType: image.type,
+        };
+
+        // Create the upload task
+        const uploadTask = uploadBytesResumable(storageRef, image, metadata);
+
+        // Handle the upload task
+        uploadTask.on(
+          'state_changed',
+          (snapshot) => {
+            const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+            console.log("progress = ", progress);
+          },
+          (error) => {
+            console.error('Error uploading image:', error);
+            reject(error); // Reject the Promise if there's an error
+          },
+          async () => {
+            try {
+              const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
+              console.log('File successfully uploaded:', downloadURL);
+              imageArray.push(downloadURL)
+              resolve(downloadURL); // Resolve the Promise with the download URL
+            } catch (error) {
+              console.error('Error getting download URL:', error);
+              reject(error); // Reject the Promise if there's an error
+            }
+          }
+        );
+      });
+    };
+
+    // Chain the image uploads sequentially
+    const uploadPromises = imageFields.reduce((promiseChain, image) => {
+      return promiseChain
+        // function is responsible for uploading a single image and returns a Promise.
+        .then(() => uploadImage(image))
+        .catch(error => {
+          console.error('Error in upload chain:', error);
+          // Optionally return a rejected promise to stop the chain
+          return Promise.reject(error);
+        });
+    }, Promise.resolve());
+
+    return uploadPromises;
+  }
+
+  // Function to get the current date and time in a specific format
+  const giveCurrentDateTime = () => {
+    const now = new Date();
+    return now.toISOString();
+  };
+
 
   return (
     <div className="container">
@@ -437,6 +529,7 @@ const CreateAccount1 = () => {
                   {index === 4 ? (
                     <>
                       <button
+                        disabled={btnDisable}
                         type="submit"
                         className="bg-yellow-500 font-semibold py-2 px-6 rounded-full hover:bg-yellow-600 text-white md:text-black md:hover:text-black"
                       >
@@ -450,7 +543,7 @@ const CreateAccount1 = () => {
                             ariaLabel="three-dots-loading"
                             wrapperStyle={{}}
                             wrapperclassName=""
-                            onClick={handleSaveSubmit()}
+                          // onClick={handleSaveSubmit()}
                           />
                         ) : (
                           "Save and submit"

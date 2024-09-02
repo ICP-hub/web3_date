@@ -2,7 +2,7 @@ import React, { useEffect, useState, useRef } from 'react';
 import { useFormContext } from 'react-hook-form';
 import compressImage from '../ImageCompressFolder/CompressImage';
 
-const Form6 = ({imageFields, setImageFields, imageError}) => {
+const Form6 = ({ imageFields, setImageFields, imageError }) => {
     const { register, setValue, formState: { errors }, unregister, trigger, watch } = useFormContext();
     // const { register, setValue, formState: { errors }, unregister, trigger, setError } = useFormContext();
     // const [imageFields, setImageFields] = useState([{},{},{},{},{}]);
@@ -39,44 +39,64 @@ const Form6 = ({imageFields, setImageFields, imageError}) => {
         };
     }, [modalRef]);
 
-    const handleImageUpload = async (e, index) => {
+    // const handleImageUpload = async (e, index) => {
+    //     const file = e.target.files[0];
+    //     console.log('file = ', file)
+    //     if (!file) {
+    //         console.log("ERROR -- handleImageUpload: file is missing");
+    //         return;
+    //     }
+
+    //     try {
+    //         const result = await trigger(`firstImage${index}`); // Assuming trigger function is correctly implemented
+    //         console.log("result =", result)
+    //         if (result) {
+    //             // const compressedFile = await compressImage(file); // Assuming compressImage function is correctly implemented and returns a File object
+
+    //             const reader = new FileReader();
+    //             reader.onloadend = () => {
+    //                 const newImageFields = [...imageFields];
+    //                 const arrayBuffer = reader.result;
+    //                 // newImageFields[index].arrayBuffer = arrayBuffer;
+    //                 // Optionally update state with newImageFields if needed
+    //                 newImageFields[index] = { arrayBuffer }
+    //                 //  adding some new code.
+    //                 setImageFields(newImageFields)
+    //                 console.log("new image of the fields = ", newImageFields)
+    //                 setPopUp(false); // Close the popup after uploading the image
+    //             };
+    //             reader.readAsArrayBuffer(compressedFile);
+
+    //             // const byteArray = await compressedFile.arrayBuffer(); // Convert compressedFile to byte array
+    //             // setValue(`firstImage${index}`, Array.from(new Uint8Array(byteArray)));
+    //             // console.log("images = ",byteArray)
+    //             // setImageFields([...imageFields, Array.from(new Uint8Array(byteArray))]); // Update imageFields state with new byte array
+    //             // setValue(`firstImage${index}`, Array.from(new Uint8Array(byteArray))); // Update form value with byte array
+
+    //         } else {
+    //             console.log("ERROR -- handleImageUpload: image trigger failed");
+    //         }
+    //     } catch (error) {
+    //         console.error("Error processing image:", error);
+    //         // Handle errors here if needed
+    //     }
+    // };
+    function handleLocalImage(e, index) {
         const file = e.target.files[0];
-        if (!file) {
-            console.log("ERROR -- handleImageUpload: file is missing");
-            return;
-        }
-
         try {
-            const result = await trigger(`firstImage${index}`); // Assuming trigger function is correctly implemented
-            if (result) {
-                const compressedFile = await compressImage(file); // Assuming compressImage function is correctly implemented and returns a File object
-
-                const reader = new FileReader();
-                reader.onloadend = () => {
-                    const newImageFields = [...imageFields];
-                    const arrayBuffer = reader.result;
-                    // newImageFields[index].arrayBuffer = arrayBuffer;
-                    // Optionally update state with newImageFields if needed
-                    newImageFields[index] = { arrayBuffer }
-                    //  adding some new code.
-                    setImageFields(newImageFields)
-                    setPopUp(false); // Close the popup after uploading the image
-                };
-                reader.readAsArrayBuffer(compressedFile);
-
-                const byteArray = await compressedFile.arrayBuffer(); // Convert compressedFile to byte array
-                setValue(`firstImage${index}`, Array.from(new Uint8Array(byteArray)));
-                // setImageFields([...imageFields, Array.from(new Uint8Array(byteArray))]); // Update imageFields state with new byte array
-                // setValue(`firstImage${index}`, Array.from(new Uint8Array(byteArray))); // Update form value with byte array
-
-            } else {
-                console.log("ERROR -- handleImageUpload: image trigger failed");
+            if (file) {
+                // Update the state with the new image file
+                setImageFields(prevFields => {
+                    const newFields = [...prevFields];
+                    newFields[index] = file; // Store only the file
+                    return newFields;
+                });
+                setPopUp(false)
             }
         } catch (error) {
-            console.error("Error processing image:", error);
-            // Handle errors here if needed
+            console.log(error);
         }
-    };
+    }
 
     // const handleAddField = () => {
     //     if (imageFields.length < 5) {
@@ -91,30 +111,48 @@ const Form6 = ({imageFields, setImageFields, imageError}) => {
     };
 
     const renderImagePreviews = () => {
-        return imageFields.map((field, index) => (
+        // return imageFields.map((field, index) => (
+        //     <div key={index} className="relative group mb-4">
+        //         {
+        //         field.arrayBuffer ? (
+        //             <div className="relative">
+        //                 <img src={URL.createObjectURL(new Blob([new Uint8Array(field.arrayBuffer)], { type: 'image/jpeg' }))} alt={`Preview ${index + 1}`} className=" w-full object-fill rounded-2xl" />
+        //                 <button
+        //                     type="button"
+        //                     onClick={() => handleRemoveField(index)}
+        //                     className="absolute top-1 right-1 bg-red-900 text-white p-1.5 rounded-md opacity-75 group-hover:opacity-100 text-xs"
+        //                 >
+        //                     X
+        //                 </button>
+        //             </div>
+        //         ) 
+
+        return imageFields.map((image, index) => (
             <div key={index} className="relative group mb-4">
-                {field.arrayBuffer ? (
-                    <div className="relative">
-                        <img src={URL.createObjectURL(new Blob([new Uint8Array(field.arrayBuffer)], { type: 'image/jpeg' }))} alt={`Preview ${index + 1}`} className=" w-full object-fill rounded-2xl" />
-                        <button
-                            type="button"
-                            onClick={() => handleRemoveField(index)}
-                            className="absolute top-1 right-1 bg-red-900 text-white p-1.5 rounded-md opacity-75 group-hover:opacity-100 text-xs"
-                        >
-                            X
-                        </button>
-                    </div>
-                ) : (
-                    <div
-                        className="h-36 w-full flex justify-center items-center border bg-gray-200 rounded-2xl cursor-pointer"
-                        // onClick={() => document.getElementById(`file-input-${index}`).click()}
-                        onClick={() => { setPopUp(true); setCurrentIndex(index) }}
-                    >
-                        <div className="flex items-center justify-center w-10 h-10 bg-white border-2 rounded-full">
-                            <span className="text-2xl text-gray-200">+</span>
+                {
+                    image.length !== 0 ? (
+                        <div className="relative">
+                            <img src={URL.createObjectURL(image)} alt={`Preview ${index + 1}`} className=" w-full object-fill rounded-2xl" />
+                            <button
+                                type="button"
+                                onClick={() => handleRemoveField(index)}
+                                className="absolute top-1 right-1 bg-red-900 text-white p-1.5 rounded-md opacity-75 group-hover:opacity-100 text-xs"
+                            >
+                                X
+                            </button>
                         </div>
-                    </div>
-                )}
+                    )
+                        : (
+                            <div
+                                className="h-36 w-full flex justify-center items-center border bg-gray-200 rounded-2xl cursor-pointer"
+                                // onClick={() => document.getElementById(`file-input-${index}`).click()}
+                                onClick={() => { setPopUp(true); setCurrentIndex(index) }}
+                            >
+                                <div className="flex items-center justify-center w-10 h-10 bg-white border-2 rounded-full">
+                                    <span className="text-2xl text-gray-200">+</span>
+                                </div>
+                            </div>
+                        )}
                 {/* <input
                     type="file"
                     accept="image/*"
@@ -185,7 +223,8 @@ const Form6 = ({imageFields, setImageFields, imageError}) => {
                                     accept="image/*"
                                     className="hidden"
                                     ref={fileInputRef}
-                                    onChange={(e) => { handleImageUpload(e, currentIndex) }}
+                                    // onChange={(e) => { handleImageUpload(e, currentIndex) }}
+                                    onChange={(e) => { handleLocalImage(e, currentIndex) }}
                                 />
                             </div>
                         </label>
