@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { SlArrowUp, SlArrowDown } from "react-icons/sl";
 import { useFormContext } from "react-hook-form";
 
-const Form3 = (props) => {
+const Form3 = ({formData, setFormData}) => {
   const {
     register,
     formState: { errors },
@@ -38,6 +38,12 @@ const Form3 = (props) => {
     }
   };
 
+  function handleUpdateInput(e) {
+    console.log(e.target.name + " and " + e.target.value)
+    console.log("formdata =", formData.gender)
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+}
+
   return (
     <div className="w-full rounded-lg p-6 shadow-md md:bg-transparent md:shadow-none ">
       {/* Smoking Selection */}
@@ -46,10 +52,10 @@ const Form3 = (props) => {
           Smoking
         </legend>
         <div className="flex flex-wrap gap-2 md:gap-2 py-2 rounded-3xl">
-          {["Regular", "Sometimes", "Never"].map((smoking) => (
+          {["Social smoker", "Smoker", "Vaper", "Non-smoker"].map((smoking) => (
             <label
               key={smoking}
-              className={`inline-block px-3 py-2 rounded-full text-sm focus:outline-none transition duration-300 ${selectedsmoking === smoking
+              className={`inline-block px-3 py-2 rounded-full text-sm focus:outline-none transition duration-300 ${formData.selectedsmoking === smoking
                 ? "bg-yellow-500 text-black"
                 : "bg-transparent hover:bg-yellow-500 hover:text-black md:text-black border border-black"
                 }`}
@@ -60,6 +66,7 @@ const Form3 = (props) => {
                 {...register("selectedsmoking", {
                   required: "Smoking preference is required",
                 })}
+                onChange={handleUpdateInput}
                 className="hidden"
               />
               {smoking}
@@ -82,7 +89,7 @@ const Form3 = (props) => {
               <label
                 key={drink}
                 className={`inline-block px-3 py-2 rounded-full text-sm focus:outline-none transition duration-300 ${errors.selecteddrink && "border-red-500"
-                  } ${selecteddrink === drink
+                  } ${formData.selecteddrink === drink
                     ? "bg-yellow-500 text-black"
                     : "bg-transparent hover:bg-yellow-500 hover:text-black text-black border border-black"
                   }`}
@@ -93,6 +100,7 @@ const Form3 = (props) => {
                   {...register("selecteddrink", {
                     required: "Drinking preference is required",
                   })}
+                  onChange={handleUpdateInput}
                   className="hidden"
                 />
                 {drink}
@@ -113,25 +121,28 @@ const Form3 = (props) => {
         <div className="flex flex-wrap gap-2 md:gap-2 py-2 rounded-3xl">
           {[
             "Reading",
-            "Dancing",
-            "Astronomy",
             "DIY",
+            "Painting",
             "Gaming",
+            "Astronomy",
             "Numerology",
             "Amateur Cook",
+            "BBQ",
             "Formula One",
-            "Painting",
-            "Pottery",
-            "Camping",
-            "Singing",
-            "Photography",
-            "Others",
+            "Cars",
+            "Motor Cycles",
+            "Movies",
+            "Netflix",
+            "Fashion",
+            "Musical Instrument",
+            "Trying New Things",
+            "Working Out",
           ]
             .slice(0, showHobbies ? undefined : 8)
             .map((hobby) => (
               <label
                 key={hobby}
-                className={`inline-block px-3 py-2 rounded-full text-sm focus:outline-none transition duration-300 ${selectedhobbies?.includes(hobby)
+                className={`inline-block px-3 py-2 rounded-full text-sm focus:outline-none transition duration-300 ${formData.selectedhobbies?.includes(hobby)
                   ? "bg-yellow-500 text-black"
                   : "bg-transparent hover:bg-yellow-500 hover:text-black text-black border border-black"
                   }`}
@@ -143,7 +154,7 @@ const Form3 = (props) => {
                     validate: (value) =>
                       value.length <= 2 || "Select up to 2 hobbies only",
                   })}
-
+                  onChange={handleUpdateInput}
                   checked={selectedhobbies?.includes(hobby)}
                   className="hidden"
                 />
@@ -178,38 +189,41 @@ const Form3 = (props) => {
         </legend>
         <div className="flex flex-wrap gap-2 md:gap-2 py-2 rounded-3xl">
           {[
-            "Cricket",
-            "Football",
-            "Basketball",
-            "Tennis",
-            "Badminton",
-            "Boxing",
-            "Gym",
-            "Yoga",
-            "Volleyball",
-            "Chess",
-            "Carrom",
             "Golf",
-            "Table-Tennis",
-            "Weightlifting",
-            "Polo",
+            "CrossFit",
+            "Hot yoga",
+            "Pilates",
+            "Soccer",
+            "Martial Arts",
+            "Surf",
+            "Paddle",
             "Rugby",
-            "Cycling",
-            "Wrestling",
+            "Boxing",
+            "BJJ",
+            "Hockey",
+            "Cricket",
+            "Polo",
+            "Bicycle Racing",
+            "Fencing",
+            "Table Tennis",
+            "Paddle",
+            "Tennis",
+            "Triathlon",
             "Swimming",
-            "Snooker",
-            "Sumo Wrestling",
-            "Aerobics",
-            "Skydiving",
-            "Karate",
-            "Judo",
-            "Others",
+            "Gymnastics",
+            "Beach Tennis",
+            "Weight Lifting",
+            "Equestrian",
+            "Pole Dancing",
+            "Rock Climbing",
+            "Wrestling",
+            "Acrobatic Yoga"
           ]
             .slice(0, showSports ? undefined : 10)
             .map((sport) => (
               <label
                 key={sport}
-                className={`inline-block px-3 py-2 rounded-full text-sm focus:outline-none transition duration-300 ${selectedsports?.includes(sport)
+                className={`inline-block px-3 py-2 rounded-full text-sm focus:outline-none transition duration-300 ${formData.selectedsports?.includes(sport)
                   ? "bg-yellow-500 text-black"
                   : "bg-transparent hover:bg-yellow-500 hover:text-black text-black border border-black"
                   }`}
@@ -221,6 +235,7 @@ const Form3 = (props) => {
                     validate: (value) =>
                       value.length <= 2 || "Select up to 2 sports only",
                   })}
+                  onChange={handleUpdateInput}
                   checked={selectedsports?.includes(sport)}
                   className="hidden"
                 />

@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { useFormContext } from "react-hook-form";
 
-const Form2 = ({ setIndex }) => {
+const Form2 = ({ setIndex, formData, setFormData }) => {
   const {
     register,
     handleSubmit,
@@ -19,6 +19,13 @@ const Form2 = ({ setIndex }) => {
   const selectedWhatYouDo = watch("selectedWhatYouDo");
   const selectedLookingFor = watch("selectedLookingFor");
 
+
+  function handleUpdateInput(e) {
+    console.log(e.target.name + " and " + e.target.value)
+    console.log("formdata =", formData.gender)
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+}
+
   return (
     <div className="w-full  rounded-lg p-6 shadow-md md:bg-transparent md:shadow-none">
       {/* Gender Pronouns Selection */}
@@ -32,7 +39,7 @@ const Form2 = ({ setIndex }) => {
               key={genPro}
               className={`inline-block px-3 py-2 rounded-full text-sm focus:outline-none transition duration-300
 
-                            ${selectedGenderPronouns === genPro
+                            ${formData.genderPronouns === genPro
                   ? "bg-yellow-500 text-black"
                   : "bg-transparent hover:bg-yellow-500 hover:text-black  text-black border  border-black"
                 }`}
@@ -43,6 +50,7 @@ const Form2 = ({ setIndex }) => {
                 {...register("genderPronouns", {
                   required: "Gender pronoun is required",
                 })}
+                onChange={handleUpdateInput}
                 className="hidden"
               />
               {genPro}
@@ -107,7 +115,7 @@ const Form2 = ({ setIndex }) => {
             <label
               key={religion}
               className={`inline-block px-3 py-2 rounded-full text-sm focus:outline-none transition duration-300
-                            ${selectedReligionValue === religion
+                            ${formData.selectedReligionValue === religion
                   ? "bg-yellow-500 text-black"
                   : "bg-transparent hover:bg-yellow-500 hover:text-black  text-black border  border-black"
                 }`}
@@ -118,6 +126,7 @@ const Form2 = ({ setIndex }) => {
                 {...register("selectedReligion", {
                   required: "Religion is required",
                 })}
+                onChange={handleUpdateInput}
                 className="hidden"
               />
               {religion}
@@ -162,6 +171,7 @@ const Form2 = ({ setIndex }) => {
                 {...register("selectedZodiac", {
                   required: "Zodiac sign is required",
                 })}
+                onChange={handleUpdateInput}
                 className="hidden"
               />
               {zodiac}
@@ -191,7 +201,7 @@ const Form2 = ({ setIndex }) => {
               key={fooding}
               className={`inline-block px-3 py-2 rounded-full text-sm focus:outline-none transition duration-300
                             ${errors.selectedFooding && "border-red-500"}
-                            ${fooding === selectedFoodingValue
+                            ${fooding === formData.selectedFooding
                   ? "bg-yellow-500 text-black"
                   : "bg-transparent hover:bg-yellow-500 hover:text-black  text-black border  border-black"
                 }`}
@@ -202,6 +212,7 @@ const Form2 = ({ setIndex }) => {
                 {...register("selectedFooding", {
                   required: "Fooding preference is required",
                 })}
+                onChange={handleUpdateInput}
                 className="hidden"
               />
               {fooding}

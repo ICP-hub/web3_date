@@ -16,35 +16,36 @@ import { MdOutlineAddToPhotos } from "react-icons/md";
 import { useAuth } from "../../auth/useAuthClient";
 
 
-const schema = yup.object({
-  usergender: yup.string().required('Gender is required'),
-  email: yup.string().email('Invalid email format').required('Email is required'),
-  username: yup.string().required('Username is required'),
-  mobile: yup.string().matches(/^\d{10}$/, 'Invalid mobile number').required('Mobile number is required'),
-  dob: yup.date().required('Date of birth is required'),
-  genderPronouns: yup.string().required('Gender pronouns are required'),
-  selectedReligion: yup.string().required('A religion selection is required'),
-  selectedLifePathNumber: yup.number().positive('Life-path number must be greater than 0').integer('Life-path number must be an integer').required('Life-path number is required'),
-  selectedZodiac: yup.string().required('Zodiac sign is required'),
-  selectedFooding: yup.string().required('Fooding preference is required'),
-  selectedWhatYouDo: yup.string().required('Occupation is required'),
-  selectedLookingFor: yup.string().required('Relationship preference is required'),
-  selectedsmoking: yup.string().required('Smoking preference is required'),
-  selecteddrink: yup.string().required('Drinking preference is required'),
-  selectedhobbies: yup.array().of(yup.string()).min(2, 'At least 2 hobbies must be selected').required(),
-  selectedsports: yup.array().of(yup.string()).min(2, 'At least 2 sports must be selected').required(),
-  selectedArt: yup.array().of(yup.string()).min(2, 'Select up to 2 arts only').required(),
-  selectedPets: yup.string().required('Pet selection is required'),
-  selectedHabits: yup.array().of(yup.string()).min(2, 'Select up to 2 habits only').required(),
-  selectedActivities: yup.array().of(yup.string()).min(2, 'Select up to 2 activities only').required(),
-  selectedMovies: yup.array().of(yup.string()).min(2, 'Select up to 2 movies only').required(),
-  selectedTravel: yup.array().of(yup.string()).min(2, 'Select up to 2 travel options only').required(),
-  selectedInterests: yup.array().of(yup.string()).min(1, 'Select at least one interest').required('Interests are required'),
-  selectedPreferAge: yup.string().required('Preferred age is required'),
-  selectedLocation: yup.string().required('Location is required'),
-  selectedPreferLocation: yup.string().required('Preferred location is required'),
-  selectedIntro: yup.string().required('Introduction is required'),
-}).required();
+// const schema = yup.object({
+//   usergender: yup.string().required('Gender is required'),
+//   email: yup.string().email('Invalid email format').required('Email is required'),
+//   username: yup.string().required('Username is required'),
+//   mobile: yup.string().matches(/^\d{10}$/, 'Invalid mobile number').required('Mobile number is required'),
+//   dob: yup.date().required('Date of birth is required'),
+//   genderPronouns: yup.string().required('Gender pronouns are required'),
+//   selectedReligion: yup.string().required('A religion selection is required'),
+//   selectedLifePathNumber: yup.number().positive('Life-path number must be greater than 0').integer('Life-path number must be an integer').required('Life-path number is required'),
+//   selectedZodiac: yup.string().required('Zodiac sign is required'),
+//   selectedFooding: yup.string().required('Fooding preference is required'),
+//   selectedWhatYouDo: yup.string().required('Occupation is required'),
+//   selectedLookingFor: yup.string().required('Relationship preference is required'),
+//   selectedsmoking: yup.string().required('Smoking preference is required'),
+//   selecteddrink: yup.string().required('Drinking preference is required'),
+//   selectedhobbies: yup.array().of(yup.string()).min(2, 'At least 2 hobbies must be selected').required(),
+//   selectedsports: yup.array().of(yup.string()).min(2, 'At least 2 sports must be selected').required(),
+//   selectedArt: yup.array().of(yup.string()).min(2, 'Select up to 2 arts only').required(),
+//   selectedPets: yup.string().required('Pet selection is required'),
+//   selectedHabits: yup.array().of(yup.string()).min(2, 'Select up to 2 habits only').required(),
+//   selectedActivities: yup.array().of(yup.string()).min(2, 'Select up to 2 activities only').required(),
+//   selectedMovies: yup.array().of(yup.string()).min(2, 'Select up to 2 movies only').required(),
+//   selectedTravel: yup.array().of(yup.string()).min(2, 'Select up to 2 travel options only').required(),
+//   selectedInterests: yup.array().of(yup.string()).min(1, 'Select at least one interest').required('Interests are required'),
+//   selectedPreferAge: yup.string().required('Preferred age is required'),
+//   selectedLocation: yup.string().required('Location is required'),
+//   selectedPreferLocation: yup.string().required('Preferred location is required'),
+//   selectedIntro: yup.string().required('Introduction is required'),
+// }).required();
+
 const EditProfile = () => {
   const formFields = {
     0: ['username', 'usergender', 'email', 'mobile', 'dob', 'selectedIntro'],
@@ -54,59 +55,143 @@ const EditProfile = () => {
     4: ['selectedInterests', 'selectedPreferAge', 'selectedLocation', 'selectedPreferLocation',],
     5: ['firstImage0', 'firstImage1', 'firstImage2', 'firstImage3', 'firstImage4']
   };
+
+  const methods = useForm({
+    defaultValues: {
+      usergender: '',
+      genderPronouns: '',
+      selectedLifePathNumber: '',
+      selectedReligion: '',
+      selectedZodiac: '',
+      selectedFooding: '',
+      selectedWhatYouDo: '',
+      selectedLookingFor: '',
+      selectedsmoking: '',
+      selecteddrink: '',
+      selectedhobbies: [],
+      selectedsports: [],
+      selectedArt: [],
+      selectedPets: '',
+      selectedHabits: [],
+      selectedActivities: [],
+      selectedMovies: [],
+      selectedTravel: [],
+      selectedInterests: '',
+      selectedPreferAge: '',
+      selectedCity: '',
+      selectedState: '',
+      selectedCountry: '',
+      preferredCity: '',
+      preferredState: '',
+      preferredCountry: '',
+      selectedLocation: '',
+      selectedPreferLocation: '',
+      selectedIntro: '',
+      images: [],
+    }
+  });
+
+   const {
+    handleSubmit,
+    setValue,
+    trigger,
+    formState: { isSubmitting },
+  } = methods;
+
+  const [index, setIndex] = useState(0);
+
   const location = useLocation();
-  const userdata = location.state
-  console.log("userdata", userdata)
+  const userdata = location.state;
   // console.log(typeof userdata.dob[0])
 
   // const myDOB = new Date(userdata.dob[0]);
 
-  function formatDate(myDOB) {
-    const year = myDOB.getFullYear();
-    const month = String(myDOB.getMonth() + 1).padStart(2, '0');
-    const day = String(myDOB.getDate()).padStart(2, '0');
-    return `${year} -${month} -${day}`;
-  }
+  // function formatDate(myDOB) {
+  //   const year = myDOB.getFullYear();
+  //   const month = String(myDOB.getMonth() + 1).padStart(2, '0');
+  //   const day = String(myDOB.getDate()).padStart(2, '0');
+  //   return `${year} -${month} -${day}`;
+  // }
 
-  const PreValue = {
-    username: userdata?.name[0],
-    usergender: userdata?.gender[0],
-    email: userdata?.email[0],
-    mobile: userdata?.mobile_number[0],
-    // dob: formatDate(myDOB),
-    selectedIntro: userdata?.introduction[0],
-    selectedsmoking: userdata?.smoking[0],
-    selecteddrink: userdata?.drinking[0],
-    selectedhobbies: userdata?.hobbies,
-    selectedsports: userdata?.sports,
-    genderPronouns: userdata?.gender_pronouns[0],
-    selectedReligion: userdata?.religion[0],
-    selectedZodiac: userdata?.zodiac[0],
-    selectedFooding: userdata?.diet[0],
-    selectedWhatYouDo: userdata?.occupation[0],
-    selectedLookingFor: userdata?.looking_for[0],
-    selectedArt: userdata?.art_and_culture,
-    selectedPets: userdata?.pets[0],
-    selectedHabits: userdata?.general_habits,
-    selectedActivities: userdata?.outdoor_activities,
-    selectedMovies: userdata?.movies,
-    selectedTravel: userdata?.travel,
-    selectedInterests: userdata?.interests_in[0],
-    selectedPreferAge: userdata?.age[0],
-    selectedPreferLocation: userdata?.preferred_location[0],
-  }
-
-  console.log("Previosu data to set as default", PreValue)
-
-  const methods = useForm({
-    resolver: yupResolver(schema),
-    mode: 'all',
-    defaultValues: PreValue
-  });
-  const { handleSubmit, trigger } = methods;
-  const [index, setIndex] = React.useState(0);
+  // const methods = useForm({
+  //   resolver: yupResolver(schema),
+  //   mode: 'all',
+  //   defaultValues: PreValue
+  // });
+  // const { handleSubmit, trigger } = methods;
+  // const [index, setIndex] = React.useState(0);
   // const [id, setId] = useState('');
   const [data, setData] = useState('');
+  const [formData, setFormData] = useState({
+    usergender: "",
+    email: "",
+    username: "",
+    mobile_number: "",
+    introduction: "",
+    images: [],
+    genderPronouns: "",
+    matches: [],
+    age: "",
+    art_and_culture: [],
+    selectedFooding: "",
+    dob: "",
+    selecteddrink: "",
+    selectedsmoking: "",
+    general_habbits: "",
+    height: "",
+    selectedhobbies: [],
+    selectedsports: [],
+    interests_in: "",
+    location: "",
+    looking_for: "",
+    max_preferred_age: "",
+    min_preferred_age: "",
+    movies: "",
+    occupation: "",
+    outdoor_activities: [],
+    pets: "",
+    preferred_gender: "",
+    preferred_location: "",
+    selectedReligion: "",
+    travel: "",
+    selectedZodiac: "",
+  });
+
+  useEffect(()=>{
+    setFormData({
+      username: userdata?.name[0],
+      email: userdata?.email[0],
+      age: userdata?.age[0],
+      art_and_culture: userdata?.art_and_culture,
+      selectedFooding: userdata?.diet[0],
+      dob: userdata?.dob,
+      selectedsports: userdata?.sports,
+      selecteddrink: userdata?.drinking[0],
+      selectedsmoking: userdata?.smoking[0],
+      usergender: userdata?.gender[0],
+      genderPronouns: userdata?.gender_pronouns[0],
+      habbits: userdata?.general_habits,
+      height: userdata?.height[0],
+      selectedhobbies: userdata?.hobbies,
+      images: userdata?.images,
+      interests_in: userdata?.interests_in[0],
+      introduction: userdata?.introduction[0],
+      location: userdata?.location[0],
+      looking_for: userdata?.looking_for[0],
+      max_preferred_age: userdata?.max_preferred_age[0],
+      min_preferred_age: userdata?.min_preferred_age[0],
+      selected_movies: userdata?.movies,
+      occupation: userdata?.occupation[0],
+      outdoor_activities: userdata?.outdoor_activities,
+      pets: userdata.pets[0],
+      preferred_gender: userdata?.preferred_gender[0],
+      preferred_location: userdata?.preferred_location[0],
+      selectedReligion: userdata?.religion[0],
+      travels: userdata?.travel,
+      selectedZodiac: userdata.zodiac[0],
+      mobile_number: userdata.mobile_number[0],
+    });
+  },[userdata])
 
   const { backendActor } = useAuth();
 
@@ -194,11 +279,10 @@ const EditProfile = () => {
   };
 
   // const [index, setIndex] = useState(0);
-  const [formData, setFormData] = useState({});
 
-  const updateFormData = (newData) => {
-    setFormData(prev => ({ ...prev, ...newData }));
-  };
+  // const updateFormData = (newData) => {
+  //   setFormData(prev => ({ ...prev, ...newData }));
+  // };
   return (
     <>
       <div>
@@ -222,38 +306,45 @@ const EditProfile = () => {
                     </div>
                     <style jsx>{`@media (max-width: 768px) {#svg-path {fill: black;}}`}</style>
                   </h2>
-
                   <div className="border-t-2 border-solid md:border-black border-white w-[90% ] mt-4 mb-4 md:ml-6"></div>
+                  <form onSubmit={handleSubmit(onSubmit)}>
+                    {index === 0 &&
+                      <Form1  formData={formData} setFormData={setFormData} />
+                    }
+                    {index === 1 &&
+                      <Form2  formData={formData} setFormData={setFormData} />
+                    }
+                    {index === 2 &&
+                      <Form3  formData={formData} setFormData={setFormData} />
+                    }
+                    {/* {index === 1 &&
+                      <Form2 index={index} setIndex={setIndex} updateFormData={updateFormData} AllformData={formData} />
+                    } */}
+                    {/* {index === 2 &&
+                      <Form3 index={index} setIndex={setIndex} updateFormData={updateFormData} AllformData={formData} 
+                      prevalue={PreValue} />
+                    } */}
+                    {/* {index === 3 &&
+                      <Form4 index={index} setIndex={setIndex} updateFormData={updateFormData} AllformData={formData} />
+                    }
+                    {index === 4 &&
+                      <Form5 index={index} setIndex={setIndex} updateFormData={updateFormData} AllformData={formData} />
+                    }
+                    {index === 5 &&
+                      <Form6 AllformData={formData} updateFormData={updateFormData} />
+                    } */}
 
-                  {index === 0 &&
-                    <Form1 index={index} setIndex={setIndex} updateFormData={data} AllformData={formData} />
-                  }
-                  {index === 1 &&
-                    <Form2 index={index} setIndex={setIndex} updateFormData={updateFormData} AllformData={formData} />
-                  }
-                  {index === 2 &&
-                    <Form3 index={index} setIndex={setIndex} updateFormData={updateFormData} AllformData={formData} prevalue={PreValue} />
-                  }
-                  {index === 3 &&
-                    <Form4 index={index} setIndex={setIndex} updateFormData={updateFormData} AllformData={formData} />
-                  }
-                  {index === 4 &&
-                    <Form5 index={index} setIndex={setIndex} updateFormData={updateFormData} AllformData={formData} />
-                  }
-                  {index === 5 &&
-                    <Form6 AllformData={formData} updateFormData={updateFormData} />
-                  }
-
-                  <div className="flex justify-between mt-6">
-                    <button type="button" className="bg-yellow-500 font-semibold py-2 px-6 rounded-full hover:bg-yellow-600 text-white md:text-black md:hover:text-black" onClick={handleBack} disabled={index === 0}>Back</button>
-                    {index === 5 ? (
-                      <>
-                        <button type="submit" className="bg-yellow-500 font-semibold py-2 px-6 rounded-full hover:bg-yellow-600 text-white md:text-black md:hover:text-black">Save</button>
-                      </>
-                    ) : (
-                      <button type="button" className="bg-yellow-500 font-semibold py-2 px-6 rounded-full hover:bg-yellow-600 text-white md:text-black md:hover:text-black" onClick={handleNext}>Next</button>
-                    )}
-                  </div>
+                    <div className="flex justify-between mt-6">
+                      <button type="button" className="bg-yellow-500 font-semibold py-2 px-6 rounded-full hover:bg-yellow-600 text-white md:text-black md:hover:text-black" onClick={handleBack} disabled={index === 0}>Back</button>
+                      {index === 5 ? (
+                        <>
+                          <button type="submit" className="bg-yellow-500 font-semibold py-2 px-6 rounded-full hover:bg-yellow-600 text-white md:text-black md:hover:text-black">Save</button>
+                        </>
+                      ) : (
+                        <button type="button" className="bg-yellow-500 font-semibold py-2 px-6 rounded-full hover:bg-yellow-600 text-white md:text-black md:hover:text-black" onClick={handleNext}>Next</button>
+                      )}
+                    </div>
+                  </form>
                 </div>
                 <div className="md:w-2/5  max-h-[90vh] overflow-y-auto">
                   <div className="border-gray-300 font-viga bg-white  ">
