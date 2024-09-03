@@ -5,7 +5,6 @@ import compressImage from '../ImageCompressFolder/CompressImage';
 const Form6 = ({ imageFields, setImageFields, imageError }) => {
     const { register, setValue, formState: { errors }, unregister, trigger, watch } = useFormContext();
     // const { register, setValue, formState: { errors }, unregister, trigger, setError } = useFormContext();
-    // const [imageFields, setImageFields] = useState([{},{},{},{},{}]);
     // const [err, setErr] = useState(false);
     const [popUp, setPopUp] = useState(false)
     const [currentIndex, setCurrentIndex] = useState(null);
@@ -104,11 +103,21 @@ const Form6 = ({ imageFields, setImageFields, imageError }) => {
     //     }
     // };
 
-    const handleRemoveField = (index) => {
-        const newImageFields = imageFields.filter((_, i) => i !== index);
+    // const handleRemoveField = (index) => {
+    //     const newImageFields = imageFields.filter((_, i) => i !== index);
+    //     setImageFields(newImageFields);
+    //     unregister(`firstImage${index}`);
+    // };
+
+    // function to clear the image from the array.
+    const handleClearImage = (index) => {
+        console.log("choose image = ",imageFields[index])
+        const newImageFields = [...imageFields];
+        newImageFields[index] = []; // or null, depending on your preference
         setImageFields(newImageFields);
         unregister(`firstImage${index}`);
     };
+    
 
     const renderImagePreviews = () => {
         // return imageFields.map((field, index) => (
@@ -135,7 +144,7 @@ const Form6 = ({ imageFields, setImageFields, imageError }) => {
                             <img src={URL.createObjectURL(image)} alt={`Preview ${index + 1}`} className=" w-full object-fill rounded-2xl" />
                             <button
                                 type="button"
-                                onClick={() => handleRemoveField(index)}
+                                onClick={() => handleClearImage(index)}
                                 className="absolute top-1 right-1 bg-red-900 text-white p-1.5 rounded-md opacity-75 group-hover:opacity-100 text-xs"
                             >
                                 X

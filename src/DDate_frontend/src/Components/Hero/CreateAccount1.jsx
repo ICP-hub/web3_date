@@ -115,7 +115,6 @@ function getMinDate() {
 
 const CreateAccount1 = () => {
   // const { backendActor } = useAuth();
-  // const [imageFields, setImageFields] = useState([{}, {}, {}, {}, {}]);
   const [imageFields, setImageFields] = useState([[], [], [], [], []]);
   const [imageError, setImageError] = useState(false)
   const [btnDisable, setBtnDisable] = useState(false)
@@ -267,71 +266,71 @@ const CreateAccount1 = () => {
 
 
   const onSubmit = async (data) => {
-    setBtnDisable(true)
-    await handleImageToFirebase();
-    console.log("Final Form Data", data);
-    if (backendActor) {
-      // const imagesBase64 = [
-      //   data?.firstImage0,
-      //   data?.firstImage1,
-      //   data?.firstImage2,
-      //   data?.firstImage3,
-      //   data?.firstImage4,
-      // ];
+    if (handleImageError()) {
+      setBtnDisable(true)
+      await handleImageToFirebase();
+      console.log("Final Form Data", data);
+      if (backendActor) {
+        // const imagesBase64 = [
+        //   data?.firstImage0,
+        //   data?.firstImage1,
+        //   data?.firstImage2,
+        //   data?.firstImage3,
+        //   data?.firstImage4,
+        // ];
 
-      // const imageArray = await Promise.all(imagesBase64.map(async (image) => {
-      //   const base64String = btoa(String.fromCharCode(...image));
-      //   return base64String;
-      // }));
+        // const imageArray = await Promise.all(imagesBase64.map(async (image) => {
+        //   const base64String = btoa(String.fromCharCode(...image));
+        //   return base64String;
+        // }));
 
-      const DdateData = {
-        email: [data?.email],
-        age: [
-          Number((data?.selectedPreferAge).slice(0, 2)) +
-          Math.floor(Math.random() * 10 + 1),
-        ],
-        gender: [data?.usergender],
-        dob: [String(data?.dob)],
-        mobile_number: [data?.mobile],
-        gender_pronouns: [data?.genderPronouns],
-        religion: [data?.selectedReligion],
-        selected_life_pathNumber: [data?.selectedLifePathNumber],
-        zodiac: [data?.selectedZodiac],
-        smoking: [data?.selectedsmoking],
-        drinking: [data?.selecteddrink],
-        hobbies: [data?.selectedhobbies],
-        sports: [data?.selectedsports],
-        art_and_culture: [data?.selectedArt],
-        general_habits: [data?.selectedHabits],
-        movies: [data?.selectedMovies],
-        interests_in: [data?.selectedInterests],
-        location: [data?.selectedLocation],
-        preferred_location: [data?.selectedPreferLocation],
-        introduction: [data?.selectedIntro],
-        occupation: [data?.selectedWhatYouDo],
-        height: [],
-        diet: [data?.selectedFooding],
-        travel: [data?.selectedTravel],
-        name: [data?.username],
-        pets: [data?.selectedPets],
-        outdoor_activities: [data?.selectedActivities],
-        min_preferred_age: [Number((data?.selectedPreferAge).slice(0, 2))],
-        preferred_gender: [data?.usergender],
-        looking_for: [data?.selectedLookingFor],
-        max_preferred_age: [Number((data?.selectedPreferAge).slice(3, 5))],
-        // images: imageArray ? [imageArray] : [],
-        selectedCity: [data?.selectedCity || ""],
-        selectedState: [data?.selectedState || ""],
-        selectedCountry: [data?.selectedCountry || ""],
-        preferredCity: [data?.preferredCity || ""],
-        preferredState: [data?.preferredState || ""],
-        preferredCountry: [data?.preferredCountry || ""],
-        images: [imageArray || []],
-        zodiac: [data?.selectedZodiac],
-      };
-      console.log("Ddatedata ", imageArray);
+        const DdateData = {
+          email: [data?.email],
+          age: [
+            Number((data?.selectedPreferAge).slice(0, 2)) +
+            Math.floor(Math.random() * 10 + 1),
+          ],
+          gender: [data?.usergender],
+          dob: [String(data?.dob)],
+          mobile_number: [data?.mobile],
+          gender_pronouns: [data?.genderPronouns],
+          religion: [data?.selectedReligion],
+          selected_life_pathNumber: [data?.selectedLifePathNumber],
+          zodiac: [data?.selectedZodiac],
+          smoking: [data?.selectedsmoking],
+          drinking: [data?.selecteddrink],
+          hobbies: [data?.selectedhobbies],
+          sports: [data?.selectedsports],
+          art_and_culture: [data?.selectedArt],
+          general_habits: [data?.selectedHabits],
+          movies: [data?.selectedMovies],
+          interests_in: [data?.selectedInterests],
+          location: [data?.selectedLocation],
+          preferred_location: [data?.selectedPreferLocation],
+          introduction: [data?.selectedIntro],
+          occupation: [data?.selectedWhatYouDo],
+          height: [],
+          diet: [data?.selectedFooding],
+          travel: [data?.selectedTravel],
+          name: [data?.username],
+          pets: [data?.selectedPets],
+          outdoor_activities: [data?.selectedActivities],
+          min_preferred_age: [Number((data?.selectedPreferAge).slice(0, 2))],
+          preferred_gender: [data?.usergender],
+          looking_for: [data?.selectedLookingFor],
+          max_preferred_age: [Number((data?.selectedPreferAge).slice(3, 5))],
+          // images: imageArray ? [imageArray] : [],
+          selectedCity: [data?.selectedCity || ""],
+          selectedState: [data?.selectedState || ""],
+          selectedCountry: [data?.selectedCountry || ""],
+          preferredCity: [data?.preferredCity || ""],
+          preferredState: [data?.preferredState || ""],
+          preferredCountry: [data?.preferredCountry || ""],
+          images: [imageArray || []],
+          zodiac: [data?.selectedZodiac],
+        };
+        console.log("Ddatedata ", DdateData);
 
-      if (handleSaveSubmit()) {
 
         try {
           await backendActor.create_an_account(DdateData).then(async (result) => {
@@ -340,8 +339,8 @@ const CreateAccount1 = () => {
               console.log("Api is generated", API);
               const trimedId = API.split(":")[1].trim();
               setId(trimedId);
-              // setBtnDisable(false)
               await registerUser(trimedId)
+              setBtnDisable(false)
               navigate("/Swipe", { state: trimedId });
             } else {
               setId("");
@@ -350,7 +349,6 @@ const CreateAccount1 = () => {
         } catch (error) {
           console.error("Error sending data to the backend:", error);
         }
-
       }
     }
   };
@@ -383,21 +381,16 @@ const CreateAccount1 = () => {
 
   //   // Only update the state if the value is different to prevent unnecessary re-renders
   //   if (imageError !== !hasValidImages) {
+  //     console.log("hasvalid images = ", !hasValidImages)
   //     setImageError(!hasValidImages);
   //   }
   // }
 
-  function handleSaveSubmit() {
-    if (imageArray.length == 0) {
-      setImageError(true)
-      setBtnDisable(false)
-      return false
-    }
-    else {
-      setImageError(false)
-      setBtnDisable(true)
-      return true
-    }
+  function handleImageError() {
+    // logic will set imageError to true if all image fields are empty, and false if at least one image is present.
+    const hasImage = imageFields.some((image) => image.length !== 0);
+    setImageError(!hasImage)
+    return hasImage;
   }
 
   function handleImageToFirebase() {
