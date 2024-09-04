@@ -1,14 +1,16 @@
 import React, { useEffect, useState } from "react";
 import { SlArrowUp, SlArrowDown } from "react-icons/sl";
 import { useFormContext } from "react-hook-form";
+import { constrainedMemory } from "process";
 
-const Form3 = ({formData, setFormData}) => {
+const Form3 = ({ formData, setFormData }) => {
   const {
     register,
     formState: { errors },
     watch,
     setValue,
   } = useFormContext();
+  console.log("form data = ", formData.selectedhobbies)
 
   const [showHobbies, setShowHobbies] = useState(false);
   const [showSports, setShowSports] = useState(false);
@@ -18,31 +20,68 @@ const Form3 = ({formData, setFormData}) => {
   const selectedhobbies = watch("selectedhobbies", []);
   const selectedsports = watch("selectedsports", []);
 
-  useEffect(() => {
-    setValue("selectedhobbies", selectedhobbies);
-    setValue("selectedsports", selectedsports);
-  }, []);
+  // useEffect(() => {
+  //   setValue("selectedhobbies", selectedhobbies);
+  //   setValue("selectedsports", selectedsports);
+  // }, []);
 
-  const handleCheckboxChange = (value, type) => {
-    let updatedList;
-    if (type === "hobbies") {
-      updatedList = selectedhobbies.includes(value)
-        ? selectedhobbies.filter((hobby) => hobby !== value)
-        : [...selectedhobbies, value].slice(0, 2); // Ensure no more than 2 are selected
-      setValue("selectedhobbies", updatedList);
-    } else if (type === "sports") {
-      updatedList = selectedsports.includes(value)
-        ? selectedsports.filter((sport) => sport !== value)
-        : [...selectedsports, value].slice(0, 2); // Ensure no more than 2 are selected
-      setValue("selectedsports", updatedList);
-    }
-  };
+  // const handleCheckboxChange = (value, type) => {
+  //   let updatedList;
+  //   if (type === "hobbies") {
+  //     updatedList = selectedhobbies.includes(value)
+  //       ? selectedhobbies.filter((hobby) => hobby !== value)
+  //       : [...selectedhobbies, value].slice(0, 2); // Ensure no more than 2 are selected
+  //     setValue("selectedhobbies", updatedList);
+  //   } else if (type === "sports") {
+  //     updatedList = selectedsports.includes(value)
+  //       ? selectedsports.filter((sport) => sport !== value)
+  //       : [...selectedsports, value].slice(0, 2); // Ensure no more than 2 are selected
+  //     setValue("selectedsports", updatedList);
+  //   }
+  // };
+
+  //   function handleUpdateInput(e) {
+  //     console.log(e.target.name + " and " + e.target.value)
+
+  //     const section = e.target.name
+  //     const tempArr = [formData[section]]
+  //     console.log("tempArr : ", tempArr)
+
+  //     if(e.target.name === "selectedhobbies"){
+  //       tempArr.push(e.target.value)
+  //         console.log("final : ", tempArr)
+  //         setFormData({ ...formData, [e.target.name]: tempArr });
+
+  //     }
+  // }
+
 
   function handleUpdateInput(e) {
+    console.log(e.target.name + " and " + e.target.value);
+
+    const section = e.target.name;
+    let tempArr = [...formData[section]] || []; // Initialize tempArr as a copy of the current value or an empty array
+
+    // Avoid duplicates if that's a concern
+    if (!tempArr[0].includes(e.target.value)) {
+      tempArr[0].push(e.target.value);
+    }
+    else {
+      const index = tempArr[0].indexOf(e.target.value);
+      tempArr[0].splice(index, 1);
+    }
+
+    // Update formData regardless of the condition
+    setFormData({ ...formData, [section]: tempArr });
+  }
+
+  
+  function handleUpdateUserInput(e) {
     console.log(e.target.name + " and " + e.target.value)
-    console.log("formdata =", formData.gender)
     setFormData({ ...formData, [e.target.name]: e.target.value });
 }
+
+
 
   return (
     <div className="w-full rounded-lg p-6 shadow-md md:bg-transparent md:shadow-none ">
@@ -66,7 +105,7 @@ const Form3 = ({formData, setFormData}) => {
                 {...register("selectedsmoking", {
                   required: "Smoking preference is required",
                 })}
-                onChange={handleUpdateInput}
+                onChange={handleUpdateUserInput}
                 className="hidden"
               />
               {smoking}
@@ -100,7 +139,7 @@ const Form3 = ({formData, setFormData}) => {
                   {...register("selecteddrink", {
                     required: "Drinking preference is required",
                   })}
-                  onChange={handleUpdateInput}
+                  onChange={handleUpdateUserInput}
                   className="hidden"
                 />
                 {drink}
@@ -142,7 +181,7 @@ const Form3 = ({formData, setFormData}) => {
             .map((hobby) => (
               <label
                 key={hobby}
-                className={`inline-block px-3 py-2 rounded-full text-sm focus:outline-none transition duration-300 ${formData.selectedhobbies?.includes(hobby)
+                className={`inline-block px-3 py-2 rounded-full text-sm focus:outline-none transition duration-300 ${formData.selectedhobbies[0]?.includes(hobby)
                   ? "bg-yellow-500 text-black"
                   : "bg-transparent hover:bg-yellow-500 hover:text-black text-black border border-black"
                   }`}
@@ -155,7 +194,7 @@ const Form3 = ({formData, setFormData}) => {
                       value.length <= 2 || "Select up to 2 hobbies only",
                   })}
                   onChange={handleUpdateInput}
-                  checked={selectedhobbies?.includes(hobby)}
+                  checked={formData.selectedhobbies[0]?.includes(hobby)}
                   className="hidden"
                 />
                 {hobby}
@@ -223,7 +262,7 @@ const Form3 = ({formData, setFormData}) => {
             .map((sport) => (
               <label
                 key={sport}
-                className={`inline-block px-3 py-2 rounded-full text-sm focus:outline-none transition duration-300 ${formData.selectedsports?.includes(sport)
+                className={`inline-block px-3 py-2 rounded-full text-sm focus:outline-none transition duration-300 ${formData.selectedsports[0]?.includes(sport)
                   ? "bg-yellow-500 text-black"
                   : "bg-transparent hover:bg-yellow-500 hover:text-black text-black border border-black"
                   }`}

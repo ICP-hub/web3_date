@@ -102,6 +102,7 @@ const EditProfile = () => {
 
   const location = useLocation();
   const userdata = location.state;
+  console.log("userdata = ",userdata)
   // console.log(typeof userdata.dob[0])
 
   // const myDOB = new Date(userdata.dob[0]);
@@ -316,6 +317,9 @@ const EditProfile = () => {
                     }
                     {index === 2 &&
                       <Form3  formData={formData} setFormData={setFormData} />
+                    }
+                    {index === 3 &&
+                      <Form5  formData={formData} setFormData={setFormData} />
                     }
                     {/* {index === 1 &&
                       <Form2 index={index} setIndex={setIndex} updateFormData={updateFormData} AllformData={formData} />

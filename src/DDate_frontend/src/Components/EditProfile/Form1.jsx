@@ -208,15 +208,16 @@ const Form1 = ({ index, setIndex, AllformData, formData, setFormData }) => {
             {errors.dob && <p className="text-red-500">{errors.dob.message}</p>}
 
             <label htmlFor="introduction" className="block font-semibold pt-2 text-lg">
-                My Introduction
+                Bio
             </label>
             <textarea
                 id="introduction"
                 value={formData.introduction}
+                rows={5}
                 {...register('introduction')}
                 onChange={handleUpdateInput}
                 placeholder="Let us know something about you"
-                className="w-full px-4 py-1.5 rounded-lg border-2 border-gray-300 bg-transparent"
+                className="bg-gray-100 w-full px-4 py-2 rounded-lg  border-none text-black"
             />
             {errors.introduction && <p className="text-red-500">{errors.introduction.message}</p>}
             {/* </form> */}

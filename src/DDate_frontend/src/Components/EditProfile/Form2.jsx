@@ -9,6 +9,7 @@ const Form2 = ({ setIndex, formData, setFormData }) => {
     watch,
     setValue,
   } = useFormContext();
+  console.log("formdata data = ",formData.selectedZodiac)
 
   console.log(errors)
   const selectedGenderPronouns = watch("genderPronouns");
@@ -47,9 +48,9 @@ const Form2 = ({ setIndex, formData, setFormData }) => {
               <input
                 type="radio"
                 value={genPro}
-                {...register("genderPronouns", {
-                  required: "Gender pronoun is required",
-                })}
+                // {...register("genderPronouns", {
+                //   required: "Gender pronoun is required",
+                // })}
                 onChange={handleUpdateInput}
                 className="hidden"
               />
@@ -80,9 +81,9 @@ const Form2 = ({ setIndex, formData, setFormData }) => {
                 <input
                   type="radio"
                   value={lifePathNumber}
-                  {...register("selectedLifePathNumber", {
-                    required: "Life-path number is required",
-                  })}
+                  // {...register("selectedLifePathNumber", {
+                  //   required: "Life-path number is required",
+                  // })}
                   className="hidden"
                 />
                 {lifePathNumber}
@@ -115,7 +116,7 @@ const Form2 = ({ setIndex, formData, setFormData }) => {
             <label
               key={religion}
               className={`inline-block px-3 py-2 rounded-full text-sm focus:outline-none transition duration-300
-                            ${formData.selectedReligionValue === religion
+                            ${formData.selectedReligion === religion
                   ? "bg-yellow-500 text-black"
                   : "bg-transparent hover:bg-yellow-500 hover:text-black  text-black border  border-black"
                 }`}
@@ -123,9 +124,9 @@ const Form2 = ({ setIndex, formData, setFormData }) => {
               <input
                 type="radio"
                 value={religion}
-                {...register("selectedReligion", {
-                  required: "Religion is required",
-                })}
+                // {...register("selectedReligion", {
+                //   required: "Religion is required",
+                // })}
                 onChange={handleUpdateInput}
                 className="hidden"
               />
@@ -160,7 +161,7 @@ const Form2 = ({ setIndex, formData, setFormData }) => {
             <label
               key={zodiac}
               className={`inline-block px-3 py-2 rounded-full text-sm focus:outline-none transition duration-300
-                            ${zodiac === selectedZodiacSign
+                            ${zodiac === formData.selectedZodiac
                   ? "bg-yellow-500 text-black"
                   : "bg-transparent hover:bg-yellow-500 hover:text-black  text-black border  border-black"
                 }`}
@@ -168,9 +169,9 @@ const Form2 = ({ setIndex, formData, setFormData }) => {
               <input
                 type="radio"
                 value={zodiac}
-                {...register("selectedZodiac", {
-                  required: "Zodiac sign is required",
-                })}
+                // {...register("selectedZodiac", {
+                //   required: "Zodiac sign is required",
+                // })}
                 onChange={handleUpdateInput}
                 className="hidden"
               />
@@ -209,9 +210,9 @@ const Form2 = ({ setIndex, formData, setFormData }) => {
               <input
                 type="radio"
                 value={fooding}
-                {...register("selectedFooding", {
-                  required: "Fooding preference is required",
-                })}
+                // {...register("selectedFooding", {
+                //   required: "Fooding preference is required",
+                // })}
                 onChange={handleUpdateInput}
                 className="hidden"
               />
@@ -221,7 +222,7 @@ const Form2 = ({ setIndex, formData, setFormData }) => {
         </div>
         {errors.selectedFooding && <p className="text-red-500">{errors.selectedFooding.message}</p>}
       </fieldset>
-      <fieldset className="mb-4">
+      {/* <fieldset className="mb-4">
         <legend className="block text-lg font-semibold   text-black">
           What You Do {errors.selectedWhatYouDo && <span className="text-red-500">*</span>}
         </legend>
@@ -251,8 +252,8 @@ const Form2 = ({ setIndex, formData, setFormData }) => {
           )}
         </div>
         {errors.selectedWhatYouDo && <p className="text-red-500">{errors.selectedWhatYouDo.message}</p>}
-      </fieldset>
-      <fieldset className="mb-4">
+      </fieldset> */}
+      {/* <fieldset className="mb-4">
         <legend className="block text-lg font-semibold   text-black">
           What are you looking for? {errors.selectedLookingFor && <span className="text-red-500">*</span>}
         </legend>
@@ -286,7 +287,7 @@ const Form2 = ({ setIndex, formData, setFormData }) => {
           ))}
         </div>
         {errors.selectedLookingFor && <p className="text-red-500">{errors.selectedLookingFor.message}</p>}
-      </fieldset>
+      </fieldset> */}
     </div>
   );
 };
