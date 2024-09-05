@@ -48,9 +48,9 @@ const Form2 = ({ setIndex, formData, setFormData }) => {
               <input
                 type="radio"
                 value={genPro}
-                // {...register("genderPronouns", {
-                //   required: "Gender pronoun is required",
-                // })}
+                {...register("genderPronouns", {
+                  required: "Gender pronoun is required",
+                })}
                 onChange={handleUpdateInput}
                 className="hidden"
               />
@@ -81,9 +81,9 @@ const Form2 = ({ setIndex, formData, setFormData }) => {
                 <input
                   type="radio"
                   value={lifePathNumber}
-                  // {...register("selectedLifePathNumber", {
-                  //   required: "Life-path number is required",
-                  // })}
+                  {...register("selectedLifePathNumber", {
+                    required: "Life-path number is required",
+                  })}
                   className="hidden"
                 />
                 {lifePathNumber}
@@ -124,9 +124,9 @@ const Form2 = ({ setIndex, formData, setFormData }) => {
               <input
                 type="radio"
                 value={religion}
-                // {...register("selectedReligion", {
-                //   required: "Religion is required",
-                // })}
+                {...register("selectedReligion", {
+                  required: "Religion is required",
+                })}
                 onChange={handleUpdateInput}
                 className="hidden"
               />
@@ -169,9 +169,9 @@ const Form2 = ({ setIndex, formData, setFormData }) => {
               <input
                 type="radio"
                 value={zodiac}
-                // {...register("selectedZodiac", {
-                //   required: "Zodiac sign is required",
-                // })}
+                {...register("selectedZodiac", {
+                  required: "Zodiac sign is required",
+                })}
                 onChange={handleUpdateInput}
                 className="hidden"
               />
@@ -210,9 +210,9 @@ const Form2 = ({ setIndex, formData, setFormData }) => {
               <input
                 type="radio"
                 value={fooding}
-                // {...register("selectedFooding", {
-                //   required: "Fooding preference is required",
-                // })}
+                {...register("selectedFooding", {
+                  required: "Fooding preference is required",
+                })}
                 onChange={handleUpdateInput}
                 className="hidden"
               />

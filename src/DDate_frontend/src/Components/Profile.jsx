@@ -22,32 +22,41 @@ const Profile = ({ userId }) => {
     email: "",
     name: "",
     mobile_number: "",
-    introduction: "",
-    images: [],
-    gender_pronouns: "",
-    matches: [],
-    age: "",
-    art_and_culture: [],
-    diet: "",
     dob: "",
+    gender_pronouns: "",
+    life_path_number: "",
+    religion: "",
+    zodiac: "",
+    diet: "",
+    smoking: "",
     drinking: "",
-    general_habbits: "",
-    height: "",
     hobbies: [],
     interests_in: "",
-    location: "",
-    looking_for: "",
     max_preferred_age: "",
     min_preferred_age: "",
-    movies: "",
-    occupation: "",
-    outdoor_activities: [],
-    pets: "",
-    preferred_gender: "",
-    preferred_location: "",
-    religion: "",
-    travel: "",
-    zodiac: "",
+    location_city: "",
+    location_state: "",
+    location_country: "",
+    preferred_city: "",
+    preferred_state: "",
+    preferred_country: "",
+    introduction: "",
+    images: [],
+    matches: [],
+    age: "",
+    // art_and_culture: [],
+    // general_habbits: "",
+    // height: "",
+    // location: "",
+    // looking_for: "",
+    // movies: "",
+    // occupation: "",
+    // outdoor_activities: [],
+    // pets: "",
+    // preferred_gender: "",
+    // preferred_location: "",
+    // travel: "",
+
   });
 
   const [principal, setPrincipal] = useState(null);
@@ -91,7 +100,7 @@ const Profile = ({ userId }) => {
         await backendActor.get_an_account(id).then((userProfileData) => {
           if (userProfileData) {
             const myData = userProfileData?.Ok?.params;
-            // console.log("My Data Abhishek ka hai ", myData);
+            console.log("My Data Abhishek ka hai ", myData);
             const dateObj = new Date(myData?.dob);
 
             const day = String(dateObj.getDate()).padStart(2, "0");
@@ -104,37 +113,45 @@ const Profile = ({ userId }) => {
             if (myData) {
               SetResult(myData);
               setFormData({
-                name: myData?.name[0],
-                email: myData?.email[0],
-                age: myData?.age[0],
-                art_and_culture: myData?.art_and_culture,
-                diet: myData?.diet[0],
-                dob: formattedDateStr,
-                sports: myData?.sports,
-                drinking: myData?.drinking[0],
-                smoking: myData?.smoking[0],
                 gender: myData?.gender[0],
+                email: myData?.email[0],
+                name: myData?.name[0],
+                mobile_number: myData.mobile_number[0],
+                dob: formattedDateStr,
                 gender_pronouns: myData?.gender[0],
-                habbits: myData?.general_habits,
-                height: myData?.height[0],
-                selected_hobbies: myData?.hobbies,
-                images: myData?.images,
+                life_path_number: myData?.life_path_number[0],
+                religion: myData?.religion[0],
+                zodiac: myData.zodiac[0],
+                diet: myData?.diet[0],
+                smoking: myData?.smoking[0],
+                drinking: myData?.drinking[0],
+                selected_hobbies: myData?.hobbies[0],
                 interests_in: myData?.interests_in[0],
-                introduction: myData?.introduction[0],
-                location: myData?.location[0],
-                looking_for: myData?.looking_for[0],
                 max_preferred_age: myData?.max_preferred_age[0],
                 min_preferred_age: myData?.min_preferred_age[0],
-                selected_movies: myData?.movies,
-                occupation: myData?.occupation[0],
-                outdoor_activities: myData?.outdoor_activities,
-                pets: myData.pets[0],
-                preferred_gender: myData?.preferred_gender[0],
-                preferred_location: myData?.preferred_location[0],
-                religion: myData?.religion[0],
-                travels: myData?.travel,
-                zodiac: myData.zodiac[0],
-                mobile_number: myData.mobile_number[0],
+                location_city: myData?.location_city[0],
+                location_state: myData?.location_state[0],
+                location_country: myData?.location_country[0],
+                preferred_city: myData?.preferred_city[0],
+                preferred_state: myData?.preferred_state[0],
+                preferred_country: myData?.preferred_country[0],
+                introduction: myData?.introduction[0],
+                images: myData?.images[0],
+                matches: myData?.matches[0],
+                age: myData?.age[0],
+                // sports: myData?.sports,
+                // habbits: myData?.general_habits,
+                // travels: myData?.travel,
+                // height: myData?.height[0],
+                // art_and_culture: myData?.art_and_culture,
+                // selected_movies: myData?.movies,
+                // occupation: myData?.occupation[0],
+                // outdoor_activities: myData?.outdoor_activities,
+                // pets: myData.pets[0],
+                // preferred_gender: myData?.preferred_gender[0],
+                // location: myData?.location[0],
+                // looking_for: myData?.looking_for[0],
+                // preferred_location: myData?.preferred_location[0],
               });
             } else {
             }
@@ -375,19 +392,19 @@ const Profile = ({ userId }) => {
                       >
                         {formData?.religion ?? ""}
                       </p>
-                      <div className="flex items-center">Height</div>
+                      {/* <div className="flex items-center">Height</div>
                       <p
                         className="col-span-2 w-full px-12
                        py-1.5"
                       >
                         none
-                      </p>
+                      </p> */}
                       <div className="flex items-center">Location</div>
                       <p
                         className="col-span-2 w-full px-12
                        py-1.5"
                       >
-                        {formData?.location ?? ""}
+                        {formData?.location_city + "," + formData?.location_state + "," + formData?.location_country}
                       </p>
                       <div className="flex items-center">Smoking</div>
                       <p
@@ -403,27 +420,26 @@ const Profile = ({ userId }) => {
                       >
                         {formData?.drinking ?? ""}
                       </p>
-                      <div className="flex items-center">Occupation</div>
+                      {/* <div className="flex items-center">Occupation</div>
                       <p
                         className="col-span-2 w-full px-12
                        py-1.5"
                       >
                         {formData?.occupation ?? ""}
-                      </p>
+                      </p> */}
                       <div className="flex items-center">Hobbies</div>
-                      <p
-                        className="col-span-2 w-full px-12
-                       flex flex-wrap gap-6 py-1.5"
-                      >
+                      <p className="col-span-2 w-full px-12 flex flex-wrap gap-6 py-1.5">
                         {formData?.selected_hobbies?.map((hobby, index) => (
-                          <div className="" key={index}>
+                          <div key={index}>
                             <p className="rounded-lg py-1.5">
-                              {hobby.join(", ")}
+                              {hobby}{index < formData.selected_hobbies.length - 1 && ', '}
                             </p>
                           </div>
                         ))}
                       </p>
-                      <div className="flex items-center">Sports</div>
+
+
+                      {/* <div className="flex items-center">Sports</div>
                       <p
                         className="col-span-2 w-full px-12
                        flex flex-wrap gap-6 py-1.5"
@@ -435,8 +451,8 @@ const Profile = ({ userId }) => {
                             </p>
                           </div>
                         ))}
-                      </p>
-                      <div className="flex items-center">
+                      </p> */}
+                      {/* <div className="flex items-center">
                         Outdoor Activities
                       </div>
                       <p
@@ -452,8 +468,8 @@ const Profile = ({ userId }) => {
                             </div>
                           )
                         )}
-                      </p>
-                      <div className="flex items-center">Travel</div>
+                      </p> */}
+                      {/* <div className="flex items-center">Travel</div>
                       <p
                         className="col-span-2 w-full px-12
                        flex flex-wrap gap-6 py-1.5"
@@ -478,7 +494,7 @@ const Profile = ({ userId }) => {
                             </p>
                           </div>
                         ))}
-                      </p>
+                      </p> */}
                       <div className="flex items-center">Zodiac Sign</div>
                       <p
                         className="col-span-2 w-full px-12
@@ -493,7 +509,7 @@ const Profile = ({ userId }) => {
                       >
                         {formData?.diet ?? ""}
                       </p>
-                      <div className="flex items-center">General Habits</div>
+                      {/* <div className="flex items-center">General Habits</div>
                       <p
                         className="col-span-2 w-full px-12
                        flex flex-wrap gap-6 py-1.5"
@@ -534,7 +550,7 @@ const Profile = ({ userId }) => {
                        py-1.5"
                       >
                         {formData?.looking_for ?? ""}
-                      </p>
+                      </p> */}
                       <div className="flex items-center">Your interests in</div>
                       <p
                         className="col-span-2 w-full px-12

@@ -64,18 +64,18 @@ const EditProfile = () => {
       selectedReligion: '',
       selectedZodiac: '',
       selectedFooding: '',
-      selectedWhatYouDo: '',
-      selectedLookingFor: '',
+      // selectedWhatYouDo: '',
+      // selectedLookingFor: '',
       selectedsmoking: '',
       selecteddrink: '',
       selectedhobbies: [],
-      selectedsports: [],
-      selectedArt: [],
-      selectedPets: '',
-      selectedHabits: [],
-      selectedActivities: [],
-      selectedMovies: [],
-      selectedTravel: [],
+      // selectedsports: [],
+      // selectedArt: [],
+      // selectedPets: '',
+      // selectedHabits: [],
+      // selectedActivities: [],
+      // selectedMovies: [],
+      // selectedTravel: [],
       selectedInterests: '',
       selectedPreferAge: '',
       selectedCity: '',
@@ -84,14 +84,14 @@ const EditProfile = () => {
       preferredCity: '',
       preferredState: '',
       preferredCountry: '',
-      selectedLocation: '',
-      selectedPreferLocation: '',
       selectedIntro: '',
       images: [],
+      // selectedLocation: '',
+      // selectedPreferLocation: '',
     }
   });
 
-   const {
+  const {
     handleSubmit,
     setValue,
     trigger,
@@ -102,7 +102,7 @@ const EditProfile = () => {
 
   const location = useLocation();
   const userdata = location.state;
-  console.log("userdata = ",userdata)
+  console.log("userdata = ", userdata)
   // console.log(typeof userdata.dob[0])
 
   // const myDOB = new Date(userdata.dob[0]);
@@ -158,41 +158,49 @@ const EditProfile = () => {
     selectedZodiac: "",
   });
 
-  useEffect(()=>{
+  useEffect(() => {
     setFormData({
-      username: userdata?.name[0],
+      gender: userdata?.gender[0],
       email: userdata?.email[0],
-      age: userdata?.age[0],
-      art_and_culture: userdata?.art_and_culture,
-      selectedFooding: userdata?.diet[0],
-      dob: userdata?.dob,
-      selectedsports: userdata?.sports,
-      selecteddrink: userdata?.drinking[0],
-      selectedsmoking: userdata?.smoking[0],
-      usergender: userdata?.gender[0],
-      genderPronouns: userdata?.gender_pronouns[0],
-      habbits: userdata?.general_habits,
-      height: userdata?.height[0],
-      selectedhobbies: userdata?.hobbies,
-      images: userdata?.images,
+      name: userdata?.name[0],
+      mobile_number: userdata.mobile_number[0],
+      dob: userdata?.dob[0],
+      gender_pronouns: userdata?.gender[0],
+      life_path_number: userdata?.life_path_number[0],
+      religion: userdata?.religion[0],
+      zodiac: userdata.zodiac[0],
+      diet: userdata?.diet[0],
+      smoking: userdata?.smoking[0],
+      drinking: userdata?.drinking[0],
+      selected_hobbies: userdata?.hobbies[0],
       interests_in: userdata?.interests_in[0],
-      introduction: userdata?.introduction[0],
-      location: userdata?.location[0],
-      looking_for: userdata?.looking_for[0],
       max_preferred_age: userdata?.max_preferred_age[0],
       min_preferred_age: userdata?.min_preferred_age[0],
-      selected_movies: userdata?.movies,
-      occupation: userdata?.occupation[0],
-      outdoor_activities: userdata?.outdoor_activities,
-      pets: userdata.pets[0],
-      preferred_gender: userdata?.preferred_gender[0],
-      preferred_location: userdata?.preferred_location[0],
-      selectedReligion: userdata?.religion[0],
-      travels: userdata?.travel,
-      selectedZodiac: userdata.zodiac[0],
-      mobile_number: userdata.mobile_number[0],
+      location_city: userdata?.location_city[0],
+      location_state: userdata?.location_state[0],
+      location_country: userdata?.location_country[0],
+      preferred_city: userdata?.preferred_city[0],
+      preferred_state: userdata?.preferred_state[0],
+      preferred_country: userdata?.preferred_country[0],
+      introduction: userdata?.introduction[0],
+      images: userdata?.images[0],
+      matches: userdata?.matches[0],
+      age: userdata?.age[0],
+      // art_and_culture: userdata?.art_and_culture,
+      // selected_movies: userdata?.movies,
+      // occupation: userdata?.occupation[0],
+      // outdoor_activities: userdata?.outdoor_activities,
+      // pets: userdata.pets[0],
+      // preferred_gender: userdata?.preferred_gender[0],
+      // preferred_location: userdata?.preferred_location[0],
+      // travels: userdata?.travel,
+      // habbits: userdata?.general_habits,
+      // height: userdata?.height[0],
+      // location: userdata?.location[0],
+      // looking_for: userdata?.looking_for[0],
+
     });
-  },[userdata])
+  }, [userdata])
 
   const { backendActor } = useAuth();
 
@@ -310,16 +318,16 @@ const EditProfile = () => {
                   <div className="border-t-2 border-solid md:border-black border-white w-[90% ] mt-4 mb-4 md:ml-6"></div>
                   <form onSubmit={handleSubmit(onSubmit)}>
                     {index === 0 &&
-                      <Form1  formData={formData} setFormData={setFormData} />
+                      <Form1 formData={formData} setFormData={setFormData} />
                     }
                     {index === 1 &&
-                      <Form2  formData={formData} setFormData={setFormData} />
+                      <Form2 formData={formData} setFormData={setFormData} />
                     }
                     {index === 2 &&
-                      <Form3  formData={formData} setFormData={setFormData} />
+                      <Form3 formData={formData} setFormData={setFormData} />
                     }
                     {index === 3 &&
-                      <Form5  formData={formData} setFormData={setFormData} />
+                      <Form5 formData={formData} setFormData={setFormData} />
                     }
                     {/* {index === 1 &&
                       <Form2 index={index} setIndex={setIndex} updateFormData={updateFormData} AllformData={formData} />

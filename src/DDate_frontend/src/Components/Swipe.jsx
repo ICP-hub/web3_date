@@ -63,6 +63,7 @@ const Swipe = () => {
   useEffect(() => {
     getAllPages();
   }, [userId, page, size, backendActor]);
+  
   const getAllPages = async () => {
     try {
       setLoading(true);
@@ -72,6 +73,7 @@ const Swipe = () => {
       });
       if (result?.Ok?.profiles) {
         setMyPageData((prevData) => [...prevData, ...result.Ok.profiles]);
+      // console.log("all profilesss : ", [...pageData,...result.Ok.profiles])
       }
       console.log("get_all_accounts: ", result);
       setLoading(true);
@@ -230,7 +232,7 @@ const Swipe = () => {
                       {character.params.name[0]}
                     </h2>
                     <p className="text-lg text-gray-900 font-bold">
-                      {character.params.location[0]}
+                     {character.params.location_city[0] + " " + character.params.location_state[0] }
                     </p>
                     <p className="mt-2 font-bold text-white line-clamp-1 hover:line-clamp-none mb-6">
                       {character.params.introduction[0]}
