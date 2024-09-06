@@ -10,7 +10,6 @@ const Form3 = ({ formData, setFormData }) => {
     watch,
     setValue,
   } = useFormContext();
-  console.log("form data = ", formData.selectedhobbies)
 
   const [showHobbies, setShowHobbies] = useState(false);
   const [showSports, setShowSports] = useState(false);
@@ -19,6 +18,7 @@ const Form3 = ({ formData, setFormData }) => {
   const selecteddrink = watch("selecteddrink");
   const selectedhobbies = watch("selectedhobbies", []);
   const selectedsports = watch("selectedsports", []);
+
 
   // useEffect(() => {
   //   setValue("selectedhobbies", selectedhobbies);
@@ -56,30 +56,30 @@ const Form3 = ({ formData, setFormData }) => {
   // }
 
 
-  function handleUpdateInput(e) {
-    console.log(e.target.name + " and " + e.target.value);
+  // function handleUpdateInput(e) {
+  //   console.log(e.target.name + " and " + e.target.value);
 
-    const section = e.target.name;
-    let tempArr = [...formData[section]] || []; // Initialize tempArr as a copy of the current value or an empty array
+  //   const section = e.target.name;
+  //   let tempArr = [...formData[section]] || []; // Initialize tempArr as a copy of the current value or an empty array
 
-    // Avoid duplicates if that's a concern
-    if (!tempArr[0].includes(e.target.value)) {
-      tempArr[0].push(e.target.value);
-    }
-    else {
-      const index = tempArr[0].indexOf(e.target.value);
-      tempArr[0].splice(index, 1);
-    }
+  //   // Avoid duplicates if that's a concern
+  //   if (!tempArr[0].includes(e.target.value)) {
+  //     tempArr[0].push(e.target.value);
+  //   }
+  //   else {
+  //     const index = tempArr[0].indexOf(e.target.value);
+  //     tempArr[0].splice(index, 1);
+  //   }
 
-    // Update formData regardless of the condition
-    setFormData({ ...formData, [section]: tempArr });
-  }
+  //   // Update formData regardless of the condition
+  //   setFormData({ ...formData, [section]: tempArr });
+  // }
 
   
-  function handleUpdateUserInput(e) {
-    console.log(e.target.name + " and " + e.target.value)
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-}
+//   function handleUpdateUserInput(e) {
+//     console.log(e.target.name + " and " + e.target.value)
+//     setFormData({ ...formData, [e.target.name]: e.target.value });
+// }
 
 
 
@@ -94,7 +94,7 @@ const Form3 = ({ formData, setFormData }) => {
           {["Social smoker", "Smoker", "Vaper", "Non-smoker"].map((smoking) => (
             <label
               key={smoking}
-              className={`inline-block px-3 py-2 rounded-full text-sm focus:outline-none transition duration-300 ${formData.selectedsmoking === smoking
+              className={`inline-block px-3 py-2 rounded-full text-sm focus:outline-none transition duration-300 ${selectedsmoking === smoking
                 ? "bg-yellow-500 text-black"
                 : "bg-transparent hover:bg-yellow-500 hover:text-black md:text-black border border-black"
                 }`}
@@ -105,7 +105,7 @@ const Form3 = ({ formData, setFormData }) => {
                 {...register("selectedsmoking", {
                   required: "Smoking preference is required",
                 })}
-                onChange={handleUpdateUserInput}
+                // onChange={handleUpdateUserInput}
                 className="hidden"
               />
               {smoking}
@@ -128,7 +128,7 @@ const Form3 = ({ formData, setFormData }) => {
               <label
                 key={drink}
                 className={`inline-block px-3 py-2 rounded-full text-sm focus:outline-none transition duration-300 ${errors.selecteddrink && "border-red-500"
-                  } ${formData.selecteddrink === drink
+                  } ${selecteddrink === drink
                     ? "bg-yellow-500 text-black"
                     : "bg-transparent hover:bg-yellow-500 hover:text-black text-black border border-black"
                   }`}
@@ -139,7 +139,7 @@ const Form3 = ({ formData, setFormData }) => {
                   {...register("selecteddrink", {
                     required: "Drinking preference is required",
                   })}
-                  onChange={handleUpdateUserInput}
+                  // onChange={handleUpdateUserInput}
                   className="hidden"
                 />
                 {drink}
@@ -181,7 +181,7 @@ const Form3 = ({ formData, setFormData }) => {
             .map((hobby) => (
               <label
                 key={hobby}
-                className={`inline-block px-3 py-2 rounded-full text-sm focus:outline-none transition duration-300 ${formData.selectedhobbies[0]?.includes(hobby)
+                className={`inline-block px-3 py-2 rounded-full text-sm focus:outline-none transition duration-300 ${selectedhobbies?.includes(hobby)
                   ? "bg-yellow-500 text-black"
                   : "bg-transparent hover:bg-yellow-500 hover:text-black text-black border border-black"
                   }`}
@@ -189,12 +189,18 @@ const Form3 = ({ formData, setFormData }) => {
                 <input
                   type="checkbox"
                   value={hobby}
+                  // {...register("selectedhobbies", {
+                  //   validate: (value) =>
+                  //     value.length >= 2 || "Select up to 2 hobbies only",
+                  // })}
                   {...register("selectedhobbies", {
-                    validate: (value) =>
-                      value.length <= 2 || "Select up to 2 hobbies only",
+                    validate: {
+                      minTwo: (value) =>
+                        value.length >= 2 || "Please select at least 2 hobbies.",
+                    },
                   })}
-                  onChange={handleUpdateInput}
-                  checked={formData.selectedhobbies[0]?.includes(hobby)}
+                  // onChange={handleUpdateInput}
+                  checked={selectedhobbies?.includes(hobby)}
                   className="hidden"
                 />
                 {hobby}
@@ -262,7 +268,7 @@ const Form3 = ({ formData, setFormData }) => {
             .map((sport) => (
               <label
                 key={sport}
-                className={`inline-block px-3 py-2 rounded-full text-sm focus:outline-none transition duration-300 ${formData.selectedsports[0]?.includes(sport)
+                className={`inline-block px-3 py-2 rounded-full text-sm focus:outline-none transition duration-300 ${selectedsports?.includes(sport)
                   ? "bg-yellow-500 text-black"
                   : "bg-transparent hover:bg-yellow-500 hover:text-black text-black border border-black"
                   }`}
@@ -270,11 +276,17 @@ const Form3 = ({ formData, setFormData }) => {
                 <input
                   type="checkbox"
                   value={sport}
+                  // {...register("selectedsports", {
+                  //   validate: (value) =>
+                  //     value.length <= 2 || "Select up to 2 sports only",
+                  // })}
                   {...register("selectedsports", {
-                    validate: (value) =>
-                      value.length <= 2 || "Select up to 2 sports only",
+                    validate: {
+                      minTwo: (value) =>
+                        value.length >= 2 || "Please select at least 2 hobbies.",
+                    },
                   })}
-                  onChange={handleUpdateInput}
+                  // onChange={handleUpdateInput}
                   checked={selectedsports?.includes(sport)}
                   className="hidden"
                 />

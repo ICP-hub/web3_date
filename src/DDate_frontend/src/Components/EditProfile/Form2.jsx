@@ -9,7 +9,6 @@ const Form2 = ({ setIndex, formData, setFormData }) => {
     watch,
     setValue,
   } = useFormContext();
-  console.log("formdata data = ",formData.selectedZodiac)
 
   console.log(errors)
   const selectedGenderPronouns = watch("genderPronouns");
@@ -21,11 +20,11 @@ const Form2 = ({ setIndex, formData, setFormData }) => {
   const selectedLookingFor = watch("selectedLookingFor");
 
 
-  function handleUpdateInput(e) {
-    console.log(e.target.name + " and " + e.target.value)
-    console.log("formdata =", formData.gender)
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-}
+  // function handleUpdateInput(e) {
+  //   console.log(e.target.name + " and " + e.target.value)
+  //   console.log("formdata =", formData.gender)
+  //   setFormData({ ...formData, [e.target.name]: e.target.value });
+  // }
 
   return (
     <div className="w-full  rounded-lg p-6 shadow-md md:bg-transparent md:shadow-none">
@@ -40,7 +39,7 @@ const Form2 = ({ setIndex, formData, setFormData }) => {
               key={genPro}
               className={`inline-block px-3 py-2 rounded-full text-sm focus:outline-none transition duration-300
 
-                            ${formData.genderPronouns === genPro
+                            ${selectedGenderPronouns === genPro
                   ? "bg-yellow-500 text-black"
                   : "bg-transparent hover:bg-yellow-500 hover:text-black  text-black border  border-black"
                 }`}
@@ -51,7 +50,7 @@ const Form2 = ({ setIndex, formData, setFormData }) => {
                 {...register("genderPronouns", {
                   required: "Gender pronoun is required",
                 })}
-                onChange={handleUpdateInput}
+                // onChange={handleUpdateInput}
                 className="hidden"
               />
               {genPro}
@@ -116,7 +115,7 @@ const Form2 = ({ setIndex, formData, setFormData }) => {
             <label
               key={religion}
               className={`inline-block px-3 py-2 rounded-full text-sm focus:outline-none transition duration-300
-                            ${formData.selectedReligion === religion
+                            ${selectedReligionValue === religion
                   ? "bg-yellow-500 text-black"
                   : "bg-transparent hover:bg-yellow-500 hover:text-black  text-black border  border-black"
                 }`}
@@ -127,7 +126,7 @@ const Form2 = ({ setIndex, formData, setFormData }) => {
                 {...register("selectedReligion", {
                   required: "Religion is required",
                 })}
-                onChange={handleUpdateInput}
+                // onChange={handleUpdateInput}
                 className="hidden"
               />
               {religion}
@@ -161,7 +160,7 @@ const Form2 = ({ setIndex, formData, setFormData }) => {
             <label
               key={zodiac}
               className={`inline-block px-3 py-2 rounded-full text-sm focus:outline-none transition duration-300
-                            ${zodiac === formData.selectedZodiac
+                            ${zodiac === selectedZodiacSign
                   ? "bg-yellow-500 text-black"
                   : "bg-transparent hover:bg-yellow-500 hover:text-black  text-black border  border-black"
                 }`}
@@ -172,7 +171,7 @@ const Form2 = ({ setIndex, formData, setFormData }) => {
                 {...register("selectedZodiac", {
                   required: "Zodiac sign is required",
                 })}
-                onChange={handleUpdateInput}
+                // onChange={handleUpdateInput}
                 className="hidden"
               />
               {zodiac}
@@ -185,7 +184,7 @@ const Form2 = ({ setIndex, formData, setFormData }) => {
       {/* Fooding Selection */}
       <fieldset className="mb-4">
         <legend className="block text-lg font-semibold  text-black">
-        Dietary Preferences {errors.selectedFooding && <span className="text-red-500">*</span>}
+          Dietary Preferences {errors.selectedFooding && <span className="text-red-500">*</span>}
         </legend>
         <div className="flex flex-wrap gap-2 md:gap-2 py-2 rounded-3xl">
           {[
@@ -202,7 +201,7 @@ const Form2 = ({ setIndex, formData, setFormData }) => {
               key={fooding}
               className={`inline-block px-3 py-2 rounded-full text-sm focus:outline-none transition duration-300
                             ${errors.selectedFooding && "border-red-500"}
-                            ${fooding === formData.selectedFooding
+                            ${fooding === selectedFoodingValue
                   ? "bg-yellow-500 text-black"
                   : "bg-transparent hover:bg-yellow-500 hover:text-black  text-black border  border-black"
                 }`}
@@ -213,7 +212,7 @@ const Form2 = ({ setIndex, formData, setFormData }) => {
                 {...register("selectedFooding", {
                   required: "Fooding preference is required",
                 })}
-                onChange={handleUpdateInput}
+                // onChange={handleUpdateInput}
                 className="hidden"
               />
               {fooding}

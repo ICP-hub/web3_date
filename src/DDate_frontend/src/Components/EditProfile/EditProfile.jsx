@@ -53,56 +53,13 @@ const EditProfile = () => {
     2: ['selectedsmoking', 'selecteddrink', 'selectedhobbies', 'selectedsports'],
     3: ['selectedArt', 'selectedPets', 'selectedHabits', 'selectedActivities', 'selectedMovies', 'selectedTravel'],
     4: ['selectedInterests', 'selectedPreferAge', 'selectedLocation', 'selectedPreferLocation',],
-    5: ['firstImage0', 'firstImage1', 'firstImage2', 'firstImage3', 'firstImage4']
+    // 5: ['firstImage0', 'firstImage1', 'firstImage2', 'firstImage3', 'firstImage4']
   };
-
-  const methods = useForm({
-    defaultValues: {
-      usergender: '',
-      genderPronouns: '',
-      selectedLifePathNumber: '',
-      selectedReligion: '',
-      selectedZodiac: '',
-      selectedFooding: '',
-      // selectedWhatYouDo: '',
-      // selectedLookingFor: '',
-      selectedsmoking: '',
-      selecteddrink: '',
-      selectedhobbies: [],
-      // selectedsports: [],
-      // selectedArt: [],
-      // selectedPets: '',
-      // selectedHabits: [],
-      // selectedActivities: [],
-      // selectedMovies: [],
-      // selectedTravel: [],
-      selectedInterests: '',
-      selectedPreferAge: '',
-      selectedCity: '',
-      selectedState: '',
-      selectedCountry: '',
-      preferredCity: '',
-      preferredState: '',
-      preferredCountry: '',
-      selectedIntro: '',
-      images: [],
-      // selectedLocation: '',
-      // selectedPreferLocation: '',
-    }
-  });
-
-  const {
-    handleSubmit,
-    setValue,
-    trigger,
-    formState: { isSubmitting },
-  } = methods;
-
   const [index, setIndex] = useState(0);
 
   const location = useLocation();
   const userdata = location.state;
-  console.log("userdata = ", userdata)
+  // console.log("userdata = ", userdata)
   // console.log(typeof userdata.dob[0])
 
   // const myDOB = new Date(userdata.dob[0]);
@@ -123,150 +80,195 @@ const EditProfile = () => {
   // const [index, setIndex] = React.useState(0);
   // const [id, setId] = useState('');
   const [data, setData] = useState('');
-  const [formData, setFormData] = useState({
-    usergender: "",
-    email: "",
-    username: "",
-    mobile_number: "",
-    introduction: "",
-    images: [],
-    genderPronouns: "",
-    matches: [],
-    age: "",
-    art_and_culture: [],
-    selectedFooding: "",
-    dob: "",
-    selecteddrink: "",
-    selectedsmoking: "",
-    general_habbits: "",
-    height: "",
-    selectedhobbies: [],
-    selectedsports: [],
-    interests_in: "",
-    location: "",
-    looking_for: "",
-    max_preferred_age: "",
-    min_preferred_age: "",
-    movies: "",
-    occupation: "",
-    outdoor_activities: [],
-    pets: "",
-    preferred_gender: "",
-    preferred_location: "",
-    selectedReligion: "",
-    travel: "",
-    selectedZodiac: "",
+  // const [formData, setFormData] = useState({
+  //   usergender: "",
+  //   email: "",
+  //   username: "",
+  //   mobile_number: "",
+  //   introduction: "",
+  //   images: [],
+  //   genderPronouns: "",
+  //   matches: [],
+  //   age: "",
+  //   art_and_culture: [],
+  //   selectedFooding: "",
+  //   dob: "",
+  //   selecteddrink: "",
+  //   selectedsmoking: "",
+  //   general_habbits: "",
+  //   height: "",
+  //   selectedhobbies: [],
+  //   selectedsports: [],
+  //   interests_in: "",
+  //   location: "",
+  //   looking_for: "",
+  //   max_preferred_age: "",
+  //   min_preferred_age: "",
+  //   movies: "",
+  //   occupation: "",
+  //   outdoor_activities: [],
+  //   pets: "",
+  //   preferred_gender: "",
+  //   preferred_location: "",
+  //   selectedReligion: "",
+  //   travel: "",
+  //   selectedZodiac: "",
+  // });
+
+  // useEffect(() => {
+  //   if (userdata) {
+  //     setFormData({
+  //       username: userdata?.name[0] || "",
+  //       email: userdata?.email[0] || "",
+  //       art_and_culture: userdata?.art_and_culture || [],
+  //       selectedFooding: userdata?.diet[0] || "",
+  //       dob: userdata?.dob || "",
+  //       selectedsports: userdata?.sports || [],
+  //       selecteddrink: userdata?.drinking[0] || "",
+  //       selectedsmoking: userdata?.smoking[0] || "",
+  //       usergender: userdata?.gender[0] || "",
+  //       genderPronouns: userdata?.gender_pronouns[0] || "",
+  //       general_habbits: userdata?.general_habits || "",
+  //       height: userdata?.height[0] || "",
+  //       selectedhobbies: userdata?.hobbies || [],
+  //       images: userdata?.images || [],
+  //       interests_in: userdata?.interests_in[0] || "",
+  //       introduction: userdata?.introduction[0] || "",
+  //       location: userdata?.location[0] || "",
+  //       looking_for: userdata?.looking_for[0] || "",
+  //       max_preferred_age: userdata?.max_preferred_age[0] || "",
+  //       min_preferred_age: userdata?.min_preferred_age[0] || "",
+  //       selectedPreferAge: `${userdata?.max_preferred_age[0]}-${userdata?.min_preferred_age[0]}` || "",
+  //       movies: userdata?.movies || "",
+  //       occupation: userdata?.occupation[0] || "",
+  //       outdoor_activities: userdata?.outdoor_activities || [],
+  //       pets: userdata.pets[0] || "",
+  //       preferred_gender: userdata?.preferred_gender[0] || "",
+  //       preferred_location: userdata?.preferred_location[0] || "",
+  //       selectedReligion: userdata?.religion[0] || "",
+  //       travel: userdata?.travel || "",
+  //       selectedZodiac: userdata.zodiac[0] || "",
+  //       mobile_number: userdata.mobile_number[0] || "",
+  //     });
+  //   }
+  // }, [userdata]);
+
+  const methods = useForm({
+    defaultValues: {
+      username: userdata?.name[0] || "",
+      email: userdata?.email[0] || "",
+      // art_and_culture: userdata?.art_and_culture || [],
+      selectedFooding: userdata?.diet[0] || "",
+      dob: userdata?.dob || "",
+      selectedsports: userdata?.sports[0] || [],
+      selecteddrink: userdata?.drinking[0] || "",
+      selectedsmoking: userdata?.smoking[0] || "",
+      usergender: userdata?.gender[0] || "",
+      genderPronouns: userdata?.gender_pronouns[0] || "",
+      selectedLifePathNumber: userdata?.life_path_number[0] || "",
+      // general_habbits: userdata?.general_habits || "",
+      // height: userdata?.height[0] || "",
+      selectedhobbies: userdata?.hobbies[0] || [],
+      images: userdata?.images || [],
+      selectedInterests: userdata?.interests_in[0] || "",
+      introduction: userdata?.introduction[0] || "",
+      // location: userdata?.location[0] || "",
+      // looking_for: userdata?.looking_for[0] || "",
+      selectedCountry: userdata?.location_country[0] || "",
+      selectedState: userdata?.location_state[0] || "",
+      selectedCity: userdata?.location_city[0] || "",
+      preferredCountry: userdata?.preferred_country[0] || "",
+      preferredState: userdata?.preferred_state[0] || "",
+      preferredCity: userdata?.preferred_city[0] || "",
+      max_preferred_age: userdata?.max_preferred_age[0] || "",
+      min_preferred_age: userdata?.min_preferred_age[0] || "",
+      selectedPreferAge: `${userdata?.min_preferred_age[0]}-${userdata?.max_preferred_age[0]}` || "",
+      // movies: userdata?.movies || "",
+      // occupation: userdata?.occupation[0] || "",
+      // outdoor_activities: userdata?.outdoor_activities || [],
+      // pets: userdata.pets[0] || "",
+      // preferred_gender: userdata?.preferred_gender[0] || "",
+      // preferred_location: userdata?.preferred_location[0] || "",
+      selectedReligion: userdata?.religion[0] || "",
+      // travel: userdata?.travel || "",
+      selectedZodiac: userdata.zodiac[0] || "",
+      mobile_number: userdata.mobile_number[0] || "",
+    }
   });
 
-  useEffect(() => {
-    setFormData({
-      gender: userdata?.gender[0],
-      email: userdata?.email[0],
-      name: userdata?.name[0],
-      mobile_number: userdata.mobile_number[0],
-      dob: userdata?.dob[0],
-      gender_pronouns: userdata?.gender[0],
-      life_path_number: userdata?.life_path_number[0],
-      religion: userdata?.religion[0],
-      zodiac: userdata.zodiac[0],
-      diet: userdata?.diet[0],
-      smoking: userdata?.smoking[0],
-      drinking: userdata?.drinking[0],
-      selected_hobbies: userdata?.hobbies[0],
-      interests_in: userdata?.interests_in[0],
-      max_preferred_age: userdata?.max_preferred_age[0],
-      min_preferred_age: userdata?.min_preferred_age[0],
-      location_city: userdata?.location_city[0],
-      location_state: userdata?.location_state[0],
-      location_country: userdata?.location_country[0],
-      preferred_city: userdata?.preferred_city[0],
-      preferred_state: userdata?.preferred_state[0],
-      preferred_country: userdata?.preferred_country[0],
-      introduction: userdata?.introduction[0],
-      images: userdata?.images[0],
-      matches: userdata?.matches[0],
-      age: userdata?.age[0],
-      // art_and_culture: userdata?.art_and_culture,
-      // selected_movies: userdata?.movies,
-      // occupation: userdata?.occupation[0],
-      // outdoor_activities: userdata?.outdoor_activities,
-      // pets: userdata.pets[0],
-      // preferred_gender: userdata?.preferred_gender[0],
-      // preferred_location: userdata?.preferred_location[0],
-      // travels: userdata?.travel,
-      // habbits: userdata?.general_habits,
-      // height: userdata?.height[0],
-      // location: userdata?.location[0],
-      // looking_for: userdata?.looking_for[0],
+  const {
+    handleSubmit,
+    setValue,
+    trigger,
+    formState: { isSubmitting },
+  } = methods;
 
-    });
-  }, [userdata])
 
   const { backendActor } = useAuth();
 
   const onSubmit = async (data) => {
     console.log('Final Form Data', data);
-    if (backendActor) {
-      const DdateData = {
-        email: [data?.email],
-        age: [Number((data?.selectedPreferAge).slice(0, 2)) + Math.floor(Math.random() * 10 + 1)],
-        gender: [data?.usergender],
-        // dob: [String(data?.dob)],
-        dob: [],
-        gender_pronouns: [data?.genderPronouns],
-        religion: [data?.selectedReligion],
-        zodiac: [data?.selectedZodiac],
-        looking_for: [data?.selectedLookingFor],
-        smoking: [data?.selectedsmoking],
-        drinking: [data?.selecteddrink],
-        hobbies: [data?.selectedhobbies],
-        sports: [data?.selectedsports],
-        art_and_culture: [data?.selectedArt],
-        general_habits: [data?.selectedHabits],
-        movies: [data?.selectedMovies],
-        interests_in: data?.selectedInterests,
-        location: [data?.selectedLocation],
-        preferred_location: [data?.selectedPreferLocation],
-        introduction: [data?.selectedIntro],
-        occupation: [data?.selectedWhatYouDo],
-        height: [],
-        mobile_number: [data?.mobile],
-        diet: [data?.selectedFooding],
-        travel: [data?.selectedTravel],
-        name: [data?.username],
-        pets: [data?.selectedPets],
-        outdoor_activities: [data?.selectedActivities],
-        min_preferred_age: [Number((data?.selectedPreferAge).slice(0, 2))],
-        preferred_gender: [data?.usergender],
-        max_preferred_age: [Number((data?.selectedPreferAge).slice(3, 5))],
-        images:
-          [
-            // data?.firstImage0,
-            // data?.firstImage1,
-            // data?.firstImage2,
-            // data?.firstImage3,
-            // data?.firstImage4
-          ]
+    // if (backendActor) {
+    //   const DdateData = {
+    //     email: [data?.email],
+    //     age: [Number((data?.selectedPreferAge).slice(0, 2)) + Math.floor(Math.random() * 10 + 1)],
+    //     gender: [data?.usergender],
+    //     // dob: [String(data?.dob)],
+    //     dob: [],
+    //     gender_pronouns: [data?.genderPronouns],
+    //     religion: [data?.selectedReligion],
+    //     zodiac: [data?.selectedZodiac],
+    //     looking_for: [data?.selectedLookingFor],
+    //     smoking: [data?.selectedsmoking],
+    //     drinking: [data?.selecteddrink],
+    //     hobbies: [data?.selectedhobbies],
+    //     sports: [data?.selectedsports],
+    //     art_and_culture: [data?.selectedArt],
+    //     general_habits: [data?.selectedHabits],
+    //     movies: [data?.selectedMovies],
+    //     interests_in: data?.selectedInterests,
+    //     location: [data?.selectedLocation],
+    //     preferred_location: [data?.selectedPreferLocation],
+    //     introduction: [data?.selectedIntro],
+    //     occupation: [data?.selectedWhatYouDo],
+    //     height: [],
+    //     mobile_number: [data?.mobile],
+    //     diet: [data?.selectedFooding],
+    //     travel: [data?.selectedTravel],
+    //     name: [data?.username],
+    //     pets: [data?.selectedPets],
+    //     outdoor_activities: [data?.selectedActivities],
+    //     min_preferred_age: [Number((data?.selectedPreferAge).slice(0, 2))],
+    //     preferred_gender: [data?.usergender],
+    //     max_preferred_age: [Number((data?.selectedPreferAge).slice(3, 5))],
+    //     images:
+    //       [
+    //         // data?.firstImage0,
+    //         // data?.firstImage1,
+    //         // data?.firstImage2,
+    //         // data?.firstImage3,
+    //         // data?.firstImage4
+    //       ]
 
-      }
-      console.log(' Edited Ddatedata ', DdateData)
+    //   }
+    //   console.log(' Edited Ddatedata ', DdateData)
 
-      try {
-        await backendActor.create_an_account(DdateData).then((result) => {
-          if (result) {
-            const API = result.Ok;
-            console.log(API)
-            const trimedId = API.split(":")[1].trim();
-            setId(trimedId);
-          } else {
-            setId('')
-          }
-        });
+    //   try {
+    //     await backendActor.create_an_account(DdateData).then((result) => {
+    //       if (result) {
+    //         const API = result.Ok;
+    //         console.log(API)
+    //         const trimedId = API.split(":")[1].trim();
+    //         setId(trimedId);
+    //       } else {
+    //         setId('')
+    //       }
+    //     });
 
-      } catch (error) {
-        console.error("Error sending data to the backend:", error);
-      }
-    }
+    //   } catch (error) {
+    //     console.error("Error sending data to the backend:", error);
+    //   }
+    // }
   };
 
 
@@ -277,6 +279,10 @@ const EditProfile = () => {
     if (isValid) {
       setIndex(prevIndex => prevIndex + 1);
     }
+  }
+
+  const handleSkip = () => {
+    setIndex((prevIndex) => prevIndex + 1);
   }
 
   const handleBack = () => {
@@ -307,7 +313,7 @@ const EditProfile = () => {
 
                   <h2 className="text-3xl md:text-4xl font-bold mb-4 text-white md:text-black text-center ">
                     <div className="flex items-center">
-                      <svg className=" mt-10 flex-shrink-0 ml-5 cursor-pointer" width="20" height="12" viewBox="0 0 12 12  " sm:fill="black" xmlns="http://www.w3.org/2000/svg">
+                      <svg onClick={handleBack} className=" mt-10 flex-shrink-0 ml-5 cursor-pointer" width="20" height="12" viewBox="0 0 12 12  " sm:fill="black" xmlns="http://www.w3.org/2000/svg">
                         <path d="M5.28501 0.285909L0.285013 5.28591C0.193973 5.38101 0.122608 5.49316 0.0750132 5.61591C-0.0250048 5.85937 -0.0250048 6.13245 0.0750133 6.37591C0.122608 6.49866 0.193973 6.6108 0.285013 6.70591L5.28501 11.7059C5.37825 11.7991 5.48894 11.8731 5.61076 11.9236C5.73259 11.974 5.86315 12 5.99501 12C6.26132 12 6.51671 11.8942 6.70501 11.7059C6.89332 11.5176 6.9991 11.2622 6.9991 10.9959C6.9991 10.7296 6.89332 10.4742 6.70501 10.2859L3.40501 6.99591L10.995 6.99591C11.2602 6.99591 11.5146 6.89055 11.7021 6.70301C11.8897 6.51548 11.995 6.26112 11.995 5.99591C11.995 5.73069 11.8897 5.47634 11.7021 5.2888C11.5146 5.10126 11.2602 4.99591 10.995 4.99591L3.40501 4.99591L6.70501 1.70591C6.79874 1.61294 6.87314 1.50234 6.9239 1.38049C6.97467 1.25863 7.00081 1.12792 7.00081 0.995908C7.00081 0.863897 6.97467 0.733191 6.9239 0.611332C6.87314 0.489472 6.79874 0.378873 6.70501 0.285909C6.61205 0.192181 6.50145 0.117785 6.37959 0.0670163C6.25773 0.0162475 6.12703 -0.00988987 5.99501 -0.00988986C5.863 -0.00988986 5.7323 0.0162475 5.61044 0.0670164C5.48858 0.117785 5.37798 0.192181 5.28501 0.285909Z" sm:fill="black" id="svg-path" />
                       </svg>
 
@@ -316,18 +322,18 @@ const EditProfile = () => {
                     <style jsx>{`@media (max-width: 768px) {#svg-path {fill: black;}}`}</style>
                   </h2>
                   <div className="border-t-2 border-solid md:border-black border-white w-[90% ] mt-4 mb-4 md:ml-6"></div>
-                  <form onSubmit={handleSubmit(onSubmit)}>
+                  {userdata !== undefined && <form onSubmit={handleSubmit(onSubmit)}>
                     {index === 0 &&
-                      <Form1 formData={formData} setFormData={setFormData} />
+                      <Form1 />
                     }
                     {index === 1 &&
-                      <Form2 formData={formData} setFormData={setFormData} />
+                      <Form2 />
                     }
                     {index === 2 &&
-                      <Form3 formData={formData} setFormData={setFormData} />
+                      <Form3 />
                     }
                     {index === 3 &&
-                      <Form5 formData={formData} setFormData={setFormData} />
+                      <Form5 />
                     }
                     {/* {index === 1 &&
                       <Form2 index={index} setIndex={setIndex} updateFormData={updateFormData} AllformData={formData} />
@@ -347,16 +353,16 @@ const EditProfile = () => {
                     } */}
 
                     <div className="flex justify-between mt-6">
-                      <button type="button" className="bg-yellow-500 font-semibold py-2 px-6 rounded-full hover:bg-yellow-600 text-white md:text-black md:hover:text-black" onClick={handleBack} disabled={index === 0}>Back</button>
-                      {index === 5 ? (
+                      <button type="button" className="font-semibold py-2 px-6  text-white md:text-black md:hover:text-black" onClick={handleSkip}>Skip</button>
+                      {index === 3 ? (
                         <>
-                          <button type="submit" className="bg-yellow-500 font-semibold py-2 px-6 rounded-full hover:bg-yellow-600 text-white md:text-black md:hover:text-black">Save</button>
+                          <button type="submit" className="bg-yellow-500 font-semibold py-2 px-6 rounded-full hover:bg-yellow-600 text-white md:text-black md:hover:text-black">Save Changes</button>
                         </>
                       ) : (
                         <button type="button" className="bg-yellow-500 font-semibold py-2 px-6 rounded-full hover:bg-yellow-600 text-white md:text-black md:hover:text-black" onClick={handleNext}>Next</button>
                       )}
                     </div>
-                  </form>
+                  </form>}
                 </div>
                 <div className="md:w-2/5  max-h-[90vh] overflow-y-auto">
                   <div className="border-gray-300 font-viga bg-white  ">

@@ -61,11 +61,10 @@ const Form1 = ({ index, setIndex, AllformData, formData, setFormData }) => {
     //     setIndex(index + 1);
     // };
 
-    function handleUpdateInput(e) {
-        console.log(e.target.name + " and " + e.target.value)
-        console.log("formdata =", formData.gender)
-        setFormData({ ...formData, [e.target.name]: e.target.value });
-    }
+    // function handleUpdateInput(e) {
+    //     console.log(e.target.name + " and " + e.target.value)
+    //     setFormData({ ...formData, [e.target.name]: e.target.value });
+    // }
 
     return (
         <div className="w-full 
@@ -113,52 +112,51 @@ const Form1 = ({ index, setIndex, AllformData, formData, setFormData }) => {
                     </label>
                 </div> */}
 
-            <label htmlFor="username" className="block text-lg font-semibold ">
+            <label className="block text-lg font-semibold ">
                 Username
             </label>
             <input
-                id="username"
+                // id="username"
                 type="text"
-                name="username"
-                value={formData?.username ?? ""}
+                // name="username"
+                // value={formData.username}
                 // {...register('username')}
                 {...register('username', {
-                    // required: "Username is required",
-                    // validate: {
-                    //     hasLetters: (value) =>
-                    //         /[a-zA-Z]/.test(value) || "Username must contain at least one letter",
-                    //     hasNumbers: (value) =>
-                    //         /\d/.test(value) || "Username must contain at least one number",
-                    //     validLength: (value) =>
-                    //         value.length >= 6 || "Username must be at least 6 characters long",
-                    //     noSpecialChars: (value) =>
-                    //         /^[a-zA-Z\d]+$/.test(value) || "Username can only contain letters and numbers",
-                    // },
+                    validate: {
+                        required: (value) => value.trim() !== "" || "Username is required",
+                        hasNumbers: (value) =>
+                            /\d/.test(value) || "Username must contain at least one number",
+                        validLength: (value) =>
+                            value.length >= 6 || "Username must be at least 6 characters long",
+                        noSpecialChars: (value) =>
+                            /^[a-zA-Z\d]+$/.test(value) || "Username can only contain letters and numbers",
+                    },
                 })}
-                onChange={handleUpdateInput}
+                // onChange={handleUpdateInput}
                 className="form-input bg-transparent w-full border-2 px-2 border-gray-300 py-1.5 rounded-3xl text-sm"
             />
             {errors.username && <p className="text-red-500">{errors.username.message}</p>}
 
-            <label htmlFor='usergender' className="block font-semibold pt-2 text-lg">
+            <label className="block font-semibold pt-2 text-lg">
                 Gender
             </label>
             <div className="flex flex-wrap gap-2 col-span-3   px-0 rounded-3xl">
                 {["Male", "Female", "Non Binary"].map((gender) => (
                     <label
                         key={gender}
-                        className={`inline-block px-3 py-1.5 rounded-full text-sm focus:outline-none transition duration-300 ${formData.usergender === gender
+                        className={`inline-block px-3 py-1.5 rounded-full text-sm focus:outline-none transition duration-300 ${selectedGender === gender
                             ? "bg-yellow-500 text-black"
                             : "bg-transparent hover:bg-yellow-500 hover:text-black border border-black"
                             }`}
                     >
+
                         <input
                             type="radio"
                             value={gender}
-                            {...register("usergender")}
+                            {...register("usergender", { required: "Gender is required" })}
                             className="hidden"
-                            // onChange={() => selectedGender(gender)}
-                            onChange={handleUpdateInput}
+                        // onChange={() => selectedGender(gender)}
+                        // onChange={handleUpdateInput}
                         />
                         {gender}
                     </label>
@@ -169,14 +167,14 @@ const Form1 = ({ index, setIndex, AllformData, formData, setFormData }) => {
             <label htmlFor="email" className="block font-semibold pt-2 text-lg">
                 Email
             </label>
-            {console.log("email id of the user =",formData.email)}
             <input
-                id="email"
+                // id="email"
                 type="email"
-                name='email'
-                value={formData.email}
-                {...register('email')}
-                onChange={handleUpdateInput}
+                // name='email'
+                // value={formData.email}
+                // {...register('email')}
+                {...register('email', { required: "Email is required", pattern: { value: /^\S+@\S+\.\S+$/, message: "Invalid email format" } })}
+                // onChange={handleUpdateInput}
                 className="form-input bg-transparent w-full border-2 px-2 border-gray-300 py-1.5 rounded-3xl text-sm"
             />
             {errors.email && <p className="text-red-500">{errors.email.message}</p>}
@@ -187,9 +185,10 @@ const Form1 = ({ index, setIndex, AllformData, formData, setFormData }) => {
             <input
                 id="mobile_number"
                 type="tel"
-                value={formData.mobile_number}
-                {...register('mobile_number')}
-                onChange={handleUpdateInput}
+                // value={formData.mobile_number}
+                // {...register('mobile_number')}
+                {...register('mobile_number', { required: "Mobile number is required", pattern: { value: /^\d{10}$/, message: "Invalid mobile number" } })}
+                // onChange={handleUpdateInput}
                 className="form-input bg-transparent w-full border-2 px-2 border-gray-300 py-1.5 rounded-3xl text-sm"
             />
             {errors.mobile_number && <p className="text-red-500">{errors.mobile_number.message}</p>}
@@ -200,9 +199,32 @@ const Form1 = ({ index, setIndex, AllformData, formData, setFormData }) => {
             <input
                 id="dob"
                 type="date"
-                value={formData.dob}
-                {...register('dob')}
-                onChange={handleUpdateInput}
+                // value={formData.dob}
+                // {...register('dob')}
+                {...register('dob', {
+                    required: "Date of birth is required",
+                    validate: {
+                        isPastDate: (value) => {
+                            const today = new Date();
+                            const dob = new Date(value);
+                            return dob <= today || "Date of birth cannot be a future date";
+                        },
+                        isOldEnough: (value) => {
+                            const today = new Date();
+                            const dob = new Date(value);
+                            let age = today.getFullYear() - dob.getFullYear();
+                            const monthDiff = today.getMonth() - dob.getMonth();
+                            if (
+                                monthDiff < 0 ||
+                                (monthDiff === 0 && today.getDate() < dob.getDate())
+                            ) {
+                                age--;
+                            }
+                            return age >= 18 || "You must be at least 18 years old";
+                        },
+                    },
+                })}
+                // onChange={handleUpdateInput}
                 className="form-input bg-transparent w-full border-2 px-2 border-gray-300 py-1.5 rounded-3xl text-sm"
             />
             {errors.dob && <p className="text-red-500">{errors.dob.message}</p>}
@@ -212,10 +234,11 @@ const Form1 = ({ index, setIndex, AllformData, formData, setFormData }) => {
             </label>
             <textarea
                 id="introduction"
-                value={formData.introduction}
+                // value={formData.introduction}
                 rows={5}
-                {...register('introduction')}
-                onChange={handleUpdateInput}
+                // {...register('introduction')}
+                {...register("introduction", { required: "Enter something about yourself" })}
+                // onChange={handleUpdateInput}
                 placeholder="Let us know something about you"
                 className="bg-gray-100 w-full px-4 py-2 rounded-lg  border-none text-black"
             />

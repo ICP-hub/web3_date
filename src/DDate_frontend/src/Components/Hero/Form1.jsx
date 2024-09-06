@@ -18,7 +18,7 @@ const Form1 = () => {
             {/* Gender Selection */}
             <fieldset className="mb-3">
                 <legend className="block text-lg font-semibold mb-1 text-white md:text-black">
-                    Choose Your Gender 
+                    Choose Your Gender
                     {errors.usergender && <span className="text-red-500">*</span>}
                 </legend>
                 <div className="flex flex-wrap gap-2 md:gap-2 -mb-1 py-2 px-0 rounded-3xl">
@@ -29,7 +29,7 @@ const Form1 = () => {
                                 type="radio"
                                 name="usergender"
                                 value={gender}
-                                {...register("usergender", { required: "Gender is required"})}
+                                {...register("usergender", { required: "Gender is required" })}
                                 // {...register("usergender")}
                                 className="hidden"
                             />
@@ -70,13 +70,13 @@ const Form1 = () => {
                     {...register('username', {
                         required: "Username is required",
                         validate: {
-                            hasLetters: (value) => 
+                            hasLetters: (value) =>
                                 /[a-zA-Z]/.test(value) || "Username must contain at least one letter",
-                            hasNumbers: (value) => 
+                            hasNumbers: (value) =>
                                 /\d/.test(value) || "Username must contain at least one number",
-                            validLength: (value) => 
+                            validLength: (value) =>
                                 value.length >= 6 || "Username must be at least 6 characters long",
-                            noSpecialChars: (value) => 
+                            noSpecialChars: (value) =>
                                 /^[a-zA-Z\d]+$/.test(value) || "Username can only contain letters and numbers",
                         },
                     })}
@@ -104,7 +104,7 @@ const Form1 = () => {
             {/* DOB Input */}
             <div className="mb-4">
                 <label htmlFor="dob" className="block text-lg font-semibold mb-2 text-white md:text-black">
-                    Enter Your DOB  
+                    Enter Your DOB
                     {errors.dob && <span className="text-red-500">*</span>}
                 </label>
                 <input
