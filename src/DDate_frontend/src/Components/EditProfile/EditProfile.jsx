@@ -56,10 +56,11 @@ const EditProfile = () => {
     // 5: ['firstImage0', 'firstImage1', 'firstImage2', 'firstImage3', 'firstImage4']
   };
   const [index, setIndex] = useState(0);
+  const navigate = useNavigate();
 
   const location = useLocation();
   const userdata = location.state;
-  // console.log("userdata = ", userdata)
+  console.log("userdata = ", userdata)
   // console.log(typeof userdata.dob[0])
 
   // const myDOB = new Date(userdata.dob[0]);
@@ -78,7 +79,7 @@ const EditProfile = () => {
   // });
   // const { handleSubmit, trigger } = methods;
   // const [index, setIndex] = React.useState(0);
-  // const [id, setId] = useState('');
+  const [id, setId] = useState('');
   const [data, setData] = useState('');
   // const [formData, setFormData] = useState({
   //   usergender: "",
@@ -207,68 +208,69 @@ const EditProfile = () => {
   const { backendActor } = useAuth();
 
   const onSubmit = async (data) => {
+    console.log("user id : ", userdata)
     console.log('Final Form Data', data);
-    // if (backendActor) {
-    //   const DdateData = {
-    //     email: [data?.email],
-    //     age: [Number((data?.selectedPreferAge).slice(0, 2)) + Math.floor(Math.random() * 10 + 1)],
-    //     gender: [data?.usergender],
-    //     // dob: [String(data?.dob)],
-    //     dob: [],
-    //     gender_pronouns: [data?.genderPronouns],
-    //     religion: [data?.selectedReligion],
-    //     zodiac: [data?.selectedZodiac],
-    //     looking_for: [data?.selectedLookingFor],
-    //     smoking: [data?.selectedsmoking],
-    //     drinking: [data?.selecteddrink],
-    //     hobbies: [data?.selectedhobbies],
-    //     sports: [data?.selectedsports],
-    //     art_and_culture: [data?.selectedArt],
-    //     general_habits: [data?.selectedHabits],
-    //     movies: [data?.selectedMovies],
-    //     interests_in: data?.selectedInterests,
-    //     location: [data?.selectedLocation],
-    //     preferred_location: [data?.selectedPreferLocation],
-    //     introduction: [data?.selectedIntro],
-    //     occupation: [data?.selectedWhatYouDo],
-    //     height: [],
-    //     mobile_number: [data?.mobile],
-    //     diet: [data?.selectedFooding],
-    //     travel: [data?.selectedTravel],
-    //     name: [data?.username],
-    //     pets: [data?.selectedPets],
-    //     outdoor_activities: [data?.selectedActivities],
-    //     min_preferred_age: [Number((data?.selectedPreferAge).slice(0, 2))],
-    //     preferred_gender: [data?.usergender],
-    //     max_preferred_age: [Number((data?.selectedPreferAge).slice(3, 5))],
-    //     images:
-    //       [
-    //         // data?.firstImage0,
-    //         // data?.firstImage1,
-    //         // data?.firstImage2,
-    //         // data?.firstImage3,
-    //         // data?.firstImage4
-    //       ]
+    if (backendActor) {
+      const DdateData = {
+        // user_id: [userdata?.user_id],
+        gender: [data?.usergender],
+        email: [data?.email],
+        name: [data?.username],
+        mobile_number: [data?.mobile_number],
+        dob: [String(data?.dob)],
+        gender_pronouns: [data?.genderPronouns],
+        life_path_number: [data?.selectedLifePathNumber],
+        religion: [data?.selectedReligion],
+        zodiac: [data?.selectedZodiac],
+        diet: [data?.selectedFooding],
+        smoking: [data?.selectedsmoking],
+        drinking: [data?.selecteddrink],
+        hobbies: [data?.selectedhobbies],
+        sports: [data?.selectedsports],
+        interests_in: data?.selectedInterests,
+        min_preferred_age: [Number((data?.selectedPreferAge).slice(0, 2))],
+        max_preferred_age: [Number((data?.selectedPreferAge).slice(3, 5))],
+        location_city:[data?.selectedCity],
+        location_state:[data?.selectedState],
+        location_country:[data?.selectedCountry],
+        preferred_city:[data?.preferredCity],
+        preferred_state:[data?.preferredState],
+        preferred_country:[data?.preferredCountry],
+        introduction: [data?.introduction],
+        images:data?.images,
+        age: [Number((data?.selectedPreferAge).slice(0, 2)) + Math.floor(Math.random() * 10 + 1)],
+        // art_and_culture: [data?.selectedArt],
+        // general_habits: [data?.selectedHabits],
+        // movies: [data?.selectedMovies],
+        // location: [data?.selectedLocation],
+        // preferred_location: [data?.selectedPreferLocation],
+        // occupation: [data?.selectedWhatYouDo],
+        // height: [],
+        // looking_for: [data?.selectedLookingFor],
+        // travel: [data?.selectedTravel],
+        // pets: [data?.selectedPets],
+        // outdoor_activities: [data?.selectedActivities],
+        // preferred_gender: [data?.usergender],
+      }
+      console.log(' Edited Ddatedata ', DdateData)
 
-    //   }
-    //   console.log(' Edited Ddatedata ', DdateData)
+      try {
+        await backendActor.update_an_account(userdata?.user_id, DdateData).then((result) => {
+          if (result) {
+            const API = result.Ok;
+            console.log(API)
+            const trimedId = API.split(":")[1].trim();
+            setId(trimedId);
+            navigate("/Profile", { state: trimedId })
+          } else {
+            setId('')
+          }
+        });
 
-    //   try {
-    //     await backendActor.create_an_account(DdateData).then((result) => {
-    //       if (result) {
-    //         const API = result.Ok;
-    //         console.log(API)
-    //         const trimedId = API.split(":")[1].trim();
-    //         setId(trimedId);
-    //       } else {
-    //         setId('')
-    //       }
-    //     });
-
-    //   } catch (error) {
-    //     console.error("Error sending data to the backend:", error);
-    //   }
-    // }
+      } catch (error) {
+        console.error("Error sending data to the backend:", error);
+      }
+    }
   };
 
 

@@ -12,7 +12,7 @@ import "./Swipe.css";
 import { useLocation } from "react-router-dom";
 import { useForm } from "react-hook-form";
 
-const Profile = ({ userId }) => {
+const Profile = () => {
   const { backendActor } = useAuth();
   const [loader, setLoader] = useState(false);
   const [progress, setProgress] = useState(60);
@@ -111,6 +111,13 @@ const Profile = ({ userId }) => {
 
             // console.log(formattedDateStr);
             if (myData) {
+
+              let userid = { "user_id": id };
+
+              Object.assign(myData, userid);
+
+              // console.log("finally : ", myData)
+
               SetResult(myData);
               setFormData({
                 gender: myData?.gender[0],
