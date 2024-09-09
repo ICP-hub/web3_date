@@ -204,7 +204,7 @@ const CreateAccount1 = () => {
       selectedActivities: [],
       selectedMovies: [],
       selectedTravel: [],
-      selectedInterests: [],
+      selectedInterests: '',
       selectedPreferAge: '',
       selectedCity: '',
       selectedState: '',
@@ -314,7 +314,7 @@ const CreateAccount1 = () => {
             Number((data?.selectedPreferAge).slice(0, 2)) +
             Math.floor(Math.random() * 10 + 1),
           ],
- 
+
           // art_and_culture: [data?.selectedArt],
           // general_habits: [data?.selectedHabits],
           // movies: [data?.selectedMovies],
@@ -512,7 +512,7 @@ const CreateAccount1 = () => {
                 <div className="flex justify-between">
                   <button
                     type="button"
-                    className={`${index === 0 && "visited"} ${index === 4 && "collapse"} text-white  font-semibold py-2 px-6 rounded-full text-b md:text-black md:hover:text-black`}
+                    className={`${index === 0 && "collapse"} ${index === 4 && "collapse"} text-white  font-semibold py-2 px-6 rounded-full text-b md:text-black md:hover:text-black`}
                     onClick={handleSkip}
                   // disabled={index === 0}
                   >

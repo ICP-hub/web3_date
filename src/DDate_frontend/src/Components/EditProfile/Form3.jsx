@@ -17,6 +17,7 @@ const Form3 = ({ formData, setFormData }) => {
   const selectedsmoking = watch("selectedsmoking");
   const selecteddrink = watch("selecteddrink");
   const selectedhobbies = watch("selectedhobbies", []);
+  console.log("selected hobbies = ", selectedhobbies)
   const selectedsports = watch("selectedsports", []);
 
 

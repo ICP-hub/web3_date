@@ -19,7 +19,7 @@ const ImageContainer =()=> {
               Complete Your Profile Here.
             </p>
             <p className="text-white font-[600] w-2/3 font-viga md:text-md">
-              Tell us about yourself and let us help you finding the perfect
+              Tell us about yourself and let us help you find the perfect
               match
             </p>
             <p className="text-[#FFC107] font-[600] mt-[15px] md:text-lg">Good Luck!</p>

@@ -50,7 +50,7 @@ import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 
 const EditProfile = () => {
   const formFields = {
-    0: ['username', 'usergender', 'email', 'mobile', 'dob', 'selectedIntro'],
+    0: ['username', 'usergender', 'email', 'mobile_number', 'dob', 'introduction'],
     1: ['genderPronouns', 'selectedLifePathNumber', 'selectedReligion', 'selectedZodiac', 'selectedFooding', 'selectedWhatYouDo', 'selectedLookingFor'],
     2: ['selectedsmoking', 'selecteddrink', 'selectedhobbies', 'selectedsports'],
     3: ['selectedArt', 'selectedPets', 'selectedHabits', 'selectedActivities', 'selectedMovies', 'selectedTravel'],
@@ -58,12 +58,15 @@ const EditProfile = () => {
     // 5: ['firstImage0', 'firstImage1', 'firstImage2', 'firstImage3', 'firstImage4']
   };
   const [index, setIndex] = useState(0);
-  const [imageArray, setImageArray] = useState([[], [], [], [], [], []])
-  let fireBaseImageArray = []
+  const [imageArray, setImageArray] = useState([[], [], [], [], [], []]);
+  // const [fireBaseImageArray, setFireBaseImageArray] = useState([])
+  let fireBaseImageArray = [];
+  const navigate = useNavigate()
 
   const location = useLocation();
   const userdata = location.state;
   console.log("userdata = ", userdata)
+  console.log("userdata images = ", userdata.images)
   // console.log(typeof userdata.dob[0])
 
   // const myDOB = new Date(userdata.dob[0]);
@@ -206,7 +209,7 @@ const EditProfile = () => {
     const updatedImageArray = [...imageArray];
 
     // Insert the values from userdata.images into the corresponding indices
-    userdata.images.forEach((image, index) => {
+    userdata.images[0].forEach((image, index) => {
       if (index < updatedImageArray.length) {
         updatedImageArray[index] = image;
       }
@@ -214,7 +217,12 @@ const EditProfile = () => {
 
     // Update the state with the new array
     setImageArray(updatedImageArray);
+    // console.log("updated array = ", updatedImageArray)
   }, [userdata.images]);
+
+  useEffect(() => {
+    console.log("checking image array = ", imageArray)
+  }, [imageArray])
 
   const {
     handleSubmit,
@@ -223,15 +231,13 @@ const EditProfile = () => {
     formState: { isSubmitting },
   } = methods;
 
-  useEffect(()=>{
-    console.log("firebase image = ", fireBaseImageArray)
-  },[fireBaseImageArray])
-
   const { backendActor } = useAuth();
 
   const onSubmit = async (data) => {
     await handleImageToFirebase()
+    console.selectedFooding
     console.log('Final Form Data', data);
+    console.log('firebase before = ', fireBaseImageArray)
     if (backendActor) {
       const DdateData = {
         // user_id: [userdata?.user_id],
@@ -249,17 +255,17 @@ const EditProfile = () => {
         drinking: [data?.selecteddrink],
         hobbies: [data?.selectedhobbies],
         sports: [data?.selectedsports],
-        interests_in: data?.selectedInterests,
+        interests_in: [data?.selectedInterests],
         min_preferred_age: [Number((data?.selectedPreferAge).slice(0, 2))],
         max_preferred_age: [Number((data?.selectedPreferAge).slice(3, 5))],
-        location_city:[data?.selectedCity],
-        location_state:[data?.selectedState],
-        location_country:[data?.selectedCountry],
-        preferred_city:[data?.preferredCity],
-        preferred_state:[data?.preferredState],
-        preferred_country:[data?.preferredCountry],
+        location_city: [data?.selectedCity],
+        location_state: [data?.selectedState],
+        location_country: [data?.selectedCountry],
+        preferred_city: [data?.preferredCity],
+        preferred_state: [data?.preferredState],
+        preferred_country: [data?.preferredCountry],
         introduction: [data?.introduction],
-        images:[data?.fireBaseImageArray],
+        images: [fireBaseImageArray || []],
         age: [Number((data?.selectedPreferAge).slice(0, 2)) + Math.floor(Math.random() * 10 + 1)],
         // art_and_culture: [data?.selectedArt],
         // general_habits: [data?.selectedHabits],
@@ -275,6 +281,7 @@ const EditProfile = () => {
         // preferred_gender: [data?.usergender],
       }
       console.log(' Edited Ddatedata ', DdateData)
+      console.log('firebase after = ', fireBaseImageArray)
 
       try {
         await backendActor.update_an_account(userdata?.user_id, DdateData).then((result) => {
@@ -319,6 +326,7 @@ const EditProfile = () => {
 
   function handleAdditionalImageChange(e, index) {
     const file = e.target.files[0];
+    // console.log("file to check = ", file)
     if (file) {
       // Update the state with the new image file
       setImageArray(prevFields => {
@@ -347,7 +355,13 @@ const EditProfile = () => {
     // Helper function to upload a single image
     const uploadImage = (image) => {
       return new Promise((resolve, reject) => {
+        // console.log("image url or html = ", image)
         if (image.length === 0) {
+          resolve(); // Resolve immediately if no image
+          return;
+        }
+        if (!image.name) {
+          fireBaseImageArray.push(image)
           resolve(); // Resolve immediately if no image
           return;
         }
@@ -376,12 +390,37 @@ const EditProfile = () => {
             try {
               const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
               console.log('File successfully uploaded:', downloadURL);
+              console.log("firebase before =", fireBaseImageArray)
               fireBaseImageArray.push(downloadURL)
+              console.log("firebase after =", fireBaseImageArray)
               resolve(downloadURL); // Resolve the Promise with the download URL
             } catch (error) {
               console.error('Error getting download URL:', error);
               reject(error); // Reject the Promise if there's an error
             }
+            // try {
+            //   const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
+            //   console.log('File successfully uploaded:', downloadURL);
+
+            //   // Log the state before updating
+            //   console.log("firebase before =", fireBaseImageArray);
+
+            //   // Update the state with the new download URL
+            //   setFireBaseImageArray((prevArray) => {
+            //     const newArray = [...prevArray, downloadURL];
+            //     // Log the state after updating
+            //     console.log("firebase after =", newArray);
+            //     return newArray;
+            //   });
+
+            //   // Resolve the Promise with the download URL
+            //   return downloadURL;
+            // } catch (error) {
+            //   console.error('Error getting download URL:', error);
+            //   // Reject the Promise if there's an error
+            //   reject(error);
+            // }
+
           }
         );
       });
@@ -462,7 +501,7 @@ const EditProfile = () => {
                     } */}
 
                     <div className="flex justify-end mt-6">
-                      <button type="button" className="font-semibold py-2 px-6  text-white md:text-black md:hover:text-black" onClick={handleSkip}>Skip</button>
+                      {/* <button type="button" className="font-semibold py-2 px-6  text-white md:text-black md:hover:text-black" onClick={handleSkip}>Skip</button> */}
                       {index === 3 ? (
                         <>
                           <button type="submit" className="bg-yellow-500 font-semibold py-2 px-6 rounded-full hover:bg-yellow-600 text-white md:text-black md:hover:text-black">Save Changes</button>
@@ -487,218 +526,228 @@ const EditProfile = () => {
 
                     <div className="bg-white flex flex-col gap-6 items-center justify-center mb-[1.5rem] sm:flex-row">
                       {/* First input field for additional photos */}
-                      <label htmlFor={`additional-image-1`}>
-                        <div className="w-40 h-[180px] md:w-40 md:h-[196px] rounded-[15px] bg-zinc-200 flex justify-center items-center cursor-pointer">
-                          {imageArray[0].length !== 0 ? (
-                            <div className="relative">
-                              <img
-                                src={imageArray[0].name ? URL.createObjectURL(imageArray[0]) : imageArray[0]}
-                                alt={`Additional Image 1`}
-                                className="w-40 h-[180px] md:h-[196px] object-cover rounded-[15px] cursor-pointer"
 
-                              />
-                              <button
-                                type="button"
-                                onClick={() => handleClearImage(0)}
-                                className="absolute top-1 right-1 bg-red-900 text-white p-1.5 rounded-md opacity-75 group-hover:opacity-100 text-xs"
-                              >
-                                X
-                              </button>
-                            </div>
-                          ) : (
+                      <div className="w-40 h-[180px] md:w-40 md:h-[196px] rounded-[15px] bg-zinc-200 flex justify-center items-center">
+                        {imageArray[0].length !== 0 ? (
+                          <div className="relative">
                             <img
-                              src={uploadProfile}
-                              alt="uploadProfile"
-                              className="rounded-[15px] cursor-pointer"
+                              src={imageArray[0].name ? URL.createObjectURL(imageArray[0]) : imageArray[0]}
+                              alt={`Additional Image 1`}
+                              className="w-40 h-[180px] md:h-[196px] object-cover rounded-[15px] cursor-pointer"
+
                             />
-                          )}
-                          <input
-                            id={`additional-image-1`}
-                            type="file"
-                            accept="image/*"
-                            onChange={(e) => handleAdditionalImageChange(e, 0)}
-                            className="hidden"
-                          />
-                        </div>
-                      </label>
-                      {/* Second input field for additional photos */}
-                      <label htmlFor={`additional-image-2`}>
-                        <div className="w-40 h-[180px] md:w-40 md:h-[196px] rounded-[15px] bg-zinc-200 flex justify-center items-center cursor-pointer">
-                          {imageArray[1].length !== 0 ? (
-                            <div className="relative">
+                            <button
+                              type="button"
+                              onClick={() => handleClearImage(0)}
+                              className="absolute top-1 right-1 bg-red-900 text-white p-1.5 rounded-md opacity-75 group-hover:opacity-100 text-xs"
+                            >
+                              X
+                            </button>
+                          </div>
+                        ) : (
+                          <>
+                            <label htmlFor={`additional-image-1`}>
                               <img
-                                src={imageArray[1].name ? URL.createObjectURL(imageArray[1]) : imageArray[1]}
-                                alt={`Additional Image 2`}
-                                className="w-40 h-[180px] md:h-[196px] object-cover rounded-[15px] cursor-pointer"
-                              />
-                              <button
-                                type="button"
-                                onClick={() => handleClearImage(1)}
-                                className="absolute top-1 right-1 bg-red-900 text-white p-1.5 rounded-md opacity-75 group-hover:opacity-100 text-xs"
-                              >
-                                X
-                              </button>
-                            </div>
-                          ) : (
+                                src={uploadProfile}
+                                alt="uploadProfile"
+                                className="rounded-[15px] cursor-pointer" />
+
+                              <input
+                                id={`additional-image-1`}
+                                type="file"
+                                accept="image/*"
+                                onChange={(e) => handleAdditionalImageChange(e, 0)}
+                                className="hidden" />
+                            </label>
+                          </>
+                        )}
+                      </div>
+                      {/* Second input field for additional photos */}
+                      <div className="w-40 h-[180px] md:w-40 md:h-[196px] rounded-[15px] bg-zinc-200 flex justify-center items-center">
+                        {imageArray[1].length !== 0 ? (
+                          <div className="relative">
                             <img
-                              src={uploadProfile}
-                              alt="uploadProfile"
-                              className="rounded-[15px] cursor-pointer"
+                              src={imageArray[1].name ? URL.createObjectURL(imageArray[1]) : imageArray[1]}
+                              alt={`Additional Image 2`}
+                              className="w-40 h-[180px] md:h-[196px] object-cover rounded-[15px] cursor-pointer"
                             />
-                          )}
-                          <input
-                            id={`additional-image-2`}
-                            type="file"
-                            accept="image/*"
-                            onChange={(e) => handleAdditionalImageChange(e, 1)}
-                            className="hidden"
-                          />
-                        </div>
-                      </label>
+                            <button
+                              type="button"
+                              onClick={() => handleClearImage(1)}
+                              className="absolute top-1 right-1 bg-red-900 text-white p-1.5 rounded-md opacity-75 group-hover:opacity-100 text-xs"
+                            >
+                              X
+                            </button>
+                          </div>
+                        ) : (
+                          <>
+                            <label htmlFor={`additional-image-2`}>
+                              <img
+                                src={uploadProfile}
+                                alt="uploadProfile"
+                                className="rounded-[15px] cursor-pointer"
+                              />
+                              <input
+                                id={`additional-image-2`}
+                                type="file"
+                                accept="image/*"
+                                onChange={(e) => handleAdditionalImageChange(e, 1)}
+                                className="hidden"
+                              />
+                            </label>
+                          </>
+                        )}
+                      </div>
                     </div>
 
                     <div className="bg-white flex flex-col gap-6 items-center justify-center mb-10 sm:flex-row">
                       {/* Third input field for additional photos */}
-                      <label htmlFor={`additional-image-3`}>
-                        <div className="w-40 h-[180px] md:w-40 md:h-[196px] rounded-[15px] bg-zinc-200 flex justify-center items-center cursor-pointer">
-                          {imageArray[2].length !== 0 ? (
-                            <div className="relative">
-                              <img
-                                src={imageArray[2].name ? URL.createObjectURL(imageArray[2]) : imageArray[2]}
-                                alt={`Additional Image 3`}
-                                className="w-40 h-[180px] md:h-[196px] object-cover rounded-[15px] cursor-pointer"
-                              />
-                              <button
-                                type="button"
-                                onClick={() => handleClearImage(2)}
-                                className="absolute top-1 right-1 bg-red-900 text-white p-1.5 rounded-md opacity-75 group-hover:opacity-100 text-xs"
-                              >
-                                X
-                              </button>
-                            </div>
-                          ) : (
+                      <div className="w-40 h-[180px] md:w-40 md:h-[196px] rounded-[15px] bg-zinc-200 flex justify-center items-center">
+                        {imageArray[2].length !== 0 ? (
+                          <div className="relative">
                             <img
-                              src={uploadProfile}
-                              alt="uploadProfile"
-                              className="rounded-[15px] cursor-pointer"
+                              src={imageArray[2].name ? URL.createObjectURL(imageArray[2]) : imageArray[2]}
+                              alt={`Additional Image 3`}
+                              className="w-40 h-[180px] md:h-[196px] object-cover rounded-[15px] cursor-pointer"
                             />
-                          )}
-                          <input
-                            id={`additional-image-3`}
-                            type="file"
-                            accept="image/*"
-                            onChange={(e) => handleAdditionalImageChange(e, 2)}
-                            className="hidden"
-                          />
-                        </div>
-                      </label>
+                            <button
+                              type="button"
+                              onClick={() => handleClearImage(2)}
+                              className="absolute top-1 right-1 bg-red-900 text-white p-1.5 rounded-md opacity-75 group-hover:opacity-100 text-xs"
+                            >
+                              X
+                            </button>
+                          </div>
+                        ) : (
+                          <>
+                            <label htmlFor={`additional-image-3`}>
+                              <img
+                                src={uploadProfile}
+                                alt="uploadProfile"
+                                className="rounded-[15px] cursor-pointer"
+                              />
+                              <input
+                                id={`additional-image-3`}
+                                type="file"
+                                accept="image/*"
+                                onChange={(e) => handleAdditionalImageChange(e, 2)}
+                                className="hidden"
+                              />
+                            </label>
+                          </>
+                        )}
+
+                      </div>
 
                       {/* Fourth input field for additional photos */}
-                      <label htmlFor={`additional-image-4`}>
-                        <div className="w-40 h-[180px] md:w-40 md:h-[196px] rounded-[15px] bg-zinc-200 flex justify-center items-center cursor-pointer">
-                          {imageArray[3].length !== 0 ? (
-                            <div className="relative">
-                              <img
-                                src={imageArray[3].name ? URL.createObjectURL(imageArray[3]) : imageArray[3]}
-                                alt={`Additional Image 4`}
-                                className="w-40 h-[180px] md:h-[196px] object-cover rounded-[15px] cursor-pointer"
-                              />
-                              <button
-                                type="button"
-                                onClick={() => handleClearImage(3)}
-                                className="absolute top-1 right-1 bg-red-900 text-white p-1.5 rounded-md opacity-75 group-hover:opacity-100 text-xs"
-                              >
-                                X
-                              </button>
-                            </div>
-                          ) : (
+                      <div className="w-40 h-[180px] md:w-40 md:h-[196px] rounded-[15px] bg-zinc-200 flex justify-center items-center">
+                        {imageArray[3].length !== 0 ? (
+                          <div className="relative">
                             <img
-                              src={uploadProfile}
-                              alt="uploadProfile"
-                              className="rounded-[15px] cursor-pointer"
+                              src={imageArray[3].name ? URL.createObjectURL(imageArray[3]) : imageArray[3]}
+                              alt={`Additional Image 4`}
+                              className="w-40 h-[180px] md:h-[196px] object-cover rounded-[15px] cursor-pointer"
                             />
-                          )}
-                          <input
-                            id={`additional-image-4`}
-                            type="file"
-                            accept="image/*"
-                            onChange={(e) => handleAdditionalImageChange(e, 3)}
-                            className="hidden"
-                          />
-                        </div>
-                      </label>
+                            <button
+                              type="button"
+                              onClick={() => handleClearImage(3)}
+                              className="absolute top-1 right-1 bg-red-900 text-white p-1.5 rounded-md opacity-75 group-hover:opacity-100 text-xs"
+                            >
+                              X
+                            </button>
+                          </div>
+                        ) : (
+                          <>
+                            <label htmlFor={`additional-image-4`}>
+                              <img
+                                src={uploadProfile}
+                                alt="uploadProfile"
+                                className="rounded-[15px] cursor-pointer"
+                              />
+                              <input
+                                id={`additional-image-4`}
+                                type="file"
+                                accept="image/*"
+                                onChange={(e) => handleAdditionalImageChange(e, 3)}
+                                className="hidden"
+                              />
+                            </label>
+                          </>
+                        )}
+                      </div>
                     </div>
 
                     <div className="bg-white flex flex-col gap-6 items-center justify-center mb-10 sm:flex-row">
                       {/* Fifth input field for additional photos */}
-                      <label htmlFor={`additional-image-5`}>
-                        <div className="w-40 h-[180px] md:w-40 md:h-[196px] rounded-[15px] bg-zinc-200 flex justify-center items-center cursor-pointer">
-                          {imageArray[4].length !== 0 ? (
-                            <div className="relative">
-                              <img
-                                src={imageArray[4].name ? URL.createObjectURL(imageArray[4]) : imageArray[4]}
-                                alt={`Additional Image 5`}
-                                className="w-40 h-[180px] md:h-[196px] object-cover rounded-[15px] cursor-pointer"
-                              />
-                              <button
-                                type="button"
-                                onClick={() => handleClearImage(4)}
-                                className="absolute top-1 right-1 bg-red-900 text-white p-1.5 rounded-md opacity-75 group-hover:opacity-100 text-xs"
-                              >
-                                X
-                              </button>
-                            </div>
-                          ) : (
+                      <div className="w-40 h-[180px] md:w-40 md:h-[196px] rounded-[15px] bg-zinc-200 flex justify-center items-center">
+                        {imageArray[4].length !== 0 ? (
+                          <div className="relative">
                             <img
-                              src={uploadProfile}
-                              alt="uploadProfile"
-                              className="rounded-[15px] cursor-pointer"
+                              src={imageArray[4].name ? URL.createObjectURL(imageArray[4]) : imageArray[4]}
+                              alt={`Additional Image 5`}
+                              className="w-40 h-[180px] md:h-[196px] object-cover rounded-[15px] cursor-pointer"
                             />
-                          )}
-                          <input
-                            id={`additional-image-5`}
-                            type="file"
-                            accept="image/*"
-                            onChange={(e) => handleAdditionalImageChange(e, 4)}
-                            className="hidden"
-                          />
-                        </div>
-                      </label>
+                            <button
+                              type="button"
+                              onClick={() => handleClearImage(4)}
+                              className="absolute top-1 right-1 bg-red-900 text-white p-1.5 rounded-md opacity-75 group-hover:opacity-100 text-xs"
+                            >
+                              X
+                            </button>
+                          </div>
+                        ) : (
+                          <>
+                            <label htmlFor={`additional-image-5`}>
+                              <img
+                                src={uploadProfile}
+                                alt="uploadProfile"
+                                className="rounded-[15px] cursor-pointer"
+                              />
+                              <input
+                                id={`additional-image-5`}
+                                type="file"
+                                accept="image/*"
+                                onChange={(e) => handleAdditionalImageChange(e, 4)}
+                                className="hidden"
+                              />
+                            </label>
+                          </>
+                        )}
+                      </div>
 
                       {/* Sixth input field for additional photos */}
-                      <label htmlFor={`additional-image-6`}>
-                        <div className="w-40 h-[180px] md:w-40 md:h-[196px] rounded-[15px] bg-zinc-200 flex justify-center items-center cursor-pointer">
-                          {imageArray[5].length !== 0 ? (
-                            <div className="relative">
-                              <img
-                                src={imageArray[5].name ? URL.createObjectURL(imageArray[5]) : imageArray[5]}
-                                alt={`Additional Image 6`}
-                                className="w-40 h-[180px] md:h-[196px] object-cover rounded-[15px] cursor-pointer"
-                              />
-                              <button
-                                type="button"
-                                onClick={() => handleClearImage(5)}
-                                className="absolute top-1 right-1 bg-red-900 text-white p-1.5 rounded-md opacity-75 group-hover:opacity-100 text-xs"
-                              >
-                                X
-                              </button>
-                            </div>
-                          ) : (
+                      <div className="w-40 h-[180px] md:w-40 md:h-[196px] rounded-[15px] bg-zinc-200 flex justify-center items-center">
+                        {imageArray[5].length !== 0 ? (
+                          <div className="relative">
+                            <img
+                              src={imageArray[5].name ? URL.createObjectURL(imageArray[5]) : imageArray[5]}
+                              alt={`Additional Image 6`}
+                              className="w-40 h-[180px] md:h-[196px] object-cover rounded-[15px] cursor-pointer"
+                            />
+                            <button
+                              type="button"
+                              onClick={() => handleClearImage(5)}
+                              className="absolute top-1 right-1 bg-red-900 text-white p-1.5 rounded-md opacity-75 group-hover:opacity-100 text-xs"
+                            >
+                              X
+                            </button>
+                          </div>
+                        ) : (
+                          <><label htmlFor={`additional-image-6`}>
                             <img
                               src={uploadProfile}
                               alt="uploadProfile"
-                              className="rounded-[15px] cursor-pointer"
-                            />
-                          )}
-                          <input
-                            id={`additional-image-6`}
-                            type="file"
-                            accept="image/*"
-                            onChange={(e) => handleAdditionalImageChange(e, 5)}
-                            className="hidden"
-                          />
-                        </div>
-                      </label>
+                              className="rounded-[15px] cursor-pointer" />
+                            <input
+                              id={`additional-image-6`}
+                              type="file"
+                              accept="image/*"
+                              onChange={(e) => handleAdditionalImageChange(e, 5)}
+                              className="hidden" />
+                          </label>
+                          </>
+                        )}
+                      </div>
                     </div>
                   </div>
                 </div>

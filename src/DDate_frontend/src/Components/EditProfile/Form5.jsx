@@ -23,7 +23,7 @@ const Form5 = ({ formData, setFormData }) => {
     };
   }, []);
 
-  const selectedInterests = watch("selectedInterests", []);
+  const selectedInterests = watch("selectedInterests");
   const selectedPreferAge = watch("selectedPreferAge");
   const selectedCountry = watch("selectedCountry");
   const selectedState = watch("selectedState");
@@ -189,11 +189,11 @@ const Form5 = ({ formData, setFormData }) => {
           {["Male", "Female", "Network", "Friends", "Business partner"].map((interest) => (
             <label
               key={interest}
-              className={`inline-block px-3 py-2 rounded-full text-sm focus:outline-none transition duration-300 ${selectedInterests?.includes(interest) ? "bg-yellow-500 text-black" : "bg-transparent hover:bg-yellow-500 hover:text-black md:text-black border border-black"
+              className={`inline-block px-3 py-2 rounded-full text-sm focus:outline-none transition duration-300 ${selectedInterests === interest ? "bg-yellow-500 text-black" : "bg-transparent hover:bg-yellow-500 hover:text-black md:text-black border border-black"
                 }`}
             >
               <input
-                type="checkbox"
+                type="radio"
                 value={interest}
                 {...register("selectedInterests")}
                 // onChange={handleUpdateInput}
@@ -270,7 +270,7 @@ const Form5 = ({ formData, setFormData }) => {
                         d="M19 9l-7 7-7-7" />
                     </svg></>
                 )}
-                
+
               />
               {/* <select
                 id="selectedCountry"
@@ -317,7 +317,7 @@ const Form5 = ({ formData, setFormData }) => {
             <div className='md:w-44'>
               <Controller className
                 // name="selectedCountry"
-                {...register("selectedState" , { required: "Select a state" })}
+                {...register("selectedState", { required: "Select a state" })}
                 render={({ field }) => (
                   <><select className="w-full px-4 py-2 font-bold rounded-full border border-white md:border-black bg-transparent text-white md:text-gray-400 focus:ring-yellow-500 focus:border-yellow-500 appearance-none" {...field}>
                     <option value="">Select State</option>
