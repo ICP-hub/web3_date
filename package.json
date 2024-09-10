@@ -15,7 +15,8 @@
     "deploy:local": "dfx deploy --network=local",
     "deploy:ic": "dfx deploy --network=ic",
     "generate": "dfx generate DDate_backend",
-    "did": "./did.sh"
+    "did": "./did.sh",
+    "build:css": "tailwindcss build src/DDate_frontend/assets/main.css -o output.css"
   },
   "dependencies": {
     "@dfinity/agent": "^0.20.1",
