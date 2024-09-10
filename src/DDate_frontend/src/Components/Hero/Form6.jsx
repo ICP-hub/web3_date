@@ -111,13 +111,13 @@ const Form6 = ({ imageFields, setImageFields, imageError }) => {
 
     // function to clear the image from the array.
     const handleClearImage = (index) => {
-        console.log("choose image = ",imageFields[index])
+        console.log("choose image = ", imageFields[index])
         const newImageFields = [...imageFields];
         newImageFields[index] = []; // or null, depending on your preference
         setImageFields(newImageFields);
         unregister(`firstImage${index}`);
     };
-    
+
 
     const renderImagePreviews = () => {
         // return imageFields.map((field, index) => (
@@ -141,7 +141,7 @@ const Form6 = ({ imageFields, setImageFields, imageError }) => {
                 {
                     image.length !== 0 ? (
                         <div className="relative">
-                            <img src={URL.createObjectURL(image)} alt={`Preview ${index + 1}`} className=" w-full object-fill rounded-2xl" />
+                            <img src={URL.createObjectURL(image)} alt={`Preview ${index + 1}`} loading='lazy' className=" w-full object-fill rounded-2xl" />
                             <button
                                 type="button"
                                 onClick={() => handleClearImage(index)}
@@ -180,15 +180,46 @@ const Form6 = ({ imageFields, setImageFields, imageError }) => {
         }
     }
 
+    const handleCross = () => {
+        setPopUp(false)
+    }
+
+    // function to handle to the drap of the images.
+    const handleDragOver = (e, index) => {
+        e.preventDefault();
+        e.stopPropagation();
+        console.log("index number = ", index)
+    };
+
+    // function to handle the drop of the images.
+    const handleDrop = (e, index) => {
+        e.preventDefault();
+        e.stopPropagation();
+        const file = e.dataTransfer.files?.[0];
+        try {
+            if (file) {
+                // Update the state with the new image file
+                setImageFields(prevFields => {
+                    const newFields = [...prevFields];
+                    newFields[index] = file; // Store only the file
+                    return newFields;
+                });
+                setPopUp(false)
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
     return (
         <div className="p-4">
             <div className='flex space-x-6'>
                 <h3 className="text-xl font-semibold mb-4">Add Photos</h3>
-                <h3 className="text-gray-400 text-xl font-semibold mb-4">(Add maximum 5 photos for better reach)</h3>
+                <h3 className="text-gray-400 text-xl font-semibold mb-4">(Add maximum 6 photos for better reach)</h3>
 
             </div>
 
-            <div className="grid grid-cols-4 sm:grid-cols-4 items-center gap-4 mb-4">
+            <div className="grid grid-cols-2 sm:grid-cols-3 items-center gap-4 mb-4">
                 {renderImagePreviews()}
             </div>
 
@@ -207,12 +238,15 @@ const Form6 = ({ imageFields, setImageFields, imageError }) => {
 
             {popUp && (
                 <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
-                    <div className="mx-16 lg:mx-32 md:mx-24 flex items-center justify-center w-full">
+                    <div className="flex items-center justify-center w-full px-10 sm:px-32 md:px-40 lg:px-56 xl:px-80">
                         <label
                             ref={modalRef}  // Attach the modal reference here
                             htmlFor="dropzone-file"
-                            className="flex flex-col items-center justify-center w-full h-96 rounded-lg bg-gray-50 dark:bg-gray-700 ">
-                            <div className="flex flex-col items-center justify-center pt-5 pb-6">
+                            className="relative flex flex-col items-center justify-center w-full h-96 rounded-lg bg-gray-50 dark:bg-gray-700 ">
+                            <div className='absolute top-[17px] right-[30px] cursor-pointer' onClick={handleCross} >
+                                <svg xmlns="http://www.w3.org/2000/svg" height="40px" viewBox="0 -960 960 960" width="40px" fill="#000000"><path d="m251.33-204.67-46.66-46.66L433.33-480 204.67-708.67l46.66-46.66L480-526.67l228.67-228.66 46.66 46.66L526.67-480l228.66 228.67-46.66 46.66L480-433.33 251.33-204.67Z" /></svg>
+                            </div>
+                            <div onDragOver={(e) => handleDragOver(e, currentIndex)} onDrop={(e) => handleDrop(e, currentIndex)} className="flex flex-col items-center justify-center pt-5 pb-6">
                                 <svg className="w-12 h-12 mb-4 font-semibold text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 16">
                                     <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2" />
                                 </svg>
@@ -221,7 +255,7 @@ const Form6 = ({ imageFields, setImageFields, imageError }) => {
 
                                 <button
                                     type="button"
-                                    className="px-12 py-2 mt-4 bg-yellow-400 text-black font-bold rounded-full"
+                                    className="px-12 py-2 mt-4 bg-primary-color text-white font-bold rounded-full"
                                     onClick={handleButtonClick}
                                 >
                                     Browse Image
@@ -237,7 +271,7 @@ const Form6 = ({ imageFields, setImageFields, imageError }) => {
                                 />
                             </div>
                         </label>
-                    </div>+
+                    </div>
                 </div>
             )}
         </div>

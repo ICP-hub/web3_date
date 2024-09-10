@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import WalletModal from '../WalletModal';
 import LogoutModal from '../LogoutModal';
-import createPageImage from '../../../assets/Images/CreateAccount/createPageImage.png';
+import createPageImage from '../../../assets/Images/CreateAccount/popUp.png';
 import { useAuth } from '../../auth/useAuthClient';
 
 const HeroRight = () => {
@@ -46,6 +46,7 @@ const HeroRight = () => {
       {/* ( */}
       <img
         src={createPageImage}
+        loading='lazy'
         alt="Logout"
         onClick={toggleLogoutModal}
         className="rounded-full h-12 w-12 flex items-center justify-center text-black cursor-pointer absolute right-6 top-4 lg:flex hidden md:hidden "
@@ -70,7 +71,7 @@ const HeroRight = () => {
           disabled={isAuthenticated}
           className={`font-num text-sm py-2 px-8 md:px-20 mt-4 md:mt-10 rounded-full mb-10 ${isAuthenticated
             ? 'bg-gray-400 text-gray-200 cursor-not-allowed'
-            : 'bg-yellow-400 hover:bg-black text-black hover:text-white'
+            : 'bg-primary-color hover:bg-secondary-dark_hover text-white hover:text-white'
             }`}
         >
           Connect Wallet

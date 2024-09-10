@@ -216,22 +216,25 @@ const Swipe = () => {
                 <div className="h-full w-full lg:max-w-lg flex flex-col items-center justify-center relative">
                   <img
                     alt="img"
-                    src="https://cdn.pixabay.com/photo/2022/01/17/22/20/add-6945894_640.png"
+                    // src="https://cdn.pixabay.com/photo/2022/01/17/22/20/add-6945894_640.png"
+                    src={character.params.images[0]}
+                    loading="lazy"
                     className="h-full w-full lg:max-w-lg"
-                    style={{ height: "106vh" }}
+                    // style={{ height: "106vh" }}
                   />
                   <div
-                    className="bg-black rounded-b-xl w-full lg:max-w-lg h-[30%] absolute bottom-0"
+                    className="w-full lg:max-w-lg h-[30%] absolute bottom-0"
                     style={{
                       background:
-                        "linear-gradient(to top, rgb(0, 0, 0) 50%, rgba(255, 255, 255, 0) 100%)",
+                        // "linear-gradient(to top, rgb(0, 0, 0) 50%, rgba(255, 255, 255, 0) 100%)",
+                        "linear-gradient(0deg, rgba(115, 134, 133, 0.5) 50%, rgba(255, 255, 255, 0) 100%)"
                     }}
                   ></div>
                   <div className="z-20 px-10 md:bottom-16 bottom-[4rem] absolute left-0">
                     <h2 className="text-4xl font-bold text-white mb-2">
                       {character.params.name[0]}
                     </h2>
-                    <p className="text-lg text-gray-900 font-bold">
+                    <p className="text-lg text-white font-bold">
                      {character.params.location_city[0] + " " + character.params.location_state[0] }
                     </p>
                     <p className="mt-2 font-bold text-white line-clamp-1 hover:line-clamp-none mb-6">

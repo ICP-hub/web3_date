@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import heroLeft from "../../../assets/Images/heroLeft.png";
-import logo from "../../../assets/Images/CreateAccount/logo.png";
+import heroLeft from "../../../assets/Images/logoFront.png";
+// import logo from "../../../assets/Images/CreateAccount/logo.png";
 import createPageImage from '../../../assets/Images/CreateAccount/createPageImage.png';
 import WalletModal from '../WalletModal';
 import LogoutModal from '../LogoutModal';
@@ -40,12 +40,12 @@ const HeroLeft = () => {
 
   return (
     <div className="w-full lg:w-2/5 h-full relative">
-      <img src={heroLeft} alt="heroLeft" className="object-cover w-full h-full" />
-      <img
+      <img src={heroLeft} loading='lazy' alt="heroLeft" className="object-cover w-full h-full" />
+      {/* <img
         src={logo}
         alt="Logo"
         className="h-16 w-16 lg:h-18 lg:w-18 mb-4 absolute top-5 left-5 lg:top-8 lg:left-8"
-      />
+      /> */}
       {isAuthenticated && (
         <img
           src={createPageImage}
@@ -55,14 +55,14 @@ const HeroLeft = () => {
         />
       )}
 
-      <img
+      {/* <img
         src={createPageImage}
         alt="Logout"
         onClick={toggleLogoutModal}
         className="rounded-full h-16 w-16 flex items-center justify-center text-black cursor-pointer absolute right-6 top-4  lg:hidden"
       />
       <LogoutModal isOpen={isLogoutModal} onClose={toggleLogoutModal} />
-      <WalletModal isOpen={isWalletModalOpen} onClose={toggleWalletModal} />
+      <WalletModal isOpen={isWalletModalOpen} onClose={toggleWalletModal} /> */}
     </div>
   );
 };

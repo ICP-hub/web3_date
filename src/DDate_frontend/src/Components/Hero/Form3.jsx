@@ -36,8 +36,8 @@ const Form3 = () => {
               key={smoking}
               className={`inline-block px-3 py-2 rounded-full text-sm focus:outline-none transition duration-300
                 ${selectedsmoking === smoking
-                  ? "bg-yellow-500 text-black"
-                  : "bg-transparent hover:bg-yellow-500 hover:text-black text-white md:text-black border border-white md:border-black"
+                  ? "bg-primary-option_color text-black"
+                  : "bg-transparent hover:bg-primary-option_color hover:text-black text-white md:text-black border border-white md:border-black"
                 }`}
             >
               <input
@@ -69,8 +69,8 @@ const Form3 = () => {
                 className={`inline-block px-3 py-2 rounded-full text-sm focus:outline-none transition duration-300
                           ${errors.selecteddrink && "border-red-500"}
                           ${selecteddrink === drink
-                    ? "bg-yellow-500 text-black"
-                    : "bg-transparent hover:bg-yellow-500 hover:text-black text-white md:text-black border border-white md:border-black"
+                    ? "bg-primary-option_color text-black"
+                    : "bg-transparent hover:bg-primary-option_color hover:text-black text-white md:text-black border border-white md:border-black"
                   }`}
               >
                 <input
@@ -121,8 +121,8 @@ const Form3 = () => {
                 key={hobby}
                 className={`inline-block px-3 py-2 rounded-full text-sm focus:outline-none transition duration-300
                             ${selectedhobbies?.includes(hobby)
-                    ? "bg-yellow-500 text-black"
-                    : "bg-transparent hover:bg-yellow-500 hover:text-black text-white md:text-black border border-white md:border-black"
+                    ? "bg-primary-option_color text-black"
+                    : "bg-transparent hover:bg-primary-option_color hover:text-black text-white md:text-black border border-white md:border-black"
                   }`}
               >
 
@@ -208,8 +208,8 @@ const Form3 = () => {
               <label
                 key={sport}
                 className={`inline-block px-3 py-2 rounded-full text-sm focus:outline-none transition duration-300 ${selectedsports?.includes(sport)
-                  ? "bg-yellow-500 text-black"
-                  : "bg-transparent hover:bg-yellow-500 hover:text-black text-white md:text-black border border-white md:border-black"
+                  ? "bg-primary-option_color text-black"
+                  : "bg-transparent hover:bg-primary-option_color hover:text-black text-white md:text-black border border-white md:border-black"
                   }`}
               >
                 <input

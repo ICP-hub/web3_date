@@ -291,6 +291,7 @@ const EditProfile = () => {
             const trimedId = API.split(":")[1].trim();
             setId(trimedId);
             navigate("/Profile", { state: trimedId })
+            console.log("data submitted for testing")
           } else {
             setId('')
           }
@@ -504,10 +505,10 @@ const EditProfile = () => {
                       {/* <button type="button" className="font-semibold py-2 px-6  text-white md:text-black md:hover:text-black" onClick={handleSkip}>Skip</button> */}
                       {index === 3 ? (
                         <>
-                          <button type="submit" className="bg-yellow-500 font-semibold py-2 px-6 rounded-full hover:bg-yellow-600 text-white md:text-black md:hover:text-black">Save Changes</button>
+                          <button type="submit" className="bg-primary-color font-semibold py-2 px-6 rounded-full hover:bg-secondary-dark_hover text-white md:text-white md:hover:text-white">Save Changes</button>
                         </>
                       ) : (
-                        <button type="button" className="bg-yellow-500 font-semibold py-2 px-6 rounded-full hover:bg-yellow-600 text-white md:text-black md:hover:text-black" onClick={handleNext}>Next</button>
+                        <button type="button" className="bg-primary-color font-semibold py-2 px-6 rounded-full hover:bg-secondary-dark_hover text-white md:text-white md:hover:text-white" onClick={handleNext}>Next</button>
                       )}
                     </div>
                   </form>}
@@ -533,6 +534,7 @@ const EditProfile = () => {
                             <img
                               src={imageArray[0].name ? URL.createObjectURL(imageArray[0]) : imageArray[0]}
                               alt={`Additional Image 1`}
+                              loading="lazy"
                               className="w-40 h-[180px] md:h-[196px] object-cover rounded-[15px] cursor-pointer"
 
                             />
@@ -550,6 +552,7 @@ const EditProfile = () => {
                               <img
                                 src={uploadProfile}
                                 alt="uploadProfile"
+                                loading="lazy"
                                 className="rounded-[15px] cursor-pointer" />
 
                               <input
@@ -569,6 +572,7 @@ const EditProfile = () => {
                             <img
                               src={imageArray[1].name ? URL.createObjectURL(imageArray[1]) : imageArray[1]}
                               alt={`Additional Image 2`}
+                              loading="lazy"
                               className="w-40 h-[180px] md:h-[196px] object-cover rounded-[15px] cursor-pointer"
                             />
                             <button
@@ -585,6 +589,7 @@ const EditProfile = () => {
                               <img
                                 src={uploadProfile}
                                 alt="uploadProfile"
+                                loading="lazy"
                                 className="rounded-[15px] cursor-pointer"
                               />
                               <input
@@ -608,6 +613,7 @@ const EditProfile = () => {
                             <img
                               src={imageArray[2].name ? URL.createObjectURL(imageArray[2]) : imageArray[2]}
                               alt={`Additional Image 3`}
+                              loading="lazy"
                               className="w-40 h-[180px] md:h-[196px] object-cover rounded-[15px] cursor-pointer"
                             />
                             <button
@@ -624,6 +630,7 @@ const EditProfile = () => {
                               <img
                                 src={uploadProfile}
                                 alt="uploadProfile"
+                                loading="lazy"
                                 className="rounded-[15px] cursor-pointer"
                               />
                               <input
@@ -646,6 +653,7 @@ const EditProfile = () => {
                             <img
                               src={imageArray[3].name ? URL.createObjectURL(imageArray[3]) : imageArray[3]}
                               alt={`Additional Image 4`}
+                              loading="lazy"
                               className="w-40 h-[180px] md:h-[196px] object-cover rounded-[15px] cursor-pointer"
                             />
                             <button
@@ -662,6 +670,7 @@ const EditProfile = () => {
                               <img
                                 src={uploadProfile}
                                 alt="uploadProfile"
+                                loading="lazy"
                                 className="rounded-[15px] cursor-pointer"
                               />
                               <input
@@ -685,6 +694,7 @@ const EditProfile = () => {
                             <img
                               src={imageArray[4].name ? URL.createObjectURL(imageArray[4]) : imageArray[4]}
                               alt={`Additional Image 5`}
+                              loading="lazy"
                               className="w-40 h-[180px] md:h-[196px] object-cover rounded-[15px] cursor-pointer"
                             />
                             <button
@@ -701,6 +711,7 @@ const EditProfile = () => {
                               <img
                                 src={uploadProfile}
                                 alt="uploadProfile"
+                                loading="lazy"
                                 className="rounded-[15px] cursor-pointer"
                               />
                               <input
@@ -722,6 +733,7 @@ const EditProfile = () => {
                             <img
                               src={imageArray[5].name ? URL.createObjectURL(imageArray[5]) : imageArray[5]}
                               alt={`Additional Image 6`}
+                              loading="lazy"
                               className="w-40 h-[180px] md:h-[196px] object-cover rounded-[15px] cursor-pointer"
                             />
                             <button
@@ -737,6 +749,7 @@ const EditProfile = () => {
                             <img
                               src={uploadProfile}
                               alt="uploadProfile"
+                              loading="lazy"
                               className="rounded-[15px] cursor-pointer" />
                             <input
                               id={`additional-image-6`}

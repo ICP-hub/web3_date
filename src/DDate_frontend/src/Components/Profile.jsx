@@ -238,19 +238,19 @@ const Profile = () => {
                           <circle
                             className="text-gray-300"
                             strokeWidth="5"
-                            stroke="#A7A1A1"
+                            stroke="#A8A2A2"
                             fill="transparent"
                             r="47"
                             cx="50"
                             cy="50"
                           />
                           <circle
-                            className="bg-yellow-400"
+                            className="bg-primary-circleColor"
                             strokeWidth="5"
+                            stroke="#F1E2E9"
                             strokeDasharray="295.31"
                             strokeDashoffset={calculateProgressOffset(progress)}
                             strokeLinecap="round"
-                            stroke="#FFC107"
                             fill="transparent"
                             r="47"
                             cx="50"
@@ -265,14 +265,15 @@ const Profile = () => {
                             "default-placeholder.jpg"
                           }
                           alt="Profile"
-                          className="rounded-full w-full h-full object-cover absolute"
-                          style={{ marginTop: "-8px", marginLeft: "2px" }}
+                          loading="lazy"
+                          className="rounded-full border-[12px] border-white w-full h-full object-cover absolute "
+                          style={{ marginTop: "-10px", marginLeft: "5px",  }}
                         />
 
                         <img
                           src={Ellipse}
                           alt="back"
-                          className="w-9 h-9 bg-yellow-400 rounded-full absolute top-24 z-20"
+                          className="w-9 h-9 bg-primary-circleColor rounded-full absolute top-24 z-20"
                           style={{ top: "11.5rem", left: "6.1rem" }}
                         />
                         <div
@@ -383,7 +384,7 @@ const Profile = () => {
                         disabled
                         rows="4"
                         value={formData?.introduction ?? ""}
-                        className=" font-[600] rounded-xl pl-10 py-1.5 w-full "
+                        className="bg-primary-text_area font-[600] rounded-xl px-8 py-1.5 w-full "
                       ></textarea>
                     </div>
                   </div>

@@ -7,13 +7,13 @@ import { Principal } from "@dfinity/principal";
 
 const WalletButton = ({ wallet, loginHandler }) => (
   <li
-    className="border border-gray-300 rounded-3xl flex items-center p-2 cursor-pointer transition-colors duration-300 ease-in-out hover:bg-yellow-900 hover:border-yellow-500 active:bg-yellow-700 active:border-yellow-600"
+    className="border border-gray-300 rounded-3xl flex items-center p-2 cursor-pointer transition-colors duration-300 ease-in-out hover:bg-primary-color active:bg-primary-color active:border-primary-color"
     onClick={() => loginHandler(wallet.id)}
   >
     <img
       src={wallet.imgSrc}
       alt={wallet.alt}
-      className="rounded-full h-8 w-8 flex items-center justify-center bg-white text-white mr-2"
+      className="rounded-full h-8 w-8 flex items-center justify-center bg-black text-white mr-2"
     />
     <span className="text-center flex-grow">{wallet.name}</span>
   </li>
@@ -157,10 +157,11 @@ const WalletModal = ({ isOpen, onClose }) => {
       onClick={onClose}
     >
       <div
-        className="relative w-full h-fit max-w-md p-5 m-3 rounded-lg shadow-lg bg-walletColor text-white"
+        className="relative w-full h-fit max-w-md p-8 m-3 rounded-lg shadow-lg bg-white text-black"
         onClick={(e) => e.stopPropagation()}
       >
-        <h3 className="text-lg font-lg mb-4 text-center">Connect With</h3>
+        <h3 className="text-lg font-lg mb-4 text-center font-bold">Connect With</h3>
+        <div className="bg-black h-[1px] w-full"></div>
         <p className="border-t border-white w-full md:w-3/4 lg:w-2/3 mx-auto mb-4"></p>
         <ul className="space-y-3">
           {walletOptions.map((wallet) => (

@@ -145,8 +145,8 @@ const Form1 = ({ index, setIndex, AllformData, formData, setFormData }) => {
                     <label
                         key={gender}
                         className={`inline-block px-3 py-1.5 rounded-full text-sm focus:outline-none transition duration-300 ${selectedGender === gender
-                            ? "bg-yellow-500 text-black"
-                            : "bg-transparent hover:bg-yellow-500 hover:text-black border border-black"
+                            ? "bg-primary-option_color text-black"
+                            : "bg-transparent hover:bg-primary-option_color hover:text-black border border-black"
                             }`}
                     >
 
@@ -240,7 +240,7 @@ const Form1 = ({ index, setIndex, AllformData, formData, setFormData }) => {
                 {...register("introduction", { required: "Enter something about yourself" })}
                 // onChange={handleUpdateInput}
                 placeholder="Let us know something about you"
-                className="bg-gray-100 w-full px-4 py-2 rounded-lg  border-none text-black"
+                className="bg-primary-text_area w-full px-4 py-2 rounded-lg  border-none text-black"
             />
             {errors.introduction && <p className="text-red-500">{errors.introduction.message}</p>}
             {/* </form> */}

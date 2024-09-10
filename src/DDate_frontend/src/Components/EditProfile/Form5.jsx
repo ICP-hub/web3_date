@@ -189,7 +189,7 @@ const Form5 = ({ formData, setFormData }) => {
           {["Male", "Female", "Network", "Friends", "Business partner"].map((interest) => (
             <label
               key={interest}
-              className={`inline-block px-3 py-2 rounded-full text-sm focus:outline-none transition duration-300 ${selectedInterests === interest ? "bg-yellow-500 text-black" : "bg-transparent hover:bg-yellow-500 hover:text-black md:text-black border border-black"
+              className={`inline-block px-3 py-2 rounded-full text-sm focus:outline-none transition duration-300 ${selectedInterests === interest ? "bg-primary-option_color text-black" : "bg-transparent hover:bg-primary-option_color hover:text-black md:text-black border border-black"
                 }`}
             >
               <input
@@ -215,7 +215,7 @@ const Form5 = ({ formData, setFormData }) => {
           {["18-20", "20-25", "25-30", "30-50"].map((preferAge) => (
             <label
               key={preferAge}
-              className={`inline-block px-3 py-2 rounded-full text-sm focus:outline-none transition duration-300 ${selectedPreferAge === preferAge ? "bg-yellow-500 text-black" : "bg-transparent hover:bg-yellow-500 hover:text-black md:text-black border border-black"
+              className={`inline-block px-3 py-2 rounded-full text-sm focus:outline-none transition duration-300 ${selectedPreferAge === preferAge ? "bg-primary-option_color text-black" : "bg-transparent hover:bg-primary-option_color hover:text-black md:text-black border border-black"
                 }`}
             >
               <input
@@ -249,7 +249,7 @@ const Form5 = ({ formData, setFormData }) => {
                 name="selectedCountry"
                 {...register("selectedCountry", { required: "Select a country" })}
                 render={({ field }) => (
-                  <><select className="w-full px-4 py-2 font-bold rounded-full border border-white md:border-black bg-transparent text-white md:text-gray-400 focus:ring-yellow-500 focus:border-yellow-500 appearance-none" {...field}>
+                  <><select className="w-full px-4 py-2 font-bold rounded-full border border-white md:border-black bg-transparent text-white md:text-gray-400 focus:ring-primary-option_color focus:border-primary-option_color appearance-none" {...field}>
                     <option value="">Select Country</option>
                     {Country.getAllCountries().map(country => (
                       <option key={country.isoCode} value={country.isoCode}>
@@ -278,7 +278,7 @@ const Form5 = ({ formData, setFormData }) => {
                 // value={currentCountry}
                 {...register("selectedCountry", { required: "Select a country" })}
                 onChange={(e) => setCurrentCountry(e.target.value)}
-                className="w-full px-4 py-2 font-bold rounded-full border border-white md:border-black bg-transparent text-white md:text-gray-400 focus:ring-yellow-500 focus:border-yellow-500 appearance-none"
+                className="w-full px-4 py-2 font-bold rounded-full border border-white md:border-black bg-transparent text-white md:text-gray-400 focus:ring-primary-option_color focus:border-primary-option_color appearance-none"
               >
                 <option value="">Select country</option>
                 {availableCountries.map((Country) => {
@@ -319,7 +319,7 @@ const Form5 = ({ formData, setFormData }) => {
                 // name="selectedCountry"
                 {...register("selectedState", { required: "Select a state" })}
                 render={({ field }) => (
-                  <><select className="w-full px-4 py-2 font-bold rounded-full border border-white md:border-black bg-transparent text-white md:text-gray-400 focus:ring-yellow-500 focus:border-yellow-500 appearance-none" {...field}>
+                  <><select className="w-full px-4 py-2 font-bold rounded-full border border-white md:border-black bg-transparent text-white md:text-gray-400 focus:ring-primary-option_color focus:border-primary-option_color appearance-none" {...field}>
                     <option value="">Select State</option>
                     {availableStates.map(state => (
                       <option key={state.isoCode} value={state.isoCode}>
@@ -351,7 +351,7 @@ const Form5 = ({ formData, setFormData }) => {
                 value={currentState}
                 {...register("selectedState", { required: "Select a state" })}
                 onChange={(e) => setCurrentState(e.target.value)}
-                className="w-full px-4 py-2 font-bold rounded-full border border-white md:border-black bg-transparent text-white md:text-gray-400 focus:ring-yellow-500 focus:border-yellow-500 appearance-none"
+                className="w-full px-4 py-2 font-bold rounded-full border border-white md:border-black bg-transparent text-white md:text-gray-400 focus:ring-primary-option_color focus:border-primary-option_color appearance-none"
               >
                 <option value="">Select state</option>
                 {availableStates.map((state) => {
@@ -390,7 +390,7 @@ const Form5 = ({ formData, setFormData }) => {
               <Controller
                 {...register("selectedCity")}
                 render={({ field }) => (
-                  <><select className="w-full px-4 py-2 font-bold rounded-full border border-white md:border-black bg-transparent text-white md:text-gray-400 focus:ring-yellow-500 focus:border-yellow-500 appearance-none" {...field}>
+                  <><select className="w-full px-4 py-2 font-bold rounded-full border border-white md:border-black bg-transparent text-white md:text-gray-400 focus:ring-primary-option_color focus:border-primary-option_color appearance-none" {...field}>
                     <option value="">Select City</option>
                     {availableCities.map(city => (
                       <option key={city.isoCode} value={city.isoCode}>
@@ -427,7 +427,7 @@ const Form5 = ({ formData, setFormData }) => {
                 name="selectedCity"
                 {...register("selectedCity", { required: "Select a city" })}
                 onChange={(e) => setCurrentCity(e.target.value)}
-                className="w-full px-4 py-2 font-bold rounded-full border border-white md:border-black bg-transparent text-white md:text-gray-400 focus:ring-yellow-500 focus:border-yellow-500 appearance-none"
+                className="w-full px-4 py-2 font-bold rounded-full border border-white md:border-black bg-transparent text-white md:text-gray-400 focus:ring-primary-option_color focus:border-primary-option_color appearance-none"
               >
                 <option value="">Select city</option>
                 {availableCities.map((city) => (
@@ -483,7 +483,7 @@ const Form5 = ({ formData, setFormData }) => {
                 name="preferredCountry"
                 {...register("preferredCountry", { required: "Select a country" })}
                 render={({ field }) => (
-                  <><select className="w-full px-4 py-2 font-bold rounded-full border border-white md:border-black bg-transparent text-white md:text-gray-400 focus:ring-yellow-500 focus:border-yellow-500 appearance-none" {...field}>
+                  <><select className="w-full px-4 py-2 font-bold rounded-full border border-white md:border-black bg-transparent text-white md:text-gray-400 focus:ring-primary-option_color focus:border-primary-option_color appearance-none" {...field}>
                     <option value="">Select State</option>
                     {Country.getAllCountries().map(country => (
                       <option key={country.isoCode} value={country.isoCode}>
@@ -521,7 +521,7 @@ const Form5 = ({ formData, setFormData }) => {
                 value={preferredCountry}
                 {...register("preferredCountry", { required: "Select a country" })}
                 onChange={(e) => setPreferredCountry(e.target.value)}
-                className="w-full px-4 py-2 font-bold rounded-full border border-white md:border-black bg-transparent text-white md:text-gray-400 focus:ring-yellow-500 focus:border-yellow-500 appearance-none"
+                className="w-full px-4 py-2 font-bold rounded-full border border-white md:border-black bg-transparent text-white md:text-gray-400 focus:ring-primary-option_color focus:border-primary-option_color appearance-none"
               >
                 <option value="" disabled >Select country</option>
                 {preferredCountriesList.map((Country) => {
@@ -563,7 +563,7 @@ const Form5 = ({ formData, setFormData }) => {
                 // name="selectedCountry"
                 {...register("preferredState", { required: "Select a state" })}
                 render={({ field }) => (
-                  <><select className="w-full px-4 py-2 font-bold rounded-full border border-white md:border-black bg-transparent text-white md:text-gray-400 focus:ring-yellow-500 focus:border-yellow-500 appearance-none" {...field}>
+                  <><select className="w-full px-4 py-2 font-bold rounded-full border border-white md:border-black bg-transparent text-white md:text-gray-400 focus:ring-primary-option_color focus:border-primary-option_color appearance-none" {...field}>
                     <option value="">Select State</option>
                     {preferredStatesList.map(country => (
                       <option key={country.isoCode} value={country.isoCode}>
@@ -602,7 +602,7 @@ const Form5 = ({ formData, setFormData }) => {
                 name="preferredState"
                 {...register("preferredState", { required: "Select a state" })}
                 onChange={(e) => setPreferredState(e.target.value)}
-                className="w-full px-4 py-2 font-bold rounded-full border border-white md:border-black bg-transparent text-white md:text-gray-400 focus:ring-yellow-500 focus:border-yellow-500 appearance-none"
+                className="w-full px-4 py-2 font-bold rounded-full border border-white md:border-black bg-transparent text-white md:text-gray-400 focus:ring-primary-option_color focus:border-primary-option_color appearance-none"
               >
                 <option value="" disabled >Select state</option>
                 {preferredStatesList.map((state) => {
@@ -642,7 +642,7 @@ const Form5 = ({ formData, setFormData }) => {
               <Controller className
                 {...register("preferredCity")}
                 render={({ field }) => (
-                  <><select className="w-full px-4 py-2 font-bold rounded-full border border-white md:border-black bg-transparent text-white md:text-gray-400 focus:ring-yellow-500 focus:border-yellow-500 appearance-none" {...field}>
+                  <><select className="w-full px-4 py-2 font-bold rounded-full border border-white md:border-black bg-transparent text-white md:text-gray-400 focus:ring-primary-option_color focus:border-primary-option_color appearance-none" {...field}>
                     <option value="">Select State</option>
                     {preferredCitiesList.map(city => (
                       <option key={city.isoCode} value={city.isoCode}>
@@ -680,7 +680,7 @@ const Form5 = ({ formData, setFormData }) => {
                 name="preferredCity"
                 {...register("preferredCity", { required: "Select a city" })}
                 onChange={(e) => setPreferredCity(e.target.value)}
-                className="w-full px-4 py-2 font-bold rounded-full border border-white md:border-black bg-transparent text-white md:text-gray-400 focus:ring-yellow-500 focus:border-yellow-500 appearance-none"
+                className="w-full px-4 py-2 font-bold rounded-full border border-white md:border-black bg-transparent text-white md:text-gray-400 focus:ring-primary-option_color focus:border-primary-option_color appearance-none"
               >
                 <option value="" disabled>Select city</option>
                 {preferredCitiesList.map((city) => (
@@ -724,7 +724,7 @@ const Form5 = ({ formData, setFormData }) => {
             name="selectedLocation"
             placeholder="Your Location"
             {...register("selectedLocation")}
-            className="w-full px-4 py-2 rounded-full border border-black bg-transparent text-black focus:ring-yellow-500 focus:border-yellow-500"
+            className="w-full px-4 py-2 rounded-full border border-black bg-transparent text-black focus:ring-primary-option_color focus:border-primary-option_color"
           />
           {errors.selectedLocation && <p className="text-red-500">{errors.selectedLocation.message}</p>}
         </div>
@@ -741,7 +741,7 @@ const Form5 = ({ formData, setFormData }) => {
             id="selectedPreferLocation"
             placeholder="Your Preferred Location"
             {...register("selectedPreferLocation")}
-            className="w-full px-4 py-2 rounded-full border border-black bg-transparent md:text-black focus:ring-yellow-500 focus:border-yellow-500"
+            className="w-full px-4 py-2 rounded-full border border-black bg-transparent md:text-black focus:ring-primary-option_color focus:border-primary-option_color"
           />
           {errors.selectedPreferLocation && <p className="text-red-500">{errors.selectedPreferLocation.message}</p>}
         </div>

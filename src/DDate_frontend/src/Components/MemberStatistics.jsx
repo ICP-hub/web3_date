@@ -3,11 +3,11 @@ import React from "react";
 
 const MemberStatistics = () => {
   return (
-    <div
-      style={{
-        background:
-          "radial-gradient(84.33% 84.32% at 51.71% 43.22%, #E28110 0%, #26011C 100%)",
-      }}
+    <div className="bg-primary-wallColor"
+      // style={{
+      //   background:
+      //     "radial-gradient(84.33% 84.32% at 51.71% 43.22%, #E28110 0%, #26011C 100%)",
+      // }}
     >
     <div className="container mx-auto">
 <div className="font-num flex  flex-wrap w-full  md: items-center  ">
@@ -28,7 +28,7 @@ const MemberStatistics = () => {
             />
           </svg>{" "}
         </div>
-        <p className="text-white font-bold text-base md:text-lg lg:text-xl mt-2">
+        <p className="text-black font-bold text-base md:text-lg lg:text-xl mt-2">
           Total Members
         </p>
       </div>
@@ -48,7 +48,7 @@ const MemberStatistics = () => {
             />
           </svg>{" "}
         </div>
-        <p className="text-white font-bold text-base md:text-lg lg:text-xl mt-2">
+        <p className="text-black font-bold text-base md:text-lg lg:text-xl mt-2">
           Premium Members
         </p>
       </div>
@@ -78,7 +78,7 @@ const MemberStatistics = () => {
             />
           </svg>{" "}
         </div>
-        <p className="text-white font-bold text-base md:text-lg lg:text-xl mt-2">
+        <p className="text-black font-bold text-base md:text-lg lg:text-xl mt-2">
           Men
         </p>
       </div>
@@ -108,7 +108,7 @@ const MemberStatistics = () => {
             />
           </svg>{" "}
         </div>
-        <p className="text-white font-bold text-base md:text-lg lg:text-xl mt-2">
+        <p className="text-black font-bold text-base md:text-lg lg:text-xl mt-2">
           Women
         </p>
       </div>

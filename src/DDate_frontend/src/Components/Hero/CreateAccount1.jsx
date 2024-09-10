@@ -115,7 +115,7 @@ function getMinDate() {
 
 const CreateAccount1 = () => {
   // const { backendActor } = useAuth();
-  const [imageFields, setImageFields] = useState([[], [], [], [], []]);
+  const [imageFields, setImageFields] = useState([[], [], [], [], [], []]);
   const [imageError, setImageError] = useState(false)
   const [btnDisable, setBtnDisable] = useState(false)
   // image array to store image url of the users.
@@ -488,7 +488,7 @@ const CreateAccount1 = () => {
                     />
                   </svg>
 
-                  <span className="flex-grow text-center md:text-2xl text-xl">
+                  <span className="flex-grow text-center md:text-2xl text-xl text-black">
                     Allow Us to Know You
                   </span>
                 </div>
@@ -501,7 +501,7 @@ const CreateAccount1 = () => {
                 `}</style>
               </h2>
 
-              <div className="border-t-2 border-solid md:border-black border-white w-full mt-4 mb-4 md:ml-6"></div>
+              <div className="bg-black h-[1px] w-full mt-4 mb-4 md:ml-6"></div>
               <form onSubmit={handleSubmit(onSubmit, onErrorHandler)}>
                 {index === 0 && <Form1 />}
                 {index === 1 && <Form2 />}
@@ -512,7 +512,7 @@ const CreateAccount1 = () => {
                 <div className="flex justify-between">
                   <button
                     type="button"
-                    className={`${index === 0 && "collapse"} ${index === 4 && "collapse"} text-white  font-semibold py-2 px-6 rounded-full text-b md:text-black md:hover:text-black`}
+                    className={`${index === 0 && ""} ${index === 4 && "collapse"} text-white  font-semibold py-2 px-6 rounded-full text-b md:text-black md:hover:text-black`}
                     onClick={handleSkip}
                   // disabled={index === 0}
                   >
@@ -524,7 +524,7 @@ const CreateAccount1 = () => {
                       <button
                         disabled={btnDisable}
                         type="submit"
-                        className="bg-yellow-500 font-semibold py-2 px-6 rounded-full hover:bg-yellow-600 text-white md:text-black md:hover:text-black"
+                        className="bg-primary-color font-semibold py-2 px-6 rounded-full hover:bg-secondary-dark_hover text-white md:text-white md:hover:text-white"
                       >
                         {isSubmitting ? (
                           <ThreeDots
@@ -546,7 +546,7 @@ const CreateAccount1 = () => {
                   ) : (
                     <button
                       type="button"
-                      className="bg-yellow-500 font-semibold py-2 px-6 rounded-full hover:bg-yellow-600 text-white md:text-black md:hover:text-black"
+                      className="bg-primary-color font-semibold py-2 px-6 rounded-full hover:bg-secondary-dark_hover text-white md:text-white md:hover:text-white"
                       onClick={handleNext}
                     >
                       Next

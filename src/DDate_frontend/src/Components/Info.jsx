@@ -3,20 +3,22 @@ import React from "react";
 
 const Info = () => {
   return (
-    <div  style={{
-      background:
-        "radial-gradient(84.33% 84.32% at 51.71% 43.22%, #E28110 0%, #26011C 100%)",
-    }}>
+    <div  className="bg-primary-wallColor"
+    //  style={{
+    //   background:
+    //     "radial-gradient(84.33% 84.32% at 51.71% 43.22%, #E28110 0%, #26011C 100%)",
+    // }}
+    >
     <div className="container mx-auto">
     <div className=" flex flex-col items-center w-full font-num">
       <div
         className="w-full py-8 sm:py-10 md:py-12 lg:py-14 px-[6%]"
        
       >
-        <h2 className="text-center font-num text-white text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold mb-2 mt-2">
+        <h2 className="text-center font-num text-black text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold mb-2 mt-2">
           How It Works
         </h2>
-        <p className="text-center text-white text-sm sm:text-base md:text-lg lg:text-lg font-light max-w-2xl sm:max-w-3xl md:max-w-4xl mx-auto mb-4">
+        <p className="text-center text-black text-sm sm:text-base md:text-lg lg:text-lg font-light max-w-2xl sm:max-w-3xl md:max-w-4xl mx-auto mb-4">
           Three Easy Steps To Join Us And Find Your Perfect Match
         </p>
 
@@ -40,10 +42,10 @@ const Info = () => {
 
         <div className="flex flex-col md:flex-row justify-between items-start pt-6 sm:pt-8 md:pt-10 lg:pt-12 font-num font-custom mb-12 md:mb-14 lg:mb-2">
           <div className="flex items-center mb-2 md:mb-0">
-            <div className="text-7xl text-white mr-4">1</div>
+            <div className="text-7xl text-black mr-4">1</div>
             <div>
-              <p className="text-2xl text-white mb-2">Create Account</p>
-              <p className="text-white text-sm font-light max-w-xs">
+              <p className="text-2xl text-black mb-2">Create Account</p>
+              <p className="text-black text-sm font-light max-w-xs">
                 Create an account to get started on our platform. It's easy and
                 only takes a few minutes to set up your profile.
               </p>
@@ -51,10 +53,10 @@ const Info = () => {
           </div>
 
           <div className="flex items-center mb-2 md:mb-0">
-            <div className="text-7xl text-white mr-4">2</div>
+            <div className="text-7xl text-black mr-4">2</div>
             <div>
-              <p className="text-2xl text-white mb-2">Update Your Profile</p>
-              <p className="text-white text-sm font-light max-w-xs">
+              <p className="text-2xl text-black mb-2">Update Your Profile</p>
+              <p className="text-black text-sm font-light max-w-xs">
                 Make your profile stand out by adding your interests, photos,
                 and more. The more information you provide, the easier it is for
                 others to find you.
@@ -63,10 +65,10 @@ const Info = () => {
           </div>
 
           <div className="flex items-center">
-            <div className="text-7xl text-white mr-4">3</div>
+            <div className="text-7xl text-black mr-4">3</div>
             <div>
-              <p className="text-2xl text-white mb-2">Swipe To Find Match</p>
-              <p className="text-white text-sm font-light max-w-xs">
+              <p className="text-2xl text-black mb-2">Swipe To Find Match</p>
+              <p className="text-black text-sm font-light max-w-xs">
                 Explore and discover potential matches by swiping right or left.
                 Find people who share your interests and start a conversation
                 today.

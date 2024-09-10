@@ -47,8 +47,8 @@ const Form2 = ({ setIndex }) => {
               key={genPro}
               className={`inline-block px-3 py-2 rounded-full text-sm focus:outline-none transition duration-300
                             ${selectedGenderPronouns === genPro
-                  ? "bg-yellow-500 text-black"
-                  : "bg-transparent hover:bg-yellow-500 hover:text-black text-white md:text-black border border-white md:border-black"
+                  ? "bg-primary-option_color text-black"
+                  : "bg-transparent hover:bg-primary-option_color hover:text-black text-white md:text-black border border-white md:border-black"
                 }`}
             >
               <input
@@ -79,8 +79,8 @@ const Form2 = ({ setIndex }) => {
                 key={lifePathNumber}
                 className={`inline-block px-3 py-2 rounded-full text-sm focus:outline-none transition duration-300
                             ${selectedlifePath === lifePathNumber
-                    ? "bg-yellow-500 text-black"
-                    : "bg-transparent hover:bg-yellow-500 hover:text-black text-white md:text-black border border-white md:border-black"
+                    ? "bg-primary-option_color text-black"
+                    : "bg-transparent hover:bg-primary-option_color hover:text-black text-white md:text-black border border-white md:border-black"
                   }`}
               >
                 <input
@@ -122,8 +122,8 @@ const Form2 = ({ setIndex }) => {
               key={religion}
               className={`inline-block px-3 py-2 rounded-full text-sm focus:outline-none transition duration-300
                             ${selectedReligionValue === religion
-                  ? "bg-yellow-500 text-black"
-                  : "bg-transparent hover:bg-yellow-500 hover:text-black text-white md:text-black border border-white md:border-black"
+                  ? "bg-primary-option_color text-black"
+                  : "bg-transparent hover:bg-primary-option_color hover:text-black text-white md:text-black border border-white md:border-black"
                 }`}
             >
               <input
@@ -166,8 +166,8 @@ const Form2 = ({ setIndex }) => {
               key={zodiac}
               className={`inline-block px-3 py-2 rounded-full text-sm focus:outline-none transition duration-300
                             ${zodiac === selectedZodiacSign
-                  ? "bg-yellow-500 text-black"
-                  : "bg-transparent hover:bg-yellow-500 hover:text-black text-white md:text-black border border-white md:border-black"
+                  ? "bg-primary-option_color text-black"
+                  : "bg-transparent hover:bg-primary-option_color hover:text-black text-white md:text-black border border-white md:border-black"
                 }`}
             >
               <input
@@ -205,8 +205,8 @@ const Form2 = ({ setIndex }) => {
               className={`inline-block px-3 py-2 rounded-full text-sm focus:outline-none transition duration-300
                             ${errors.selectedFooding && "border-red-500"}
                             ${fooding === selectedFoodingValue
-                  ? "bg-yellow-500 text-black"
-                  : "bg-transparent hover:bg-yellow-500 hover:text-black text-white md:text-black border border-white md:border-black"
+                  ? "bg-primary-option_color text-black"
+                  : "bg-transparent hover:bg-primary-option_color hover:text-black text-white md:text-black border border-white md:border-black"
                 }`}
             >
               <input

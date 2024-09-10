@@ -15,7 +15,8 @@ export default function NodataCard() {
                 className="bg-black rounded-b-xl w-full lg:max-w-lg h-[30%] absolute bottom-0"
                 style={{
                     background:
-                        "linear-gradient(to top, rgb(0, 0, 0) 50%, rgba(255, 255, 255, 0) 100%)",
+                        // "linear-gradient(to top, rgb(0, 0, 0) 50%, rgba(255, 255, 255, 0) 100%)",
+                        "linear-gradient(0deg, rgba(115, 134, 133, 0.5) 50%, rgba(255, 255, 255, 0) 100%)"
                 }}
             ></div>
         </div>
