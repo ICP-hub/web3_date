@@ -1,17 +1,28 @@
 import React, { useEffect } from 'react';
-import { useFormContext } from 'react-hook-form';
+import { useFormContext, Controller } from 'react-hook-form';
+import PhoneInput from 'react-phone-number-input';
+import 'react-phone-number-input/style.css';
 
 const Form1 = () => {
     const { register, formState: { errors }, setValue, defaultvalues, getValues, watch } = useFormContext();
     const selectedGender = watch('usergender');  // This will monitor changes in 'usergender'
 
-    console.log("Errors:", errors);
-    console.log("Register:", register);
+    // console.log("Errors:", errors);
+    // console.log("Register:", register);
     // Set the default value
     // useEffect(() => {
     // setValue('usergender', 'Male');
     // }, [])
 
+    // Validation function for the mobile number.
+    const handleValidate = (value) => {
+        console.log("value mobile = ",value.length)
+        if (!value) return 'Mobile number is required';
+        if(value.length < 4)  return 'Invalid mobile number';
+        if(value.length > 16)  return 'Invalid mobile number';
+        // Add more validation logic if needed
+        return true;
+    };
 
     return (
         <div className="w-full rounded-lg p-6 shadow-md md:bg-transparent md:shadow-none">
@@ -90,14 +101,52 @@ const Form1 = () => {
                 <label htmlFor="mobile" className="block text-lg font-semibold mb-2 text-white md:text-black">
                     Enter Your Mobile No {errors.mobile && <span className="text-red-500">*</span>}
                 </label>
-                <input
+                {/* using controller to bridge the gap between custom compoent and the react hook form */}
+                <Controller
+                    name="mobile"
+                    // control={control}
+                    // defaultValue=""
+                    rules={{ validate: handleValidate }}
+                    render={({ field }) => (
+                        <PhoneInput
+                            {...field}
+                            id="mobile"
+                            international
+                            defaultCountry="US"
+                            // placeholder="Enter phone number"
+                            onChange={(value) => {
+                                field.onChange(value);
+                                setValue('mobile', value);
+                            }}
+                            className="form-input text-sm bg-transparent w-full border-2 px-2 border-gray-300 py-1.5 rounded-3xl text-white md:text-black"
+                        />
+                    )}
+                />
+                {/* <PhoneInput
+                    id="mobile"
+                    name="mobile"
+                    international
+                    defaultCountry="US"
+                    placeholder="Enter phone number"
+                    {...register('mobile', {
+                        required: 'Mobile number is required',
+                        validate: handleValidate,
+                    })}
+                    onChange={(value) => setValue('mobile', value)}
+                    className="form-input text-sm bg-transparent w-full border-2 px-2 border-gray-300 py-1.5 rounded-3xl text-white md:text-black"
+                /> */}
+                {/* <input
                     id="mobile"
                     type="tel"
                     name="mobile"
-                    {...register('mobile', { required: "Mobile number is required", pattern: { value: /^\d{10}$/, message: "Invalid mobile number" } })}
+                    // {...register('mobile', { required: "Mobile number is required", pattern: { value: /^\d{10}$/, message: "Invalid mobile number" } })}
+                    {...register('mobile', {
+                        required: "Mobile number is required",
+                        validate: handleValidate,
+                    })}
                     // {...register('mobile')}
                     className="form-input text-sm bg-transparent w-full border-2 px-2 border-gray-300 py-1.5 rounded-3xl text-white md:text-black "
-                />
+                /> */}
                 {errors.mobile && <p className="text-red-500">{errors.mobile.message}</p>}
             </div>
 
