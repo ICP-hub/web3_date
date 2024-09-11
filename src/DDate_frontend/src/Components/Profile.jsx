@@ -17,6 +17,7 @@ const Profile = () => {
   const [loader, setLoader] = useState(false);
   const [progress, setProgress] = useState(60);
   const [result, SetResult] = useState("");
+  const [id, setId] = useState('');
   const [formData, setFormData] = useState({
     gender: "",
     email: "",
@@ -89,13 +90,20 @@ const Profile = () => {
     return circumference - (progress / 100) * circumference;
   };
 
-  const location = useLocation();
-  const id = location.state;
-  console.log("data in profiel ", id);
+  // const location = useLocation();
+  // const id = location.state;
+  // console.log("data in profiel ", id);
+
+
+  // Retrieve userId from localStorage
+  useEffect(() => {
+    const storedUserId = localStorage.getItem('userId');
+    setId(storedUserId);
+  }, []); 
 
   useEffect(() => {
     const getData = async () => {
-      // console.log("Generated Id", id);
+      console.log("Generated Id", id);
       try {
         await backendActor.get_an_account(id).then((userProfileData) => {
           if (userProfileData) {

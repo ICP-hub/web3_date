@@ -174,7 +174,6 @@ const ChattingPage = () => {
                   placeholder="Search by name"
                 />
               </div>
-              {<Loader/> }
               <div className="bg-white">
                 {loading ? (
                   <Loader />
