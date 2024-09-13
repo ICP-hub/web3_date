@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import SidebarComponent from "./SidebarComponent";
 import { Principal } from "@dfinity/principal";
 import back from "../../assets/Images/CreateAccount/back.svg";
-import Ellipse from "../../assets/Images/UserProfiles/Ellipse.svg";
+import Ellipse from "../../assets/Images/UserProfiles/Ellipse116.svg";
 import { CiEdit } from "react-icons/ci";
 import { useNavigate } from "react-router-dom";
 // import { DDate_backend } from "../../../declarations/DDate_backend/index";
@@ -285,7 +285,7 @@ const Profile = () => {
                           style={{ top: "11.5rem", left: "6.1rem" }}
                         />
                         <div
-                          className=" text-white font-bold text-xs absolute z-30"
+                          className=" text-black font-bold text-xs absolute z-30"
                           style={{ top: "12.0rem", left: "6.4rem" }}
                         >
                           {progress} %

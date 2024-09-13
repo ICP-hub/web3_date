@@ -7,16 +7,16 @@ import * as yup from 'yup';
 import Form1 from "./Form1";
 import Form2 from "./Form2";
 import Form3 from "./Form3";
-import Form4 from "./Form4";
+// import Form4 from "./Form4";
 import Form5 from "./Form5";
-import Form6 from "./Form6";
+// import Form6 from "./Form6";
 import uploadProfile from "../../../assets/Images/UserProfiles/upload.svg";
 import SidebarComponent from "../SidebarComponent";
 import { MdOutlineAddToPhotos } from "react-icons/md";
 import { useAuth } from "../../auth/useAuthClient";
 import { storage } from "../../firebase";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
-
+import { ThreeDots } from "react-loader-spinner";
 
 // const schema = yup.object({
 //   usergender: yup.string().required('Gender is required'),
@@ -53,12 +53,13 @@ const EditProfile = () => {
     0: ['username', 'usergender', 'email', 'mobile_number', 'dob', 'introduction'],
     1: ['genderPronouns', 'selectedLifePathNumber', 'selectedReligion', 'selectedZodiac', 'selectedFooding', 'selectedWhatYouDo', 'selectedLookingFor'],
     2: ['selectedsmoking', 'selecteddrink', 'selectedhobbies', 'selectedsports'],
-    3: ['selectedArt', 'selectedPets', 'selectedHabits', 'selectedActivities', 'selectedMovies', 'selectedTravel'],
-    4: ['selectedInterests', 'selectedPreferAge', 'selectedLocation', 'selectedPreferLocation',],
+    // 3: ['selectedArt', 'selectedPets', 'selectedHabits', 'selectedActivities', 'selectedMovies', 'selectedTravel'],
+    3: ['selectedInterests', 'selectedPreferAge', 'selectedLocation', 'selectedPreferLocation',],
     // 5: ['firstImage0', 'firstImage1', 'firstImage2', 'firstImage3', 'firstImage4']
   };
   const [index, setIndex] = useState(0);
   const [imageArray, setImageArray] = useState([[], [], [], [], [], []]);
+  const [btnDisable, setBtnDisable] = useState(false)
   // const [fireBaseImageArray, setFireBaseImageArray] = useState([])
   let fireBaseImageArray = [];
   const navigate = useNavigate()
@@ -66,7 +67,6 @@ const EditProfile = () => {
   const location = useLocation();
   const userdata = location.state;
   console.log("userdata = ", userdata)
-  console.log("userdata images = ", userdata.images)
   // console.log(typeof userdata.dob[0])
 
   // const myDOB = new Date(userdata.dob[0]);
@@ -203,6 +203,10 @@ const EditProfile = () => {
     }
   });
 
+  useEffect(() => {
+    console.log('Index changed to:', index);
+  }, [index]);
+
   // to get the exiting images of the user.
   useEffect(() => {
     // Create a new array to avoid directly mutating the state
@@ -220,10 +224,6 @@ const EditProfile = () => {
     // console.log("updated array = ", updatedImageArray)
   }, [userdata.images]);
 
-  useEffect(() => {
-    console.log("checking image array = ", imageArray)
-  }, [imageArray])
-
   const {
     handleSubmit,
     setValue,
@@ -234,10 +234,10 @@ const EditProfile = () => {
   const { backendActor } = useAuth();
 
   const onSubmit = async (data) => {
+    console.log("auto submission")
+    setBtnDisable(true)
     await handleImageToFirebase()
-    console.selectedFooding
     console.log('Final Form Data', data);
-    console.log('firebase before = ', fireBaseImageArray)
     if (backendActor) {
       const DdateData = {
         // user_id: [userdata?.user_id],
@@ -280,8 +280,6 @@ const EditProfile = () => {
         // outdoor_activities: [data?.selectedActivities],
         // preferred_gender: [data?.usergender],
       }
-      console.log(' Edited Ddatedata ', DdateData)
-      console.log('firebase after = ', fireBaseImageArray)
 
       try {
         await backendActor.update_an_account(userdata?.user_id, DdateData).then((result) => {
@@ -290,6 +288,7 @@ const EditProfile = () => {
             console.log(API)
             const trimedId = API.split(":")[1].trim();
             setId(trimedId);
+            setBtnDisable(false);
             navigate("/Profile", { state: trimedId })
             console.log("data submitted for testing")
           } else {
@@ -307,7 +306,6 @@ const EditProfile = () => {
 
   const handleNext = async () => {
     const isValid = await trigger(formFields[index]);
-    console.log('isValid: ', isValid);
     if (isValid) {
       setIndex(prevIndex => prevIndex + 1);
     }
@@ -318,10 +316,8 @@ const EditProfile = () => {
   }
 
   const handleBack = () => {
-    console.log("It is outside isValid")
     if (index > 0) {
       setIndex(prevIndex => prevIndex - 1);
-      console.log("It is inside isValid")
     }
   };
 
@@ -391,9 +387,7 @@ const EditProfile = () => {
             try {
               const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
               console.log('File successfully uploaded:', downloadURL);
-              console.log("firebase before =", fireBaseImageArray)
               fireBaseImageArray.push(downloadURL)
-              console.log("firebase after =", fireBaseImageArray)
               resolve(downloadURL); // Resolve the Promise with the download URL
             } catch (error) {
               console.error('Error getting download URL:', error);
@@ -442,6 +436,10 @@ const EditProfile = () => {
     return uploadPromises;
   }
 
+  const onErrorHandler = (val) => {
+    console.log("error", val);
+  };
+
   // const [index, setIndex] = useState(0);
 
   // const updateFormData = (newData) => {
@@ -471,7 +469,7 @@ const EditProfile = () => {
                     <style jsx>{`@media (max-width: 768px) {#svg-path {fill: black;}}`}</style>
                   </h2>
                   <div className="border-t-2 border-solid md:border-black border-white w-[90% ] mt-4 mb-4 md:ml-6"></div>
-                  {userdata !== undefined && <form onSubmit={handleSubmit(onSubmit)}>
+                  {/* {userdata !== undefined && <form onSubmit={handleSubmit(onSubmit, onErrorHandler)}> */}
                     {index === 0 &&
                       <Form1 />
                     }
@@ -505,13 +503,33 @@ const EditProfile = () => {
                       {/* <button type="button" className="font-semibold py-2 px-6  text-white md:text-black md:hover:text-black" onClick={handleSkip}>Skip</button> */}
                       {index === 3 ? (
                         <>
-                          <button type="submit" className="bg-primary-color font-semibold py-2 px-6 rounded-full hover:bg-secondary-dark_hover text-white md:text-white md:hover:text-white">Save Changes</button>
+                          <button
+                            disabled={btnDisable}
+                            type="button"
+                            onClick={handleSubmit(onSubmit,onErrorHandler)}
+                            className="bg-primary-color font-semibold py-2 px-6 rounded-full hover:bg-secondary-dark_hover text-white md:text-white md:hover:text-white"
+                          >
+                            {isSubmitting ? (
+                              <ThreeDots
+                                visible={true}
+                                height="35"
+                                width="35"
+                                color="#FFFEFF"
+                                radius="9"
+                                ariaLabel="three-dots-loading"
+                                wrapperStyle={{}}
+                                wrapperclassName=""
+                              />
+                            ) : (
+                              "Save changes"
+                            )}
+                          </button>
                         </>
                       ) : (
-                        <button type="button" className="bg-primary-color font-semibold py-2 px-6 rounded-full hover:bg-secondary-dark_hover text-white md:text-white md:hover:text-white" onClick={handleNext}>Next</button>
+                        <button type="button" className="bg-primary-color font-semibold py-2 px-6 rounded-full hover:bg-secondary-dark_hover text-white md:text-white md:hover:text-white mb-5" onClick={handleNext}>Next</button>
                       )}
                     </div>
-                  </form>}
+                  {/* </form>} */}
                 </div>
                 <div className="md:w-2/5 max-h-[90vh] overflow-y-auto">
                   <div className="border-gray-300 font-viga bg-white">

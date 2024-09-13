@@ -1,10 +1,14 @@
 import React, { useEffect } from 'react';
 import CompressImage from "../ImageCompressFolder/CompressImage";
-import { useFormContext } from 'react-hook-form';
+import { useFormContext, Controller } from 'react-hook-form';
+import PhoneInput from 'react-phone-number-input';
+import PhoneInputWithCountry from "react-phone-number-input/react-hook-form";
+import 'react-phone-number-input/style.css';
+import { isPossiblePhoneNumber } from "react-phone-number-input";
 
 const Form1 = ({ index, setIndex, AllformData, formData, setFormData }) => {
 
-    const { register, formState: { errors }, setValue, getValues, watch, handleSubmit } = useFormContext();
+    const { control, register, formState: { errors }, setValue, getValues, watch, handleSubmit } = useFormContext();
 
     const selectedGender = watch('usergender');
 
@@ -182,7 +186,50 @@ const Form1 = ({ index, setIndex, AllformData, formData, setFormData }) => {
             <label htmlFor="mobile_number" className="block font-semibold pt-2 text-lg">
                 Mobile No
             </label>
-            <input
+            {/* <Controller
+                name="mobile_number"
+                control={control}
+                // defaultValue='+917982343785'
+                // rules={{ validate: handleValidate }}
+                rules={{ required: true }}
+                render={({ field }) => (
+                    <PhoneInput
+                        {...field}
+                        id="mobile_number"
+                        international
+                        defaultCountry="US"
+                        // placeholder="Enter phone number"
+                        onChange={(value) => {
+                            field.onChange(value);
+                            console.log("the phone number value = ", value)
+                            setValue('mobile_number', value);
+                        }}
+                        className="form-input text-sm bg-transparent w-full border-2 px-2 border-gray-300 py-1.5 rounded-3xl text-white md:text-black"
+                    />
+                )}
+            /> */}
+            <Controller
+                name="mobile_number"
+                control={control}
+                rules={{ required: "Mobile number is required", validate: (value) => isPossiblePhoneNumber(value) || "Invalid number" }}
+                // rules={{ validate: handleValidate }}
+                render={({ field }) => (
+                    <PhoneInputWithCountry
+                        {...field}
+                        international={false}
+                        defaultCountry="US"
+                        value={field.value}
+                        onChange={(value) => {
+                            field.onChange(value);
+                            setValue('mobile_number', value);
+                        }}
+                        control={control}
+                        className="form-input text-sm bg-transparent w-full border-2 px-2 border-gray-300 py-1.5 rounded-3xl text-white md:text-black"
+                    />
+                )}
+            />
+
+            {/* <input
                 id="mobile_number"
                 type="tel"
                 // value={formData.mobile_number}
@@ -190,7 +237,7 @@ const Form1 = ({ index, setIndex, AllformData, formData, setFormData }) => {
                 {...register('mobile_number', { required: "Mobile number is required", pattern: { value: /^\d{10}$/, message: "Invalid mobile number" } })}
                 // onChange={handleUpdateInput}
                 className="form-input bg-transparent w-full border-2 px-2 border-gray-300 py-1.5 rounded-3xl text-sm"
-            />
+            /> */}
             {errors.mobile_number && <p className="text-red-500">{errors.mobile_number.message}</p>}
 
             <label htmlFor="dob" className="block font-semibold pt-2 text-lg">
