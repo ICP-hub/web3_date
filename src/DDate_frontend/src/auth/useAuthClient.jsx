@@ -95,6 +95,8 @@ const useAuthClient = (options = defaultOptions) => {
     const principal = identity.getPrincipal();
     const publicKey = identity._delegation?.publicKey;
 
+    console.log("use client publickey : ",publicKey)
+
     setAuthClient(client);
     setIsAuthenticated(isAuthenticated);
     setIdentity(identity);

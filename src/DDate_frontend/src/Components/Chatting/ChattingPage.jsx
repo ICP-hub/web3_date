@@ -6,6 +6,9 @@ import Loader from "../Loader";
 import ChattingPageformessage from "./ChattingPageformessage";
 import { useAuth } from "../../auth/useAuthClient";
 import { useLocation } from "react-router-dom";
+import { nodeBackendUrl } from "../../DevelopmentConfig";
+
+
 const ChattingPage = () => {
   const navigate = useNavigate();
   const [selectedProfile, setSelectedProfile] = useState(null);
@@ -16,61 +19,86 @@ const ChattingPage = () => {
   const { principal, publicKey } = useAuth();
   const location = useLocation();
   const userId = location.state;
-
-  console.log("userId", userId);
+  console.log("node url : ", nodeBackendUrl)
+  console.log("userId on chat page", userId);
+  console.log("principal", principal.toText())
+  console.log("publicKey ", publicKey)
   //fetch user id
-  useEffect(() => {
-    const fetchChatHistory = async () => {
-      setLoading(true);
-      console.log("call api of fetching user");
-      try {
-        const formdata = new FormData();
-        formdata.append("principal", principal);
-        formdata.append("publicKey", publicKey);
-        formdata.append("user_id", userId);
-        console.log("user_id", userId);
-        const requestOptions = {
-          method: "POST",
-          body: formdata,
-          redirect: "follow",
-        };
-        const response = await fetch(
-          "https://ddate.kaifoundry.com/api/v1/login/user"
-        ); // Adjust the endpoint according to your API
-        console.log("response", response);
-        if (!response.ok) {
-          throw new Error("Network response was not ok");
-        }
-        const data = await response.json();
-        setprivateToken(data.historyUsers);
-      } catch (error) {
-        console.error("Error fetching chat history:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
+  // useEffect(() => {
+  //   const fetchPrivateToken = async () => {
+  //     setLoading(true);
+  //     console.log("call api of fetching user");
+  //     try {
+  //       const formdata = new FormData();
+  //       formdata.append("principal", principal);
+  //       formdata.append("publicKey", publicKey);
+  //       formdata.append("user_id", userId);
+  //       console.log("user_id", userId);
+  //       const requestOptions = {
+  //         method: "POST",
+  //         body: formdata,
+  //         redirect: "follow",
+  //       };
+  //       const response = await fetch(
+  //         // "https://ddate.kaifoundry.com/api/v1/login/user"
+  //         `${nodeBackendUrl}/api/v1/login/user`, requestOptions
+  //       ); // Adjust the endpoint according to your API
+  //       console.log("Login user response on messsage page ", response);
+  //       if (!response.ok) {
+  //         throw new Error("Network response was not ok");
+  //       }
+  //       const data = await response.json();
+  //       setprivateToken(data.historyUsers);
+  //     } catch (error) {
+  //       console.error("Error fetching chat history:", error);
+  //     } finally {
+  //       setLoading(false);
+  //     }
+  //   };
 
-    fetchChatHistory();
-  }, []);
+  //   fetchPrivateToken();
+  // }, []);
   // Fetch chat history on component mount
   useEffect(() => {
     const fetchChatHistory = async () => {
       setLoading(true);
       console.log("Call chat history api ");
       try {
-        const formdata = new FormData();
-        formdata.append("x-principal", principal);
-        formdata.append("x-private-token", privateToken);
+        // const formdata = new FormData();
+        // formdata.append("x-principal", principal);
+        // formdata.append("x-private-token", privateToken);
+
+        // const requestOptions = {
+        //   method: "POST",
+        //   body: formdata,
+        //   redirect: "follow",
+        // };
+
+        const privToken = localStorage.getItem("privateToken")
+        console.log(privToken)
+        const myHeaders = new Headers();
+        myHeaders.append("Content-Type", "application/json");
+
+        const principalString = principal.toText()
+
+        const raw = JSON.stringify({
+          "x-principal": principalString,
+          "x-private-token": privToken,
+          userId,
+        })
 
         const requestOptions = {
           method: "POST",
-          body: formdata,
+          headers: myHeaders,
+          body: raw,
           redirect: "follow",
         };
+
         const response = await fetch(
-          "https://ddate.kaifoundry.com/api/v1/chat/history"
+          // "https://ddate.kaifoundry.com/api/v1/chat/history"
+          `${nodeBackendUrl}/api/v1/chat/history`, requestOptions
         ); // Adjust the endpoint according to your API
-        console.log("response", response);
+        console.log("chat history response", response);
         if (!response.ok) {
           throw new Error("Network response was not ok");
         }
@@ -97,7 +125,8 @@ const ChattingPage = () => {
             redirect: "follow",
           };
           const response = await fetch(
-            `https://ddate.kaifoundry.com/api/v1/chat/?principal&chat_id`
+            // `https://ddate.kaifoundry.com/api/v1/chat/?principal&chat_id`
+            `${nodeBackendUrl}/api/v1/chat/?principal&chat_id`
           ); // Adjust the endpoint according to your API
           console.log("selected profile id ", selectedProfile.id);
           if (!response.ok) {
@@ -133,9 +162,8 @@ const ChattingPage = () => {
 
         {/* Left side - takes 40% of the width */}
         <div
-          className={`col-span-12 ${
-            selectedProfile ? "md:col-span-4" : "md:col-span-10"
-          } px-6 lg:px-10  ${selectedProfile ? "hidden md:block" : ""}`}
+          className={`col-span-12 ${selectedProfile ? "md:col-span-4" : "md:col-span-10"
+            } px-6 lg:px-10  ${selectedProfile ? "hidden md:block" : ""}`}
         >
           <div className="flex items-center md:mt-10 ml-12 gap-2 mb-4">
             <img
@@ -178,7 +206,7 @@ const ChattingPage = () => {
                 {loading ? (
                   <Loader />
                 ) : (
-                  chatHistory.map((pro, index) => (
+                  chatHistory?.map((pro, index) => (
                     <div key={pro.id}>
                       <div
                         className="flex items-center p-3 md:p-4 hover:bg-gray-100 cursor-pointer"

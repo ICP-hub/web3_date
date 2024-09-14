@@ -4,6 +4,7 @@ import { useAuth } from "../auth/useAuthClient";
 import InternetIdentity from "../../assets/Images/WalletLogos/InternetIdentity.png";
 import NFID from "../../assets/Images/WalletLogos/NFID.png";
 import { Principal } from "@dfinity/principal";
+import { nodeBackendUrl } from "../DevelopmentConfig";
 
 // const WalletButton = ({ wallet, loginHandler, handlePopUp }) => (
 //   <li
@@ -60,7 +61,8 @@ const WalletModal = ({ isOpen, onClose }) => {
     try {
       const response = await fetch(
         // "https://ddate.kaifoundry.com/api/v1/register/user",
-        "http://localhost:5000/api/v1/register/user",
+        // "http://localhost:5000/api/v1/register/user",
+        `${nodeBackendUrl}/api/v1/register/user`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -86,7 +88,8 @@ const WalletModal = ({ isOpen, onClose }) => {
     try {
       const response = await fetch(
         // "https://ddate.kaifoundry.com/api/v1/login/user",
-        "http://localhost:5000/api/v1/login/user",
+        // "http://localhost:5000/api/v1/login/user",
+        `${nodeBackendUrl}/api/v1/login/user`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },

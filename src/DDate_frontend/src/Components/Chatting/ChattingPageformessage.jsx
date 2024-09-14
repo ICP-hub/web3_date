@@ -8,12 +8,14 @@ import backarrow from "../../../assets/Images/CreateAccount/backarrow.png";
 import { useNavigate } from "react-router-dom";
 import SidebarComponent from "../SidebarComponent";
 import { useAuth } from "../../auth/useAuthClient";
+import { nodeBackendUrl } from "../../DevelopmentConfig";
 
-const ChattingPageformessage = ({ messages, status }) => {
+const ChattingPageformessage = ({ messages, status,profile }) => {
   const { chatId } = useParams(); // toPrincipal
+  // chatId = profile.chat_id;
   const navigate = useNavigate();
   const location = useLocation();
-  const { profile } = location.state || {};
+  // const { profile } = location.state || {};
 
   const dummySentMessages = [
     {
@@ -63,7 +65,8 @@ const ChattingPageformessage = ({ messages, status }) => {
   const [toggleBarVisible, setToggleBarVisible] = useState(false); // State for toggle bar visibility
 
   useEffect(() => {
-    const newSocket = io("http://localhost:5000", {
+    console.log("profile",profile)
+    const newSocket = io(nodeBackendUrl, {
       query: { principal },
     });
 
@@ -81,15 +84,17 @@ const ChattingPageformessage = ({ messages, status }) => {
   }, [principal]);
 
   const sendMessage = () => {
+    console.log("profile",profile)
     console.log("Sending messages ...");
-    if (socket && chatId) {
+    console.log("djdijd",profile.chat_id,socket)
+    if (socket && profile.chat_id) {
       const newMessage = {
-        user_id: principal.toText(),
-        to_user_id: chatId,
+        principal: principal.toText(),
+        to_user_id: profile.chat_id.split("-")[2],
         message,
-        chat_id: principal.toText(),
+        chat_id: profile.chat_id, // principal.toText()
       };
-      console.log(newMessage);
+      console.log("newMessage : ", newMessage);
       socket.emit("sendMessage", JSON.stringify(newMessage));
 
       // Add the new message to sent messages state
@@ -143,13 +148,14 @@ const ChattingPageformessage = ({ messages, status }) => {
               <div>
                 <img
                   className="w-10 h-10 rounded-full"
-                  src="https://darrenjameseeley.files.wordpress.com/2014/09/expendables3.jpeg"
+                  // src="https://darrenjameseeley.files.wordpress.com/2014/09/expendables3.jpeg"
+                  src={profile.image[0]}
                 />
                 {/* <img className="w-10 h-10 rounded-full" src={profile.images[0]} /> */}
               </div>
               <div className="ml-4">
-                <p className="text-white">Tushar Jain</p>
-                <p className="text-white text-xs mt-1">Tushar Jain</p>
+                <p className="text-white">{profile.name}</p>
+                {/* <p className="text-white text-xs mt-1">{profile.name}</p> */}
               </div>
             </div>
             <div className="flex">

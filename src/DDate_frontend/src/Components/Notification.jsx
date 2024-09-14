@@ -53,6 +53,7 @@ const Notification = () => {
   }, [backendActor, userId, page, size]);
   const addChatList = async (user_id) => {
     try {
+      console.log("user id addCHatList : ",user_id)
       const result = await backendActor.add_user_to_chatlist(user_id);
       console.log("add_user_to_chatlist", result);
       if (result && result?.Ok) {

@@ -14,6 +14,7 @@ import Form6 from "./Form6";
 import { useAuth } from "../../auth/useAuthClient";
 import { storage } from '../../firebase';
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
+import { nodeBackendUrl } from "../../DevelopmentConfig";
 // Define Yup schema for the entire form including the image validation
 
 function getMinDate() {
@@ -248,7 +249,8 @@ const CreateAccount1 = () => {
     try {
       const response = await fetch(
         // "https://ddate.kaifoundry.com/api/v1/register/user",
-        "http://localhost:5000/api/v1/register/user",
+        // "http://localhost:5000/api/v1/register/user",
+        `${nodeBackendUrl/api/v1/register/user}`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },

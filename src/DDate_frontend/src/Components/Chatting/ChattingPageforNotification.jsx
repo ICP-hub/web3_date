@@ -5,6 +5,7 @@ import back from "../../../assets/Images/CreateAccount/back.svg";
 import Loader from "../Loader";
 import ChattingPageformessage from "./ChattingPageformessage";
 import { useAuth } from "../../auth/useAuthClient";
+import { nodeBackendUrl } from "../../DevelopmentConfig";
 const ChattingPageforNotification = ({ userId, chatList }) => {
   const navigate = useNavigate();
   const [selectedProfile, setSelectedProfile] = useState(null);
@@ -71,7 +72,8 @@ const ChattingPageforNotification = ({ userId, chatList }) => {
             redirect: "follow",
           };
           const response = await fetch(
-            `https://ddate.kaifoundry.com/api/v1/chat/${principalString}/${selectedProfile?.chat_id}`,
+            // `https://ddate.kaifoundry.com/api/v1/chat/${principalString}/${selectedProfile?.chat_id}`,
+            `${nodeBackendUrl}/api/v1/chat/${principalString}/${selectedProfile?.chat_id}`,
             requestOptions
           );
 
