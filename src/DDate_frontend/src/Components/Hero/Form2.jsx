@@ -37,9 +37,9 @@ const Form2 = ({ setIndex }) => {
     <div className="w-full rounded-lg p-6 shadow-md md:bg-transparent md:shadow-none">
       {/* Gender Pronouns Selection */}
       <fieldset className="mb-4">
-        <legend className="block text-lg font-semibold mb-1 text-white md:text-black">
+        <legend className="block text-lg font-semibold mb-1 text-black md:text-black">
           Gender Pronouns 
-          {errors.genderPronouns && <span className="text-red-500">*</span>}
+          {/* {errors.genderPronouns && <span className="text-red-500">*</span>} */}
         </legend>
         <div className="flex flex-wrap gap-2 md:gap-2 py-2 px-0 rounded-3xl">
           {["He/Him", "She/Her", "They/Them"].map((genPro) => (
@@ -48,7 +48,7 @@ const Form2 = ({ setIndex }) => {
               className={`inline-block px-3 py-2 rounded-full text-sm focus:outline-none transition duration-300
                             ${selectedGenderPronouns === genPro
                   ? "bg-primary-option_color text-black"
-                  : "bg-transparent hover:bg-primary-option_color hover:text-black text-white md:text-black border border-white md:border-black"
+                  : "bg-transparent hover:bg-primary-option_color hover:text-black text-black md:text-black border border-black md:border-black"
                 }`}
             >
               <input
@@ -68,9 +68,9 @@ const Form2 = ({ setIndex }) => {
 
       {/* Life Path Number Selection */}
       <fieldset className="mb-4">
-        <legend className="block text-lg font-semibold mb-2 text-white md:text-black">
+        <legend className="block text-lg font-semibold mb-2 text-black md:text-black">
           Life-Path Number 
-          {errors.selectedLifePathNumber && <span className="text-red-500">*</span>}
+          {/* {errors.selectedLifePathNumber && <span className="text-red-500">*</span>} */}
         </legend>
         <div className="flex flex-wrap gap-2 md:gap-2 py-2 rounded-3xl">
           {["1", "2", "3", "4", "5", "6", "7", "8", "9", "11", "22", "33"].map(
@@ -80,7 +80,7 @@ const Form2 = ({ setIndex }) => {
                 className={`inline-block px-3 py-2 rounded-full text-sm focus:outline-none transition duration-300
                             ${selectedlifePath === lifePathNumber
                     ? "bg-primary-option_color text-black"
-                    : "bg-transparent hover:bg-primary-option_color hover:text-black text-white md:text-black border border-white md:border-black"
+                    : "bg-transparent hover:bg-primary-option_color hover:text-black text-black md:text-black border border-black md:border-black"
                   }`}
               >
                 <input
@@ -100,9 +100,9 @@ const Form2 = ({ setIndex }) => {
 
       {/* Religion Selection */}
       <fieldset className="mb-4">
-        <legend className="block text-lg font-semibold mb-1 text-white md:text-black">
+        <legend className="block text-lg font-semibold mb-1 text-black md:text-black">
           Religion 
-          {errors.selectedReligion && <span className="text-red-500">*</span>}
+          {/* {errors.selectedReligion && <span className="text-red-500">*</span>} */}
         </legend>
         <div className="flex flex-wrap gap-2 md:gap-2 px-0 rounded-3xl">
           {[
@@ -123,7 +123,7 @@ const Form2 = ({ setIndex }) => {
               className={`inline-block px-3 py-2 rounded-full text-sm focus:outline-none transition duration-300
                             ${selectedReligionValue === religion
                   ? "bg-primary-option_color text-black"
-                  : "bg-transparent hover:bg-primary-option_color hover:text-black text-white md:text-black border border-white md:border-black"
+                  : "bg-transparent hover:bg-primary-option_color hover:text-black text-black md:text-black border border-black md:border-black"
                 }`}
             >
               <input
@@ -143,9 +143,9 @@ const Form2 = ({ setIndex }) => {
 
       {/* Zodiac Sign Selection */}
       <fieldset className="mb-4">
-        <legend className="block text-lg font-semibold mb-2 text-white md:text-black">
+        <legend className="block text-lg font-semibold mb-2 text-black md:text-black">
           Animal Zodiac Sign 
-          {errors.selectedZodiac && <span className="text-red-500">*</span>}
+          {/* {errors.selectedZodiac && <span className="text-red-500">*</span>} */}
         </legend>
         <div className="flex flex-wrap gap-2 md:gap-2 py-2 rounded-3xl">
           {[
@@ -167,7 +167,7 @@ const Form2 = ({ setIndex }) => {
               className={`inline-block px-3 py-2 rounded-full text-sm focus:outline-none transition duration-300
                             ${zodiac === selectedZodiacSign
                   ? "bg-primary-option_color text-black"
-                  : "bg-transparent hover:bg-primary-option_color hover:text-black text-white md:text-black border border-white md:border-black"
+                  : "bg-transparent hover:bg-primary-option_color hover:text-black text-black md:text-black border border-black md:border-black"
                 }`}
             >
               <input
@@ -186,8 +186,8 @@ const Form2 = ({ setIndex }) => {
 
       {/* Fooding Selection */}
       <fieldset className="mb-4">
-        <legend className="block text-lg font-semibold mb-2 text-white md:text-black">
-        Dietary Preferences {errors.selectedFooding && <span className="text-red-500">*</span>}
+        <legend className="block text-lg font-semibold mb-2 text-black md:text-black">
+        {/* Dietary Preferences {errors.selectedFooding && <span className="text-red-500">*</span>} */}
         </legend>
         <div className="flex flex-wrap gap-2 md:gap-2 py-2 rounded-3xl">
           {[
@@ -206,7 +206,7 @@ const Form2 = ({ setIndex }) => {
                             ${errors.selectedFooding && "border-red-500"}
                             ${fooding === selectedFoodingValue
                   ? "bg-primary-option_color text-black"
-                  : "bg-transparent hover:bg-primary-option_color hover:text-black text-white md:text-black border border-white md:border-black"
+                  : "bg-transparent hover:bg-primary-option_color hover:text-black text-black md:text-black border border-black md:border-black"
                 }`}
             >
               <input
@@ -223,7 +223,7 @@ const Form2 = ({ setIndex }) => {
         {errors.selectedFooding && <p className="text-red-500">{errors.selectedFooding.message}</p>}
       </fieldset>
       {/* <fieldset className="mb-4">
-        <legend className="block text-lg font-semibold mb-1 text-white md:text-black">
+        <legend className="block text-lg font-semibold mb-1 text-black md:text-black">
           What You Do 
           {errors.selectedWhatYouDo && <span className="text-red-500">*</span>}
         </legend>
@@ -235,7 +235,7 @@ const Form2 = ({ setIndex }) => {
                 className={`inline-block px-3 py-2 rounded-full text-sm focus:outline-none transition duration-300 
               ${selectedWhatYouDo === option
                     ? "bg-yellow-500 text-black"
-                    : "bg-transparent hover:bg-yellow-500 hover:text-black text-white md:text-black border border-white md:border-black"
+                    : "bg-transparent hover:bg-yellow-500 hover:text-black text-black md:text-black border border-black md:border-black"
                   }`}
               >
                 <input
@@ -254,7 +254,7 @@ const Form2 = ({ setIndex }) => {
         {errors.selectedWhatYouDo && <p className="text-red-500">{errors.selectedWhatYouDo.message}</p>}
       </fieldset> */}
       {/* <fieldset className="mb-4">
-        <legend className="block text-lg font-semibold mb-1 text-white md:text-black">
+        <legend className="block text-lg font-semibold mb-1 text-black md:text-black">
           What are you looking for? 
           {errors.selectedLookingFor && <span className="text-red-500">*</span>}
         </legend>
@@ -271,7 +271,7 @@ const Form2 = ({ setIndex }) => {
               className={`inline-block px-3 py-2 rounded-full text-sm focus:outline-none transition duration-300 
               ${selectedLookingFor === lookingFor
                   ? "bg-yellow-500 text-black"
-                  : "bg-transparent hover:bg-yellow-500 hover:text-black text-white md:text-black border border-white md:border-black"
+                  : "bg-transparent hover:bg-yellow-500 hover:text-black text-black md:text-black border border-black md:border-black"
                 }`}
             >
               <input

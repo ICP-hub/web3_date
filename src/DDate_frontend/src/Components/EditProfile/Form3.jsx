@@ -76,11 +76,11 @@ const Form3 = ({ formData, setFormData }) => {
   //   setFormData({ ...formData, [section]: tempArr });
   // }
 
-  
-//   function handleUpdateUserInput(e) {
-//     console.log(e.target.name + " and " + e.target.value)
-//     setFormData({ ...formData, [e.target.name]: e.target.value });
-// }
+
+  //   function handleUpdateUserInput(e) {
+  //     console.log(e.target.name + " and " + e.target.value)
+  //     setFormData({ ...formData, [e.target.name]: e.target.value });
+  // }
 
 
 
@@ -299,13 +299,15 @@ const Form3 = ({ formData, setFormData }) => {
             className="text-black text-[12px] md:text-[16px] font-semibold flex items-center"
             type="button"
           >
-            {showSports ? "see less" : "see more"}
-            <span>
-              {showSports ? (
-                <SlArrowUp size={12} className="font-extrabold ml-2" />
-              ) : (
-                <SlArrowDown size={12} className="ml-2 font-extrabold" />
-              )}
+            <span className="flex text-base text-nowrap items-center">
+              {showSports ? "see less" : "see more"}
+              <span>
+                {showSports ? (
+                  <SlArrowUp size={12} className="font-extrabold ml-2" />
+                ) : (
+                  <SlArrowDown size={12} className="ml-2 font-extrabold" />
+                )}
+              </span>
             </span>
           </button>
         </div>

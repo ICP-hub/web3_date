@@ -357,6 +357,7 @@ const CreateAccount1 = () => {
 
   const handleNext = async () => {
     const isValid = await trigger(formFields[index]);
+    console.log("to check the valid = ", isValid)
     if (isValid) {
       setIndex((prevIndex) => prevIndex + 1);
     }
@@ -471,9 +472,9 @@ const CreateAccount1 = () => {
           {/* Form container */}
           <div className="w-full  md:w-1/2 flex flex-col items-center justify-start px-4 md:px-12 z-10 overflow-y-auto">
             <div className="w-full my-10">
-              <h2 className="text-3xl md:text-4xl font-bold mb-4 text-white md:text-black text-center">
+              <h2 className="text-3xl md:text-4xl font-bold mb-4 text-black md:text-black text-center">
                 <div className="flex items-center">
-                  <svg
+                  {/* <svg
                     className={`${index === 0 && "collapse"} flex-shrink-0 ml-5 cursor-pointer`}
                     // onClick={() => navigate("/")}
                     onClick={handleBack}
@@ -488,7 +489,10 @@ const CreateAccount1 = () => {
                       fill="black"
                       id="svg-path"
                     />
-                  </svg>
+                  </svg> */}
+                  <svg className={`${index === 0 && "collapse"} flex-shrink-0 ml-5 cursor-pointer`}
+                    // onClick={() => navigate("/")}
+                    onClick={handleBack} xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#000000"><path d="m313-440 224 224-57 56-320-320 320-320 57 56-224 224h487v80H313Z" /></svg>
 
                   <span className="flex-grow text-center md:text-2xl text-xl text-black">
                     Allow Us to Know You
@@ -514,7 +518,7 @@ const CreateAccount1 = () => {
                 <div className="flex justify-between">
                   <button
                     type="button"
-                    className={`${index === 0 && ""} ${index === 4 && "collapse"} text-white  font-semibold py-2 px-6 rounded-full text-b md:text-black md:hover:text-black`}
+                    className={`${index === 0 && "vi"} ${index === 4 && "collapse"} text-black  font-semibold py-2 px-6 rounded-full text-b md:text-black md:hover:text-black`}
                     onClick={handleSkip}
                   // disabled={index === 0}
                   >

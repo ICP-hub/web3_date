@@ -207,7 +207,7 @@ const Form5 = ({ formData, setFormData }) => {
         </div>
       </fieldset>
 
-      <fieldset className="mb-2">
+      <fieldset className="mb-4">
         <legend className="block text-lg font-semibold mb-1 md:text-black">
           Preferred Age
         </legend>
@@ -234,8 +234,8 @@ const Form5 = ({ formData, setFormData }) => {
       </fieldset>
 
       {/* user location */}
-      <div className='flex-col space-y-2'>
-        <h1 className="block text-lg font-semibold mb-1 text-white md:text-black">Location</h1>
+      <div className='flex-col space-y-2 mb-4'>
+        <h1 className="block text-lg font-semibold mb-1 text-black md:text-black">Location</h1>
         <div className="flex flex-col md:flex-row md:space-x-4 mb-6">
 
           {/* Country Dropdown */}
@@ -249,7 +249,7 @@ const Form5 = ({ formData, setFormData }) => {
                 name="selectedCountry"
                 {...register("selectedCountry", { required: "Select a country" })}
                 render={({ field }) => (
-                  <><select className="w-full px-4 py-2 font-bold rounded-full border border-white md:border-black bg-transparent text-white md:text-gray-400 focus:ring-primary-option_color focus:border-primary-option_color appearance-none" {...field}>
+                  <><select className="w-full px-4 py-2 font-bold rounded-full border border-black md:border-black bg-transparent text-black md:text-gray-400 focus:ring-primary-option_color focus:border-primary-option_color appearance-none" {...field}>
                     <option value="">Select Country</option>
                     {Country.getAllCountries().map(country => (
                       <option key={country.isoCode} value={country.isoCode}>
@@ -257,7 +257,7 @@ const Form5 = ({ formData, setFormData }) => {
                       </option>
                     ))}
                   </select><svg
-                    className="absolute top-[20px] right-4 transform -translate-y-1/2 w-8 h-8 font-semibold text-white md:text-gray-400 pointer-events-none"
+                    className="absolute top-[20px] right-4 transform -translate-y-1/2 w-8 h-8 font-semibold text-black md:text-gray-400 pointer-events-none"
                     xmlns="http://www.w3.org/2000/svg"
                     fill="none"
                     viewBox="0 0 24 24"
@@ -278,7 +278,7 @@ const Form5 = ({ formData, setFormData }) => {
                 // value={currentCountry}
                 {...register("selectedCountry", { required: "Select a country" })}
                 onChange={(e) => setCurrentCountry(e.target.value)}
-                className="w-full px-4 py-2 font-bold rounded-full border border-white md:border-black bg-transparent text-white md:text-gray-400 focus:ring-primary-option_color focus:border-primary-option_color appearance-none"
+                className="w-full px-4 py-2 font-bold rounded-full border border-black md:border-black bg-transparent text-black md:text-gray-400 focus:ring-primary-option_color focus:border-primary-option_color appearance-none"
               >
                 <option value="">Select country</option>
                 {availableCountries.map((Country) => {
@@ -291,7 +291,7 @@ const Form5 = ({ formData, setFormData }) => {
               </select>
               {errors.selectedCountry && <p className="text-red-500">{errors.selectedCountry.message}</p>}
               <svg
-                className="absolute top-[20px] right-4 transform -translate-y-1/2 w-8 h-8 font-semibold text-white md:text-gray-400 pointer-events-none"
+                className="absolute top-[20px] right-4 transform -translate-y-1/2 w-8 h-8 font-semibold text-black md:text-gray-400 pointer-events-none"
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
                 viewBox="0 0 24 24"
@@ -319,7 +319,7 @@ const Form5 = ({ formData, setFormData }) => {
                 // name="selectedCountry"
                 {...register("selectedState", { required: "Select a state" })}
                 render={({ field }) => (
-                  <><select className="w-full px-4 py-2 font-bold rounded-full border border-white md:border-black bg-transparent text-white md:text-gray-400 focus:ring-primary-option_color focus:border-primary-option_color appearance-none" {...field}>
+                  <><select className="w-full px-4 py-2 font-bold rounded-full border border-black md:border-black bg-transparent text-black md:text-gray-400 focus:ring-primary-option_color focus:border-primary-option_color appearance-none" {...field}>
                     <option value="">Select State</option>
                     {availableStates.map(state => (
                       <option key={state.isoCode} value={state.isoCode}>
@@ -327,7 +327,7 @@ const Form5 = ({ formData, setFormData }) => {
                       </option>
                     ))}
                   </select><svg
-                    className="absolute top-[20px] right-4 transform -translate-y-1/2 w-8 h-8 font-semibold text-white md:text-gray-400 pointer-events-none"
+                    className="absolute top-[20px] right-4 transform -translate-y-1/2 w-8 h-8 font-semibold text-black md:text-gray-400 pointer-events-none"
                     xmlns="http://www.w3.org/2000/svg"
                     fill="none"
                     viewBox="0 0 24 24"
@@ -351,7 +351,7 @@ const Form5 = ({ formData, setFormData }) => {
                 value={currentState}
                 {...register("selectedState", { required: "Select a state" })}
                 onChange={(e) => setCurrentState(e.target.value)}
-                className="w-full px-4 py-2 font-bold rounded-full border border-white md:border-black bg-transparent text-white md:text-gray-400 focus:ring-primary-option_color focus:border-primary-option_color appearance-none"
+                className="w-full px-4 py-2 font-bold rounded-full border border-black md:border-black bg-transparent text-black md:text-gray-400 focus:ring-primary-option_color focus:border-primary-option_color appearance-none"
               >
                 <option value="">Select state</option>
                 {availableStates.map((state) => {
@@ -364,7 +364,7 @@ const Form5 = ({ formData, setFormData }) => {
               </select>
               {currentCountry && errors.selectedState && <p className="text-red-500">{errors.selectedState.message}</p>}
               <svg
-                className="absolute top-[20px] right-4 transform -translate-y-1/2 w-8 h-8 font-semibold text-white md:text-gray-400 pointer-events-none"
+                className="absolute top-[20px] right-4 transform -translate-y-1/2 w-8 h-8 font-semibold text-black md:text-gray-400 pointer-events-none"
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
                 viewBox="0 0 24 24"
@@ -390,7 +390,7 @@ const Form5 = ({ formData, setFormData }) => {
               <Controller
                 {...register("selectedCity")}
                 render={({ field }) => (
-                  <><select className="w-full px-4 py-2 font-bold rounded-full border border-white md:border-black bg-transparent text-white md:text-gray-400 focus:ring-primary-option_color focus:border-primary-option_color appearance-none" {...field}>
+                  <><select className="w-full px-4 py-2 font-bold rounded-full border border-black md:border-black bg-transparent text-black md:text-gray-400 focus:ring-primary-option_color focus:border-primary-option_color appearance-none" {...field}>
                     <option value="">Select City</option>
                     {availableCities.map(city => (
                       <option key={city.isoCode} value={city.isoCode}>
@@ -398,7 +398,7 @@ const Form5 = ({ formData, setFormData }) => {
                       </option>
                     ))}
                   </select><svg
-                    className="absolute top-[20px] right-4 transform -translate-y-1/2 w-8 h-8 font-semibold text-white md:text-gray-400 pointer-events-none"
+                    className="absolute top-[20px] right-4 transform -translate-y-1/2 w-8 h-8 font-semibold text-black md:text-gray-400 pointer-events-none"
                     xmlns="http://www.w3.org/2000/svg"
                     fill="none"
                     viewBox="0 0 24 24"
@@ -427,7 +427,7 @@ const Form5 = ({ formData, setFormData }) => {
                 name="selectedCity"
                 {...register("selectedCity", { required: "Select a city" })}
                 onChange={(e) => setCurrentCity(e.target.value)}
-                className="w-full px-4 py-2 font-bold rounded-full border border-white md:border-black bg-transparent text-white md:text-gray-400 focus:ring-primary-option_color focus:border-primary-option_color appearance-none"
+                className="w-full px-4 py-2 font-bold rounded-full border border-black md:border-black bg-transparent text-black md:text-gray-400 focus:ring-primary-option_color focus:border-primary-option_color appearance-none"
               >
                 <option value="">Select city</option>
                 {availableCities.map((city) => (
@@ -439,7 +439,7 @@ const Form5 = ({ formData, setFormData }) => {
               </select>
               {currentState && errors.selectedCity && <p className="text-red-500">{errors.selectedCity.message}</p>}
               <svg
-                className="absolute top-[20px] right-4 transform -translate-y-1/2 w-8 h-8 font-semibold text-white md:text-gray-400 pointer-events-none"
+                className="absolute top-[20px] right-4 transform -translate-y-1/2 w-8 h-8 font-semibold text-black md:text-gray-400 pointer-events-none"
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
                 viewBox="0 0 24 24"
@@ -459,9 +459,9 @@ const Form5 = ({ formData, setFormData }) => {
       </div>
 
       {/* Preferred location */}
-      <div className='flex-col space-y-2'>
+      <div className='flex-col space-y-2 mb-4'>
         <div className='flex justify-between'>
-          <h1 className="block text-lg font-semibold mb-1 text-white md:text-black">Preferred Location</h1>
+          <h1 className="block text-lg font-semibold text-black md:text-black">Preferred Location</h1>
           {/* <div className='p-[4px] bg-yellow-400 rounded-full'>
             <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#000000"><path d="M440-440H200v-80h240v-240h80v240h240v80H520v240h-80v-240Z" /></svg>
 
@@ -483,7 +483,7 @@ const Form5 = ({ formData, setFormData }) => {
                 name="preferredCountry"
                 {...register("preferredCountry", { required: "Select a country" })}
                 render={({ field }) => (
-                  <><select className="w-full px-4 py-2 font-bold rounded-full border border-white md:border-black bg-transparent text-white md:text-gray-400 focus:ring-primary-option_color focus:border-primary-option_color appearance-none" {...field}>
+                  <><select className="w-full px-4 py-2 font-bold rounded-full border border-black md:border-black bg-transparent text-black md:text-gray-400 focus:ring-primary-option_color focus:border-primary-option_color appearance-none" {...field}>
                     <option value="">Select State</option>
                     {Country.getAllCountries().map(country => (
                       <option key={country.isoCode} value={country.isoCode}>
@@ -491,7 +491,7 @@ const Form5 = ({ formData, setFormData }) => {
                       </option>
                     ))}
                   </select><svg
-                    className="absolute top-[20px] right-4 transform -translate-y-1/2 w-8 h-8 font-semibold text-white md:text-gray-400 pointer-events-none"
+                    className="absolute top-[20px] right-4 transform -translate-y-1/2 w-8 h-8 font-semibold text-black md:text-gray-400 pointer-events-none"
                     xmlns="http://www.w3.org/2000/svg"
                     fill="none"
                     viewBox="0 0 24 24"
@@ -521,7 +521,7 @@ const Form5 = ({ formData, setFormData }) => {
                 value={preferredCountry}
                 {...register("preferredCountry", { required: "Select a country" })}
                 onChange={(e) => setPreferredCountry(e.target.value)}
-                className="w-full px-4 py-2 font-bold rounded-full border border-white md:border-black bg-transparent text-white md:text-gray-400 focus:ring-primary-option_color focus:border-primary-option_color appearance-none"
+                className="w-full px-4 py-2 font-bold rounded-full border border-black md:border-black bg-transparent text-black md:text-gray-400 focus:ring-primary-option_color focus:border-primary-option_color appearance-none"
               >
                 <option value="" disabled >Select country</option>
                 {preferredCountriesList.map((Country) => {
@@ -534,7 +534,7 @@ const Form5 = ({ formData, setFormData }) => {
               </select>
               {errors.preferredCountry && <p className="text-red-500">{errors.preferredCountry.message}</p>}
               <svg
-                className="absolute top-[20px] right-4 transform -translate-y-1/2 w-8 h-8 font-semibold text-white md:text-gray-400 pointer-events-none"
+                className="absolute top-[20px] right-4 transform -translate-y-1/2 w-8 h-8 font-semibold text-black md:text-gray-400 pointer-events-none"
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
                 viewBox="0 0 24 24"
@@ -563,7 +563,7 @@ const Form5 = ({ formData, setFormData }) => {
                 // name="selectedCountry"
                 {...register("preferredState", { required: "Select a state" })}
                 render={({ field }) => (
-                  <><select className="w-full px-4 py-2 font-bold rounded-full border border-white md:border-black bg-transparent text-white md:text-gray-400 focus:ring-primary-option_color focus:border-primary-option_color appearance-none" {...field}>
+                  <><select className="w-full px-4 py-2 font-bold rounded-full border border-black md:border-black bg-transparent text-black md:text-gray-400 focus:ring-primary-option_color focus:border-primary-option_color appearance-none" {...field}>
                     <option value="">Select State</option>
                     {preferredStatesList.map(country => (
                       <option key={country.isoCode} value={country.isoCode}>
@@ -571,7 +571,7 @@ const Form5 = ({ formData, setFormData }) => {
                       </option>
                     ))}
                   </select><svg
-                    className="absolute top-[20px] right-4 transform -translate-y-1/2 w-8 h-8 font-semibold text-white md:text-gray-400 pointer-events-none"
+                    className="absolute top-[20px] right-4 transform -translate-y-1/2 w-8 h-8 font-semibold text-black md:text-gray-400 pointer-events-none"
                     xmlns="http://www.w3.org/2000/svg"
                     fill="none"
                     viewBox="0 0 24 24"
@@ -602,7 +602,7 @@ const Form5 = ({ formData, setFormData }) => {
                 name="preferredState"
                 {...register("preferredState", { required: "Select a state" })}
                 onChange={(e) => setPreferredState(e.target.value)}
-                className="w-full px-4 py-2 font-bold rounded-full border border-white md:border-black bg-transparent text-white md:text-gray-400 focus:ring-primary-option_color focus:border-primary-option_color appearance-none"
+                className="w-full px-4 py-2 font-bold rounded-full border border-black md:border-black bg-transparent text-black md:text-gray-400 focus:ring-primary-option_color focus:border-primary-option_color appearance-none"
               >
                 <option value="" disabled >Select state</option>
                 {preferredStatesList.map((state) => {
@@ -615,7 +615,7 @@ const Form5 = ({ formData, setFormData }) => {
               </select>
               {preferredCountry && errors.preferredState && <p className="text-red-500">{errors.preferredState.message}</p>}
               <svg
-                className="absolute top-[20px] right-4 transform -translate-y-1/2 w-8 h-8 font-semibold text-white md:text-gray-400 pointer-events-none"
+                className="absolute top-[20px] right-4 transform -translate-y-1/2 w-8 h-8 font-semibold text-black md:text-gray-400 pointer-events-none"
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
                 viewBox="0 0 24 24"
@@ -642,7 +642,7 @@ const Form5 = ({ formData, setFormData }) => {
               <Controller className
                 {...register("preferredCity")}
                 render={({ field }) => (
-                  <><select className="w-full px-4 py-2 font-bold rounded-full border border-white md:border-black bg-transparent text-white md:text-gray-400 focus:ring-primary-option_color focus:border-primary-option_color appearance-none" {...field}>
+                  <><select className="w-full px-4 py-2 font-bold rounded-full border border-black md:border-black bg-transparent text-black md:text-gray-400 focus:ring-primary-option_color focus:border-primary-option_color appearance-none" {...field}>
                     <option value="">Select State</option>
                     {preferredCitiesList.map(city => (
                       <option key={city.isoCode} value={city.isoCode}>
@@ -650,7 +650,7 @@ const Form5 = ({ formData, setFormData }) => {
                       </option>
                     ))}
                   </select><svg
-                    className="absolute top-[20px] right-4 transform -translate-y-1/2 w-8 h-8 font-semibold text-white md:text-gray-400 pointer-events-none"
+                    className="absolute top-[20px] right-4 transform -translate-y-1/2 w-8 h-8 font-semibold text-black md:text-gray-400 pointer-events-none"
                     xmlns="http://www.w3.org/2000/svg"
                     fill="none"
                     viewBox="0 0 24 24"
@@ -680,7 +680,7 @@ const Form5 = ({ formData, setFormData }) => {
                 name="preferredCity"
                 {...register("preferredCity", { required: "Select a city" })}
                 onChange={(e) => setPreferredCity(e.target.value)}
-                className="w-full px-4 py-2 font-bold rounded-full border border-white md:border-black bg-transparent text-white md:text-gray-400 focus:ring-primary-option_color focus:border-primary-option_color appearance-none"
+                className="w-full px-4 py-2 font-bold rounded-full border border-black md:border-black bg-transparent text-black md:text-gray-400 focus:ring-primary-option_color focus:border-primary-option_color appearance-none"
               >
                 <option value="" disabled>Select city</option>
                 {preferredCitiesList.map((city) => (
@@ -692,7 +692,7 @@ const Form5 = ({ formData, setFormData }) => {
               </select>
               {preferredState && errors.preferredCity && <p className="text-red-500">{errors.preferredCity.message}</p>}
               <svg
-                className="absolute top-[20px] right-4 transform -translate-y-1/2 w-8 h-8 font-semibold text-white md:text-gray-400 pointer-events-none"
+                className="absolute top-[20px] right-4 transform -translate-y-1/2 w-8 h-8 font-semibold text-black md:text-gray-400 pointer-events-none"
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
                 viewBox="0 0 24 24"

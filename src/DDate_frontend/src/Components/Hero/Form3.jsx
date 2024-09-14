@@ -27,7 +27,7 @@ const Form3 = () => {
     <div className="w-full  rounded-lg p-6 shadow-md md:bg-transparent md:shadow-none">
       {/* Smoking Selection */}
       <fieldset className="mb-4">
-        <legend className="block text-lg font-semibold mb-1 text-white md:text-black">
+        <legend className="block text-lg font-semibold mb-1 text-black md:text-black">
           Smoking habits
         </legend>
         <div className="flex flex-wrap gap-2 md:gap-2 py-2 rounded-3xl">
@@ -37,7 +37,7 @@ const Form3 = () => {
               className={`inline-block px-3 py-2 rounded-full text-sm focus:outline-none transition duration-300
                 ${selectedsmoking === smoking
                   ? "bg-primary-option_color text-black"
-                  : "bg-transparent hover:bg-primary-option_color hover:text-black text-white md:text-black border border-white md:border-black"
+                  : "bg-transparent hover:bg-primary-option_color hover:text-black text-black md:text-black border border-black md:border-black"
                 }`}
             >
               <input
@@ -58,7 +58,7 @@ const Form3 = () => {
 
       {/* Drink Selection */}
       <fieldset className="mb-4">
-        <legend className="block text-lg font-semibold mb-1 text-white md:text-black">
+        <legend className="block text-lg font-semibold mb-1 text-black md:text-black">
           Alcohol/Drink
         </legend>
         <div className="flex flex-wrap gap-2 md:gap-2 py-2 rounded-3xl">
@@ -70,7 +70,7 @@ const Form3 = () => {
                           ${errors.selecteddrink && "border-red-500"}
                           ${selecteddrink === drink
                     ? "bg-primary-option_color text-black"
-                    : "bg-transparent hover:bg-primary-option_color hover:text-black text-white md:text-black border border-white md:border-black"
+                    : "bg-transparent hover:bg-primary-option_color hover:text-black text-black md:text-black border border-black md:border-black"
                   }`}
               >
                 <input
@@ -91,7 +91,7 @@ const Form3 = () => {
 
       {/* Hobbies */}
       <fieldset className="mb-4">
-        <legend className="block text-lg font-semibold mb-2 text-white md:text-black">
+        <legend className="block text-lg font-semibold mb-2 text-black md:text-black">
           Hobbies <span className="text-gray-400 text-sm">(select any 2)</span>
         </legend>
         <div className="flex flex-wrap gap-2 md:gap-2 py-2 rounded-3xl">
@@ -122,7 +122,7 @@ const Form3 = () => {
                 className={`inline-block px-3 py-2 rounded-full text-sm focus:outline-none transition duration-300
                             ${selectedhobbies?.includes(hobby)
                     ? "bg-primary-option_color text-black"
-                    : "bg-transparent hover:bg-primary-option_color hover:text-black text-white md:text-black border border-white md:border-black"
+                    : "bg-transparent hover:bg-primary-option_color hover:text-black text-black md:text-black border border-black md:border-black"
                   }`}
               >
 
@@ -168,7 +168,7 @@ const Form3 = () => {
       </fieldset>
 
       <fieldset className="mb-4">
-        <legend className="block text-lg font-semibold mb-1 text-white md:text-black">
+        <legend className="block text-lg font-semibold mb-1 text-black md:text-black">
           Sports <span className="text-gray-400 text-sm">(select any 2)</span>
         </legend>
         <div className="flex flex-wrap gap-2 md:gap-2 py-2 rounded-3xl">
@@ -209,7 +209,7 @@ const Form3 = () => {
                 key={sport}
                 className={`inline-block px-3 py-2 rounded-full text-sm focus:outline-none transition duration-300 ${selectedsports?.includes(sport)
                   ? "bg-primary-option_color text-black"
-                  : "bg-transparent hover:bg-primary-option_color hover:text-black text-white md:text-black border border-white md:border-black"
+                  : "bg-transparent hover:bg-primary-option_color hover:text-black text-black md:text-black border border-black md:border-black"
                   }`}
               >
                 <input
@@ -238,8 +238,9 @@ const Form3 = () => {
             className="text-black text-[12px] md:text-[16px] font-semibold flex items-center"
             type="button"
           >
+            <span className="flex text-base text-nowrap items-center">
             {showSports ? "see less" : "see more"}
-            <span>
+            {/* <span> */}
               {showSports ? (
                 <SlArrowUp size={12} className="font-extrabold ml-2" />
               ) : (

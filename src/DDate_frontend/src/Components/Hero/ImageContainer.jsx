@@ -8,7 +8,7 @@ const ImageContainer = () => {
       className="w-full md:w-1/2 h-full absolute md:relative bg-cover bg-center z-0 text-center"
       style={{ backgroundImage: `url(${createAccountImage})` }}
     >
-      <div className='mt-14 ml-10'>
+      <div className='mt-14 ml-10 hidden md:block'>
         <img src={Logo} loading='lazy' className='h-14' alt="" />
       </div>
       <div className="hidden md:flex md:flex-col md:justify-center md:text-center md:items-center md:absolute md:inset-0 px-8 py-12">
@@ -32,7 +32,7 @@ const ImageContainer = () => {
       </div>
 
       {/* Image Overlay for smaller screens */}
-      <div className="w-full h-full bg-black opacity-50 md:opacity-0"></div>
+      {/* <div className="w-full h-full bg-black opacity-50 md:opacity-0"></div> */}
     </div>
   )
 }
