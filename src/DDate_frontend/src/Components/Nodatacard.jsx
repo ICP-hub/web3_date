@@ -12,7 +12,7 @@ export default function NodataCard() {
             /> */}
             <h1 className="text-4xl">No Data Found</h1>
             <div
-                className="bg-black rounded-b-xl w-full lg:max-w-lg h-[30%] absolute bottom-0"
+                className="bg-black w-full lg:max-w-lg h-[30%] absolute bottom-0"
                 style={{
                     background:
                         // "linear-gradient(to top, rgb(0, 0, 0) 50%, rgba(255, 255, 255, 0) 100%)",
