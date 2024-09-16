@@ -141,7 +141,7 @@ const Form6 = ({ imageFields, setImageFields, imageError }) => {
                 {
                     image.length !== 0 ? (
                         <div className="relative">
-                            <img src={URL.createObjectURL(image)} alt={`Preview ${index + 1}`} loading='lazy' className=" w-full object-fill rounded-2xl" />
+                            <img src={URL.createObjectURL(image)} alt={`Preview ${index + 1}`} loading='lazy' className=" w-full h-[190px] object-cover rounded-2xl" />
                             <button
                                 type="button"
                                 onClick={() => handleClearImage(index)}
@@ -188,7 +188,6 @@ const Form6 = ({ imageFields, setImageFields, imageError }) => {
     const handleDragOver = (e, index) => {
         e.preventDefault();
         e.stopPropagation();
-        console.log("index number = ", index)
     };
 
     // function to handle the drop of the images.

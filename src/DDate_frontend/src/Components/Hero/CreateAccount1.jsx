@@ -515,10 +515,10 @@ const CreateAccount1 = () => {
                 {/* {index === 3 && <Form4 />} */}
                 {index === 3 && <Form5 />}
                 {index === 4 && <Form6 imageFields={imageFields} setImageFields={setImageFields} imageError={imageError} />}
-                <div className="flex justify-between">
+                <div className="flex justify-between mt-5">
                   <button
                     type="button"
-                    className={`${index === 0 && "vi"} ${index === 4 && "collapse"} text-black  font-semibold py-2 px-6 rounded-full text-b md:text-black md:hover:text-black`}
+                    className={`${index === 0 && "collapse"} ${index === 4 && "collapse"} text-black  font-semibold py-2 px-6 rounded-full text-b md:text-black md:hover:text-black`}
                     onClick={handleSkip}
                   // disabled={index === 0}
                   >
