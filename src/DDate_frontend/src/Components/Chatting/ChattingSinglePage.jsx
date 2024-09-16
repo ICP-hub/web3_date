@@ -126,14 +126,14 @@ const ChattingSinglePage = () => {
                          border flex flex-col md:w-[80%] w-full float-right ">
                             <div className="py-2 px-3 bg-gradient-to-r from-[#350B19] via-[#904B03] to-[#350B19] flex flex-row justify-between items-center">
                                 <div className="flex gap-4 items-center">
-                                    <div className="flex items-center">
+                                    {/* <div className="flex items-center">
                                         <img
                                             src={backarrow}
                                             alt="back"
                                             onClick={() => navigate("/Notification")}
                                             className="w-8 h-8 cursor-pointer"
                                         />
-                                    </div>
+                                    </div> */}
                                     <div>
                                         <img className="w-10 h-10 rounded-full" src="https://darrenjameseeley.files.wordpress.com/2014/09/expendables3.jpeg" />
                                         {/* <img className="w-10 h-10 rounded-full" src={profile.images[0]} /> */}

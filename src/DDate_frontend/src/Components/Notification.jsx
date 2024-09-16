@@ -261,7 +261,7 @@ const Notification = () => {
                             }
                           />
                           <div className="flex items-center justify-between">
-                            <div className="absolute bg-yellow-400 m-3 bottom-0 flex h-[41px] items-center justify-center right-0 rounded-full w-[41px]">
+                            <div className="absolute bg-primary-wallColor m-3 bottom-0 flex h-[41px] items-center justify-center right-0 rounded-full w-[41px]">
                               <svg
                                 xmlns="http://www.w3.org/2000/svg"
                                 height="20"
