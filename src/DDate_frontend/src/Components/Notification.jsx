@@ -7,6 +7,7 @@ import Loader from "./Loader";
 import { useAuth } from "../auth/useAuthClient";
 import { useLocation } from "react-router-dom";
 import ChattingPageforNotification from "./Chatting/ChattingPageforNotification";
+import { nodeBackendUrl } from "../DevelopmentConfig";
 
 const Notification = () => {
   const navigate = useNavigate();
@@ -18,10 +19,87 @@ const Notification = () => {
   const [chatList, setChatList] = useState([]);
   const location = useLocation();
   const userId = location.state;
-  const { backendActor } = useAuth();
+  const { backendActor, principal } = useAuth();
   // console.log("UserId",userId)
   const [page, setpage] = useState(1);
   const [size, setsize] = useState(10);
+
+
+  useEffect(() => {
+    const fetchChatHistory = async () => {
+      setLoading(true);
+      console.log("Call chat history api ");
+      try {
+        // const formdata = new FormData();
+        // formdata.append("x-principal", principal);
+        // formdata.append("x-private-token", privateToken);
+        // const requestOptions = {
+        //   method: "POST",
+        //   body: formdata,
+        //   redirect: "follow",
+        // };
+
+
+        const privToken = localStorage.getItem("privateToken")
+        console.log(privToken)
+        const myHeaders = new Headers();
+        myHeaders.append("Content-Type", "application/json");
+
+
+        const principalString = principal.toText()
+
+
+        const raw = JSON.stringify({
+          "x-principal": principalString,
+          "x-private-token": privToken,
+          userId,
+        })
+
+
+        const requestOptions = {
+          method: "POST",
+          headers: myHeaders,
+          body: raw,
+          redirect: "follow",
+        };
+
+
+        const response = await fetch(
+          // "https://ddate.kaifoundry.com/api/v1/chat/history"
+          `${nodeBackendUrl}/api/v1/chat/history`, requestOptions
+        ); // Adjust the endpoint according to your API
+        console.log("chat history response", response);
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        const data = await response.json();
+        console.log(data.historyUsers)
+        let newArr = []
+        for (let i = 0; i < data.historyUsers?.length > 0; i++) {
+          let otherUser = data?.historyUsers[i]?.from_user_id
+          if (data?.historyUsers[i]?.from_user_id == userId) {
+            otherUser = data?.historyUsers[i]?.to_user_id
+          }
+          let userData = await backendActor.get_an_account(otherUser)
+          if (userData?.Ok == undefined) {
+            continue
+          }
+          console.log("history userdata : ", userData?.Ok)
+          newArr.push({ id: otherUser, name: userData?.Ok?.params?.name[0], images: userData?.Ok?.params?.images[0], chat_id: `chat-${userId}-${otherUser}` })
+        }
+        console.log("newarr", newArr)
+        setChatList(newArr);
+      } catch (error) {
+        console.error("Error fetching chat history:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+
+    fetchChatHistory();
+  }, []);
+
 
   useEffect(() => {
     const fetchedprofiledata = async () => {
@@ -53,7 +131,7 @@ const Notification = () => {
   }, [backendActor, userId, page, size]);
   const addChatList = async (user_id) => {
     try {
-      console.log("user id addCHatList : ",user_id)
+      console.log("user id addCHatList : ", user_id)
       const result = await backendActor.add_user_to_chatlist(user_id);
       console.log("add_user_to_chatlist", result);
       if (result && result?.Ok) {
@@ -169,6 +247,7 @@ const Notification = () => {
                           key={index}
                           className="relative w -[230px] h-[280px] "
                           onClick={() =>
+                            // addChatList(p => [...p, { ...profile?.matched_profiles?.[0], images: profile?.matched_profiles?.[0]?.image }])
                             addChatList(profile?.matched_profiles?.[0])
                           }
                         >
