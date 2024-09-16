@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import SidebarComponent from "./SidebarComponent";
 import { Principal } from "@dfinity/principal";
 import back from "../../assets/Images/CreateAccount/back.svg";
-import Ellipse from "../../assets/Images/UserProfiles/Ellipse.svg";
+import Ellipse from "../../assets/Images/UserProfiles/Ellipse116.svg";
 import { CiEdit } from "react-icons/ci";
 import { useNavigate } from "react-router-dom";
 // import { DDate_backend } from "../../../declarations/DDate_backend/index";
@@ -12,42 +12,52 @@ import "./Swipe.css";
 import { useLocation } from "react-router-dom";
 import { useForm } from "react-hook-form";
 
-const Profile = ({ userId }) => {
+const Profile = () => {
   const { backendActor } = useAuth();
   const [loader, setLoader] = useState(false);
   const [progress, setProgress] = useState(60);
   const [result, SetResult] = useState("");
+  const [id, setId] = useState('');
   const [formData, setFormData] = useState({
     gender: "",
     email: "",
     name: "",
     mobile_number: "",
-    introduction: "",
-    images: [],
-    gender_pronouns: "",
-    matches: [],
-    age: "",
-    art_and_culture: [],
-    diet: "",
     dob: "",
+    gender_pronouns: "",
+    life_path_number: "",
+    religion: "",
+    zodiac: "",
+    diet: "",
+    smoking: "",
     drinking: "",
-    general_habbits: "",
-    height: "",
     hobbies: [],
     interests_in: "",
-    location: "",
-    looking_for: "",
     max_preferred_age: "",
     min_preferred_age: "",
-    movies: "",
-    occupation: "",
-    outdoor_activities: [],
-    pets: "",
-    preferred_gender: "",
-    preferred_location: "",
-    religion: "",
-    travel: "",
-    zodiac: "",
+    location_city: "",
+    location_state: "",
+    location_country: "",
+    preferred_city: "",
+    preferred_state: "",
+    preferred_country: "",
+    introduction: "",
+    images: [],
+    matches: [],
+    age: "",
+    // art_and_culture: [],
+    // general_habbits: "",
+    // height: "",
+    // location: "",
+    // looking_for: "",
+    // movies: "",
+    // occupation: "",
+    // outdoor_activities: [],
+    // pets: "",
+    // preferred_gender: "",
+    // preferred_location: "",
+    // travel: "",
+
   });
 
   const [principal, setPrincipal] = useState(null);
@@ -80,18 +90,25 @@ const Profile = ({ userId }) => {
     return circumference - (progress / 100) * circumference;
   };
 
-  const location = useLocation();
-  const id = location.state;
-  console.log("data in profiel ", id);
+  // const location = useLocation();
+  // const id = location.state;
+  // console.log("data in profiel ", id);
+
+
+  // Retrieve userId from localStorage
+  useEffect(() => {
+    const storedUserId = localStorage.getItem('userId');
+    setId(storedUserId);
+  }, []); 
 
   useEffect(() => {
     const getData = async () => {
-      // console.log("Generated Id", id);
+      console.log("Generated Id", id);
       try {
         await backendActor.get_an_account(id).then((userProfileData) => {
           if (userProfileData) {
             const myData = userProfileData?.Ok?.params;
-            // console.log("My Data Abhishek ka hai ", myData);
+            console.log("My Data Abhishek ka hai ", myData);
             const dateObj = new Date(myData?.dob);
 
             const day = String(dateObj.getDate()).padStart(2, "0");
@@ -102,39 +119,54 @@ const Profile = ({ userId }) => {
 
             // console.log(formattedDateStr);
             if (myData) {
+
+              let userid = { "user_id": id };
+
+              Object.assign(myData, userid);
+
+              // console.log("finally : ", myData)
+
               SetResult(myData);
               setFormData({
-                name: myData?.name[0],
-                email: myData?.email[0],
-                age: myData?.age[0],
-                art_and_culture: myData?.art_and_culture,
-                diet: myData?.diet[0],
-                dob: formattedDateStr,
-                sports: myData?.sports,
-                drinking: myData?.drinking[0],
-                smoking: myData?.smoking[0],
                 gender: myData?.gender[0],
+                email: myData?.email[0],
+                name: myData?.name[0],
+                mobile_number: myData.mobile_number[0],
+                dob: formattedDateStr,
                 gender_pronouns: myData?.gender[0],
-                habbits: myData?.general_habits,
-                height: myData?.height[0],
-                selected_hobbies: myData?.hobbies,
-                images: myData?.images,
+                life_path_number: myData?.life_path_number[0],
+                religion: myData?.religion[0],
+                zodiac: myData.zodiac[0],
+                diet: myData?.diet[0],
+                smoking: myData?.smoking[0],
+                drinking: myData?.drinking[0],
+                selected_hobbies: myData?.hobbies[0],
                 interests_in: myData?.interests_in[0],
-                introduction: myData?.introduction[0],
-                location: myData?.location[0],
-                looking_for: myData?.looking_for[0],
                 max_preferred_age: myData?.max_preferred_age[0],
                 min_preferred_age: myData?.min_preferred_age[0],
-                selected_movies: myData?.movies,
-                occupation: myData?.occupation[0],
-                outdoor_activities: myData?.outdoor_activities,
-                pets: myData.pets[0],
-                preferred_gender: myData?.preferred_gender[0],
-                preferred_location: myData?.preferred_location[0],
-                religion: myData?.religion[0],
-                travels: myData?.travel,
-                zodiac: myData.zodiac[0],
-                mobile_number: myData.mobile_number[0],
+                location_city: myData?.location_city[0],
+                location_state: myData?.location_state[0],
+                location_country: myData?.location_country[0],
+                preferred_city: myData?.preferred_city[0],
+                preferred_state: myData?.preferred_state[0],
+                preferred_country: myData?.preferred_country[0],
+                introduction: myData?.introduction[0],
+                images: myData?.images[0],
+                matches: myData?.matches[0],
+                age: myData?.age[0],
+                // sports: myData?.sports,
+                // habbits: myData?.general_habits,
+                // travels: myData?.travel,
+                // height: myData?.height[0],
+                // art_and_culture: myData?.art_and_culture,
+                // selected_movies: myData?.movies,
+                // occupation: myData?.occupation[0],
+                // outdoor_activities: myData?.outdoor_activities,
+                // pets: myData.pets[0],
+                // preferred_gender: myData?.preferred_gender[0],
+                // location: myData?.location[0],
+                // looking_for: myData?.looking_for[0],
+                // preferred_location: myData?.preferred_location[0],
               });
             } else {
             }
@@ -214,19 +246,19 @@ const Profile = ({ userId }) => {
                           <circle
                             className="text-gray-300"
                             strokeWidth="5"
-                            stroke="#A7A1A1"
+                            stroke="#A8A2A2"
                             fill="transparent"
                             r="47"
                             cx="50"
                             cy="50"
                           />
                           <circle
-                            className="bg-yellow-400"
+                            className="bg-primary-circleColor"
                             strokeWidth="5"
+                            stroke="#F1E2E9"
                             strokeDasharray="295.31"
                             strokeDashoffset={calculateProgressOffset(progress)}
                             strokeLinecap="round"
-                            stroke="#FFC107"
                             fill="transparent"
                             r="47"
                             cx="50"
@@ -241,18 +273,19 @@ const Profile = ({ userId }) => {
                             "default-placeholder.jpg"
                           }
                           alt="Profile"
-                          className="rounded-full w-full h-full object-cover absolute"
-                          style={{ marginTop: "-8px", marginLeft: "2px" }}
+                          loading="lazy"
+                          className="rounded-full border-[12px] border-white w-full h-full object-cover absolute "
+                          style={{ marginTop: "-10px", marginLeft: "5px",  }}
                         />
 
                         <img
                           src={Ellipse}
                           alt="back"
-                          className="w-9 h-9 bg-yellow-400 rounded-full absolute top-24 z-20"
+                          className="w-9 h-9 bg-primary-circleColor rounded-full absolute top-24 z-20"
                           style={{ top: "11.5rem", left: "6.1rem" }}
                         />
                         <div
-                          className=" text-white font-bold text-xs absolute z-30"
+                          className=" text-black font-bold text-xs absolute z-30"
                           style={{ top: "12.0rem", left: "6.4rem" }}
                         >
                           {progress} %
@@ -359,7 +392,7 @@ const Profile = ({ userId }) => {
                         disabled
                         rows="4"
                         value={formData?.introduction ?? ""}
-                        className=" font-[600] rounded-xl pl-10 py-1.5 w-full "
+                        className="bg-primary-text_area font-[600] rounded-xl px-8 py-1.5 w-full "
                       ></textarea>
                     </div>
                   </div>
@@ -375,19 +408,19 @@ const Profile = ({ userId }) => {
                       >
                         {formData?.religion ?? ""}
                       </p>
-                      <div className="flex items-center">Height</div>
+                      {/* <div className="flex items-center">Height</div>
                       <p
                         className="col-span-2 w-full px-12
                        py-1.5"
                       >
                         none
-                      </p>
+                      </p> */}
                       <div className="flex items-center">Location</div>
                       <p
                         className="col-span-2 w-full px-12
                        py-1.5"
                       >
-                        {formData?.location ?? ""}
+                        {formData?.location_city + "," + formData?.location_state + "," + formData?.location_country}
                       </p>
                       <div className="flex items-center">Smoking</div>
                       <p
@@ -403,27 +436,26 @@ const Profile = ({ userId }) => {
                       >
                         {formData?.drinking ?? ""}
                       </p>
-                      <div className="flex items-center">Occupation</div>
+                      {/* <div className="flex items-center">Occupation</div>
                       <p
                         className="col-span-2 w-full px-12
                        py-1.5"
                       >
                         {formData?.occupation ?? ""}
-                      </p>
+                      </p> */}
                       <div className="flex items-center">Hobbies</div>
-                      <p
-                        className="col-span-2 w-full px-12
-                       flex flex-wrap gap-6 py-1.5"
-                      >
+                      <p className="col-span-2 w-full px-12 flex flex-wrap gap-6 py-1.5">
                         {formData?.selected_hobbies?.map((hobby, index) => (
-                          <div className="" key={index}>
+                          <div key={index}>
                             <p className="rounded-lg py-1.5">
-                              {hobby.join(", ")}
+                              {hobby}{index < formData.selected_hobbies.length - 1 && ', '}
                             </p>
                           </div>
                         ))}
                       </p>
-                      <div className="flex items-center">Sports</div>
+
+
+                      {/* <div className="flex items-center">Sports</div>
                       <p
                         className="col-span-2 w-full px-12
                        flex flex-wrap gap-6 py-1.5"
@@ -435,8 +467,8 @@ const Profile = ({ userId }) => {
                             </p>
                           </div>
                         ))}
-                      </p>
-                      <div className="flex items-center">
+                      </p> */}
+                      {/* <div className="flex items-center">
                         Outdoor Activities
                       </div>
                       <p
@@ -452,8 +484,8 @@ const Profile = ({ userId }) => {
                             </div>
                           )
                         )}
-                      </p>
-                      <div className="flex items-center">Travel</div>
+                      </p> */}
+                      {/* <div className="flex items-center">Travel</div>
                       <p
                         className="col-span-2 w-full px-12
                        flex flex-wrap gap-6 py-1.5"
@@ -478,7 +510,7 @@ const Profile = ({ userId }) => {
                             </p>
                           </div>
                         ))}
-                      </p>
+                      </p> */}
                       <div className="flex items-center">Zodiac Sign</div>
                       <p
                         className="col-span-2 w-full px-12
@@ -493,7 +525,7 @@ const Profile = ({ userId }) => {
                       >
                         {formData?.diet ?? ""}
                       </p>
-                      <div className="flex items-center">General Habits</div>
+                      {/* <div className="flex items-center">General Habits</div>
                       <p
                         className="col-span-2 w-full px-12
                        flex flex-wrap gap-6 py-1.5"
@@ -534,7 +566,7 @@ const Profile = ({ userId }) => {
                        py-1.5"
                       >
                         {formData?.looking_for ?? ""}
-                      </p>
+                      </p> */}
                       <div className="flex items-center">Your interests in</div>
                       <p
                         className="col-span-2 w-full px-12

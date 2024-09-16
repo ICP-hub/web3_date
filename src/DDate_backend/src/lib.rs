@@ -276,8 +276,10 @@ fn check_user_match(current_user_id: String, potential_match_id: String) -> bool
                 && potential_match.params.max_preferred_age.is_some()
                 && current_user.params.age.unwrap() >= potential_match.params.min_preferred_age.unwrap()
                 && current_user.params.age.unwrap() <= potential_match.params.max_preferred_age.unwrap()
-                && current_user.params.gender == potential_match.params.preferred_gender
-                && current_user.params.location == potential_match.params.preferred_location
+                && current_user.params.gender == potential_match.params.interests_in
+                && current_user.params.location_city == potential_match.params.preferred_city
+                && current_user.params.location_state == potential_match.params.preferred_state
+                && current_user.params.location_country == potential_match.params.preferred_country
                 && current_user.params.rightswipes.as_ref().map_or(false, |rightswipes| rightswipes.contains(&potential_match_id))
                 && potential_match.params.rightswipes.as_ref().map_or(false, |rightswipes| rightswipes.contains(&current_user_id));
             

@@ -36,7 +36,7 @@ const Explore = () => {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-4 w-full px-6 place-items-center	">
             {/* Friendships */}
             <div className="flex flex-col sm:flex-row items-center text-start mt-8 md:mb-16 mb-6 relative">
-              <div className="w-40 h-40 bg-yellow-400 rounded-full relative mb-6 sm:mb-0">
+              <div className="w-40 h-40 bg-[#E1CDCD] rounded-full relative mb-6 sm:mb-0">
                 <img
                   className="absolute z-10 top-1/4 left-1/2 transform -translate-x-1/2 -translate-y-2/6 w-full h-full object-contain"
                   src={friendshipImage}
@@ -58,7 +58,7 @@ const Explore = () => {
 
             {/* Dating */}
             <div className="flex flex-col sm:flex-row items-center text-start mt-8 md:mb-16 mb-6">
-              <div className="w-40 h-40 bg-custom-orange rounded-full relative mb-6 sm:mb-0">
+              <div className="w-40 h-40 bg-[#ECFCFF] rounded-full relative mb-6 sm:mb-0">
                 <img
                   className="absolute z-10 top-1/4 left-1/2 transform -translate-x-1/2 -translate-y-2/6 w-full h-full object-contain"
                   src={datingImage}
@@ -77,7 +77,7 @@ const Explore = () => {
 
             {/* Marriage */}
             <div className="flex flex-col sm:flex-row items-center text-start md:mb-16 mb-6 ">
-              <div className="w-40 h-40 bg-custom-red rounded-full relative mb-6 sm:mb-0">
+              <div className="w-40 h-40 bg-[#ECFCFF] rounded-full relative mb-6 sm:mb-0">
                 <img
                   className="absolute z-10 top-1/4 left-1/2 transform -translate-x-1/2 -translate-y-2/6 w-full h-full object-contain"
                   src={marriageImage}
@@ -95,7 +95,7 @@ const Explore = () => {
 
             {/* Networking */}
             <div className="flex flex-col sm:flex-row items-center text-start md:mb-16 mb-6">
-              <div className="w-40 h-40 bg-custom-purple rounded-full relative mb-6 sm:mb-0">
+              <div className="w-40 h-40 bg-[#E1CDCD] rounded-full relative mb-6 sm:mb-0">
                 <img
                   className="absolute z-10 top-1/4 left-1/2 transform -translate-x-1/2 -translate-y-2/6 w-full h-full object-contain"
                   src={networkingImage}

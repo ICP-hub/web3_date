@@ -39,31 +39,37 @@ pub struct UserInputParams {
     pub mobile_number: Option<String>,
     pub dob: Option<String>,
     pub gender_pronouns: Option<String>,
+    pub life_path_number: Option<String>,
     pub religion: Option<String>,
-    pub height: Option<String>,
     pub zodiac: Option<String>,
     pub diet: Option<String>,
-    pub occupation: Option<String>,
-    pub looking_for: Option<String>,
     pub smoking: Option<String>,
     pub drinking: Option<String>,
     pub hobbies: Option<Vec<String>>,
     pub sports: Option<Vec<String>>,
-    pub art_and_culture: Option<Vec<String>>,
-    pub pets: Option<String>,
-    pub general_habits: Option<Vec<String>>,
-    pub outdoor_activities: Option<Vec<String>>,
-    pub travel: Option<Vec<String>>,
-    pub movies: Option<Vec<String>>,
     pub interests_in: Option<String>,
-    pub age: Option<u64>,
-    pub location: Option<String>,
     pub min_preferred_age: Option<u64>,
     pub max_preferred_age: Option<u64>,
-    pub preferred_gender: Option<String>,
-    pub preferred_location: Option<String>,
+    pub location_city: Option<String>,
+    pub location_state: Option<String>,
+    pub location_country: Option<String>,
+    pub preferred_city: Option<String>,
+    pub preferred_state: Option<String>,
+    pub preferred_country: Option<String>,
     pub introduction: Option<String>,
     pub images: Option<Vec<String>>,
+    pub age: Option<u64>,
+    // pub preferred_gender: Option<String>,
+    // pub preferred_location: Option<String>,
+    // pub height: Option<String>,
+    // pub art_and_culture: Option<Vec<String>>,
+    // pub pets: Option<String>,
+    // pub general_habits: Option<Vec<String>>,
+    // pub outdoor_activities: Option<Vec<String>>,
+    // pub travel: Option<Vec<String>>,
+    // pub movies: Option<Vec<String>>,
+    // pub looking_for: Option<String>,
+
 }
 
 #[derive(Clone, Deserialize, CandidType, Debug, Serialize)]
@@ -103,31 +109,36 @@ pub struct UserProfileParams {
     pub mobile_number: Option<String>,
     pub dob: Option<String>,
     pub gender_pronouns: Option<String>,
+    pub life_path_number: Option<String>,
     pub religion: Option<String>,
-    pub height: Option<String>,
     pub zodiac: Option<String>,
     pub diet: Option<String>,
-    pub occupation: Option<String>,
-    pub looking_for: Option<String>,
     pub smoking: Option<String>,
     pub drinking: Option<String>,
     pub hobbies: Option<Vec<String>>,
     pub sports: Option<Vec<String>>,
-    pub art_and_culture: Option<Vec<String>>,
-    pub pets: Option<String>,
-    pub general_habits: Option<Vec<String>>,
-    pub outdoor_activities: Option<Vec<String>>,
-    pub travel: Option<Vec<String>>,
-    pub movies: Option<Vec<String>>,
     pub interests_in: Option<String>,
-    pub age: Option<u64>,
-    pub location: Option<String>,
     pub min_preferred_age: Option<u64>,
     pub max_preferred_age: Option<u64>,
-    pub preferred_gender: Option<String>,
-    pub preferred_location: Option<String>,
+    pub location_city: Option<String>,
+    pub location_state: Option<String>,
+    pub location_country: Option<String>,
+    pub preferred_city: Option<String>,
+    pub preferred_state: Option<String>,
+    pub preferred_country: Option<String>,
     pub introduction: Option<String>,
     pub images: Option<Vec<String>>,
+    pub age: Option<u64>,
+    // pub preferred_gender: Option<String>,
+    // pub preferred_location: Option<String>,
+    // pub height: Option<String>,
+    // pub art_and_culture: Option<Vec<String>>,
+    // pub pets: Option<String>,
+    // pub general_habits: Option<Vec<String>>,
+    // pub outdoor_activities: Option<Vec<String>>,
+    // pub travel: Option<Vec<String>>,
+    // pub movies: Option<Vec<String>>,
+    // pub looking_for: Option<String>,
     pub likes: Option<HashSet<String>>,
     pub matches: Option<Vec<String>>,
     pub notifications: Option<VecDeque<Notification>>,
@@ -174,33 +185,33 @@ impl State {
     
     pub fn create_account(&mut self, user_id: String, mut params: UserProfileCreationInfo) -> Result<String, String> {
         // Validation
-        if params.params.name.is_none() || params.params.name.as_ref().unwrap().trim().is_empty() {
-            return Err("Name is required".to_string());
-        }
-        if params.params.email.is_none() || params.params.email.as_ref().unwrap().trim().is_empty() {
-            return Err("Email is required".to_string());
-        }
-        if params.params.age.is_none() {
-            return Err("Age is required".to_string());
-        }
-        if params.params.min_preferred_age.is_none() {
-            return Err("Minimum preferred age is required".to_string());
-        }
-        if params.params.max_preferred_age.is_none() {
-            return Err("Maximum preferred age is required".to_string());
-        }
-        if params.params.location.is_none() || params.params.location.as_ref().unwrap().trim().is_empty() {
-            return Err("Location is required".to_string());
-        }
-        if params.params.preferred_location.is_none() || params.params.preferred_location.as_ref().unwrap().trim().is_empty() {
-            return Err("Preferred location is required".to_string());
-        }
-        if params.params.gender.is_none() || params.params.gender.as_ref().unwrap().trim().is_empty() {
-            return Err("Gender is required".to_string());
-        }
-        if params.params.preferred_gender.is_none() || params.params.preferred_gender.as_ref().unwrap().trim().is_empty() {
-            return Err("Preferred gender is required".to_string());
-        }
+        // if params.params.name.is_none() || params.params.name.as_ref().unwrap().trim().is_empty() {
+        //     return Err("Name is required".to_string());
+        // }
+        // if params.params.email.is_none() || params.params.email.as_ref().unwrap().trim().is_empty() {
+        //     return Err("Email is required".to_string());
+        // }
+        // if params.params.age.is_none() {
+        //     return Err("Age is required".to_string());
+        // }
+        // if params.params.min_preferred_age.is_none() {
+        //     return Err("Minimum preferred age is required".to_string());
+        // }
+        // if params.params.max_preferred_age.is_none() {
+        //     return Err("Maximum preferred age is required".to_string());
+        // }
+        // if params.params.location.is_none() || params.params.location.as_ref().unwrap().trim().is_empty() {
+        //     return Err("Location is required".to_string());
+        // }
+        // if params.params.preferred_location.is_none() || params.params.preferred_location.as_ref().unwrap().trim().is_empty() {
+        //     return Err("Preferred location is required".to_string());
+        // }
+        // if params.params.gender.is_none() || params.params.gender.as_ref().unwrap().trim().is_empty() {
+        //     return Err("Gender is required".to_string());
+        // }
+        // if params.params.preferred_gender.is_none() || params.params.preferred_gender.as_ref().unwrap().trim().is_empty() {
+        //     return Err("Preferred gender is required".to_string());
+        // }
     
         // Initialize expired to false
         params.expired =false ;
@@ -286,8 +297,12 @@ impl State {
             } else {
                 let is_preferred = profile.params.age.unwrap_or(0) >= new_profile.params.min_preferred_age.unwrap_or(0) &&
                                    profile.params.age.unwrap_or(0) <= new_profile.params.max_preferred_age.unwrap_or(0) &&
-                                   profile.params.gender.as_ref() == new_profile.params.preferred_gender.as_ref() &&
-                                   profile.params.location.as_ref() == new_profile.params.preferred_location.as_ref();
+                                //    profile.params.gender.as_ref() == new_profile.params.preferred_gender.as_ref()
+                                   profile.params.gender.as_ref() == new_profile.params.interests_in.as_ref() &&
+                                //    profile.params.location.as_ref() == new_profile.params.preferred_location.as_ref();
+                                   profile.params.location_city.as_ref() == new_profile.params.preferred_city.as_ref() &&
+                                   profile.params.location_state.as_ref() == new_profile.params.preferred_state.as_ref() &&
+                                   profile.params.location_country.as_ref() == new_profile.params.preferred_country.as_ref();
     
                 if is_preferred {
                     matching_profiles.push(profile.clone());
@@ -542,29 +557,36 @@ impl From<UserInputParams> for UserProfileParams {
             mobile_number: input.mobile_number,
             dob: input.dob,
             gender_pronouns: input.gender_pronouns,
+            life_path_number: input.life_path_number,
             religion: input.religion,
-            height: input.height,
+            // height: input.height,
             zodiac: input.zodiac,
             diet: input.diet,
-            occupation: input.occupation,
-            looking_for: input.looking_for,
+            // occupation: input.occupation,
+            // looking_for: input.looking_for,
             smoking: input.smoking,
             drinking: input.drinking,
             hobbies: input.hobbies,
             sports: input.sports,
-            art_and_culture: input.art_and_culture,
-            pets: input.pets,
-            general_habits: input.general_habits,
-            outdoor_activities: input.outdoor_activities,
-            travel: input.travel,
-            movies: input.movies,
+            // art_and_culture: input.art_and_culture,
+            // pets: input.pets,
+            // general_habits: input.general_habits,
+            // outdoor_activities: input.outdoor_activities,
+            // travel: input.travel,
+            // movies: input.movies,
             interests_in: input.interests_in,
             age: input.age,
-            location: input.location,
+            // location: input.location,
             min_preferred_age: input.min_preferred_age,
             max_preferred_age: input.max_preferred_age,
-            preferred_gender: input.preferred_gender,
-            preferred_location: input.preferred_location,
+            location_city: input.location_city,
+            location_state: input.location_state,
+            location_country: input.location_country,
+            preferred_city: input.preferred_city,
+            preferred_state: input.preferred_state,
+            preferred_country: input.preferred_country,
+            // preferred_gender: input.preferred_gender,
+            // preferred_location: input.preferred_location,
             introduction: input.introduction,
             images: input.images,
             likes: None,
@@ -598,24 +620,27 @@ impl UserProfileParams {
         if let Some(gender_pronouns) = other.gender_pronouns {
             self.gender_pronouns = Some(gender_pronouns);
         }
+        if let Some(life_path_number) = other.life_path_number{
+            self.life_path_number = Some(life_path_number);
+        }
         if let Some(religion) = other.religion {
             self.religion = Some(religion);
         }
-        if let Some(height) = other.height {
-            self.height = Some(height);
-        }
+        // if let Some(height) = other.height {
+        //     self.height = Some(height);
+        // }
         if let Some(zodiac) = other.zodiac {
             self.zodiac = Some(zodiac);
         }
         if let Some(diet) = other.diet {
             self.diet = Some(diet);
         }
-        if let Some(occupation) = other.occupation {
-            self.occupation = Some(occupation);
-        }
-        if let Some(looking_for) = other.looking_for {
-            self.looking_for = Some(looking_for);
-        }
+        // if let Some(occupation) = other.occupation {
+        //     self.occupation = Some(occupation);
+        // }
+        // if let Some(looking_for) = other.looking_for {
+        //     self.looking_for = Some(looking_for);
+        // }
         if let Some(smoking) = other.smoking {
             self.smoking = Some(smoking);
         }
@@ -628,45 +653,63 @@ impl UserProfileParams {
         if let Some(sports) = other.sports {
             self.sports = Some(sports);
         }
-        if let Some(art_and_culture) = other.art_and_culture {
-            self.art_and_culture = Some(art_and_culture);
-        }
-        if let Some(pets) = other.pets {
-            self.pets = Some(pets);
-        }
-        if let Some(general_habits) = other.general_habits {
-            self.general_habits = Some(general_habits);
-        }
-        if let Some(outdoor_activities) = other.outdoor_activities {
-            self.outdoor_activities = Some(outdoor_activities);
-        }
-        if let Some(travel) = other.travel {
-            self.travel = Some(travel);
-        }
-        if let Some(movies) = other.movies {
-            self.movies = Some(movies);
-        }
+        // if let Some(art_and_culture) = other.art_and_culture {
+        //     self.art_and_culture = Some(art_and_culture);
+        // }
+        // if let Some(pets) = other.pets {
+        //     self.pets = Some(pets);
+        // }
+        // if let Some(general_habits) = other.general_habits {
+        //     self.general_habits = Some(general_habits);
+        // }
+        // if let Some(outdoor_activities) = other.outdoor_activities {
+        //     self.outdoor_activities = Some(outdoor_activities);
+        // }
+        // if let Some(travel) = other.travel {
+        //     self.travel = Some(travel);
+        // }
+        // if let Some(movies) = other.movies {
+        //     self.movies = Some(movies);
+        // }
         if let Some(interests_in) = other.interests_in {
             self.interests_in = Some(interests_in);
         }
         if let Some(age) = other.age {
             self.age = Some(age);
         }
-        if let Some(location) = other.location {
-            self.location = Some(location);
-        }
+        // if let Some(location) = other.location {
+        //     self.location = Some(location);
+        // }
         if let Some(min_preferred_age) = other.min_preferred_age {
             self.min_preferred_age = Some(min_preferred_age);
         }
         if let Some(max_preferred_age) = other.max_preferred_age {
             self.max_preferred_age = Some(max_preferred_age);
         }
-        if let Some(preferred_gender) = other.preferred_gender {
-            self.preferred_gender = Some(preferred_gender);
+        if let Some(location_city) = other.location_city{
+            self.location_city = Some(location_city);
         }
-        if let Some(preferred_location) = other.preferred_location {
-            self.preferred_location = Some(preferred_location);
+        if let Some(location_state) = other.location_state{
+            self.location_state = Some(location_state);
         }
+        if let Some(location_country) = other.location_country{
+            self.location_country = Some(location_country);
+        }
+        if let Some(preferred_city) = other.preferred_city{
+            self.preferred_city = Some(preferred_city);
+        }
+        if let Some(preferred_state) = other.preferred_state{
+            self.preferred_state = Some(preferred_state);
+        }
+        if let Some(preferred_country) = other.preferred_country{
+            self.preferred_country = Some(preferred_country);
+        }
+        // if let Some(preferred_gender) = other.preferred_gender {
+        //     self.preferred_gender = Some(preferred_gender);
+        // }
+        // if let Some(preferred_location) = other.preferred_location {
+        //     self.preferred_location = Some(preferred_location);
+        // }
         if let Some(introduction) = other.introduction {
             self.introduction = Some(introduction);
         }

@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { useFormContext } from "react-hook-form";
 
-const Form2 = ({ setIndex }) => {
+const Form2 = ({ setIndex, formData, setFormData }) => {
   const {
     register,
     handleSubmit,
@@ -19,6 +19,13 @@ const Form2 = ({ setIndex }) => {
   const selectedWhatYouDo = watch("selectedWhatYouDo");
   const selectedLookingFor = watch("selectedLookingFor");
 
+
+  // function handleUpdateInput(e) {
+  //   console.log(e.target.name + " and " + e.target.value)
+  //   console.log("formdata =", formData.gender)
+  //   setFormData({ ...formData, [e.target.name]: e.target.value });
+  // }
+
   return (
     <div className="w-full  rounded-lg p-6 shadow-md md:bg-transparent md:shadow-none">
       {/* Gender Pronouns Selection */}
@@ -33,8 +40,8 @@ const Form2 = ({ setIndex }) => {
               className={`inline-block px-3 py-2 rounded-full text-sm focus:outline-none transition duration-300
 
                             ${selectedGenderPronouns === genPro
-                  ? "bg-yellow-500 text-black"
-                  : "bg-transparent hover:bg-yellow-500 hover:text-black  text-black border  border-black"
+                  ? "bg-primary-option_color text-black"
+                  : "bg-transparent hover:bg-primary-option_color hover:text-black  text-black border  border-black"
                 }`}
             >
               <input
@@ -43,6 +50,7 @@ const Form2 = ({ setIndex }) => {
                 {...register("genderPronouns", {
                   required: "Gender pronoun is required",
                 })}
+                // onChange={handleUpdateInput}
                 className="hidden"
               />
               {genPro}
@@ -65,8 +73,8 @@ const Form2 = ({ setIndex }) => {
                 key={lifePathNumber}
                 className={`inline-block px-3 py-2 rounded-full text-sm focus:outline-none transition duration-300
                             ${selectedlifePath === lifePathNumber
-                    ? "bg-yellow-500 text-black"
-                    : "bg-transparent hover:bg-yellow-500 hover:text-black  text-black border  border-black"
+                    ? "bg-primary-option_color text-black"
+                    : "bg-transparent hover:bg-primary-option_color hover:text-black  text-black border  border-black"
                   }`}
               >
                 <input
@@ -108,8 +116,8 @@ const Form2 = ({ setIndex }) => {
               key={religion}
               className={`inline-block px-3 py-2 rounded-full text-sm focus:outline-none transition duration-300
                             ${selectedReligionValue === religion
-                  ? "bg-yellow-500 text-black"
-                  : "bg-transparent hover:bg-yellow-500 hover:text-black  text-black border  border-black"
+                  ? "bg-primary-option_color text-black"
+                  : "bg-transparent hover:bg-primary-option_color hover:text-black  text-black border  border-black"
                 }`}
             >
               <input
@@ -118,6 +126,7 @@ const Form2 = ({ setIndex }) => {
                 {...register("selectedReligion", {
                   required: "Religion is required",
                 })}
+                // onChange={handleUpdateInput}
                 className="hidden"
               />
               {religion}
@@ -152,8 +161,8 @@ const Form2 = ({ setIndex }) => {
               key={zodiac}
               className={`inline-block px-3 py-2 rounded-full text-sm focus:outline-none transition duration-300
                             ${zodiac === selectedZodiacSign
-                  ? "bg-yellow-500 text-black"
-                  : "bg-transparent hover:bg-yellow-500 hover:text-black  text-black border  border-black"
+                  ? "bg-primary-option_color text-black"
+                  : "bg-transparent hover:bg-primary-option_color hover:text-black  text-black border  border-black"
                 }`}
             >
               <input
@@ -162,6 +171,7 @@ const Form2 = ({ setIndex }) => {
                 {...register("selectedZodiac", {
                   required: "Zodiac sign is required",
                 })}
+                // onChange={handleUpdateInput}
                 className="hidden"
               />
               {zodiac}
@@ -174,7 +184,7 @@ const Form2 = ({ setIndex }) => {
       {/* Fooding Selection */}
       <fieldset className="mb-4">
         <legend className="block text-lg font-semibold  text-black">
-          Fooding {errors.selectedFooding && <span className="text-red-500">*</span>}
+          Dietary Preferences {errors.selectedFooding && <span className="text-red-500">*</span>}
         </legend>
         <div className="flex flex-wrap gap-2 md:gap-2 py-2 rounded-3xl">
           {[
@@ -192,8 +202,8 @@ const Form2 = ({ setIndex }) => {
               className={`inline-block px-3 py-2 rounded-full text-sm focus:outline-none transition duration-300
                             ${errors.selectedFooding && "border-red-500"}
                             ${fooding === selectedFoodingValue
-                  ? "bg-yellow-500 text-black"
-                  : "bg-transparent hover:bg-yellow-500 hover:text-black  text-black border  border-black"
+                  ? "bg-primary-option_color text-black"
+                  : "bg-transparent hover:bg-primary-option_color hover:text-black  text-black border  border-black"
                 }`}
             >
               <input
@@ -202,6 +212,7 @@ const Form2 = ({ setIndex }) => {
                 {...register("selectedFooding", {
                   required: "Fooding preference is required",
                 })}
+                // onChange={handleUpdateInput}
                 className="hidden"
               />
               {fooding}
@@ -210,7 +221,7 @@ const Form2 = ({ setIndex }) => {
         </div>
         {errors.selectedFooding && <p className="text-red-500">{errors.selectedFooding.message}</p>}
       </fieldset>
-      <fieldset className="mb-4">
+      {/* <fieldset className="mb-4">
         <legend className="block text-lg font-semibold   text-black">
           What You Do {errors.selectedWhatYouDo && <span className="text-red-500">*</span>}
         </legend>
@@ -221,8 +232,8 @@ const Form2 = ({ setIndex }) => {
                 key={option}
                 className={`inline-block px-3 py-2 rounded-full text-sm focus:outline-none transition duration-300 
               ${selectedWhatYouDo === option
-                    ? "bg-yellow-500 text-black"
-                    : "bg-transparent hover:bg-yellow-500 hover:text-black  text-black border  border-black"
+                    ? "bg-primary-option_color text-black"
+                    : "bg-transparent hover:bg-primary-option_color hover:text-black  text-black border  border-black"
                   }`}
               >
                 <input
@@ -240,8 +251,8 @@ const Form2 = ({ setIndex }) => {
           )}
         </div>
         {errors.selectedWhatYouDo && <p className="text-red-500">{errors.selectedWhatYouDo.message}</p>}
-      </fieldset>
-      <fieldset className="mb-4">
+      </fieldset> */}
+      {/* <fieldset className="mb-4">
         <legend className="block text-lg font-semibold   text-black">
           What are you looking for? {errors.selectedLookingFor && <span className="text-red-500">*</span>}
         </legend>
@@ -257,8 +268,8 @@ const Form2 = ({ setIndex }) => {
               key={lookingFor}
               className={`inline-block px-3 py-2 rounded-full text-sm focus:outline-none transition duration-300 
               ${selectedLookingFor === lookingFor
-                  ? "bg-yellow-500 text-black"
-                  : "bg-transparent hover:bg-yellow-500 hover:text-black  text-black border  border-black"
+                  ? "bg-primary-option_color text-black"
+                  : "bg-transparent hover:bg-primary-option_color hover:text-black  text-black border  border-black"
                 }`}
             >
               <input
@@ -275,7 +286,7 @@ const Form2 = ({ setIndex }) => {
           ))}
         </div>
         {errors.selectedLookingFor && <p className="text-red-500">{errors.selectedLookingFor.message}</p>}
-      </fieldset>
+      </fieldset> */}
     </div>
   );
 };

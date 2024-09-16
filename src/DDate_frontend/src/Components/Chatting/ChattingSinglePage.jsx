@@ -8,6 +8,7 @@ import backarrow from "../../../assets/Images/CreateAccount/backarrow.png";
 import { useNavigate } from "react-router-dom";
 import SidebarComponent from "../SidebarComponent";
 import { useAuth } from '../../auth/useAuthClient';
+import { nodeBackendUrl } from '../../DevelopmentConfig';
 
 const ChattingSinglePage = () => {
     const { chatId } = useParams(); // toPrincipal
@@ -60,7 +61,7 @@ const ChattingSinglePage = () => {
     const [toggleBarVisible, setToggleBarVisible] = useState(false); // State for toggle bar visibility
 
     useEffect(() => {
-        const newSocket = io('http://localhost:5000', {
+        const newSocket = io(nodeBackendUrl, {
             query: { principal }
         });
 
@@ -79,6 +80,8 @@ const ChattingSinglePage = () => {
 
     const sendMessage = () => {
         console.log('Sending messages ...')
+        console.log("p")
+        console.log("noo",socket,chatId)
         if (socket && chatId) {
             const newMessage = {
                 user_id: principal.toText(),
@@ -123,14 +126,14 @@ const ChattingSinglePage = () => {
                          border flex flex-col md:w-[80%] w-full float-right ">
                             <div className="py-2 px-3 bg-gradient-to-r from-[#350B19] via-[#904B03] to-[#350B19] flex flex-row justify-between items-center">
                                 <div className="flex gap-4 items-center">
-                                    <div className="flex items-center">
+                                    {/* <div className="flex items-center">
                                         <img
                                             src={backarrow}
                                             alt="back"
                                             onClick={() => navigate("/Notification")}
                                             className="w-8 h-8 cursor-pointer"
                                         />
-                                    </div>
+                                    </div> */}
                                     <div>
                                         <img className="w-10 h-10 rounded-full" src="https://darrenjameseeley.files.wordpress.com/2014/09/expendables3.jpeg" />
                                         {/* <img className="w-10 h-10 rounded-full" src={profile.images[0]} /> */}

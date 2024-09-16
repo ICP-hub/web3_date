@@ -3,9 +3,9 @@ import "./Loader.css";
 
 function Loader() {
   return (
-    <div className="load ipad:top-[25%] left-2/5 ">
-      <div className=" rounded-full flex justify-center items-center">
-        <svg
+    <div className="bg-primary-wallColor load ipad:top-[25%] left-2/5">
+      <div className="flex justify-center items-center">
+        {/* <svg
           xmlns="http://www.w3.org/2000/svg"
           width="32"
           height="48"
@@ -17,8 +17,29 @@ function Loader() {
             stroke="#FFFFFF"
             strokeWidth="3"
           />
+        </svg> */}
+        <svg width="79" height="78" viewBox="0 0 79 78" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path opacity="0.3" d="M46.2073 72.7273L41.0732 67.5957L35.9392 72.7273L41.0732 77.8589L46.2073 72.7273Z" fill="#C2839E" />
+          <path d="M0 26.8016L25.4121 52.2016L40.8163 36.807L56.203 52.2016L66.5286 42.0079L58.0849 34.0588L73.1483 18.5713L58.3535 5.00195L39.9333 23.173L21.7818 5.03015L0 26.8016Z" fill="#C2839E" />
+          <path d="M35.6799 52.2019L30.5459 47.0703L25.4119 52.2019L30.5459 57.3335L35.6799 52.2019Z" fill="#C2839E" />
+          <path opacity="0.6" d="M40.814 57.3328L35.6799 52.2012L30.5459 57.3328L35.6799 62.4644L40.814 57.3328Z" fill="#C2839E" />
+          <path opacity="0.4" d="M45.948 62.4646L40.814 57.333L35.6799 62.4646L40.814 67.5962L45.948 62.4646Z" fill="#C2839E" />
+          <path opacity="0.7" d="M40.814 47.0701L35.6799 41.9385L30.5459 47.0701L35.6799 52.2017L40.814 47.0701Z" fill="#C2839E" />
+          <path opacity="0.3" d="M45.948 52.2019L40.814 47.0703L35.6799 52.2019L40.814 57.3335L45.948 52.2019Z" fill="#C2839E" />
+          <path opacity="0.8" d="M45.948 41.9382L40.814 36.8066L35.6799 41.9382L40.814 47.0698L45.948 41.9382Z" fill="#C2839E" />
+          <path opacity="0.7" d="M51.082 47.0701L45.948 41.9385L40.814 47.0701L45.948 52.2017L51.082 47.0701Z" fill="#C2839E" />
+          <path opacity="0.7" d="M63.0189 28.9182L57.9978 34.1602L63.2423 39.1789L68.2634 33.9369L63.0189 28.9182Z" fill="#C2839E" />
+          <path opacity="0.3" d="M68.1518 33.8576L63.1306 39.0996L68.3751 44.1184L73.3962 38.8764L68.1518 33.8576Z" fill="#C2839E" />
+          <path opacity="0.6" d="M56.216 52.2019L51.082 47.0703L45.948 52.2019L51.082 57.3335L56.216 52.2019Z" fill="#C2839E" />
+          <path opacity="0.1" d="M51.082 57.3328L45.948 52.2012L40.814 57.3328L45.948 62.4644L51.082 57.3328Z" fill="#C2839E" />
+          <path opacity="0.8" d="M66.4841 52.2019L61.3501 47.0703L56.2161 52.2019L61.3501 57.3335L66.4841 52.2019Z" fill="#C2839E" />
+          <path opacity="0.1" d="M58.3865 5.0017L53.1257 0L48.1217 5.25828L53.3824 10.26L58.3865 5.0017Z" fill="#C2839E" />
+          <path d="M51.082 47.0701L45.948 41.9385L40.814 47.0701L45.948 52.2017L51.082 47.0701Z" fill="#C2839E" />
+          <path opacity="0.3" d="M68.0402 23.676L63.019 28.918L68.2635 33.9367L73.2847 28.6947L68.0402 23.676Z" fill="#C2839E" />
+          <path opacity="0.1" d="M73.0612 18.4338L68.04 23.6758L73.2845 28.6945L78.3056 23.4526L73.0612 18.4338Z" fill="#C2839E" />
         </svg>
-        <svg
+
+        {/* <svg
           xmlns="http://www.w3.org/2000/svg"
           width="32"
           height="48"
@@ -30,10 +51,12 @@ function Loader() {
             stroke="#000000"
             strokeWidth="3"
           />
-        </svg>
+        </svg> */}
       </div>
     </div>
   );
 }
+
+
 
 export default Loader;
