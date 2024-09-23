@@ -267,51 +267,54 @@ import { nodeBackendUrl } from "../../DevelopmentConfig";
 
 
 const ChattingPage = () => {
-  const navigate = useNavigate();
-  const [selectedProfile, setSelectedProfile] = useState(null);
-  const [loading, setLoading] = useState(false);
-  const [privateToken, setprivateToken] = useState([]);
-  const [chatHistory, setChatHistory] = useState([]);
-  const [messages, setMessages] = useState([]);
-  const { principal, publicKey, backendActor } = useAuth();
-  const location = useLocation();
-  const userId = location.state;
-  console.log("node url : ", nodeBackendUrl)
-  console.log("userId on chat page", userId);
-  console.log("principal", principal.toText())
-  console.log("publicKey ", publicKey)
-  //fetch user id
-  // useEffect(() => {
-  //   const fetchPrivateToken = async () => {
-  //     setLoading(true);
-  //     console.log("call api of fetching user");
-  //     try {
-  //       const formdata = new FormData();
-  //       formdata.append("principal", principal);
-  //       formdata.append("publicKey", publicKey);
-  //       formdata.append("user_id", userId);
-  //       console.log("user_id", userId);
-  //       const requestOptions = {
-  //         method: "POST",
-  //         body: formdata,
-  //         redirect: "follow",
-  //       };
-  //       const response = await fetch(
-  //         // "https://ddate.kaifoundry.com/api/v1/login/user"
-  //         `${nodeBackendUrl}/api/v1/login/user`, requestOptions
-  //       ); // Adjust the endpoint according to your API
-  //       console.log("Login user response on messsage page ", response);
-  //       if (!response.ok) {
-  //         throw new Error("Network response was not ok");
-  //       }
-  //       const data = await response.json();
-  //       setprivateToken(data.historyUsers);
-  //     } catch (error) {
-  //       console.error("Error fetching chat history:", error);
-  //     } finally {
-  //       setLoading(false);
-  //     }
-  //   };
+ const navigate = useNavigate();
+ const [selectedProfile, setSelectedProfile] = useState(null);
+ const [loading, setLoading] = useState(false);
+ const [privateToken, setprivateToken] = useState([]);
+ const [chatHistory, setChatHistory] = useState([]);
+ const [messages, setMessages] = useState([]);
+ const { principal, publicKey, backendActor } = useAuth();
+ const location = useLocation();
+
+ const [status,setStatus]=useState();
+
+ const userId = location.state;
+ console.log("node url : ", nodeBackendUrl)
+ console.log("userId on chat page", userId);
+ console.log("principal", principal.toText())
+ console.log("publicKey ", publicKey)
+ //fetch user id
+ // useEffect(() => {
+ //   const fetchPrivateToken = async () => {
+ //     setLoading(true);
+ //     console.log("call api of fetching user");
+ //     try {
+ //       const formdata = new FormData();
+ //       formdata.append("principal", principal);
+ //       formdata.append("publicKey", publicKey);
+ //       formdata.append("user_id", userId);
+ //       console.log("user_id", userId);
+ //       const requestOptions = {
+ //         method: "POST",
+ //         body: formdata,
+ //         redirect: "follow",
+ //       };
+ //       const response = await fetch(
+ //         // "https://ddate.kaifoundry.com/api/v1/login/user"
+ //         `${nodeBackendUrl}/api/v1/login/user`, requestOptions
+ //       ); // Adjust the endpoint according to your API
+ //       console.log("Login user response on messsage page ", response);
+ //       if (!response.ok) {
+ //         throw new Error("Network response was not ok");
+ //       }
+ //       const data = await response.json();
+ //       setprivateToken(data.historyUsers);
+ //     } catch (error) {
+ //       console.error("Error fetching chat history:", error);
+ //     } finally {
+ //       setLoading(false);
+ //     }
+ //   };
 
 
   //   fetchPrivateToken();

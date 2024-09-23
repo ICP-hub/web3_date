@@ -34,11 +34,23 @@ const SidebarComponent = ({ userId }) => {
   const [startLoader, setStartLoader] = useState(false);
   const [isInputFocused, setIsInputFocused] = useState(false);
 
+  const [profilePic, setProfilePic] = useState();
+  useEffect(()=>{
+    const PP = localStorage.getItem("profilePic");
+    console.log("my photu : ", PP);
+    setProfilePic(PP);
+  },[]);
+
   const logoutHandler = async () => {
     await logout();
     // localStorage.removeItem("id");
     // localStorage.removeItem("identity");
     // localStorage.removeItem("wallet");
+    // localStorage.removeItem("userId");
+    // localStorage.removeItem("privateToken");
+    localStorage.clear();
+
+
 
     // setLoader(false)
     window.location.href = "/";
@@ -306,11 +318,11 @@ const SidebarComponent = ({ userId }) => {
                   onClick={() => navigate("/Profile", { state: userId })}
                   className=" mb-2 flex flex-row items-center rounded-full p-2 text-gray-900  dark:text-white group hover:bg-primary-color hover:text-white"
                 >
-                  {formData.images ? (
+                  {profilePic ? (
                     <div className="pt-2">
                       <img
                         src={
-                          formData.images[0] || "https://via.placeholder.com/150"
+                          profilePic
                         }
                         alt="Profile"
                         className="rounded-full w-10 h-10  object-cover border-2 border-white "
@@ -319,7 +331,7 @@ const SidebarComponent = ({ userId }) => {
                     </div>
                   ) : (
                     // <img
-                    //   src="https://via.placeholder.com/150"
+                    //   src={profilePic}
                     //   alt="Profile"
                     //   className="rounded-full h-12 w-12"
                     // />
