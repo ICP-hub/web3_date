@@ -1,4 +1,4 @@
-const production = false;
+const production = true;
 
 export const nodeBackendUrl = production
 ?"https://ddate.kaifoundry.com"
