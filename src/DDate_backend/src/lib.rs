@@ -7,7 +7,7 @@ use std::collections::VecDeque;
 use crate::profile_creation::UserProfileCreationInfo;
 use candid::CandidType;
 // use candid::Principal;
-use ic_cdk::{caller, export_candid, query, update};
+use ic_cdk::{caller, export_candid, query, update,api};
 pub use notification::*;
 use profile_creation::Message;
 use profile_creation::{Notification, Pagination};
@@ -17,6 +17,7 @@ use serde::Serialize;
 use state_handler::*;
 use crate::profile_creation::UserInputParams;
 use crate::profile_creation::PaginatedProfiles;
+use time::{Duration, OffsetDateTime};
 
 // const ANONYMOUS_PRINCIPAL_ID: &str = "2vxsx-fae";
 
@@ -244,8 +245,11 @@ fn get_leftswipes(user_id: String, pagination: Pagination) -> Result<MatchResult
 // #[query(guard = "is_anonymous")]
 #[query]
 fn get_rightswipes(user_id: String, pagination: Pagination) -> Result<MatchResult, String> {
+    let current_time = api::time();
+    ic_cdk::println!("Error: Same profile ID entered in both {}.",current_time);
     read_state(|state| {
         fetch_rightswipes(state, user_id, pagination)
+        
     })
 }
 
@@ -307,7 +311,18 @@ fn make_user_inactive(user_id: String) -> Result<String, String> {
         state.set_user_inactive(user_id)
     })
 }
+// #[update]
+// pub fn day(timestamp: &u64) -> usize {
+//     let nanoseconds = *timestamp as i64;
+//     let seconds = nanoseconds / 1_000_000_000;
+//     let nanos_remainder = nanoseconds % 1_000_000_000;
 
+//     let date = OffsetDateTime::from_unix_timestamp(seconds).unwrap() + Duration::nanoseconds(nanos_remainder as i64);
+
+//     let ordinal = date.ordinal();
+
+//     ordinal as usize
+// }
 // #[update(guard = "is_anonymous")]
 #[update]
 pub fn retrieve_notifications_for_user(user_id: String) -> Result<Vec<Notification>, String> {

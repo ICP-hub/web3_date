@@ -13,8 +13,11 @@ import "./Swipe.css";
 
 const Swipe = () => {
   const { backendActor } = useAuth();
-  const location = useLocation();
-  const userId = location.state;
+  // const location = useLocation();
+  // const userId = location.state;
+
+  const userId = localStorage.getItem("userId")
+  console.log("uid fetch from localstorage : ". userId)
 
   const [getAccountresult, setGetAccountresult] = useState();
   const [db, setSwipeProfiles] = useState([]);
@@ -46,6 +49,8 @@ const Swipe = () => {
     const getData = async () => {
       try {
         const result = await backendActor.get_an_account(userId);
+        console.log("we git our account :: ", result.Ok.params.images[0]);
+        localStorage.setItem("profilePic",result.Ok.params.images[0])
         setGetAccountresult(result);
       } catch (error) {
         console.error("Error getting data from the backend:", error);
@@ -63,7 +68,7 @@ const Swipe = () => {
   useEffect(() => {
     getAllPages();
   }, [userId, page, size, backendActor]);
-  
+
   const getAllPages = async () => {
     try {
       setLoading(true);
@@ -71,9 +76,13 @@ const Swipe = () => {
         page,
         size,
       });
+      // const res = await backendActor.get_all()
+      // console.log("new res : ", res.Ok)
       if (result?.Ok?.profiles) {
         setMyPageData((prevData) => [...prevData, ...result.Ok.profiles]);
       // console.log("all profilesss : ", [...pageData,...result.Ok.profiles])
+      // if (res?.Ok) {
+      //   setMyPageData((prevData) => [...prevData, ...res.Ok[1]])
       }
       console.log("get_all_accounts: ", result);
       setLoading(true);
@@ -186,6 +195,26 @@ const Swipe = () => {
     setMatch(false);
   };
 
+  const getData = async () => {
+    console.log("Generated Id", userId);
+    try {
+      await backendActor.get_an_account(userId).then((userProfileData) => {
+        if (userProfileData) {
+          const myData = userProfileData?.Ok?.params;
+          
+
+          // console.log(formattedDateStr);
+          if (myData) {
+            console.log("Image got on swipe : ", myData?.images[0])            
+          } 
+        }
+      });
+    } catch (error) {
+      console.error("Error getting data to the backend:", error);
+    }
+  };
+
+
   return (
     <div className="flex flex-col grid-cols-9 h-screen z-10">
       <SidebarComponent userId={userId} className="hidden " />
@@ -220,7 +249,7 @@ const Swipe = () => {
                     src={character.params.images[0]}
                     loading="lazy"
                     className="h-full w-full lg:max-w-lg"
-                    // style={{ height: "106vh" }}
+                  // style={{ height: "106vh" }}
                   />
                   <div
                     className="w-full lg:max-w-lg h-[30%] absolute bottom-0"
@@ -235,7 +264,7 @@ const Swipe = () => {
                       {character.params.name[0]}
                     </h2>
                     <p className="text-lg text-white font-bold">
-                     {character.params.location_city[0] + " " + character.params.location_state[0] }
+                      {character.params.location_city[0] + " " + character.params.location_state[0]}
                     </p>
                     <p className="mt-2 font-bold text-white line-clamp-1 hover:line-clamp-none mb-6">
                       {character.params.introduction[0]}

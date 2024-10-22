@@ -245,7 +245,7 @@ const Notification = () => {
                       {profiles.map((profile, index) => (
                         <div
                           key={index}
-                          className="relative w -[230px] h-[280px] "
+                          className="relative w -[230px] h-[280px] cursor-pointer"
                           onClick={() =>
                             // addChatList(p => [...p, { ...profile?.matched_profiles?.[0], images: profile?.matched_profiles?.[0]?.image }])
                             addChatList(profile?.matched_profiles?.[0])

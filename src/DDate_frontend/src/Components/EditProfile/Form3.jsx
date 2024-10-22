@@ -156,7 +156,7 @@ const Form3 = ({ formData, setFormData }) => {
       {/* Hobbies Selection */}
       <fieldset className="mb-4">
         <legend className="block text-lg font-semibold text-black">
-          Hobbies <span className="text-gray-400 text-sm">(select any 2)</span>
+          Hobbies <span className="text-gray-400 text-sm">(select at least 2)</span>
         </legend>
         <div className="flex flex-wrap gap-2 md:gap-2 py-2 rounded-3xl">
           {[
@@ -231,7 +231,7 @@ const Form3 = ({ formData, setFormData }) => {
       {/* Sports Selection */}
       <fieldset className="mb-4">
         <legend className="block text-lg font-semibold text-black">
-          Sports <span className="text-gray-400 text-sm">(select any 2)</span>
+          Sports <span className="text-gray-400 text-sm">(select at least 2)</span>
         </legend>
         <div className="flex flex-wrap gap-2 md:gap-2 py-2 rounded-3xl">
           {[

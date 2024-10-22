@@ -250,7 +250,7 @@ const CreateAccount1 = () => {
       const response = await fetch(
         // "https://ddate.kaifoundry.com/api/v1/register/user",
         // "http://localhost:5000/api/v1/register/user",
-        `${nodeBackendUrl/api/v1/register/user}`,
+        `${nodeBackendUrl}/api/v1/register/user`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -343,6 +343,8 @@ const CreateAccount1 = () => {
               setId(trimedId);
               await registerUser(trimedId)
               setBtnDisable(false)
+              localStorage.setItem("userId",trimedId)
+              localStorage.setItem("profilePic",DdateData.images)
               navigate("/Swipe", { state: trimedId });
             } else {
               setId("");

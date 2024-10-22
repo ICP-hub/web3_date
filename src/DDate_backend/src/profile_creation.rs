@@ -7,9 +7,9 @@ use std::collections::{HashSet, VecDeque};
 
 // use crate::is_anonymous;
 
-use crate::{post_file_contents, state_handler};
-use crate::state_handler::{init_file_contents, mutate_state, read_state, State, STATE};
 use crate::state_handler::Candid;
+use crate::state_handler::{init_file_contents, mutate_state, read_state, State, STATE};
+use crate::{post_file_contents, state_handler};
 
 #[derive(Debug, Serialize, Deserialize, CandidType)]
 pub struct PaginatedProfiles {
@@ -69,7 +69,6 @@ pub struct UserInputParams {
     // pub travel: Option<Vec<String>>,
     // pub movies: Option<Vec<String>>,
     // pub looking_for: Option<String>,
-
 }
 
 #[derive(Clone, Deserialize, CandidType, Debug, Serialize)]
@@ -81,9 +80,8 @@ pub struct UserProfileCreationInfo {
     pub notifications: VecDeque<Notification>,
     pub matched_profiles: Vec<String>,
     pub status: bool,
-    pub expired: bool,
+    // pub expired: bool,
 }
-
 
 impl Default for UserProfileCreationInfo {
     fn default() -> Self {
@@ -95,7 +93,7 @@ impl Default for UserProfileCreationInfo {
             notifications: VecDeque::new(),
             matched_profiles: Vec::new(),
             status: true,
-            expired: false, 
+            // expired: false,
         }
     }
 }
@@ -171,7 +169,6 @@ pub struct UserChatList {
     pub chat_id: String,
 }
 
-
 #[init]
 fn init() {
     STATE.with(|state| {
@@ -182,8 +179,11 @@ fn init() {
 }
 
 impl State {
-    
-    pub fn create_account(&mut self, user_id: String, mut params: UserProfileCreationInfo) -> Result<String, String> {
+    pub fn create_account(
+        &mut self,
+        user_id: String,
+        mut params: UserProfileCreationInfo,
+    ) -> Result<String, String> {
         // Validation
         // if params.params.name.is_none() || params.params.name.as_ref().unwrap().trim().is_empty() {
         //     return Err("Name is required".to_string());
@@ -212,22 +212,30 @@ impl State {
         // if params.params.preferred_gender.is_none() || params.params.preferred_gender.as_ref().unwrap().trim().is_empty() {
         //     return Err("Preferred gender is required".to_string());
         // }
-    
+
         // Initialize expired to false
-        params.expired =false ;
-    
+        // params.expired =false ;
+
         ic_cdk::println!("Creating profile with user_id: {}", user_id);
         if self.user_profiles.insert(user_id.clone(), params).is_some() {
             Err(format!("User profile with id {} already exists", user_id))
         } else {
-            ic_cdk::println!("Profiles after insertion: {:?}", self.user_profiles.iter().map(|(k, _)| k.clone()).collect::<Vec<_>>());
+            ic_cdk::println!(
+                "Profiles after insertion: {:?}",
+                self.user_profiles
+                    .iter()
+                    .map(|(k, _)| k.clone())
+                    .collect::<Vec<_>>()
+            );
             Ok(format!("User profile created with id: {}", user_id))
         }
     }
 
-    
-
-    pub fn update_account(&mut self, user_id: String, new_params: UserProfileParams) -> Result<String, String> {
+    pub fn update_account(
+        &mut self,
+        user_id: String,
+        new_params: UserProfileParams,
+    ) -> Result<String, String> {
         match self.user_profiles.get(&user_id) {
             Some(mut profile) => {
                 if !profile.status {
@@ -238,11 +246,10 @@ impl State {
                 self.user_profiles.insert(user_id.clone(), profile);
                 ic_cdk::println!("Updated profile with user_id: {}", user_id);
                 Ok(format!("User profile updated with id: {}", user_id))
-            },
+            }
             None => Err("Profile not found".to_string()),
         }
     }
-    
 
     pub fn delete_account(&mut self, user_id: String) -> Result<String, String> {
         match self.user_profiles.get(&user_id) {
@@ -250,14 +257,15 @@ impl State {
                 if !profile.status {
                     return Err("Account is inactive".to_string());
                 }
-            },
+            }
             None => return Err("Profile not found".to_string()),
         }
-        self.user_profiles.remove(&user_id).ok_or("Profile not found".to_string())?;
+        self.user_profiles
+            .remove(&user_id)
+            .ok_or("Profile not found".to_string())?;
         ic_cdk::println!("Deleted profile with user_id: {}", user_id);
         Ok(format!("User profile deleted with id: {}", user_id))
     }
-    
 
     pub fn get_account(&self, user_id: String) -> Result<UserProfileCreationInfo, String> {
         match self.user_profiles.get(&user_id) {
@@ -267,43 +275,149 @@ impl State {
                 }
                 ic_cdk::println!("Retrieved profile with user_id: {}", user_id);
                 Ok(profile.clone())
-            },
+            }
             None => Err("Profile not found".to_string()),
         }
     }
-    
-    pub fn get_all_accounts(&self, user_id: String, pagination: Pagination) -> Result<PaginatedProfiles, String> {
+
+    // pub fn get_all_accounts(&self, user_id: String, pagination: Pagination) -> Result<PaginatedProfiles, String> {
+    //     let mut suggested_profiles: Vec<UserProfileCreationInfo> = Vec::new();
+    //     let mut matching_profiles: Vec<UserProfileCreationInfo> = Vec::new();
+    //     let mut other_profiles: Vec<UserProfileCreationInfo> = Vec::new();
+
+    //     let new_profile = self.user_profiles.get(&user_id).ok_or_else(|| "User not found".to_string())?;
+
+    //     // Iterate over the user profiles in the map
+    //     for entry in self.user_profiles.iter() {
+    //         let (id, profile) = entry;
+    //         if *id == user_id || profile.expired {
+    //             continue;
+    //         }
+
+    //         // Check if the profile has left-swiped the user_id
+    //         let profile_leftswiped_user = profile.params.leftswipes.as_ref().map_or(false, |leftswipes| leftswipes.contains(&user_id));
+    //         if profile_leftswiped_user {
+    //             continue;
+    //         }
+
+    //         if profile.params.rightswipes.as_ref().map_or(false, |rightswipes| rightswipes.contains(&user_id)) {
+    //             suggested_profiles.push(profile.clone());
+    //         } else {
+    //             let is_preferred = profile.params.age.unwrap_or(0) >= new_profile.params.min_preferred_age.unwrap_or(0) &&
+    //                                profile.params.age.unwrap_or(0) <= new_profile.params.max_preferred_age.unwrap_or(0) &&
+    //                             //    profile.params.gender.as_ref() == new_profile.params.preferred_gender.as_ref()
+    //                                profile.params.gender.as_ref() == new_profile.params.interests_in.as_ref() &&
+    //                             //    profile.params.location.as_ref() == new_profile.params.preferred_location.as_ref();
+    //                                profile.params.location_city.as_ref() == new_profile.params.preferred_city.as_ref() &&
+    //                                profile.params.location_state.as_ref() == new_profile.params.preferred_state.as_ref() &&
+    //                                profile.params.location_country.as_ref() == new_profile.params.preferred_country.as_ref();
+
+    //             if is_preferred {
+    //                 matching_profiles.push(profile.clone());
+    //             } else {
+    //                 other_profiles.push(profile.clone());
+    //             }
+    //         }
+    //     }
+
+    //     // Combine the suggested profiles, matching profiles, and other profiles
+    //     let mut all_profiles = Vec::with_capacity(suggested_profiles.len() + matching_profiles.len() + other_profiles.len());
+    //     all_profiles.append(&mut suggested_profiles);
+    //     all_profiles.append(&mut matching_profiles);
+    //     all_profiles.append(&mut other_profiles);
+
+    //     if all_profiles.is_empty() {
+    //         return Err("No profiles are available.".to_string());
+    //     }
+
+    //     let total_profiles = all_profiles.len();
+    //     let start = (pagination.page - 1) * pagination.size;
+    //     if start >= total_profiles {
+    //         return Err("No profiles are matched.".to_string());
+    //     }
+    //     let end = std::cmp::min(start + pagination.size, total_profiles);
+
+    //     let paginated_profiles = all_profiles[start..end].to_vec();
+
+    //     Ok(PaginatedProfiles {
+    //         total_profiles,
+    //         profiles: paginated_profiles,
+    //     })
+    // }
+
+    pub fn get_all_accounts(
+        &self,
+        user_id: String,
+        pagination: Pagination,
+    ) -> Result<PaginatedProfiles, String> {
         let mut suggested_profiles: Vec<UserProfileCreationInfo> = Vec::new();
         let mut matching_profiles: Vec<UserProfileCreationInfo> = Vec::new();
         let mut other_profiles: Vec<UserProfileCreationInfo> = Vec::new();
-    
-        let new_profile = self.user_profiles.get(&user_id).ok_or_else(|| "User not found".to_string())?;
-    
+
+        let new_profile = self
+            .user_profiles
+            .get(&user_id)
+            .ok_or_else(|| "User not found".to_string())?;
+
+        // Get the current user's left and right swipes and bind them to a longer-lived value
+        let user_leftswipes = new_profile
+            .params
+            .leftswipes
+            .as_ref()
+            .unwrap_or(&HashSet::new())
+            .clone();
+        let user_rightswipes = new_profile
+            .params
+            .rightswipes
+            .as_ref()
+            .unwrap_or(&HashSet::new())
+            .clone();
+
         // Iterate over the user profiles in the map
         for entry in self.user_profiles.iter() {
             let (id, profile) = entry;
-            if *id == user_id || profile.expired {
+
+            // Skip current user's profile
+            if *id == user_id {
                 continue;
             }
-    
+
+            // Skip profiles that the current user has left-swiped or right-swiped
+            if user_leftswipes.contains(&id) || user_rightswipes.contains(&id) {
+                continue;
+            }
+
             // Check if the profile has left-swiped the user_id
-            let profile_leftswiped_user = profile.params.leftswipes.as_ref().map_or(false, |leftswipes| leftswipes.contains(&user_id));
+            let profile_leftswiped_user = profile
+                .params
+                .leftswipes
+                .as_ref()
+                .map_or(false, |leftswipes| leftswipes.contains(&user_id));
             if profile_leftswiped_user {
                 continue;
             }
-    
-            if profile.params.rightswipes.as_ref().map_or(false, |rightswipes| rightswipes.contains(&user_id)) {
+
+            // Check if the profile has right-swiped the user_id
+            if profile
+                .params
+                .rightswipes
+                .as_ref()
+                .map_or(false, |rightswipes| rightswipes.contains(&user_id))
+            {
                 suggested_profiles.push(profile.clone());
             } else {
-                let is_preferred = profile.params.age.unwrap_or(0) >= new_profile.params.min_preferred_age.unwrap_or(0) &&
-                                   profile.params.age.unwrap_or(0) <= new_profile.params.max_preferred_age.unwrap_or(0) &&
-                                //    profile.params.gender.as_ref() == new_profile.params.preferred_gender.as_ref()
-                                   profile.params.gender.as_ref() == new_profile.params.interests_in.as_ref() &&
-                                //    profile.params.location.as_ref() == new_profile.params.preferred_location.as_ref();
-                                   profile.params.location_city.as_ref() == new_profile.params.preferred_city.as_ref() &&
-                                   profile.params.location_state.as_ref() == new_profile.params.preferred_state.as_ref() &&
-                                   profile.params.location_country.as_ref() == new_profile.params.preferred_country.as_ref();
-    
+                let is_preferred = profile.params.age.unwrap_or(0)
+                    >= new_profile.params.min_preferred_age.unwrap_or(0)
+                    && profile.params.age.unwrap_or(0)
+                        <= new_profile.params.max_preferred_age.unwrap_or(0)
+                    && profile.params.gender.as_ref() == new_profile.params.interests_in.as_ref()
+                    && profile.params.location_city.as_ref()
+                        == new_profile.params.preferred_city.as_ref()
+                    && profile.params.location_state.as_ref()
+                        == new_profile.params.preferred_state.as_ref()
+                    && profile.params.location_country.as_ref()
+                        == new_profile.params.preferred_country.as_ref();
+
                 if is_preferred {
                     matching_profiles.push(profile.clone());
                 } else {
@@ -311,51 +425,59 @@ impl State {
                 }
             }
         }
-    
+
         // Combine the suggested profiles, matching profiles, and other profiles
-        let mut all_profiles = Vec::with_capacity(suggested_profiles.len() + matching_profiles.len() + other_profiles.len());
+        let mut all_profiles = Vec::with_capacity(
+            suggested_profiles.len() + matching_profiles.len() + other_profiles.len(),
+        );
         all_profiles.append(&mut suggested_profiles);
         all_profiles.append(&mut matching_profiles);
         all_profiles.append(&mut other_profiles);
-    
+
         if all_profiles.is_empty() {
             return Err("No profiles are available.".to_string());
         }
-    
+
         let total_profiles = all_profiles.len();
         let start = (pagination.page - 1) * pagination.size;
         if start >= total_profiles {
             return Err("No profiles are matched.".to_string());
         }
         let end = std::cmp::min(start + pagination.size, total_profiles);
-    
+
         let paginated_profiles = all_profiles[start..end].to_vec();
-    
+
         Ok(PaginatedProfiles {
             total_profiles,
             profiles: paginated_profiles,
         })
     }
-    
-    
-    pub fn get_all_profiles(&self) -> Result<(usize, Vec<(String, UserProfileCreationInfo)>), String> {
-        let all_profiles: Vec<(String, UserProfileCreationInfo)> = self.user_profiles.iter()
+
+    pub fn get_all_profiles(
+        &self,
+    ) -> Result<(usize, Vec<(String, UserProfileCreationInfo)>), String> {
+        let all_profiles: Vec<(String, UserProfileCreationInfo)> = self
+            .user_profiles
+            .iter()
             .map(|(user_id, profile)| (user_id.clone(), profile.clone()))
             .collect();
-        
+
         let count = all_profiles.len();
-        
+
         if count == 0 {
             return Err("No profiles found".to_string());
         }
-        
+
         ic_cdk::println!("Retrieved all profiles.");
         Ok((count, all_profiles))
     }
-    
 
-
-    pub fn create_message_internal(&mut self, sender_id: String, receiver_id: String, content: String) -> Result<u64, String> {
+    pub fn create_message_internal(
+        &mut self,
+        sender_id: String,
+        receiver_id: String,
+        content: String,
+    ) -> Result<u64, String> {
         // Validate input
         if sender_id.trim().is_empty() {
             return Err("Sender ID is required".to_string());
@@ -371,13 +493,19 @@ impl State {
         }
 
         // Check if sender exists and is active
-        let sender_profile = self.user_profiles.get(&sender_id).ok_or_else(|| format!("Sender ID '{}' does not exist", sender_id))?;
+        let sender_profile = self
+            .user_profiles
+            .get(&sender_id)
+            .ok_or_else(|| format!("Sender ID '{}' does not exist", sender_id))?;
         if !sender_profile.status {
             return Err(format!("Sender ID '{}' is inactive", sender_id));
         }
 
         // Check if receiver exists and is active
-        let receiver_profile = self.user_profiles.get(&receiver_id).ok_or_else(|| format!("Receiver ID '{}' does not exist", receiver_id))?;
+        let receiver_profile = self
+            .user_profiles
+            .get(&receiver_id)
+            .ok_or_else(|| format!("Receiver ID '{}' does not exist", receiver_id))?;
         if !receiver_profile.status {
             return Err(format!("Receiver ID '{}' is inactive", receiver_id));
         }
@@ -393,13 +521,16 @@ impl State {
         };
 
         let chat_id = Self::get_chat_id(&sender_id, &receiver_id);
-        let mut candid_messages = self.user_messages.get(&chat_id).map_or_else(|| Candid(VecDeque::new()), |c| state_handler::Candid(c.clone()));
+        let mut candid_messages = self.user_messages.get(&chat_id).map_or_else(
+            || Candid(VecDeque::new()),
+            |c| state_handler::Candid(c.clone()),
+        );
         candid_messages.push_back(message);
         self.user_messages.insert(chat_id, candid_messages);
 
         Ok(timestamp)
     }
-    
+
     pub fn read_messages(user_id: &String, other_user_id: &String) -> Result<Vec<Message>, String> {
         // Validate input
         if user_id.trim().is_empty() {
@@ -408,10 +539,10 @@ impl State {
         if other_user_id.trim().is_empty() {
             return Err("Other user ID is required".to_string());
         }
-    
+
         STATE.with(|state| {
             let state = state.borrow();
-    
+
             // Check if user exists and is active
             if let Some(user_profile) = state.user_profiles.get(user_id) {
                 if !user_profile.status {
@@ -420,7 +551,7 @@ impl State {
             } else {
                 return Err(format!("User ID '{}' does not exist", user_id));
             }
-    
+
             // Check if other user exists and is active
             if let Some(other_user_profile) = state.user_profiles.get(other_user_id) {
                 if !other_user_profile.status {
@@ -429,7 +560,7 @@ impl State {
             } else {
                 return Err(format!("Other user ID '{}' does not exist", other_user_id));
             }
-    
+
             // Retrieve messages
             let chat_id = Self::get_chat_id(user_id, other_user_id);
             match state.user_messages.get(&chat_id) {
@@ -438,21 +569,25 @@ impl State {
             }
         })
     }
-    
-    pub fn update_message(&mut self, timestamp: u64, new_content: String) -> Result<String, String> {
+
+    pub fn update_message(
+        &mut self,
+        timestamp: u64,
+        new_content: String,
+    ) -> Result<String, String> {
         // Validate input
         if new_content.trim().is_empty() {
             return Err("New content is required".to_string());
         }
-    
+
         let mut message_found = false;
-    
+
         // Iterate through all user messages
         let keys: Vec<_> = self.user_messages.iter().map(|(k, _)| k.clone()).collect();
         for key in keys {
             if let Some(messages) = self.user_messages.get(&key) {
                 let mut messages_data: VecDeque<Message> = messages.0.clone();
-    
+
                 for message in messages_data.iter_mut() {
                     if message.timestamp == timestamp {
                         if let Some(sender_profile) = self.user_profiles.get(&message.sender_id) {
@@ -460,24 +595,29 @@ impl State {
                                 return Err("Sender's account is inactive".to_string());
                             }
                         } else {
-                            return Err(format!("Sender ID '{}' does not exist", message.sender_id));
+                            return Err(format!(
+                                "Sender ID '{}' does not exist",
+                                message.sender_id
+                            ));
                         }
-    
+
                         message.content = new_content.clone();
                         message_found = true;
-    
+
                         // Update the user_messages map with modified messages
-                        self.user_messages.insert(key.clone(), Candid(messages_data)).unwrap();
+                        self.user_messages
+                            .insert(key.clone(), Candid(messages_data))
+                            .unwrap();
                         break;
                     }
                 }
-    
+
                 if message_found {
                     break;
                 }
             }
         }
-    
+
         // Return result based on whether the message was found or not
         if message_found {
             Ok("Message updated successfully".to_string())
@@ -485,18 +625,17 @@ impl State {
             Err("Message not found".to_string())
         }
     }
-    
-    
+
     pub fn delete_message(&mut self, timestamp: u64) -> Result<String, String> {
         // Delete message if sender is active
         let mut message_found = false;
-    
+
         // Iterate through all keys in user_messages to find and delete the message
         let keys: Vec<_> = self.user_messages.iter().map(|(k, _)| k.clone()).collect();
         for key in keys {
             if let Some(candid_messages) = self.user_messages.get(&key) {
                 let mut messages_data: VecDeque<Message> = candid_messages.0.clone();
-    
+
                 if let Some(pos) = messages_data.iter().position(|m| m.timestamp == timestamp) {
                     let sender_id = messages_data[pos].sender_id.clone();
                     if let Some(sender_profile) = self.user_profiles.get(&sender_id) {
@@ -506,25 +645,25 @@ impl State {
                     } else {
                         return Err(format!("Sender ID '{}' does not exist", sender_id));
                     }
-    
+
                     messages_data.remove(pos);
                     message_found = true;
-    
+
                     // Update the user_messages map with modified messages
-                    self.user_messages.insert(key.clone(), Candid(messages_data)).unwrap();
+                    self.user_messages
+                        .insert(key.clone(), Candid(messages_data))
+                        .unwrap();
                     break;
                 }
             }
         }
-    
+
         if message_found {
             Ok("Message deleted successfully".to_string())
         } else {
             Err("Message not found".to_string())
         }
     }
-    
-    
 
     // Utility function to generate a chat ID
     fn get_chat_id(user1: &str, user2: &str) -> String {
@@ -532,7 +671,6 @@ impl State {
         users.sort();
         format!("{}_{}", users[0], users[1])
     }
-
 
     pub fn set_user_inactive(&mut self, user_id: String) -> Result<String, String> {
         if let Some(user_profile) = self.user_profiles.get(&user_id) {
@@ -545,7 +683,6 @@ impl State {
             Err(format!("User ID '{}' not found", user_id))
         }
     }
-    
 }
 
 impl From<UserInputParams> for UserProfileParams {
@@ -620,7 +757,7 @@ impl UserProfileParams {
         if let Some(gender_pronouns) = other.gender_pronouns {
             self.gender_pronouns = Some(gender_pronouns);
         }
-        if let Some(life_path_number) = other.life_path_number{
+        if let Some(life_path_number) = other.life_path_number {
             self.life_path_number = Some(life_path_number);
         }
         if let Some(religion) = other.religion {
@@ -686,22 +823,22 @@ impl UserProfileParams {
         if let Some(max_preferred_age) = other.max_preferred_age {
             self.max_preferred_age = Some(max_preferred_age);
         }
-        if let Some(location_city) = other.location_city{
+        if let Some(location_city) = other.location_city {
             self.location_city = Some(location_city);
         }
-        if let Some(location_state) = other.location_state{
+        if let Some(location_state) = other.location_state {
             self.location_state = Some(location_state);
         }
-        if let Some(location_country) = other.location_country{
+        if let Some(location_country) = other.location_country {
             self.location_country = Some(location_country);
         }
-        if let Some(preferred_city) = other.preferred_city{
+        if let Some(preferred_city) = other.preferred_city {
             self.preferred_city = Some(preferred_city);
         }
-        if let Some(preferred_state) = other.preferred_state{
+        if let Some(preferred_state) = other.preferred_state {
             self.preferred_state = Some(preferred_state);
         }
-        if let Some(preferred_country) = other.preferred_country{
+        if let Some(preferred_country) = other.preferred_country {
             self.preferred_country = Some(preferred_country);
         }
         // if let Some(preferred_gender) = other.preferred_gender {
@@ -736,7 +873,10 @@ impl UserProfileParams {
 pub async fn create_an_account(params: UserInputParams) -> Result<String, String> {
     let caller = ic_cdk::api::caller();
 
-    let u_ids = raw_rand().await.map_err(|e| format!("Failed to generate random user ID: {:?}", e))?.0;
+    let u_ids = raw_rand()
+        .await
+        .map_err(|e| format!("Failed to generate random user ID: {:?}", e))?
+        .0;
     let unique_user_id = format!("{:x}", Sha256::digest(&u_ids));
 
     let profile_info = UserProfileCreationInfo {
@@ -747,13 +887,12 @@ pub async fn create_an_account(params: UserInputParams) -> Result<String, String
         notifications: VecDeque::new(),
         matched_profiles: Vec::new(),
         status: true,
-        expired: false, // Initialize expired to false
+        // expired: false, // Initialize expired to false
     };
-
+ 
     ic_cdk::println!("Creating account with user_id: {}", unique_user_id);
     mutate_state(|state| state.create_account(unique_user_id, profile_info))
 }
-
 
 // #[update(guard = "is_anonymous")]
 #[update]
@@ -771,7 +910,6 @@ pub fn delete_an_account(user_id: String) -> Result<String, String> {
     mutate_state(|state| state.delete_account(user_id))
 }
 
-
 // #[query(guard = "is_anonymous")]
 #[query]
 pub fn get_an_account(user_id: String) -> Result<UserProfileCreationInfo, String> {
@@ -781,7 +919,10 @@ pub fn get_an_account(user_id: String) -> Result<UserProfileCreationInfo, String
 
 // #[query(guard = "is_anonymous")]
 #[query]
-pub fn get_all_accounts(user_id: String, pagination: Pagination) -> Result<PaginatedProfiles, String> {
+pub fn get_all_accounts(
+    user_id: String,
+    pagination: Pagination,
+) -> Result<PaginatedProfiles, String> {
     read_state(|state| state.get_all_accounts(user_id, pagination))
 }
 
@@ -793,9 +934,3 @@ fn get_all() -> Result<(usize, Vec<(String, UserProfileCreationInfo)>), String> 
         state.get_all_profiles()
     })
 }
-
-
-
-
-
-

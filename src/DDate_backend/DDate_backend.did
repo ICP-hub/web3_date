@@ -72,7 +72,6 @@ type UserInputParams = record {
 };
 type UserProfileCreationInfo = record {
   status : bool;
-  expired : bool;
   notifications : vec Notification;
   matched_profiles : vec text;
   created_at : nat64;

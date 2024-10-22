@@ -92,7 +92,7 @@ const Form3 = () => {
       {/* Hobbies */}
       <fieldset className="mb-4">
         <legend className="block text-lg font-semibold mb-2 text-black md:text-black">
-          Hobbies <span className="text-gray-400 text-sm">(select any 2)</span>
+          Hobbies <span className="text-gray-400 text-sm">(select at least 2)</span>
         </legend>
         <div className="flex flex-wrap gap-2 md:gap-2 py-2 rounded-3xl">
           {[
@@ -169,7 +169,7 @@ const Form3 = () => {
 
       <fieldset className="mb-4">
         <legend className="block text-lg font-semibold mb-1 text-black md:text-black">
-          Sports <span className="text-gray-400 text-sm">(select any 2)</span>
+          Sports <span className="text-gray-400 text-sm">(select at least 2)</span>
         </legend>
         <div className="flex flex-wrap gap-2 md:gap-2 py-2 rounded-3xl">
           {[

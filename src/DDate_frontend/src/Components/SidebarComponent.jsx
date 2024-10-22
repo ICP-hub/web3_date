@@ -34,11 +34,23 @@ const SidebarComponent = ({ userId }) => {
   const [startLoader, setStartLoader] = useState(false);
   const [isInputFocused, setIsInputFocused] = useState(false);
 
+  const [profilePic, setProfilePic] = useState();
+  useEffect(()=>{
+    const PP = localStorage.getItem("profilePic");
+    console.log("my photu : ", PP);
+    setProfilePic(PP);
+  },[]);
+
   const logoutHandler = async () => {
     await logout();
     // localStorage.removeItem("id");
     // localStorage.removeItem("identity");
     // localStorage.removeItem("wallet");
+    // localStorage.removeItem("userId");
+    // localStorage.removeItem("privateToken");
+    localStorage.clear();
+
+
 
     // setLoader(false)
     window.location.href = "/";
@@ -306,11 +318,11 @@ const SidebarComponent = ({ userId }) => {
                   onClick={() => navigate("/Profile", { state: userId })}
                   className=" mb-2 flex flex-row items-center rounded-full p-2 text-gray-900  dark:text-white group hover:bg-primary-color hover:text-white"
                 >
-                  {formData.images ? (
+                  {profilePic ? (
                     <div className="pt-2">
                       <img
                         src={
-                          formData.images[0] || "https://via.placeholder.com/150"
+                          profilePic
                         }
                         alt="Profile"
                         className="rounded-full w-10 h-10  object-cover border-2 border-white "
@@ -319,7 +331,7 @@ const SidebarComponent = ({ userId }) => {
                     </div>
                   ) : (
                     // <img
-                    //   src="https://via.placeholder.com/150"
+                    //   src={profilePic}
                     //   alt="Profile"
                     //   className="rounded-full h-12 w-12"
                     // />
@@ -602,7 +614,11 @@ const SidebarComponent = ({ userId }) => {
               //   background:'#576B70',
               // }}
               >
-                <IoLogOut color={'white'} size={22} /> Logout
+                {/* <IoLogOut color={'white'} size={22} /> Logout */}
+                <svg width="20" height="20" viewBox="0 0 20 23" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M11 5.22727L11 13.5909L9 13.5909L9 5.22727L6 5.22727L10 -4.37114e-07L14 5.22727L11 5.22727ZM4 4.18182L4 7.01291C2.98167 8.22008 2.31815 9.70881 2.08906 11.3004C1.85998 12.8921 2.07506 14.519 2.7085 15.986C3.34194 17.4531 4.36683 18.6978 5.66019 19.571C6.95354 20.4441 8.46042 20.9086 10 20.9086C11.5396 20.9086 13.0465 20.4441 14.3398 19.571C15.6332 18.6978 16.6581 17.4531 17.2915 15.9861C17.9249 14.519 18.14 12.8921 17.9109 11.3005C17.6819 9.70881 17.0183 8.22008 16 7.01291L16 4.18182C17.2428 5.15478 18.2515 6.41735 18.9459 7.86921C19.6402 9.32107 20.0012 10.9222 20 12.5455C20 18.3195 15.523 23 10 23C4.477 23 4.92128e-06 18.3195 5.17367e-06 12.5455C-0.00116205 10.9222 0.359777 9.32107 1.05415 7.86921C1.74852 6.41735 2.75718 5.15478 4 4.18182Z" fill="white" />
+                </svg> Logout
+
               </button>
             </div>
           </div>
